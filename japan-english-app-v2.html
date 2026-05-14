@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Japan Script — English Learning</title>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --ink: #1a1410;
+  --paper: #f5f0e8;
+  --accent-gold: #c8962a;
+  --accent-moss: #4a7c59;
+  --accent-indigo: #3d5a8a;
+  --accent-crimson: #a03030;
+  --highlight-gold: rgba(200,150,42,0.18);
+  --highlight-moss: rgba(74,124,89,0.15);
+  --highlight-indigo: rgba(61,90,138,0.15);
+  --panel-bg: #fffdf8;
+  --border: rgba(26,20,16,0.12);
+}
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── NAV TABS ── */
+.nav-tabs {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(245,240,232,0.95);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  padding: 0 16px;
+}
+.tab-btn {
+  padding: 14px 20px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: rgba(26,20,16,0.45);
+  border: none;
+  background: none;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.tab-btn.active {
+  color: var(--ink);
+  border-bottom-color: var(--accent-gold);
+}
+.tab-btn:hover { color: var(--ink); }
+
+/* ── PAGES ── */
+.page { display: none; }
+.page.active { display: block; }
+
+.container {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 32px 20px 80px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── HEADER ── */
+header { text-align: center; margin-bottom: 32px; }
+.label {
+  font-size: 10px; font-weight: 500; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--accent-gold); margin-bottom: 10px;
+}
+h1 {
+  font-family: 'Shippori Mincho', serif;
+  font-size: clamp(22px, 4vw, 32px);
+  font-weight: 700; line-height: 1.2; margin-bottom: 6px;
+}
+.subtitle { font-size: 12px; color: rgba(26,20,16,0.45); font-weight: 300; }
+
+/* ── LEGEND ── */
+.legend {
+  display: flex; gap: 12px; flex-wrap: wrap;
+  justify-content: center; margin-bottom: 20px;
+}
+.legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: rgba(26,20,16,0.55); }
+.legend-dot { width: 9px; height: 9px; border-radius: 2px; flex-shrink: 0; }
+
+/* ── AUDIO BAR ── */
+.audio-bar {
+  background: var(--ink); border-radius: 14px;
+  padding: 14px 20px; display: flex; align-items: center;
+  gap: 14px; margin-bottom: 24px;
+  box-shadow: 0 4px 20px rgba(26,20,16,0.18);
+}
+#playBtn {
+  width: 42px; height: 42px; border-radius: 50%;
+  background: var(--accent-gold); border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; transition: transform 0.15s, background 0.15s;
+}
+#playBtn:hover { transform: scale(1.08); background: #d9a832; }
+#playBtn:active { transform: scale(0.95); }
+#playBtn svg { width: 17px; height: 17px; fill: #1a1410; }
+.audio-info { flex: 1; min-width: 0; }
+.audio-title { color: #f5f0e8; font-size: 12px; font-weight: 500; margin-bottom: 6px; }
+.progress-track { height: 3px; background: rgba(245,240,232,0.2); border-radius: 2px; overflow: hidden; cursor: pointer; }
+.progress-fill { height: 100%; background: var(--accent-gold); border-radius: 2px; width: 0%; transition: width 0.1s linear; }
+.audio-time { color: rgba(245,240,232,0.4); font-size: 10px; margin-top: 4px; }
+.speed-btn {
+  background: rgba(245,240,232,0.1); border: 1px solid rgba(245,240,232,0.2);
+  color: #f5f0e8; font-size: 11px; font-weight: 500; border-radius: 6px;
+  padding: 5px 9px; cursor: pointer; transition: background 0.15s; white-space: nowrap;
+}
+.speed-btn:hover { background: rgba(245,240,232,0.18); }
+
+/* ── SCRIPT CARD ── */
+.script-card {
+  background: var(--panel-bg); border: 1px solid var(--border);
+  border-radius: 16px; padding: 28px 24px; margin-bottom: 16px;
+  box-shadow: 0 2px 12px rgba(26,20,16,0.06);
+  font-size: 16px; font-weight: 300;
+}
+
+/* ── SLASH READING ── */
+.slash-view .script-card { line-height: 1; font-size: 15px; }
+.chunk-line { display: block; margin-bottom: 20px; }
+.chunk-row { display: flex; align-items: baseline; flex-wrap: wrap; gap: 0; }
+.slash { color: var(--accent-gold); font-weight: 400; margin: 0 3px; opacity: 0.7; font-size: 14px; }
+.chunk {
+  display: inline;
+  padding: 6px 0;
+  line-height: 2;
+}
+.chunk-jp {
+  display: block;
+  font-size: 11px;
+  color: rgba(26,20,16,0.4);
+  font-weight: 400;
+  margin-top: 1px;
+  margin-bottom: 8px;
+  padding-left: 2px;
+  font-style: italic;
+}
+
+/* Normal view line-height */
+.normal-view .script-card { line-height: 2; }
+.normal-view .script-card p { margin-bottom: 18px; }
+.normal-view .script-card p:last-child { margin-bottom: 0; }
+
+/* ── PHRASE HIGHLIGHTS ── */
+.phrase {
+  display: inline; border-radius: 4px; padding: 1px 3px;
+  cursor: pointer; transition: all 0.15s; font-weight: 400;
+}
+.phrase-gold { background: var(--highlight-gold); border-bottom: 2px solid var(--accent-gold); color: #8a6010; }
+.phrase-gold:hover { background: rgba(200,150,42,0.28); }
+.phrase-moss { background: var(--highlight-moss); border-bottom: 2px solid var(--accent-moss); color: #2a5c3a; }
+.phrase-moss:hover { background: rgba(74,124,89,0.25); }
+.phrase-indigo { background: var(--highlight-indigo); border-bottom: 2px solid var(--accent-indigo); color: #1d3a6a; }
+.phrase-indigo:hover { background: rgba(61,90,138,0.25); }
+.phrase.mastered {
+  background: rgba(74,124,89,0.08) !important;
+  border-bottom-color: rgba(74,124,89,0.3) !important;
+  color: rgba(26,20,16,0.35) !important;
+  text-decoration: line-through;
+  text-decoration-color: var(--accent-moss);
+}
+
+/* View toggle */
+.view-toggle {
+  display: flex; gap: 8px; margin-bottom: 16px; justify-content: flex-end;
+}
+.view-btn {
+  padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 500;
+  border: 1px solid var(--border); background: transparent;
+  color: rgba(26,20,16,0.5); cursor: pointer; transition: all 0.15s;
+}
+.view-btn.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+.hint { text-align: center; font-size: 11px; color: rgba(26,20,16,0.35); margin-top: 10px; }
+
+/* ── POPUP ── */
+.popup-overlay {
+  position: fixed; inset: 0; background: rgba(26,20,16,0.4);
+  z-index: 200; display: none; align-items: flex-end;
+  justify-content: center; backdrop-filter: blur(2px);
+}
+.popup-overlay.show { display: flex; animation: fadeIn 0.2s ease; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.popup {
+  background: var(--panel-bg); border-radius: 20px 20px 0 0;
+  padding: 24px 22px 44px; width: 100%; max-width: 680px;
+  box-shadow: 0 -8px 40px rgba(26,20,16,0.2);
+  animation: slideUp 0.25s cubic-bezier(0.16,1,0.3,1);
+  position: relative;
+}
+@keyframes slideUp { from { transform: translateY(60px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+.popup-handle { width: 36px; height: 4px; background: var(--border); border-radius: 2px; margin: 0 auto 18px; }
+.popup-type { font-size: 10px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 6px; }
+.popup-phrase { font-family: 'Shippori Mincho', serif; font-size: 20px; font-weight: 700; margin-bottom: 12px; line-height: 1.3; }
+.popup-body { font-size: 13px; line-height: 1.8; color: rgba(26,20,16,0.72); margin-bottom: 14px; }
+.popup-vs { background: rgba(26,20,16,0.04); border-radius: 10px; padding: 12px 14px; font-size: 12px; line-height: 1.7; margin-bottom: 16px; }
+.popup-vs .ok { color: var(--accent-moss); font-weight: 500; }
+.popup-vs .ng { color: var(--accent-crimson); font-weight: 500; }
+.close-btn {
+  position: absolute; top: 18px; right: 18px; width: 30px; height: 30px;
+  border-radius: 50%; background: rgba(26,20,16,0.08); border: none;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  font-size: 14px; color: var(--ink); transition: background 0.15s;
+}
+.close-btn:hover { background: rgba(26,20,16,0.15); }
+
+/* Mastery button in popup */
+.mastery-btn {
+  width: 100%; padding: 12px; border-radius: 10px; border: 1.5px solid;
+  font-size: 13px; font-weight: 500; cursor: pointer;
+  transition: all 0.2s; display: flex; align-items: center;
+  justify-content: center; gap: 8px;
+}
+.mastery-btn.not-mastered {
+  border-color: var(--accent-moss); color: var(--accent-moss); background: transparent;
+}
+.mastery-btn.not-mastered:hover { background: rgba(74,124,89,0.08); }
+.mastery-btn.is-mastered {
+  border-color: var(--accent-moss); color: var(--panel-bg);
+  background: var(--accent-moss);
+}
+
+/* ── FLASHCARD PAGE ── */
+.fc-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+.fc-title { font-family: 'Shippori Mincho', serif; font-size: 20px; font-weight: 700; }
+.fc-counter { font-size: 12px; color: rgba(26,20,16,0.4); }
+
+.fc-progress-bar { height: 4px; background: var(--border); border-radius: 2px; margin-bottom: 28px; overflow: hidden; }
+.fc-progress-fill { height: 100%; background: var(--accent-gold); border-radius: 2px; transition: width 0.4s ease; }
+
+.flashcard {
+  background: var(--panel-bg); border: 1px solid var(--border);
+  border-radius: 20px; min-height: 260px;
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; padding: 32px 24px; text-align: center;
+  cursor: pointer; position: relative;
+  box-shadow: 0 4px 24px rgba(26,20,16,0.08);
+  transition: transform 0.15s;
+  perspective: 1000px;
+}
+.flashcard:hover { transform: translateY(-2px); }
+.flashcard:active { transform: scale(0.98); }
+
+.fc-front, .fc-back { width: 100%; }
+.fc-back { display: none; }
+.flashcard.flipped .fc-front { display: none; }
+.flashcard.flipped .fc-back { display: block; }
+
+.fc-type-badge {
+  display: inline-block; padding: 4px 10px; border-radius: 20px;
+  font-size: 10px; font-weight: 500; letter-spacing: 0.12em;
+  text-transform: uppercase; margin-bottom: 16px;
+}
+.fc-word { font-family: 'Shippori Mincho', serif; font-size: 26px; font-weight: 700; margin-bottom: 8px; line-height: 1.3; }
+.fc-tap-hint { font-size: 11px; color: rgba(26,20,16,0.35); margin-top: 16px; }
+.fc-meaning { font-size: 14px; line-height: 1.7; color: rgba(26,20,16,0.7); margin-bottom: 12px; }
+.fc-example {
+  background: rgba(26,20,16,0.04); border-radius: 8px;
+  padding: 10px 14px; font-size: 12px; line-height: 1.7;
+  color: rgba(26,20,16,0.55); text-align: left; margin-bottom: 16px;
+}
+
+.fc-actions { display: flex; gap: 10px; margin-top: 6px; width: 100%; }
+.fc-action-btn {
+  flex: 1; padding: 11px; border-radius: 10px; border: 1.5px solid;
+  font-size: 12px; font-weight: 500; cursor: pointer;
+  transition: all 0.15s; display: flex; align-items: center;
+  justify-content: center; gap: 6px;
+}
+.fc-again { border-color: var(--accent-crimson); color: var(--accent-crimson); background: transparent; }
+.fc-again:hover { background: rgba(160,48,48,0.06); }
+.fc-got { border-color: var(--accent-moss); color: var(--accent-moss); background: transparent; }
+.fc-got:hover { background: rgba(74,124,89,0.08); }
+
+.fc-nav { display: flex; gap: 10px; margin-top: 16px; justify-content: center; }
+.fc-nav-btn {
+  padding: 8px 20px; border-radius: 20px; border: 1px solid var(--border);
+  background: transparent; font-size: 12px; color: rgba(26,20,16,0.5);
+  cursor: pointer; transition: all 0.15s;
+}
+.fc-nav-btn:hover { border-color: var(--ink); color: var(--ink); }
+.fc-nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+.fc-reset-btn {
+  display: block; margin: 20px auto 0; padding: 8px 20px;
+  border-radius: 20px; border: 1px solid var(--border);
+  background: transparent; font-size: 11px;
+  color: rgba(26,20,16,0.4); cursor: pointer; transition: all 0.15s;
+}
+.fc-reset-btn:hover { color: var(--ink); border-color: var(--ink); }
+
+/* Mastered overlay on card */
+.fc-mastered-badge {
+  position: absolute; top: 14px; right: 14px;
+  background: var(--accent-moss); color: white;
+  font-size: 10px; font-weight: 600; letter-spacing: 0.1em;
+  padding: 3px 9px; border-radius: 20px; text-transform: uppercase;
+}
+
+/* ── STATS BAR ── */
+.stats-bar {
+  background: var(--panel-bg); border: 1px solid var(--border);
+  border-radius: 12px; padding: 14px 18px;
+  display: flex; gap: 0; margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(26,20,16,0.04);
+}
+.stat-item { flex: 1; text-align: center; }
+.stat-item + .stat-item { border-left: 1px solid var(--border); }
+.stat-num { font-family: 'Shippori Mincho', serif; font-size: 22px; font-weight: 700; }
+.stat-label { font-size: 10px; color: rgba(26,20,16,0.4); margin-top: 2px; letter-spacing: 0.05em; }
+.stat-gold { color: var(--accent-gold); }
+.stat-moss { color: var(--accent-moss); }
+
+/* Filter chips */
+.filter-chips { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+.chip {
+  padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 500;
+  border: 1px solid var(--border); background: transparent;
+  color: rgba(26,20,16,0.5); cursor: pointer; transition: all 0.15s;
+}
+.chip.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav-tabs">
+  <button class="tab-btn active" onclick="switchPage('script')">📜 スクリプト</button>
+  <button class="tab-btn" onclick="switchPage('slash')">✂️ スラッシュ</button>
+  <button class="tab-btn" onclick="switchPage('flashcard')">🃏 単語帳</button>
+</nav>
+
+<!-- ═══════════════ PAGE: SCRIPT ═══════════════ -->
+<div class="page active" id="page-script">
+<div class="container">
+  <header>
+    <div class="label">English Learning Script</div>
+    <h1>Must-Visit Places in Japan</h1>
+    <p class="subtitle">タップして表現を学ぼう · ✓で習得済みに</p>
+  </header>
+
+  <div class="stats-bar" id="scriptStats">
+    <div class="stat-item"><div class="stat-num stat-gold" id="totalCount">12</div><div class="stat-label">フレーズ総数</div></div>
+    <div class="stat-item"><div class="stat-num stat-moss" id="masteredCount">0</div><div class="stat-label">習得済み</div></div>
+    <div class="stat-item"><div class="stat-num" id="remainCount">12</div><div class="stat-label">学習中</div></div>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:var(--accent-gold)"></div>重要フレーズ</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--accent-moss)"></div>便利表現</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--accent-indigo)"></div>語彙</div>
+  </div>
+
+  <div class="audio-bar">
+    <button id="playBtn" onclick="togglePlay()">
+      <svg id="playIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+    </button>
+    <div class="audio-info">
+      <div class="audio-title">Must-Visit Places in Japan</div>
+      <div class="progress-track" onclick="seekAudio(event)">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <div class="audio-time" id="audioTime">0:00 / 0:00</div>
+    </div>
+    <button class="speed-btn" onclick="changeSpeed()">1.0×</button>
+  </div>
+
+  <div class="normal-view">
+    <div class="script-card" id="scriptText">
+      <p>So, if you're ever planning a trip to Japan, <span class="phrase phrase-gold" data-key="gotta">you've gotta check out</span> Kyoto and Osaka — they're <span class="phrase phrase-moss" data-key="vibes">totally different vibes</span>, but both amazing in their own way.</p>
+      <p>Kyoto <span class="phrase phrase-gold" data-key="allabout">is all about</span> the scenery and the beautiful traditional buildings. And if I had to pick just one spot, I'd say <span class="phrase phrase-indigo" data-key="kinkakuji">Kinkaku-ji</span> — the Golden Pavilion — is <span class="phrase phrase-indigo" data-key="unmissable">absolutely unmissable</span>. I mean, the way the gold just <em>shines</em>, and it reflects perfectly off the pond, with this <span class="phrase phrase-indigo" data-key="gorgeous">gorgeous</span> garden all around it… it feels almost <span class="phrase phrase-indigo" data-key="dreamlike">dreamlike</span>, like you've stepped into another world.</p>
+      <p>And here's my tip — go in the <strong>early morning</strong>. There's this soft, <span class="phrase phrase-indigo" data-key="misty">misty</span> atmosphere that makes the whole place feel even more magical. It's honestly <span class="phrase phrase-moss" data-key="breathtaking">breathtaking</span>.</p>
+      <p>Then, when you head over to <strong>Osaka</strong>, <span class="phrase phrase-moss" data-key="shiftgears">shift gears completely</span> — because it's all about the food. The street food scene there is <span class="phrase phrase-gold" data-key="anotherlevel">on another level</span>.</p>
+      <p>So yeah — Kyoto for the beauty, Osaka for the food. <span class="phrase phrase-moss" data-key="combo">That combo alone</span> makes Japan so worth the trip.</p>
+    </div>
+  </div>
+  <p class="hint">🎴 色付きの言葉をタップ → 解説 &amp; 習得チェック</p>
+</div>
+</div>
+
+<!-- ═══════════════ PAGE: SLASH READING ═══════════════ -->
+<div class="page" id="page-slash">
+<div class="container">
+  <header>
+    <div class="label">スラッシュリーディング</div>
+    <h1>Slash Reading</h1>
+    <p class="subtitle">意味のまとまりで読む練習 · Read in chunks</p>
+  </header>
+
+  <div class="slash-view">
+    <div class="script-card">
+
+      <div class="chunk-line">
+        <div class="chunk-row">
+          <span class="chunk">So, if you're ever planning a trip to Japan,</span>
+          <span class="slash">/</span>
+          <span class="chunk"><span class="phrase phrase-gold" data-key="gotta">you've gotta check out</span> Kyoto and Osaka</span>
+          <span class="slash">/</span>
+          <span class="chunk">— they're <span class="phrase phrase-moss" data-key="vibes">totally different vibes,</span></span>
+          <span class="slash">/</span>
+          <span class="chunk">but both amazing in their own way.</span>
+        </div>
+        <span class="chunk-jp">日本旅行を計画しているなら / 京都と大阪に絶対行くべき / 全然違う雰囲気だけど / どちらも最高</span>
+      </div>
+
+      <div class="chunk-line">
+        <div class="chunk-row">
+          <span class="chunk">Kyoto <span class="phrase phrase-gold" data-key="allabout">is all about</span> the scenery</span>
+          <span class="slash">/</span>
+          <span class="chunk">and the beautiful traditional buildings.</span>
+          <span class="slash">/</span>
+          <span class="chunk">And if I had to pick just one spot,</span>
+          <span class="slash">/</span>
+          <span class="chunk">I'd say <span class="phrase phrase-indigo" data-key="kinkakuji">Kinkaku-ji</span> — the Golden Pavilion —</span>
+          <span class="slash">/</span>
+          <span class="chunk">is <span class="phrase phrase-indigo" data-key="unmissable">absolutely unmissable.</span></span>
+        </div>
+        <span class="chunk-jp">京都といえば景色 / そして美しい伝統建築 / 一ヵ所だけ選ぶとしたら / 金閣寺（黄金の東屋）/ は絶対見逃せない</span>
+      </div>
+
+      <div class="chunk-line">
+        <div class="chunk-row">
+          <span class="chunk">I mean, the way the gold just <em>shines,</em></span>
+          <span class="slash">/</span>
+          <span class="chunk">and it reflects perfectly off the pond,</span>
+          <span class="slash">/</span>
+          <span class="chunk">with this <span class="phrase phrase-indigo" data-key="gorgeous">gorgeous</span> garden all around it…</span>
+          <span class="slash">/</span>
+          <span class="chunk">it feels almost <span class="phrase phrase-indigo" data-key="dreamlike">dreamlike,</span></span>
+          <span class="slash">/</span>
+          <span class="chunk">like you've stepped into another world.</span>
+        </div>
+        <span class="chunk-jp">金の輝き方といったら / 池に完璧に映って / 豪華な庭に囲まれて / ほとんど夢のような感じ / 別世界に踏み込んだみたい</span>
+      </div>
+
+      <div class="chunk-line">
+        <div class="chunk-row">
+          <span class="chunk">And here's my tip —</span>
+          <span class="slash">/</span>
+          <span class="chunk">go in the early morning.</span>
+          <span class="slash">/</span>
+          <span class="chunk">There's this soft, <span class="phrase phrase-indigo" data-key="misty">misty</span> atmosphere</span>
+          <span class="slash">/</span>
+          <span class="chunk">that makes the whole place feel even more magical.</span>
+          <span class="slash">/</span>
+          <span class="chunk">It's honestly <span class="phrase phrase-moss" data-key="breathtaking">breathtaking.</span></span>
+        </div>
+        <span class="chunk-jp">ここでアドバイス / 朝早く行くこと / 柔らかい靄がかかった雰囲気が / 場所全体をさらに幻想的にしてくれる / 本当に息をのむほど美しい</span>
+      </div>
+
+      <div class="chunk-line">
+        <div class="chunk-row">
+          <span class="chunk">Then, when you head over to Osaka,</span>
+          <span class="slash">/</span>
+          <span class="chunk"><span class="phrase phrase-moss" data-key="shiftgears">shift gears completely</span> —</span>
+          <span class="slash">/</span>
+          <span class="chunk">because it's all about the food.</span>
+          <span class="slash">/</span>
+          <span class="chunk">The street food scene there is <span class="phrase phrase-gold" data-key="anotherlevel">on another level.</span></span>
+        </div>
+        <span class="chunk-jp">次に大阪へ向かったら / ガラッとモードチェンジ / 大阪といえば食べ物 / 屋台グルメは格が違う</span>
+      </div>
+
+      <div class="chunk-line">
+        <div class="chunk-row">
+          <span class="chunk">So yeah — Kyoto for the beauty, Osaka for the food.</span>
+          <span class="slash">/</span>
+          <span class="chunk"><span class="phrase phrase-moss" data-key="combo">That combo alone</span></span>
+          <span class="slash">/</span>
+          <span class="chunk">makes Japan so worth the trip.</span>
+        </div>
+        <span class="chunk-jp">つまり — 美しさの京都、食の大阪 / その組み合わせだけで / 日本は行く価値がある</span>
+      </div>
+
+    </div>
+  </div>
+  <p class="hint">/ で区切られたかたまりごとに読んで、意味を確認しよう</p>
+</div>
+</div>
+
+<!-- ═══════════════ PAGE: FLASHCARD ═══════════════ -->
+<div class="page" id="page-flashcard">
+<div class="container">
+  <header>
+    <div class="label">単語帳 · Flashcards</div>
+    <h1>フレーズを覚えよう</h1>
+    <p class="subtitle">カードをタップして意味を確認 · Tap to flip</p>
+  </header>
+
+  <div class="filter-chips">
+    <button class="chip active" onclick="filterCards('all', this)">すべて</button>
+    <button class="chip" onclick="filterCards('gold', this)">🏅 重要</button>
+    <button class="chip" onclick="filterCards('moss', this)">💬 表現</button>
+    <button class="chip" onclick="filterCards('indigo', this)">📖 語彙</button>
+    <button class="chip" onclick="filterCards('unmastered', this)">🔄 未習得</button>
+  </div>
+
+  <div class="fc-header">
+    <div class="fc-title" id="fcTitle">カード 1 / 12</div>
+    <div class="fc-counter" id="fcMasteredLabel">習得済み: 0</div>
+  </div>
+  <div class="fc-progress-bar"><div class="fc-progress-fill" id="fcProgressFill"></div></div>
+
+  <div class="flashcard" id="flashcard" onclick="flipCard()">
+    <div class="fc-front" id="fcFront">
+      <div class="fc-type-badge" id="fcBadge"></div>
+      <div class="fc-word" id="fcWord"></div>
+      <div class="fc-tap-hint">タップして確認 →</div>
+    </div>
+    <div class="fc-back" id="fcBack">
+      <div class="fc-type-badge" id="fcBadgeBack"></div>
+      <div class="fc-word" id="fcWordBack"></div>
+      <div class="fc-meaning" id="fcMeaning"></div>
+      <div class="fc-example" id="fcExample"></div>
+      <div class="fc-actions">
+        <button class="fc-action-btn fc-again" onclick="markCard(false, event)">✕ もう一度</button>
+        <button class="fc-action-btn fc-got" onclick="markCard(true, event)">✓ 覚えた！</button>
+      </div>
+    </div>
+    <div class="fc-mastered-badge" id="fcMasteredBadge" style="display:none">✓ 習得済み</div>
+  </div>
+
+  <div class="fc-nav">
+    <button class="fc-nav-btn" id="fcPrev" onclick="prevCard()">← 前へ</button>
+    <button class="fc-nav-btn" id="fcNext" onclick="nextCard()">次へ →</button>
+  </div>
+  <button class="fc-reset-btn" onclick="resetAll()">🔄 すべてリセット</button>
+</div>
+</div>
+
+<!-- POPUP -->
+<div class="popup-overlay" id="popupOverlay" onclick="closePopup(event)">
+  <div class="popup" id="popup">
+    <div class="popup-handle"></div>
+    <button class="close-btn" onclick="closePopupDirect()">✕</button>
+    <div class="popup-type" id="popupType"></div>
+    <div class="popup-phrase" id="popupPhrase"></div>
+    <div class="popup-body" id="popupBody"></div>
+    <div class="popup-vs" id="popupVs"></div>
+    <button class="mastery-btn not-mastered" id="masteryBtn" onclick="toggleMasteryFromPopup()">
+      <span id="masteryBtnIcon">☐</span>
+      <span id="masteryBtnText">習得済みにする</span>
+    </button>
+  </div>
+</div>
+
+<script>
+// ── DATA ──
+const phraseData = {
+  gotta: {
+    type: '🏅 重要フレーズ', color: '#c8962a', category: 'gold',
+    phrase: "you've gotta check out ~",
+    body: '「絶対〜してみて！」という強いおすすめを伝えるカジュアルな表現。"gotta" は "got to"（〜しなければ）の短縮形で、会話では自然にこの形が使われます。',
+    vs: '<span class="ok">✅ ネイティブ：</span> "You\'ve gotta check out Kyoto!"<br><span class="ng">❌ 日本人がやりがち：</span> "You should go to Kyoto." → 間違いではないが熱量が半分になる',
+    meaning: '「絶対〜してみて！」強いおすすめを伝えるカジュアル表現',
+    example: '"You\'ve gotta check out Kyoto and Osaka!"'
+  },
+  allabout: {
+    type: '🏅 重要フレーズ', color: '#c8962a', category: 'gold',
+    phrase: "is all about ~",
+    body: '「〜といえばコレ！」「〜が真髄」という意味。何かの本質・特徴を端的に伝えるときに使う定番表現。',
+    vs: '<span class="ok">✅ ネイティブ：</span> "Kyoto is all about the scenery."<br><span class="ng">❌ 日本人がやりがち：</span> "Kyoto is famous for the scenery." → パンフレット的で少し硬い',
+    meaning: '「〜といえばコレ」「〜が真髄」本質を端的に伝える',
+    example: '"Kyoto is all about the scenery and traditional buildings."'
+  },
+  anotherlevel: {
+    type: '🏅 重要フレーズ', color: '#c8962a', category: 'gold',
+    phrase: "on another level",
+    body: '「格が違う」「レベルが桁違い」という意味のスラング的表現。驚きや感動を強調したいときに使います。スポーツ・食・技術など幅広く使える万能表現。',
+    vs: '<span class="ok">✅ ネイティブ：</span> "The street food there is on another level."<br><span class="ng">❌ 日本人がやりがち：</span> "The food is very good." → 感動が1/3も伝わらない',
+    meaning: '「格が違う」「レベルが桁違い」感動・驚きを強調',
+    example: '"The street food scene in Osaka is on another level."'
+  },
+  vibes: {
+    type: '💬 便利表現', color: '#4a7c59', category: 'moss',
+    phrase: "totally different vibes",
+    body: '"vibe" は「雰囲気・感じ」という意味の現代英語の定番スラング。"totally" で強調。「全然違う雰囲気」をおしゃれに言えます。',
+    vs: '<span class="ok">✅ ネイティブ：</span> "They have totally different vibes."<br><span class="ng">❌ 日本人がやりがち：</span> "They have different atmospheres." → 少し古風・硬い',
+    meaning: '「全然違う雰囲気」vibe = 現代英語で雰囲気・感じ',
+    example: '"Kyoto and Osaka have totally different vibes."'
+  },
+  shiftgears: {
+    type: '💬 便利表現', color: '#4a7c59', category: 'moss',
+    phrase: "shift gears completely",
+    body: '車のギアチェンジから来た比喩表現。「話題・モードをガラッと変える」ときに使います。',
+    vs: '<span class="ok">✅ ネイティブ：</span> "Shift gears completely — it\'s all about the food."<br><span class="ng">❌ 日本人がやりがち：</span> "But in Osaka, the food is..." → 繋ぎ方が単調',
+    meaning: '「モードをガラッと変える」ギアチェンジの比喩',
+    example: '"When you head to Osaka, shift gears completely."'
+  },
+  breathtaking: {
+    type: '💬 便利表現', color: '#4a7c59', category: 'moss',
+    phrase: "breathtaking",
+    body: '「息をのむほど美しい」。"breath（息）+ taking（奪う）" で、あまりの美しさに言葉を失う感覚。',
+    vs: '<span class="ok">✅ ネイティブ：</span> "It\'s honestly breathtaking."<br><span class="ng">❌ 日本人がやりがち：</span> "It\'s very beautiful." → 臨場感・感動が薄い',
+    meaning: '「息をのむほど美しい」圧倒的な美しさを表す',
+    example: '"The misty morning view is honestly breathtaking."'
+  },
+  combo: {
+    type: '💬 便利表現', color: '#4a7c59', category: 'moss',
+    phrase: "That combo alone",
+    body: '"combo" は "combination" のカジュアルな短縮形。"alone" は「〜だけで十分」という意味。まとめの一言としてスマート。',
+    vs: '<span class="ok">✅ ネイティブ：</span> "That combo alone makes it worth the trip."<br><span class="ng">❌ 日本人がやりがち：</span> "Both cities are good, so please visit." → 締めとして弱い',
+    meaning: '「その組み合わせだけで十分」comboはcombinationの略',
+    example: '"That combo alone makes Japan so worth the trip."'
+  },
+  kinkakuji: {
+    type: '📖 語彙', color: '#3d5a8a', category: 'indigo',
+    phrase: "Kinkaku-ji (金閣寺)",
+    body: '英語では "Kinkaku-ji" または "The Golden Pavilion"（黄金の東屋）と呼ばれます。ダッシュ（—）で言い換えを挟むと自然でわかりやすい。',
+    vs: '<span class="ok">✅ 使い方：</span> "Kinkaku-ji — the Golden Pavilion — is unmissable."<br>← ダッシュで言い換えを挟むと自然',
+    meaning: '金閣寺 = "The Golden Pavilion"。外国人には両方セットで',
+    example: '"Kinkaku-ji — the Golden Pavilion — is absolutely unmissable."'
+  },
+  unmissable: {
+    type: '📖 語彙', color: '#3d5a8a', category: 'indigo',
+    phrase: "absolutely unmissable",
+    body: '"unmissable" は「絶対見逃せない」。"must-see" と同じように使えますが、より口語的でおしゃれな響きがあります。',
+    vs: '<span class="ok">✅ 類語：</span> unmissable / must-see / not to be missed<br><span class="ng">❌ 避けたい：</span> "you cannot miss it" → 少し回りくどい',
+    meaning: '「絶対見逃せない」must-seeより口語的でおしゃれ',
+    example: '"The Golden Pavilion is absolutely unmissable."'
+  },
+  gorgeous: {
+    type: '📖 語彙', color: '#3d5a8a', category: 'indigo',
+    phrase: "gorgeous",
+    body: '"beautiful" より一段上の「豪華で美しい」ニュアンス。景色・食べ物・服など幅広く使えます。',
+    vs: '<span class="ok">✅ 強度順：</span> nice → beautiful → gorgeous → stunning<br>↑ 金閣寺の庭には gorgeous 以上がぴったり',
+    meaning: '「豪華で美しい」beautifulより一段上のレベル',
+    example: '"There\'s a gorgeous garden all around it."'
+  },
+  dreamlike: {
+    type: '📖 語彙', color: '#3d5a8a', category: 'indigo',
+    phrase: "dreamlike",
+    body: '「夢のような、幻想的な」という形容詞。"like a dream" の一語版で、詩的でおしゃれな表現です。',
+    vs: '<span class="ok">✅ ネイティブ：</span> "It feels almost dreamlike."<br><span class="ng">❌ 日本人がやりがち：</span> "It is like a dream." → やや子供っぽい響き',
+    meaning: '「夢のような・幻想的な」like a dreamの洗練された一語版',
+    example: '"It feels almost dreamlike, like another world."'
+  },
+  misty: {
+    type: '📖 語彙', color: '#3d5a8a', category: 'indigo',
+    phrase: "misty",
+    body: '"mist（霧・靄）" の形容詞形。朝の空気感を表すのにぴったり。"foggy"（濃い霧）より軽く、詩的なニュアンス。',
+    vs: '<span class="ok">✅ 類語の違い：</span><br>misty → 軽い靄・幻想的<br>foggy → 濃い霧・視界不良<br>hazy → もや・ぼんやり',
+    meaning: '「靄がかかった・幻想的な」foggyより軽く詩的',
+    example: '"There\'s a soft, misty atmosphere in the morning."'
+  }
+};
+
+const allKeys = Object.keys(phraseData);
+let mastered = new Set();
+let currentFilter = 'all';
+let filteredKeys = [...allKeys];
+let cardIndex = 0;
+let currentPopupKey = null;
+
+// ── TABS ──
+function switchPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  document.querySelectorAll('.tab-btn')[['script','slash','flashcard'].indexOf(id)].classList.add('active');
+  if (id === 'flashcard') renderCard();
+  updateStats();
+}
+
+// ── STATS ──
+function updateStats() {
+  const m = mastered.size;
+  document.getElementById('masteredCount').textContent = m;
+  document.getElementById('remainCount').textContent = allKeys.length - m;
+  document.getElementById('fcMasteredLabel').textContent = '習得済み: ' + m;
+  // Update phrase styles
+  document.querySelectorAll('.phrase').forEach(el => {
+    if (mastered.has(el.dataset.key)) el.classList.add('mastered');
+    else el.classList.remove('mastered');
+  });
+}
+
+// ── PHRASE CLICK (script + slash) ──
+document.querySelectorAll('.phrase').forEach(el => {
+  el.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const key = el.dataset.key;
+    const d = phraseData[key];
+    if (!d) return;
+    currentPopupKey = key;
+    document.getElementById('popupType').textContent = d.type;
+    document.getElementById('popupType').style.color = d.color;
+    document.getElementById('popupPhrase').textContent = d.phrase;
+    document.getElementById('popupBody').textContent = d.body;
+    document.getElementById('popupVs').innerHTML = d.vs;
+    updateMasteryBtn(key);
+    document.getElementById('popupOverlay').classList.add('show');
+  });
+});
+
+function updateMasteryBtn(key) {
+  const btn = document.getElementById('masteryBtn');
+  const icon = document.getElementById('masteryBtnIcon');
+  const text = document.getElementById('masteryBtnText');
+  if (mastered.has(key)) {
+    btn.className = 'mastery-btn is-mastered';
+    icon.textContent = '✓';
+    text.textContent = '習得済み（タップで解除）';
+  } else {
+    btn.className = 'mastery-btn not-mastered';
+    icon.textContent = '☐';
+    text.textContent = '習得済みにする';
+  }
+}
+
+function toggleMasteryFromPopup() {
+  if (!currentPopupKey) return;
+  if (mastered.has(currentPopupKey)) mastered.delete(currentPopupKey);
+  else mastered.add(currentPopupKey);
+  updateMasteryBtn(currentPopupKey);
+  updateStats();
+  if (document.getElementById('page-flashcard').classList.contains('active')) renderCard();
+}
+
+function closePopup(e) {
+  if (e.target === document.getElementById('popupOverlay')) closePopupDirect();
+}
+function closePopupDirect() {
+  document.getElementById('popupOverlay').classList.remove('show');
+  currentPopupKey = null;
+}
+
+// ── FLASHCARD ──
+function filterCards(type, btn) {
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  currentFilter = type;
+  if (type === 'all') filteredKeys = [...allKeys];
+  else if (type === 'unmastered') filteredKeys = allKeys.filter(k => !mastered.has(k));
+  else filteredKeys = allKeys.filter(k => phraseData[k].category === type);
+  cardIndex = 0;
+  renderCard();
+}
+
+function renderCard() {
+  if (currentFilter === 'unmastered') filteredKeys = allKeys.filter(k => !mastered.has(k));
+  const total = filteredKeys.length;
+  if (total === 0) {
+    document.getElementById('fcTitle').textContent = '全部習得済み！🎉';
+    document.getElementById('fcProgressFill').style.width = '100%';
+    document.getElementById('flashcard').innerHTML = '<div style="text-align:center;padding:40px 0"><div style="font-size:48px;margin-bottom:16px">🎉</div><div style="font-family:Shippori Mincho,serif;font-size:20px;font-weight:700;margin-bottom:8px">全フレーズ習得！</div><div style="font-size:13px;color:rgba(26,20,16,0.5)">素晴らしい！フィルターを変えるか<br>リセットして続けましょう</div></div>';
+    return;
+  }
+  if (cardIndex >= total) cardIndex = total - 1;
+  const key = filteredKeys[cardIndex];
+  const d = phraseData[key];
+  const isMastered = mastered.has(key);
+
+  document.getElementById('fcTitle').textContent = `カード ${cardIndex + 1} / ${total}`;
+  const mastPct = (mastered.size / allKeys.length) * 100;
+  document.getElementById('fcProgressFill').style.width = mastPct + '%';
+
+  // Rebuild card HTML
+  const fc = document.getElementById('flashcard');
+  const badgeStyle = `background:${d.color}22;color:${d.color}`;
+  fc.innerHTML = `
+    <div class="fc-front" id="fcFront">
+      <div class="fc-type-badge" style="${badgeStyle}">${d.type}</div>
+      <div class="fc-word">${d.phrase}</div>
+      <div class="fc-tap-hint">タップして確認 →</div>
+    </div>
+    <div class="fc-back" id="fcBack" style="display:none">
+      <div class="fc-type-badge" style="${badgeStyle}">${d.type}</div>
+      <div class="fc-word">${d.phrase}</div>
+      <div class="fc-meaning">${d.meaning}</div>
+      <div class="fc-example">${d.example}</div>
+      <div class="fc-actions">
+        <button class="fc-action-btn fc-again" onclick="markCard(false,event)">✕ もう一度</button>
+        <button class="fc-action-btn fc-got" onclick="markCard(true,event)">✓ 覚えた！</button>
+      </div>
+    </div>
+    ${isMastered ? '<div class="fc-mastered-badge">✓ 習得済み</div>' : ''}
+  `;
+  fc.classList.remove('flipped');
+  fc.onclick = flipCard;
+
+  document.getElementById('fcPrev').disabled = cardIndex === 0;
+  document.getElementById('fcNext').disabled = cardIndex === total - 1;
+}
+
+function flipCard() {
+  const fc = document.getElementById('flashcard');
+  fc.classList.toggle('flipped');
+  const front = document.getElementById('fcFront');
+  const back = document.getElementById('fcBack');
+  if (fc.classList.contains('flipped')) {
+    front.style.display = 'none';
+    back.style.display = 'block';
+  } else {
+    front.style.display = 'block';
+    back.style.display = 'none';
+  }
+}
+
+function markCard(got, e) {
+  e.stopPropagation();
+  const key = filteredKeys[cardIndex];
+  if (got) mastered.add(key);
+  else mastered.delete(key);
+  updateStats();
+  if (cardIndex < filteredKeys.length - 1) cardIndex++;
+  renderCard();
+}
+
+function prevCard() { if (cardIndex > 0) { cardIndex--; renderCard(); } }
+function nextCard() { if (cardIndex < filteredKeys.length - 1) { cardIndex++; renderCard(); } }
+
+function resetAll() {
+  mastered.clear();
+  cardIndex = 0;
+  updateStats();
+  renderCard();
+}
+
+// ── AUDIO ──
+let speaking = false, speedIndex = 0;
+const speeds = [1.0, 0.75, 1.25];
+const speedLabels = ['1.0×', '0.75×', '1.25×'];
+const scriptText = `So, if you're ever planning a trip to Japan, you've gotta check out Kyoto and Osaka — they're totally different vibes, but both amazing in their own way. Kyoto is all about the scenery and the beautiful traditional buildings. And if I had to pick just one spot, I'd say Kinkaku-ji — the Golden Pavilion — is absolutely unmissable. I mean, the way the gold just shines, and it reflects perfectly off the pond, with this gorgeous garden all around it… it feels almost dreamlike, like you've stepped into another world. And here's my tip — go in the early morning. There's this soft, misty atmosphere that makes the whole place feel even more magical. It's honestly breathtaking. Then, when you head over to Osaka, shift gears completely — because it's all about the food. The street food scene there is on another level. So yeah — Kyoto for the beauty, Osaka for the food. That combo alone makes Japan so worth the trip.`;
+
+function togglePlay() {
+  if (!('speechSynthesis' in window)) { alert('音声合成が使えません'); return; }
+  if (speaking) {
+    window.speechSynthesis.cancel(); speaking = false;
+    updatePlayBtn(false);
+    document.getElementById('progressFill').style.width = '0%';
+    document.getElementById('audioTime').textContent = '0:00 / 0:00';
+    return;
+  }
+  const utt = new SpeechSynthesisUtterance(scriptText);
+  utt.lang = 'en-US'; utt.rate = speeds[speedIndex];
+  const voices = window.speechSynthesis.getVoices();
+  const v = voices.find(v => v.lang.startsWith('en') && v.localService);
+  if (v) utt.voice = v;
+  const est = scriptText.length * 60;
+  utt.onstart = () => { speaking = true; updatePlayBtn(true); animateProgress(est / speeds[speedIndex]); };
+  utt.onend = () => { speaking = false; updatePlayBtn(false); document.getElementById('progressFill').style.width = '100%'; };
+  utt.onerror = () => { speaking = false; updatePlayBtn(false); };
+  window.speechSynthesis.speak(utt);
+}
+
+let pInterval = null;
+function animateProgress(dur) {
+  clearInterval(pInterval);
+  const s = Date.now();
+  pInterval = setInterval(() => {
+    const el = Date.now() - s, pct = Math.min((el/dur)*100,100);
+    document.getElementById('progressFill').style.width = pct+'%';
+    document.getElementById('audioTime').textContent = `${fmt(Math.floor(el/1000))} / ${fmt(Math.floor(dur/1000))}`;
+    if (pct>=100) clearInterval(pInterval);
+  },100);
+}
+function fmt(s) { return `${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`; }
+function updatePlayBtn(p) {
+  document.getElementById('playIcon').innerHTML = p
+    ? '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>'
+    : '<path d="M8 5v14l11-7z"/>';
+}
+function changeSpeed() {
+  speedIndex = (speedIndex+1)%speeds.length;
+  document.querySelector('.speed-btn').textContent = speedLabels[speedIndex];
+  if (speaking) { window.speechSynthesis.cancel(); speaking=false; updatePlayBtn(false); setTimeout(togglePlay,100); }
+}
+function seekAudio(e) {
+  const pct = e.offsetX / e.currentTarget.offsetWidth;
+  document.getElementById('progressFill').style.width = (pct*100)+'%';
+}
+window.speechSynthesis.onvoiceschanged = () => {};
+
+// Init
+renderCard();
+updateStats();
+</script>
+</body>
+</html>
