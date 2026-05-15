@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meaning of Life | English Speaking Practice</title>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1410;
+    --paper: #f5f0e8;
+    --accent-gold: #c8962a;
+    --accent-moss: #4a7c59;
+    --accent-indigo: #3d5a8a;
+    --accent-crimson: #a03030;
+    --panel-bg: #fffdf8;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+  }
+
+  /* NAV */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(245,240,232,0.85);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(26,20,16,0.1);
+    display: flex;
+    justify-content: center;
+    gap: 0;
+  }
+
+  .tab {
+    padding: 14px 28px;
+    font-family: 'Shippori Mincho', serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    color: var(--ink);
+    opacity: 0.5;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+    letter-spacing: 0.05em;
+  }
+
+  .tab.active {
+    opacity: 1;
+    border-bottom: 3px solid var(--accent-gold);
+  }
+
+  .tab:hover { opacity: 0.8; }
+
+  /* HEADER */
+  .hero {
+    text-align: center;
+    padding: 48px 24px 32px;
+    border-bottom: 1px solid rgba(26,20,16,0.08);
+  }
+
+  .hero-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent-gold);
+    margin-bottom: 12px;
+  }
+
+  .hero h1 {
+    font-family: 'Shippori Mincho', serif;
+    font-size: clamp(28px, 5vw, 42px);
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--ink);
+  }
+
+  .hero p {
+    margin-top: 12px;
+    font-size: 14px;
+    color: rgba(26,20,16,0.5);
+    font-style: italic;
+  }
+
+  /* PAGE SECTIONS */
+  .page { display: none; padding: 32px 24px; max-width: 720px; margin: 0 auto; }
+  .page.active { display: block; }
+
+  /* STATS BAR */
+  .stats-bar {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1px;
+    background: rgba(26,20,16,0.1);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 28px;
+  }
+
+  .stat {
+    background: var(--panel-bg);
+    padding: 16px;
+    text-align: center;
+  }
+
+  .stat-num {
+    font-size: 28px;
+    font-weight: 700;
+    font-family: 'Shippori Mincho', serif;
+  }
+
+  .stat-label {
+    font-size: 11px;
+    color: rgba(26,20,16,0.5);
+    margin-top: 4px;
+    letter-spacing: 0.05em;
+  }
+
+  .stat-num.gold { color: var(--accent-gold); }
+  .stat-num.moss { color: var(--accent-moss); }
+  .stat-num.ink  { color: var(--ink); }
+
+  /* LEGEND */
+  .legend {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+    font-size: 12px;
+  }
+
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+
+  .legend-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+  }
+
+  /* AUDIO BAR */
+  .audio-bar {
+    background: var(--ink);
+    border-radius: 14px;
+    padding: 16px 20px;
+    margin-bottom: 28px;
+    color: white;
+  }
+
+  .audio-title {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 13px;
+    margin-bottom: 12px;
+    opacity: 0.9;
+    letter-spacing: 0.03em;
+  }
+
+  .audio-controls {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .play-btn {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: var(--accent-gold);
+    border: none;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: transform 0.15s;
+  }
+
+  .play-btn:hover { transform: scale(1.05); }
+
+  .play-btn svg { width: 16px; height: 16px; fill: white; margin-left: 2px; }
+  .play-btn.playing svg { margin-left: 0; }
+
+  .audio-right { flex: 1; }
+
+  .progress-wrap {
+    height: 4px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 2px;
+    cursor: pointer;
+    margin-bottom: 8px;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--accent-gold);
+    border-radius: 2px;
+    transition: width 0.1s linear;
+  }
+
+  .audio-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    opacity: 0.6;
+  }
+
+  .speed-btn {
+    background: rgba(255,255,255,0.15);
+    border: none;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .speed-btn:hover { background: rgba(255,255,255,0.25); }
+
+  /* SCRIPT */
+  .script-body {
+    font-size: 16px;
+    line-height: 2.2;
+    background: var(--panel-bg);
+    border-radius: 14px;
+    padding: 28px 32px;
+    border: 1px solid rgba(26,20,16,0.06);
+  }
+
+  .ph {
+    cursor: pointer;
+    border-radius: 3px;
+    padding: 1px 3px;
+    transition: opacity 0.2s;
+    border-bottom: 2px solid;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .ph:hover { opacity: 0.75; }
+  .ph.done { text-decoration: line-through; opacity: 0.5; }
+
+  .ph.gold {
+    background: rgba(200,150,42,0.18);
+    border-bottom-color: var(--accent-gold);
+  }
+
+  .ph.moss {
+    background: rgba(74,124,89,0.15);
+    border-bottom-color: var(--accent-moss);
+  }
+
+  .ph.indigo {
+    background: rgba(61,90,138,0.15);
+    border-bottom-color: var(--accent-indigo);
+  }
+
+  /* SLASH PAGE */
+  .slash-chunk {
+    margin-bottom: 24px;
+  }
+
+  .slash-line {
+    font-size: 17px;
+    line-height: 1.9;
+    background: var(--panel-bg);
+    border-radius: 10px;
+    padding: 16px 20px;
+    border: 1px solid rgba(26,20,16,0.06);
+    margin-bottom: 6px;
+  }
+
+  .slash-ja {
+    font-style: italic;
+    font-size: 13px;
+    color: rgba(26,20,16,0.45);
+    padding-left: 8px;
+  }
+
+  /* FLASHCARD PAGE */
+  .filter-chips {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+  }
+
+  .chip {
+    padding: 7px 16px;
+    border-radius: 20px;
+    border: 1.5px solid rgba(26,20,16,0.15);
+    background: transparent;
+    font-size: 12px;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.2s;
+  }
+
+  .chip.active {
+    background: var(--ink);
+    color: white;
+    border-color: var(--ink);
+  }
+
+  .card-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    font-size: 13px;
+    color: rgba(26,20,16,0.5);
+  }
+
+  .card-progress-bar {
+    height: 4px;
+    background: rgba(26,20,16,0.1);
+    border-radius: 2px;
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+
+  .card-progress-fill {
+    height: 100%;
+    background: var(--accent-moss);
+    border-radius: 2px;
+    transition: width 0.4s ease;
+  }
+
+  .flashcard-wrap {
+    perspective: 1000px;
+    margin-bottom: 24px;
+  }
+
+  .flashcard {
+    position: relative;
+    width: 100%;
+    min-height: 240px;
+    transform-style: preserve-3d;
+    transition: transform 0.5s cubic-bezier(0.4,0,0.2,1);
+    cursor: pointer;
+  }
+
+  .flashcard.flipped { transform: rotateY(180deg); }
+
+  .card-face {
+    position: absolute;
+    width: 100%;
+    min-height: 240px;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: 16px;
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  .card-front {
+    background: var(--panel-bg);
+    border: 1.5px solid rgba(26,20,16,0.1);
+  }
+
+  .card-back {
+    background: var(--ink);
+    color: white;
+    transform: rotateY(180deg);
+  }
+
+  .card-badge {
+    font-size: 11px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+  }
+
+  .badge-gold { background: rgba(200,150,42,0.2); color: var(--accent-gold); }
+  .badge-moss { background: rgba(74,124,89,0.2); color: var(--accent-moss); }
+  .badge-indigo { background: rgba(61,90,138,0.2); color: var(--accent-indigo); }
+
+  .card-phrase {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+
+  .card-tap-hint {
+    margin-top: 16px;
+    font-size: 11px;
+    opacity: 0.35;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .card-back .card-meaning {
+    font-size: 22px;
+    font-weight: 600;
+    font-family: 'Shippori Mincho', serif;
+    margin-bottom: 12px;
+  }
+
+  .card-back .card-example {
+    font-size: 13px;
+    opacity: 0.7;
+    font-style: italic;
+    line-height: 1.6;
+  }
+
+  .card-actions {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .card-actions button {
+    flex: 1;
+    padding: 14px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s;
+  }
+
+  .btn-again {
+    background: rgba(160,48,48,0.1);
+    color: var(--accent-crimson);
+  }
+
+  .btn-again:hover { background: rgba(160,48,48,0.18); }
+
+  .btn-got {
+    background: rgba(74,124,89,0.15);
+    color: var(--accent-moss);
+  }
+
+  .btn-got:hover { background: rgba(74,124,89,0.25); }
+  .btn-got.mastered { background: var(--accent-moss); color: white; }
+
+  .card-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .nav-btn {
+    padding: 10px 24px;
+    border-radius: 10px;
+    border: 1.5px solid rgba(26,20,16,0.15);
+    background: transparent;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    transition: all 0.2s;
+  }
+
+  .nav-btn:hover { background: var(--ink); color: white; border-color: var(--ink); }
+
+  .reset-btn {
+    font-size: 12px;
+    color: rgba(26,20,16,0.4);
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+
+  .mastered-pill {
+    position: absolute;
+    top: 12px; right: 12px;
+    background: var(--accent-moss);
+    color: white;
+    font-size: 10px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    display: none;
+  }
+
+  .mastered-pill.show { display: block; }
+
+  /* POPUP */
+  .overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(26,20,16,0.5);
+    z-index: 200;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+
+  .overlay.open {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .popup {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: var(--panel-bg);
+    border-radius: 20px 20px 0 0;
+    padding: 12px 28px 40px;
+    z-index: 201;
+    transform: translateY(100%);
+    transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  .popup.open { transform: translateY(0); }
+
+  .popup-handle {
+    width: 40px; height: 4px;
+    background: rgba(26,20,16,0.15);
+    border-radius: 2px;
+    margin: 0 auto 20px;
+  }
+
+  .popup-close {
+    position: absolute;
+    top: 20px; right: 24px;
+    background: none; border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: rgba(26,20,16,0.4);
+    line-height: 1;
+  }
+
+  .popup-type {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .popup-phrase {
+    font-size: 22px;
+    font-weight: 600;
+    font-family: 'DM Sans', sans-serif;
+    margin-bottom: 16px;
+    line-height: 1.4;
+  }
+
+  .popup-body {
+    font-size: 14px;
+    line-height: 1.8;
+    color: rgba(26,20,16,0.75);
+    margin-bottom: 20px;
+  }
+
+  .popup-vs {
+    background: rgba(26,20,16,0.04);
+    border-radius: 10px;
+    padding: 16px;
+    font-size: 13px;
+    line-height: 1.9;
+    margin-bottom: 20px;
+  }
+
+  .popup-master-btn {
+    width: 100%;
+    padding: 14px;
+    border-radius: 12px;
+    border: 1.5px solid var(--accent-moss);
+    background: transparent;
+    color: var(--accent-moss);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .popup-master-btn.mastered {
+    background: var(--accent-moss);
+    color: white;
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-label">English Speaking Practice</div>
+  <h1>The Meaning of Life</h1>
+  <p>人生・存在・シミュレーション — 深い問いを英語で語る</p>
+</div>
+
+<nav>
+  <button class="tab active" onclick="switchTab('script')">📜 スクリプト</button>
+  <button class="tab" onclick="switchTab('slash')">✂️ スラッシュ</button>
+  <button class="tab" onclick="switchTab('cards')">🃏 単語帳</button>
+</nav>
+
+<!-- SCRIPT PAGE -->
+<div class="page active" id="page-script">
+  <div class="stats-bar">
+    <div class="stat">
+      <div class="stat-num gold" id="total-count">8</div>
+      <div class="stat-label">フレーズ総数</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num moss" id="mastered-count">0</div>
+      <div class="stat-label">習得済み</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num ink" id="learning-count">8</div>
+      <div class="stat-label">学習中</div>
+    </div>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-dot" style="background:var(--accent-gold)"></div>
+      <span style="font-size:12px">🏅 重要フレーズ</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot" style="background:var(--accent-moss)"></div>
+      <span style="font-size:12px">💬 便利表現</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot" style="background:var(--accent-indigo)"></div>
+      <span style="font-size:12px">📖 語彙</span>
+    </div>
+  </div>
+
+  <div class="audio-bar">
+    <div class="audio-title">🎙 The Meaning of Life — 1-minute speaking script</div>
+    <div class="audio-controls">
+      <button class="play-btn" id="play-btn" onclick="togglePlay()">
+        <svg viewBox="0 0 16 16"><polygon points="3,2 14,8 3,14"/></svg>
+      </button>
+      <div class="audio-right">
+        <div class="progress-wrap" onclick="seekAudio(event)">
+          <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+        </div>
+        <div class="audio-meta">
+          <span id="time-display">0:00 / 1:00</span>
+          <button class="speed-btn" onclick="toggleSpeed()" id="speed-btn">1.0×</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="script-body" id="script-body">
+    <p>
+      I often find myself wondering, <span class="ph gold" data-key="what-for" onclick="openPopup('what-for')">"What am I here for?"</span>
+      It's one of those questions that <span class="ph moss" data-key="creep-back" onclick="openPopup('creep-back')">keeps creeping back</span>,
+      no matter how busy I get.
+    </p>
+    <br>
+    <p>
+      Intellectually, I <span class="ph gold" data-key="come-to-terms" onclick="openPopup('come-to-terms')">have come to terms with</span>
+      the idea that life may have no inherent meaning.
+      But even knowing that, I still feel a kind of <span class="ph indigo" data-key="existential" onclick="openPopup('existential')">existential</span> ache —
+      a heaviness that's hard to shake.
+    </p>
+    <br>
+    <p>
+      What gets me is this loop: if life has no meaning, then how we live shouldn't matter either —
+      and yet, somehow, it still does.
+      That <span class="ph moss" data-key="contradiction" onclick="openPopup('contradiction')">contradiction</span> is exhausting.
+    </p>
+    <br>
+    <p>
+      One thing that helps me is <span class="ph gold" data-key="step-back" onclick="openPopup('step-back')">stepping back</span>
+      and thinking of all this as a kind of simulation.
+      If none of it is truly "real," then maybe the suffering isn't either.
+      It's a strange comfort, but it works for me.
+    </p>
+    <br>
+    <p>
+      I guess what I'm learning is that <span class="ph moss" data-key="sit-with" onclick="openPopup('sit-with')">sitting with the uncertainty</span>
+      — rather than trying to solve it — might be the whole point.
+      Not <span class="ph indigo" data-key="resolution" onclick="openPopup('resolution')">resolution</span>, but <span class="ph gold" data-key="presence" onclick="openPopup('presence')">presence</span>.
+    </p>
+  </div>
+</div>
+
+<!-- SLASH PAGE -->
+<div class="page" id="page-slash">
+  <div id="slash-content"></div>
+</div>
+
+<!-- CARDS PAGE -->
+<div class="page" id="page-cards">
+  <div class="filter-chips">
+    <button class="chip active" onclick="filterCards('all', this)">すべて</button>
+    <button class="chip" onclick="filterCards('gold', this)">🏅 重要</button>
+    <button class="chip" onclick="filterCards('moss', this)">💬 表現</button>
+    <button class="chip" onclick="filterCards('indigo', this)">📖 語彙</button>
+    <button class="chip" onclick="filterCards('unmastered', this)">🔄 未習得</button>
+  </div>
+
+  <div class="card-meta">
+    <span id="card-counter">カード 1 / 8</span>
+    <button class="reset-btn" onclick="resetAll()">すべてリセット</button>
+  </div>
+
+  <div class="card-progress-bar">
+    <div class="card-progress-fill" id="card-progress-fill" style="width:0%"></div>
+  </div>
+
+  <div class="flashcard-wrap">
+    <div class="flashcard" id="flashcard" onclick="flipCard()">
+      <div class="card-face card-front" id="card-front">
+        <div class="mastered-pill" id="mastered-pill">✓ 習得済み</div>
+        <div class="card-badge" id="card-badge"></div>
+        <div class="card-phrase" id="card-phrase"></div>
+        <div class="card-tap-hint">tap to flip</div>
+      </div>
+      <div class="card-face card-back" id="card-back">
+        <div class="card-meaning" id="card-meaning"></div>
+        <div class="card-example" id="card-example"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-actions">
+    <button class="btn-again" onclick="markAgain()">✕ もう一度</button>
+    <button class="btn-got" id="btn-got" onclick="markMastered()">✓ 覚えた！</button>
+  </div>
+
+  <div class="card-nav">
+    <button class="nav-btn" onclick="prevCard()">← 前へ</button>
+    <button class="nav-btn" onclick="nextCard()">次へ →</button>
+  </div>
+</div>
+
+<!-- OVERLAY + POPUP -->
+<div class="overlay" id="overlay" onclick="closePopup()"></div>
+<div class="popup" id="popup">
+  <div class="popup-handle"></div>
+  <button class="popup-close" onclick="closePopup()">×</button>
+  <div class="popup-type" id="popup-type"></div>
+  <div class="popup-phrase" id="popup-phrase"></div>
+  <div class="popup-body" id="popup-body"></div>
+  <div class="popup-vs" id="popup-vs"></div>
+  <button class="popup-master-btn" id="popup-master-btn" onclick="toggleMasterFromPopup()">習得済みにする</button>
+</div>
+
+<script>
+const phraseData = {
+  'what-for': {
+    type: '🏅 重要フレーズ',
+    color: '#c8962a',
+    category: 'gold',
+    phrase: 'What am I here for?',
+    body: '「何のために生きているのか」を英語で自然に表現する核心フレーズ。"Why do I live?" よりずっとネイティブらしい。',
+    vs: '✅ ネイティブ："What am I here for?"\n❌ 日本人がやりがち："Why do I live?" / "What is the purpose of my life?"（硬すぎる）',
+    meaning: '何のために生きているのか',
+    example: 'I often find myself wondering, "What am I here for?"'
+  },
+  'creep-back': {
+    type: '💬 便利表現',
+    color: '#4a7c59',
+    category: 'moss',
+    phrase: 'keeps creeping back',
+    body: 'ふとした瞬間に繰り返し戻ってくる感覚を表す表現。"comes back" より生き生きとした印象を与える。',
+    vs: '✅ ネイティブ："keeps creeping back"\n❌ 日本人がやりがち："comes back again and again"（単調）',
+    meaning: 'ふと戻ってくる・頭をよぎる',
+    example: 'It\'s one of those questions that keeps creeping back.'
+  },
+  'come-to-terms': {
+    type: '🏅 重要フレーズ',
+    color: '#c8962a',
+    category: 'gold',
+    phrase: 'come to terms with',
+    body: '苦しいことを受け入れ、折り合いをつける過程を表す重要イディオム。知的・感情的な受容どちらにも使える。',
+    vs: '✅ ネイティブ："come to terms with the idea"\n❌ 日本人がやりがち："accept" だけ（プロセス感がない）',
+    meaning: '〜と折り合いをつける・受け入れる',
+    example: 'I have come to terms with the idea that life may have no inherent meaning.'
+  },
+  'existential': {
+    type: '📖 語彙',
+    color: '#3d5a8a',
+    category: 'indigo',
+    phrase: 'existential ache',
+    body: '「実存的な痛み」。哲学的・感情的な重さを一言で表す洗練された語彙。"existential dread/crisis" も同様に使える。',
+    vs: '✅ ネイティブ："existential ache"\n❌ 日本人がやりがち："philosophical pain"（不自然）',
+    meaning: '実存的な痛み・虚無感',
+    example: 'I still feel a kind of existential ache — a heaviness that\'s hard to shake.'
+  },
+  'contradiction': {
+    type: '💬 便利表現',
+    color: '#4a7c59',
+    category: 'moss',
+    phrase: 'That contradiction is exhausting.',
+    body: 'ループ・矛盾の苦しさを短く締める一文。シンプルだが感情の重さが伝わる力強い表現。',
+    vs: '✅ ネイティブ："That contradiction is exhausting."\n❌ 日本人がやりがち："It is very tiring to think about this contradiction."（回りくどい）',
+    meaning: 'その矛盾に疲れてしまう',
+    example: 'That contradiction is exhausting.'
+  },
+  'step-back': {
+    type: '🏅 重要フレーズ',
+    color: '#c8962a',
+    category: 'gold',
+    phrase: 'stepping back',
+    body: '物事から距離を置き、俯瞰する動作を表すイディオム。シミュレーション論的な視点の切り替えと相性が良い。',
+    vs: '✅ ネイティブ："stepping back and thinking of all this as…"\n❌ 日本人がやりがち："thinking from a distance"（不自然）',
+    meaning: '一歩引いて・距離を置いて',
+    example: 'One thing that helps me is stepping back and thinking of all this as a kind of simulation.'
+  },
+  'sit-with': {
+    type: '💬 便利表現',
+    color: '#4a7c59',
+    category: 'moss',
+    phrase: 'sitting with the uncertainty',
+    body: '答えを求めず、不確かさの中にとどまることを表す表現。心理・哲学的な文脈で非常によく使われる。',
+    vs: '✅ ネイティブ："sitting with the uncertainty"\n❌ 日本人がやりがち："enduring the uncertainty"（受け身すぎる）',
+    meaning: '不確かさとともにいる・受け入れてとどまる',
+    example: 'sitting with the uncertainty — rather than trying to solve it — might be the whole point.'
+  },
+  'resolution': {
+    type: '📖 語彙',
+    color: '#3d5a8a',
+    category: 'indigo',
+    phrase: 'resolution vs presence',
+    body: '"resolution"（解決・結論）と"presence"（今ここにいること）を対比させる構造。哲学的なスピーチの締めに効果的。',
+    vs: '✅ ネイティブ："Not resolution, but presence."\n❌ 日本人がやりがち："Not solving, but being here."（やや幼い）',
+    meaning: '解決・結論 vs 今ここにいること',
+    example: 'Not resolution, but presence.'
+  },
+  'presence': {
+    type: '🏅 重要フレーズ',
+    color: '#c8962a',
+    category: 'gold',
+    phrase: 'presence',
+    body: '「今ここにいること」。マインドフルネスや実存哲学で中心的な概念。短い一語だが非常に深い意味を持つ。',
+    vs: '✅ ネイティブ："presence"\n❌ 日本人がやりがち："being present" — 正しいが "presence" のほうが詩的で締まる',
+    meaning: '今ここにいること・存在感',
+    example: 'Not resolution, but presence.'
+  }
+};
+
+const slashData = [
+  { en: 'I often find myself wondering, / "What am I here for?"', ja: '私はよく、「何のために生きているのか」と考えていることに気づく。' },
+  { en: 'It\'s one of those questions / that keeps creeping back, / no matter how busy I get.', ja: 'それはどれだけ忙しくしていても、ふと戻ってくる類の問いだ。' },
+  { en: 'Intellectually, I have come to terms with / the idea that life may have no inherent meaning.', ja: '知的には、人生に本質的な意味などないかもしれないという考えと折り合いをつけた。' },
+  { en: 'But even knowing that, / I still feel a kind of existential ache — / a heaviness that\'s hard to shake.', ja: 'それでもなお、実存的な痛みのようなものを感じる — 払拭しにくい重さを。' },
+  { en: 'What gets me is this loop: / if life has no meaning, / then how we live shouldn\'t matter either.', ja: '私を苦しめるのはこのループだ：人生に意味がないなら、どう生きるかも関係ないはず。' },
+  { en: 'And yet, somehow, it still does. / That contradiction is exhausting.', ja: 'それでもやはり、関係してしまう。その矛盾に疲れてしまう。' },
+  { en: 'One thing that helps me / is stepping back / and thinking of all this as a kind of simulation.', ja: '助けになることの一つは、一歩引いて、これ全体を一種のシミュレーションとして見ることだ。' },
+  { en: 'If none of it is truly "real," / then maybe the suffering isn\'t either.', ja: 'どれも本当の意味で「現実」でないなら、苦しみもそうではないかもしれない。' },
+  { en: 'sitting with the uncertainty — / rather than trying to solve it — / might be the whole point.', ja: '不確かさとともにとどまること — 解決しようとするのではなく — それ自体が目的かもしれない。' },
+  { en: 'Not resolution, / but presence.', ja: '解決ではなく、今ここにいること。' }
+];
+
+let masteredSet = new Set();
+let currentPopupKey = null;
+let cardKeys = Object.keys(phraseData);
+let filteredKeys = [...cardKeys];
+let currentCardIdx = 0;
+let isFlipped = false;
+let speeds = [1.0, 0.75, 1.25];
+let speedIdx = 0;
+let fakeTime = 0;
+let fakeMax = 60;
+let playing = false;
+let timerInterval = null;
+
+// TABS
+function switchTab(tab) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-' + tab).classList.add('active');
+  event.target.classList.add('active');
+
+  if (tab === 'slash') renderSlash();
+  if (tab === 'cards') renderCard();
+}
+
+// AUDIO (simulated)
+function togglePlay() {
+  playing = !playing;
+  const btn = document.getElementById('play-btn');
+  if (playing) {
+    btn.innerHTML = '<svg viewBox="0 0 16 16"><rect x="3" y="2" width="4" height="12"/><rect x="9" y="2" width="4" height="12"/></svg>';
+    timerInterval = setInterval(() => {
+      fakeTime += 0.1;
+      if (fakeTime >= fakeMax) { fakeTime = 0; playing = false; clearInterval(timerInterval); togglePlay(); }
+      updateAudioUI();
+    }, 100);
+  } else {
+    btn.innerHTML = '<svg viewBox="0 0 16 16"><polygon points="3,2 14,8 3,14"/></svg>';
+    clearInterval(timerInterval);
+  }
+}
+
+function updateAudioUI() {
+  const pct = (fakeTime / fakeMax * 100).toFixed(1);
+  document.getElementById('progress-fill').style.width = pct + '%';
+  const m = Math.floor(fakeTime / 60);
+  const s = Math.floor(fakeTime % 60).toString().padStart(2, '0');
+  document.getElementById('time-display').textContent = `${m}:${s} / 1:00`;
+}
+
+function seekAudio(e) {
+  const rect = e.currentTarget.getBoundingClientRect();
+  const ratio = (e.clientX - rect.left) / rect.width;
+  fakeTime = ratio * fakeMax;
+  updateAudioUI();
+}
+
+function toggleSpeed() {
+  speedIdx = (speedIdx + 1) % speeds.length;
+  document.getElementById('speed-btn').textContent = speeds[speedIdx].toFixed(2).replace('.00', '.0') + '×';
+}
+
+// POPUP
+function openPopup(key) {
+  currentPopupKey = key;
+  const d = phraseData[key];
+  document.getElementById('popup-type').textContent = d.type;
+  document.getElementById('popup-type').style.color = d.color;
+  document.getElementById('popup-phrase').textContent = d.phrase;
+  document.getElementById('popup-body').textContent = d.body;
+  document.getElementById('popup-vs').textContent = d.vs;
+  const btn = document.getElementById('popup-master-btn');
+  btn.classList.toggle('mastered', masteredSet.has(key));
+  btn.textContent = masteredSet.has(key) ? '✓ 習得済み' : '習得済みにする';
+  document.getElementById('overlay').classList.add('open');
+  document.getElementById('popup').classList.add('open');
+}
+
+function closePopup() {
+  document.getElementById('overlay').classList.remove('open');
+  document.getElementById('popup').classList.remove('open');
+  currentPopupKey = null;
+}
+
+function toggleMasterFromPopup() {
+  if (!currentPopupKey) return;
+  toggleMaster(currentPopupKey);
+  const btn = document.getElementById('popup-master-btn');
+  btn.classList.toggle('mastered', masteredSet.has(currentPopupKey));
+  btn.textContent = masteredSet.has(currentPopupKey) ? '✓ 習得済み' : '習得済みにする';
+}
+
+function toggleMaster(key) {
+  if (masteredSet.has(key)) {
+    masteredSet.delete(key);
+  } else {
+    masteredSet.add(key);
+  }
+  updateStats();
+  updateScriptHighlights();
+  updateCardProgress();
+}
+
+function updateStats() {
+  const total = cardKeys.length;
+  const m = masteredSet.size;
+  document.getElementById('total-count').textContent = total;
+  document.getElementById('mastered-count').textContent = m;
+  document.getElementById('learning-count').textContent = total - m;
+}
+
+function updateScriptHighlights() {
+  document.querySelectorAll('.ph').forEach(el => {
+    const key = el.dataset.key;
+    el.classList.toggle('done', masteredSet.has(key));
+  });
+}
+
+function updateCardProgress() {
+  const total = filteredKeys.length;
+  const m = filteredKeys.filter(k => masteredSet.has(k)).length;
+  const pct = total > 0 ? (m / total * 100) : 0;
+  document.getElementById('card-progress-fill').style.width = pct + '%';
+}
+
+// SLASH
+function renderSlash() {
+  const container = document.getElementById('slash-content');
+  container.innerHTML = slashData.map(item => {
+    const chunks = item.en.split(' / ');
+    const highlighted = chunks.map(chunk => highlightPhrase(chunk)).join(' / ');
+    return `<div class="slash-chunk">
+      <div class="slash-line">${highlighted}</div>
+      <div class="slash-ja">${item.ja}</div>
+    </div>`;
+  }).join('');
+}
+
+function highlightPhrase(text) {
+  let result = text;
+  Object.keys(phraseData).forEach(key => {
+    const d = phraseData[key];
+    if (text.toLowerCase().includes(d.phrase.toLowerCase())) {
+      result = result.replace(d.phrase, `<span class="ph ${d.category}" data-key="${key}" onclick="openPopup('${key}')">${d.phrase}</span>`);
+    }
+  });
+  return result;
+}
+
+// CARDS
+function filterCards(type, el) {
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  if (type === 'all') filteredKeys = [...cardKeys];
+  else if (type === 'unmastered') filteredKeys = cardKeys.filter(k => !masteredSet.has(k));
+  else filteredKeys = cardKeys.filter(k => phraseData[k].category === type);
+  currentCardIdx = 0;
+  isFlipped = false;
+  renderCard();
+}
+
+function renderCard() {
+  if (filteredKeys.length === 0) {
+    document.getElementById('flashcard').innerHTML = '<div class="card-face card-front" style="display:flex;align-items:center;justify-content:center;font-size:14px;color:rgba(26,20,16,0.4)">カードがありません</div>';
+    return;
+  }
+  const key = filteredKeys[currentCardIdx];
+  const d = phraseData[key];
+
+  document.getElementById('card-counter').textContent = `カード ${currentCardIdx + 1} / ${filteredKeys.length}`;
+  document.getElementById('flashcard').classList.remove('flipped');
+  isFlipped = false;
+
+  const badge = document.getElementById('card-badge');
+  badge.textContent = d.type;
+  badge.className = 'card-badge badge-' + d.category;
+
+  document.getElementById('card-phrase').textContent = d.phrase;
+  document.getElementById('card-meaning').textContent = d.meaning;
+  document.getElementById('card-example').textContent = d.example;
+
+  const pill = document.getElementById('mastered-pill');
+  pill.classList.toggle('show', masteredSet.has(key));
+
+  const gotBtn = document.getElementById('btn-got');
+  gotBtn.classList.toggle('mastered', masteredSet.has(key));
+  gotBtn.textContent = masteredSet.has(key) ? '✓ 習得済み！' : '✓ 覚えた！';
+
+  updateCardProgress();
+}
+
+function flipCard() {
+  isFlipped = !isFlipped;
+  document.getElementById('flashcard').classList.toggle('flipped', isFlipped);
+}
+
+function markAgain() {
+  if (masteredSet.has(filteredKeys[currentCardIdx])) {
+    masteredSet.delete(filteredKeys[currentCardIdx]);
+    updateStats(); updateScriptHighlights();
+  }
+  nextCard();
+}
+
+function markMastered() {
+  const key = filteredKeys[currentCardIdx];
+  toggleMaster(key);
+  renderCard();
+}
+
+function prevCard() {
+  currentCardIdx = (currentCardIdx - 1 + filteredKeys.length) % filteredKeys.length;
+  renderCard();
+}
+
+function nextCard() {
+  currentCardIdx = (currentCardIdx + 1) % filteredKeys.length;
+  renderCard();
+}
+
+function resetAll() {
+  masteredSet.clear();
+  updateStats();
+  updateScriptHighlights();
+  renderCard();
+}
+
+// INIT
+updateStats();
+renderCard();
+</script>
+</body>
+</html>
