@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Dog Coco — 英語スピーキング練習</title>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f5f0e8;
+  --bg2: #ede7d9;
+  --bg3: #ddd5c5;
+  --ink: #1c1710;
+  --ink2: #5a5245;
+  --ink3: #9c9080;
+  --accent: #8b5e3c;
+  --accent2: #c49a6c;
+  --accent3: #ecdfc9;
+  --red: #a33a2a;
+  --green: #3a6b4a;
+  --blue: #2a4b82;
+  --phrase-bg: #fff8e7;
+  --phrase-border: #e0b84a;
+  --phrase-text: #7a5210;
+  --word-bg: #eaf4ff;
+  --word-border: #7ab0e0;
+  --word-text: #1a3f70;
+  --shadow: 0 2px 12px rgba(28,23,16,0.07);
+  --shadow2: 0 8px 40px rgba(28,23,16,0.18);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);color:var(--ink);font-family:'DM Sans',sans-serif;font-weight:300;min-height:100vh}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg width='300' height='300' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");pointer-events:none;z-index:0}
+.wrap{max-width:780px;margin:0 auto;padding:2.5rem 1.5rem 6rem;position:relative;z-index:1}
+
+/* HEADER */
+.hdr{text-align:center;padding-bottom:2rem;margin-bottom:2rem;border-bottom:1px solid var(--bg3);position:relative}
+.hdr::after{content:'';position:absolute;bottom:-1px;left:50%;transform:translateX(-50%);width:48px;height:2px;background:var(--accent2)}
+.eyebrow{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent2);margin-bottom:.6rem}
+.hdr h1{font-family:'Shippori Mincho',serif;font-size:2rem;font-weight:500;color:var(--ink);line-height:1.25}
+.hdr h1 em{font-style:normal;color:var(--accent)}
+.hdr-sub{font-size:12px;color:var(--ink3);margin-top:.4rem}
+
+/* TABS */
+.tabs{display:flex;border-bottom:1px solid var(--bg3);margin-bottom:1.75rem;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex-shrink:0;padding:.65rem 1rem;font-size:12.5px;font-family:'DM Sans',sans-serif;font-weight:400;color:var(--ink3);background:none;border:none;border-bottom:2px solid transparent;margin-bottom:-1px;cursor:pointer;transition:all .2s;white-space:nowrap}
+.tab:hover{color:var(--accent)}
+.tab.on{color:var(--accent);border-bottom-color:var(--accent);font-weight:500}
+
+/* PANELS */
+.panel{display:none;animation:fi .28s ease}
+.panel.on{display:block}
+@keyframes fi{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+
+/* PLAY ROW */
+.play-row{display:flex;align-items:center;gap:8px;margin-bottom:1.1rem;flex-wrap:wrap}
+.play-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:var(--accent);color:#fff;border:none;border-radius:3px;font-size:13px;font-family:'DM Sans',sans-serif;cursor:pointer;transition:background .2s;flex-shrink:0}
+.play-btn:hover{background:var(--ink)}
+.play-btn.stop{background:var(--red)}
+.play-btn svg{width:12px;height:12px;flex-shrink:0}
+.spd-lbl{font-size:12px;color:var(--ink3)}
+.spd-btn{background:none;border:0.5px solid var(--bg3);border-radius:2px;padding:3px 8px;font-size:11px;font-family:'DM Sans',sans-serif;color:var(--ink2);cursor:pointer;transition:all .15s}
+.spd-btn.on,.spd-btn:hover{background:var(--accent3);border-color:var(--accent2);color:var(--accent)}
+
+/* LEGEND */
+.legend{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:1.1rem;font-size:11.5px;color:var(--ink2)}
+.leg-item{display:flex;align-items:center;gap:5px}
+.leg-dot{width:9px;height:9px;border-radius:2px;flex-shrink:0}
+.leg-dot.p{background:var(--phrase-bg);border:1.5px solid var(--phrase-border)}
+.leg-dot.w{background:var(--word-bg);border:1.5px solid var(--word-border)}
+
+/* SCRIPT CARD */
+.script-card{background:#fff;border:1px solid var(--bg3);border-radius:4px;padding:1.75rem 2rem;box-shadow:var(--shadow);position:relative;line-height:2.15;font-size:15.5px}
+.script-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent2);border-radius:4px 0 0 4px}
+
+/* HIGHLIGHTS */
+.phrase{background:var(--phrase-bg);border-bottom:2px solid var(--phrase-border);color:var(--phrase-text);padding:1px 2px;border-radius:2px;cursor:pointer;transition:background .15s}
+.phrase:hover{background:#ffecb0}
+.word{background:var(--word-bg);border-bottom:2px solid var(--word-border);color:var(--word-text);padding:1px 2px;border-radius:2px;cursor:pointer;transition:background .15s}
+.word:hover{background:#c8e2ff}
+
+/* BOTTOM SHEET TOOLTIP */
+.overlay{position:fixed;inset:0;z-index:1000;display:flex;align-items:flex-end;justify-content:center;background:rgba(28,23,16,0);pointer-events:none;transition:background .25s}
+.overlay.show{background:rgba(28,23,16,0.38);pointer-events:all}
+.sheet{background:#fff;border-radius:14px 14px 0 0;padding:1.5rem 1.5rem 2.5rem;width:100%;max-width:540px;box-shadow:var(--shadow2);transform:translateY(100%);transition:transform .3s cubic-bezier(.32,.72,0,1);border-top:3px solid var(--accent2);position:relative}
+.overlay.show .sheet{transform:translateY(0)}
+.sheet-close{position:absolute;top:.9rem;right:1.2rem;background:none;border:none;font-size:22px;cursor:pointer;color:var(--ink3);line-height:1}
+.sheet-term{font-size:17px;font-weight:500;color:var(--accent);margin-bottom:.2rem}
+.sheet-type{font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--ink3);margin-bottom:.65rem}
+.sheet-def{font-family:'Shippori Mincho',serif;font-size:15px;color:var(--ink);line-height:1.9;margin-bottom:.5rem}
+.sheet-note{font-size:13px;color:var(--ink2);line-height:1.75}
+.sheet-why{color:var(--green);font-size:12.5px;margin-top:.4rem;line-height:1.7}
+.sheet-wrong{color:var(--red);font-size:12.5px;margin-top:.2rem;line-height:1.7}
+
+/* SLASH */
+.slash-intro{font-family:'Shippori Mincho',serif;font-size:13px;color:var(--ink2);margin-bottom:1.1rem;line-height:1.9}
+.slash-hint{font-size:11px;color:var(--ink3);text-align:right;margin-bottom:.65rem;letter-spacing:.04em}
+.chunk{background:#fff;border:1px solid var(--bg3);border-radius:4px;padding:.9rem 1.2rem;margin-bottom:.55rem;cursor:pointer;box-shadow:var(--shadow);transition:border-color .2s,background .2s}
+.chunk:hover{border-color:var(--accent2)}
+.chunk.open{border-color:var(--accent2);background:var(--phrase-bg)}
+.chunk-en{font-size:15px;color:var(--ink);line-height:2}
+.slash-sep{color:var(--accent2);margin:0 3px;font-weight:500}
+.chunk-jp{display:none;font-family:'Shippori Mincho',serif;font-size:13px;color:var(--ink2);margin-top:.45rem;padding-top:.45rem;border-top:1px dashed var(--bg3);line-height:1.85}
+.chunk.open .chunk-jp{display:block}
+
+/* VOCAB */
+.vsearch{width:100%;padding:9px 14px;background:#fff;border:1px solid var(--bg3);border-radius:3px;font-size:14px;font-family:'DM Sans',sans-serif;color:var(--ink);margin-bottom:1rem;outline:none;transition:border-color .2s}
+.vsearch:focus{border-color:var(--accent2)}
+.vc{background:#fff;border:1px solid var(--bg3);border-radius:4px;padding:1rem 1rem 1rem 1.4rem;margin-bottom:.55rem;display:flex;gap:1rem;align-items:flex-start;box-shadow:var(--shadow);transition:border-color .2s,opacity .2s;position:relative}
+.vc::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:4px 0 0 4px}
+.vc.ptype::before{background:var(--phrase-border)}
+.vc.wtype::before{background:var(--word-border)}
+.vc:hover{border-color:var(--accent2)}
+.vc.mastered{opacity:.45}
+.vc-left{min-width:0;flex:1}
+.vc-term{font-size:14px;font-weight:500;color:var(--accent);line-height:1.5;margin-bottom:3px}
+.badge{display:inline-block;font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:1px 6px;border-radius:2px}
+.badge.p{background:var(--phrase-bg);color:var(--phrase-text);border:.5px solid var(--phrase-border)}
+.badge.w{background:var(--word-bg);color:var(--word-text);border:.5px solid var(--word-border)}
+.vc-def{font-family:'Shippori Mincho',serif;font-size:13.5px;color:var(--ink);line-height:1.7;margin-top:.3rem}
+.vc-sub{font-size:12px;color:var(--ink2);margin-top:.25rem;line-height:1.65}
+.vcheck{width:22px;height:22px;border:1.5px solid var(--bg3);border-radius:3px;flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;transition:all .2s;margin-top:2px;color:transparent}
+.vcheck.done{background:var(--green);border-color:var(--green);color:#fff}
+.vcheck:hover{border-color:var(--accent2)}
+.vnote{font-size:11.5px;color:var(--ink3);text-align:right;margin-top:.5rem}
+
+/* CHECK */
+.prog-wrap{margin-bottom:1.5rem}
+.prog-lbl{font-size:12px;color:var(--ink3);margin-bottom:.45rem;display:flex;justify-content:space-between}
+.prog-bar{background:var(--bg3);border-radius:2px;height:5px;overflow:hidden}
+.prog-fill{height:100%;background:var(--green);border-radius:2px;transition:width .4s ease}
+.check-intro{font-family:'Shippori Mincho',serif;font-size:13px;color:var(--ink2);margin-bottom:1.2rem;line-height:1.9}
+.ci{background:#fff;border:1px solid var(--bg3);border-radius:4px;padding:.8rem 1.1rem;margin-bottom:.5rem;display:flex;align-items:center;gap:.8rem;cursor:pointer;transition:all .2s;box-shadow:var(--shadow)}
+.ci:hover{border-color:var(--accent2)}
+.ci.done{background:#f0f8f2;border-color:#a8d4b4}
+.cbox{width:22px;height:22px;border:1.5px solid var(--bg3);border-radius:3px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;transition:all .2s;color:transparent}
+.ci.done .cbox{background:var(--green);border-color:var(--green);color:#fff}
+.ctext{font-size:13.5px;color:var(--ink);font-weight:300;flex:1;line-height:1.5}
+.ci.done .ctext{color:var(--ink3);text-decoration:line-through}
+.star{text-align:center;padding:1.5rem;font-family:'Shippori Mincho',serif;font-size:15px;color:var(--accent);line-height:1.9;display:none}
+
+/* FOOTER */
+.footer{text-align:center;margin-top:3rem;padding-top:1.75rem;border-top:1px solid var(--bg3)}
+.paw{font-size:20px;opacity:.35}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hdr">
+  <div class="eyebrow">英語スピーキング練習 / Speaking Practice</div>
+  <h1>My Dog <em>Coco</em></h1>
+  <p class="hdr-sub">colour-coded phrases · audio · slash reading · vocab · mastery check</p>
+</header>
+
+<nav class="tabs">
+  <button class="tab on" onclick="showTab('script',this)">📄 スクリプト</button>
+  <button class="tab" onclick="showTab('slash',this)">✂️ スラッシュ</button>
+  <button class="tab" onclick="showTab('vocab',this)">📖 単語帳</button>
+  <button class="tab" onclick="showTab('check',this)">✅ 習得チェック</button>
+</nav>
+
+<!-- ━━━ SCRIPT ━━━ -->
+<div class="panel on" id="panel-script">
+  <div class="play-row">
+    <button class="play-btn" id="playBtn" onclick="toggleSpeech()">
+      <svg viewBox="0 0 24 24" fill="currentColor" id="playIcon"><path d="M8 5v14l11-7z"/></svg>
+      <span id="playLbl">音声再生</span>
+    </button>
+    <span class="spd-lbl">速度：</span>
+    <button class="spd-btn on" onclick="setSpd(0.85,this)">ゆっくり</button>
+    <button class="spd-btn" onclick="setSpd(1.0,this)">普通</button>
+    <button class="spd-btn" onclick="setSpd(1.2,this)">速め</button>
+  </div>
+  <div class="legend">
+    <div class="leg-item"><div class="leg-dot p"></div>重要フレーズ（タップで解説）</div>
+    <div class="leg-item"><div class="leg-dot w"></div>重要単語（タップで解説）</div>
+  </div>
+  <div class="script-card">
+    I have a <span class="word" data-id="w-dog">dog</span> named Coco — and
+    <span class="phrase" data-id="p-despite">despite the name</span>,
+    he's actually a boy!
+    He's incredibly <span class="word" data-id="w-timid">timid</span>
+    and <span class="word" data-id="w-clingy">clingy</span>, and honestly,
+    <span class="phrase" data-id="p-cantstand">he can't stand being alone</span>.
+    On a typical workday, he's by himself for over ten hours.
+    I have a pet camera set up at home, so
+    <span class="phrase" data-id="p-checkin">I check in on him</span> now and then —
+    and most of the time, he's just
+    <span class="phrase" data-id="p-asleep">sound asleep</span>, which is a relief.
+    But <span class="phrase" data-id="p-moment">the moment I start getting ready to go out</span>,
+    <span class="phrase" data-id="p-berserk">he goes absolutely berserk</span>.
+    It's like he just loses it.
+    One time, I was watching through the camera and he
+    <span class="phrase" data-id="p-disappeared">completely disappeared from the frame</span> —
+    I panned around everywhere and couldn't find him anywhere.
+    <span class="phrase" data-id="p-heart">My heart nearly stopped</span>!
+    I worry about him all the time.
+    Even at work, I can't always focus knowing he's home alone.
+    But I guess
+    <span class="phrase" data-id="p-love">that's just what it means to love a dog this much</span>.
+  </div>
+</div>
+
+<!-- ━━━ SLASH ━━━ -->
+<div class="panel" id="panel-slash">
+  <p class="slash-intro">英語は「意味のかたまり」で読むと自然に聞こえます。<br>各カードをタップして日本語訳を確認しましょう。</p>
+  <p class="slash-hint">← タップで日本語表示 / もう一度タップで閉じる</p>
+
+  <div class="chunk" onclick="this.classList.toggle('open')">
+    <div class="chunk-en">I have a dog named Coco <span class="slash-sep">/</span> and despite the name, <span class="slash-sep">/</span> he's actually a boy!</div>
+    <div class="chunk-jp">ココという名前の犬を飼っています / でも名前に反して / 実は男の子なんです！</div>
+  </div>
+  <div class="chunk" onclick="this.classList.toggle('open')">
+    <div class="chunk-en">He's incredibly timid and clingy, <span class="slash-sep">/</span> and honestly, <span class="slash-sep">/</span> he can't stand being alone.</div>
+    <div class="chunk-jp">本当に臆病で甘えん坊で / 正直言って / 一人でいることに耐えられないんです。</div>
+  </div>
+  <div class="chunk" onclick="this.classList.toggle('open')">
+    <div class="chunk-en">On a typical workday, <span class="slash-sep">/</span> he's by himself <span class="slash-sep">/</span> for over ten hours.</div>
+    <div class="chunk-jp">普通の仕事の日は / 一人で / 10時間以上います。</div>
+  </div>
+  <div class="chunk" onclick="this.classList.toggle('open')">
+    <div class="chunk-en">I have a pet camera set up at home, <span class="slash-sep">/</span> so I check in on him now and then —</div>
+    <div class="chunk-jp">家にペットカメラを設置しているので / 時々様子を見るんですが…</div>
+  </div>
+  <div class="chunk" onclick="this.classList.toggle('open')">
+    <div class="chunk-en">and most of the time, <span class="slash-sep">/</span> he's just sound asleep, <span class="slash-sep">/</span> which is a relief.</div>
+    <div class="chunk-jp">たいていは / ぐっすり寝ています / それが救いで。</div>
+  </div>
+  <div class="chunk" onclick="this.classList.toggle('open')">
+    <div class="chunk-en">But the moment I start getting ready to go out, <span class="slash-sep">/</span> he goes absolutely berserk.</div>
+    <div class="chunk-jp">でも私が出かける支度を始めた瞬間 / 完全に狂ったように吠えるんです。</div>
+  </div>
+  <div class="chunk" onclick="this.classList.toggle('open')">
+    <div class="chunk-en">One time, <span class="slash-sep">/</span> I was watching through the camera <span class="slash-sep">/</span> and he completely disappeared from the frame —</div>
+    <div class="chunk-jp">ある時 / カメラで見ていたら / 彼が完全に画面から消えてしまって…</div>
+  </div>
+  <div class="chunk" onclick="this.classList.toggle('open')">
+    <div class="chunk-en">I panned around everywhere <span class="slash-sep">/</span> and couldn't find him anywhere. <span class="slash-sep">/</span> My heart nearly stopped!</div>
+    <div class="chunk-jp">あちこちカメラを動かしたけど / どこにもいなくて / 心臓が止まりそうになりました！</div>
+  </div>
+  <div class="chunk" onclick="this.classList.toggle('open')">
+    <div class="chunk-en">I worry about him all the time. <span class="slash-sep">/</span> Even at work, <span class="slash-sep">/</span> I can't always focus <span class="slash-sep">/</span> knowing he's home alone.</div>
+    <div class="chunk-jp">いつも心配しています。 / 仕事中でも / 集中できないことが多くて / 彼が一人でいると思うと。</div>
+  </div>
+  <div class="chunk" onclick="this.classList.toggle('open')">
+    <div class="chunk-en">But I guess <span class="slash-sep">/</span> that's just what it means <span class="slash-sep">/</span> to love a dog this much.</div>
+    <div class="chunk-jp">でもそれが / そういうことなんでしょうね / こんなにも犬を愛するということは。</div>
+  </div>
+</div>
+
+<!-- ━━━ VOCAB ━━━ -->
+<div class="panel" id="panel-vocab">
+  <input class="vsearch" id="vsearch" placeholder="検索…（例: berserk、甘えん坊）" oninput="filterV()">
+  <div id="vlist">
+
+    <div class="vc ptype" data-term="goes absolutely berserk">
+      <div class="vc-left">
+        <div class="vc-term">goes absolutely berserk</div>
+        <span class="badge p">フレーズ</span>
+        <div class="vc-def">完全に狂ったように（吠える・暴れる）</div>
+        <div class="vc-sub">✅ 感情の爆発を生き生きと表現。"barks a lot" より圧倒的に臨場感が出る<br>❌ "barks very very much" → 強調の重ね方が不自然</div>
+      </div>
+      <div class="vcheck" onclick="toggleV(this)">✓</div>
+    </div>
+
+    <div class="vc ptype" data-term="can't stand being alone">
+      <div class="vc-left">
+        <div class="vc-term">can't stand being alone</div>
+        <span class="badge p">フレーズ</span>
+        <div class="vc-def">一人でいることに耐えられない</div>
+        <div class="vc-sub">✅ シンプルかつ自然。感情をストレートに伝える定番表現<br>❌ "doesn't like to be alone so much" → 回りくどい</div>
+      </div>
+      <div class="vcheck" onclick="toggleV(this)">✓</div>
+    </div>
+
+    <div class="vc ptype" data-term="my heart nearly stopped">
+      <div class="vc-left">
+        <div class="vc-term">my heart nearly stopped</div>
+        <span class="badge p">フレーズ</span>
+        <div class="vc-def">心臓が止まりそうになった（驚き・焦り）</div>
+        <div class="vc-sub">✅ ドラマチックだがネイティブが日常的に使う慣用表現<br>❌ "I was very surprised" → 正しいが感情が弱く伝わる</div>
+      </div>
+      <div class="vcheck" onclick="toggleV(this)">✓</div>
+    </div>
+
+    <div class="vc ptype" data-term="check in on him">
+      <div class="vc-left">
+        <div class="vc-term">check in on him</div>
+        <span class="badge p">フレーズ</span>
+        <div class="vc-def">（カメラなどで）様子を見る・気にかける</div>
+        <div class="vc-sub">✅ "watch him" より自然。気にかけているニュアンスが加わる<br>❌ "I see him on camera sometimes" → 動作が曖昧</div>
+      </div>
+      <div class="vcheck" onclick="toggleV(this)">✓</div>
+    </div>
+
+    <div class="vc ptype" data-term="sound asleep">
+      <div class="vc-left">
+        <div class="vc-term">sound asleep</div>
+        <span class="badge p">フレーズ</span>
+        <div class="vc-def">ぐっすり眠っている</div>
+        <div class="vc-sub">✅ "deeply sleeping" より自然なネイティブ表現<br>❌ "sleeping so deeply" → 教科書的で少し不自然</div>
+      </div>
+      <div class="vcheck" onclick="toggleV(this)">✓</div>
+    </div>
+
+    <div class="vc ptype" data-term="disappeared from the frame">
+      <div class="vc-left">
+        <div class="vc-term">disappeared from the frame</div>
+        <span class="badge p">フレーズ</span>
+        <div class="vc-def">画面（カメラの枠）から消えた</div>
+        <div class="vc-sub">✅ カメラ映像の文脈でとても自然な表現<br>❌ "gone from the camera" → slightly awkward</div>
+      </div>
+      <div class="vcheck" onclick="toggleV(this)">✓</div>
+    </div>
+
+    <div class="vc ptype" data-term="that's just what it means to love">
+      <div class="vc-left">
+        <div class="vc-term">that's just what it means to love...</div>
+        <span class="badge p">フレーズ</span>
+        <div class="vc-def">〜を愛するということはそういうことなんですよね</div>
+        <div class="vc-sub">"what it means to 〜" は「〜することの本質・意味」を語る洗練した構文</div>
+      </div>
+      <div class="vcheck" onclick="toggleV(this)">✓</div>
+    </div>
+
+    <div class="vc wtype" data-term="timid">
+      <div class="vc-left">
+        <div class="vc-term">timid</div>
+        <span class="badge w">単語</span>
+        <div class="vc-def">臆病な、小心な（形容詞）</div>
+        <div class="vc-sub">"shy" より弱さ・怖がりのニュアンスが強い。動物にもよく使われる</div>
+      </div>
+      <div class="vcheck" onclick="toggleV(this)">✓</div>
+    </div>
+
+    <div class="vc wtype" data-term="clingy">
+      <div class="vc-left">
+        <div class="vc-term">clingy</div>
+        <span class="badge w">単語</span>
+        <div class="vc-def">べったりくっついてくる、甘えん坊な（形容詞）</div>
+        <div class="vc-sub">人・ペット両方に使える。"dependent" より口語的で愛情が感じられる</div>
+      </div>
+      <div class="vcheck" onclick="toggleV(this)">✓</div>
+    </div>
+
+    <div class="vc wtype" data-term="berserk">
+      <div class="vc-left">
+        <div class="vc-term">berserk</div>
+        <span class="badge w">単語</span>
+        <div class="vc-def">狂乱した、暴れ回る（形容詞・副詞）</div>
+        <div class="vc-sub">バイキング語由来。"go berserk" の形でよく使う。強い感情的反応に使う</div>
+      </div>
+      <div class="vcheck" onclick="toggleV(this)">✓</div>
+    </div>
+
+  </div>
+  <p class="vnote">右端の ✓ をタップして習得済みにできます</p>
+</div>
+
+<!-- ━━━ CHECK ━━━ -->
+<div class="panel" id="panel-check">
+  <p class="check-intro">声に出して練習したらチェックしましょう。<br>全て完了で習得完了です！</p>
+  <div class="prog-wrap">
+    <div class="prog-lbl"><span>達成度</span><span id="progTxt">0 / 8</span></div>
+    <div class="prog-bar"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+  </div>
+
+  <div class="ci" onclick="toggleCI(this)"><div class="cbox">✓</div><div class="ctext">スクリプト全文をゆっくり声に出して読んだ</div></div>
+  <div class="ci" onclick="toggleCI(this)"><div class="cbox">✓</div><div class="ctext">音声を聞きながらシャドーイングした</div></div>
+  <div class="ci" onclick="toggleCI(this)"><div class="cbox">✓</div><div class="ctext">「goes absolutely berserk」を使って一文話せる</div></div>
+  <div class="ci" onclick="toggleCI(this)"><div class="cbox">✓</div><div class="ctext">「can't stand being alone」を使って一文話せる</div></div>
+  <div class="ci" onclick="toggleCI(this)"><div class="cbox">✓</div><div class="ctext">「my heart nearly stopped」を使って一文話せる</div></div>
+  <div class="ci" onclick="toggleCI(this)"><div class="cbox">✓</div><div class="ctext">スラッシュリーディングを全チャンク完了した</div></div>
+  <div class="ci" onclick="toggleCI(this)"><div class="cbox">✓</div><div class="ctext">スクリプトを見ずに要点を英語で話せる</div></div>
+  <div class="ci" onclick="toggleCI(this)"><div class="cbox">✓</div><div class="ctext">単語帳の全フレーズ・単語を習得済みにした</div></div>
+
+  <div class="star" id="star">🎉 おめでとうございます！全項目クリアです！<br>ココちゃんの話、英語でバッチリ話せますね 🐾</div>
+</div>
+
+<footer class="footer"><div class="paw">🐾</div></footer>
+</div>
+
+<!-- ━━━ BOTTOM SHEET ━━━ -->
+<div class="overlay" id="overlay" onclick="closeSheet(event)">
+  <div class="sheet" id="sheet">
+    <button class="sheet-close" onclick="closeSheet()">×</button>
+    <div class="sheet-term" id="sTerm"></div>
+    <div class="sheet-type" id="sType"></div>
+    <div class="sheet-def" id="sDef"></div>
+    <div class="sheet-note" id="sNote"></div>
+    <div class="sheet-why" id="sWhy"></div>
+    <div class="sheet-wrong" id="sWrong"></div>
+  </div>
+</div>
+
+<script>
+const DB = {
+  'p-despite':    { term:'despite the name', type:'フレーズ', def:'名前に反して・名前とは裏腹に', note:'"even though his name sounds like a girl\'s name" より洗練された前置詞の使い方。', why:'', wrong:'' },
+  'p-cantstand':  { term:"can't stand being alone", type:'重要フレーズ ★', def:'一人でいることに耐えられない', note:'', why:'✅ シンプルかつ自然。感情をストレートに伝える定番表現', wrong:'❌ "doesn\'t like to be alone so much" → 回りくどい' },
+  'p-checkin':    { term:'check in on him', type:'重要フレーズ ★', def:'（カメラなどで）様子を見る・気にかける', note:'', why:'✅ "watch him" より自然。気にかけているニュアンスが加わる', wrong:'❌ "I see him on camera sometimes" → 動作が曖昧' },
+  'p-asleep':     { term:'sound asleep', type:'重要フレーズ ★', def:'ぐっすり眠っている', note:'', why:'✅ "deeply sleeping" より自然なネイティブ表現', wrong:'❌ "sleeping so deeply" → 教科書的' },
+  'p-moment':     { term:'the moment I start getting ready to go out', type:'フレーズ', def:'私が出かける支度を始めた瞬間に', note:'"the moment ＋ 文" で「〜した瞬間に」。時間の即座性を強調する便利な構文。', why:'', wrong:'' },
+  'p-berserk':    { term:'goes absolutely berserk', type:'重要フレーズ ★', def:'完全に狂ったように（吠える・暴れる）', note:'', why:'✅ 感情の爆発を生き生きと表現。"barks a lot" より圧倒的に臨場感', wrong:'❌ "barks very very much" → 強調の重ね方が不自然' },
+  'p-disappeared':{ term:'completely disappeared from the frame', type:'フレーズ', def:'画面（カメラの枠）から完全に消えた', note:'"frame" はカメラの画角・フレームのこと。映像・写真の文脈でよく使う自然な表現。', why:'', wrong:'' },
+  'p-heart':      { term:'my heart nearly stopped', type:'重要フレーズ ★', def:'心臓が止まりそうになった（驚き・焦り）', note:'', why:'✅ ドラマチックだがネイティブが日常的に使う慣用表現', wrong:'❌ "I was very surprised" → 正しいが感情が弱く伝わる' },
+  'p-love':       { term:"that's just what it means to love a dog this much", type:'フレーズ', def:'これがこんなにも犬を愛するということなんでしょうね', note:'"what it means to 〜" は「〜することの意味・本質」を語る洗練した構文。スピーチのクロージングにも使える。', why:'', wrong:'' },
+  'w-dog':        { term:'dog', type:'単語', def:'犬（名詞）', note:'基本単語ですが "pet" との使い分けに注目。所有・愛着を表す時は "my dog" が自然。', why:'', wrong:'' },
+  'w-timid':      { term:'timid', type:'重要単語 ★', def:'臆病な、小心な（形容詞）', note:'"shy" より弱さ・怖がりのニュアンスが強い。動物にもよく使われる。', why:'', wrong:'' },
+  'w-clingy':     { term:'clingy', type:'重要単語 ★', def:'べったりくっついてくる、甘えん坊な（形容詞）', note:'人・ペット両方に使える。"dependent" より口語的で愛情が感じられる。', why:'', wrong:'' },
+};
+
+function showTab(id, el) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('on'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('on'));
+  document.getElementById('panel-' + id).classList.add('on');
+  el.classList.add('on');
+}
+
+document.querySelectorAll('.phrase,.word').forEach(el => {
+  el.addEventListener('click', e => {
+    e.stopPropagation();
+    const d = DB[el.dataset.id]; if (!d) return;
+    document.getElementById('sTerm').textContent = d.term;
+    document.getElementById('sType').textContent = d.type;
+    document.getElementById('sDef').textContent = d.def;
+    document.getElementById('sNote').textContent = d.note;
+    document.getElementById('sWhy').textContent = d.why;
+    document.getElementById('sWrong').textContent = d.wrong;
+    document.getElementById('overlay').classList.add('show');
+  });
+});
+
+function closeSheet(e) {
+  if (!e || e.target === document.getElementById('overlay'))
+    document.getElementById('overlay').classList.remove('show');
+}
+
+let speaking = false, spd = 0.85;
+const SCRIPT = `I have a dog named Coco — and despite the name, he's actually a boy! He's incredibly timid and clingy, and honestly, he can't stand being alone. On a typical workday, he's by himself for over ten hours. I have a pet camera set up at home, so I check in on him now and then — and most of the time, he's just sound asleep, which is a relief. But the moment I start getting ready to go out, he goes absolutely berserk. It's like he just loses it. One time, I was watching through the camera and he completely disappeared from the frame — I panned around everywhere and couldn't find him anywhere. My heart nearly stopped! I worry about him all the time. Even at work, I can't always focus knowing he's home alone. But I guess that's just what it means to love a dog this much.`;
+
+function setSpd(r, el) {
+  spd = r;
+  document.querySelectorAll('.spd-btn').forEach(b => b.classList.remove('on'));
+  el.classList.add('on');
+}
+
+function toggleSpeech() {
+  if (!window.speechSynthesis) { alert('お使いのブラウザは音声合成に対応していません。'); return; }
+  if (speaking) { speechSynthesis.cancel(); setStopped(); return; }
+  const u = new SpeechSynthesisUtterance(SCRIPT);
+  u.lang = 'en-US'; u.rate = spd; u.pitch = 1;
+  const vs = speechSynthesis.getVoices();
+  const v = vs.find(v => v.lang === 'en-US' && /samantha|karen|victoria|female/i.test(v.name))
+          || vs.find(v => v.lang.startsWith('en-US'))
+          || vs.find(v => v.lang.startsWith('en'));
+  if (v) u.voice = v;
+  u.onstart = () => {
+    speaking = true;
+    document.getElementById('playIcon').innerHTML = '<rect x="6" y="5" width="4" height="14"/><rect x="14" y="5" width="4" height="14"/>';
+    document.getElementById('playLbl').textContent = '停止';
+    document.getElementById('playBtn').classList.add('stop');
+  };
+  u.onend = u.onerror = setStopped;
+  speechSynthesis.speak(u);
+}
+function setStopped() {
+  speaking = false;
+  document.getElementById('playIcon').innerHTML = '<path d="M8 5v14l11-7z"/>';
+  document.getElementById('playLbl').textContent = '音声再生';
+  document.getElementById('playBtn').classList.remove('stop');
+}
+speechSynthesis.addEventListener('voiceschanged', () => {});
+
+function filterV() {
+  const q = document.getElementById('vsearch').value.toLowerCase();
+  document.querySelectorAll('#vlist .vc').forEach(c => {
+    c.style.display = c.textContent.toLowerCase().includes(q) ? '' : 'none';
+  });
+}
+
+function toggleV(el) {
+  el.classList.toggle('done');
+  el.closest('.vc').classList.toggle('mastered', el.classList.contains('done'));
+}
+
+function toggleCI(el) {
+  el.classList.toggle('done');
+  updateProg();
+}
+function updateProg() {
+  const all = document.querySelectorAll('.ci');
+  const done = document.querySelectorAll('.ci.done');
+  document.getElementById('progTxt').textContent = done.length + ' / ' + all.length;
+  document.getElementById('progFill').style.width = (done.length / all.length * 100) + '%';
+  document.getElementById('star').style.display = done.length === all.length ? 'block' : 'none';
+}
+</script>
+</body>
+</html>
