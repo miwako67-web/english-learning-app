@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Dog Coco — English Learning</title>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --ink: #1a1410;
+  --paper: #f5f0e8;
+  --accent-gold: #c8962a;
+  --accent-moss: #4a7c59;
+  --accent-indigo: #3d5a8a;
+  --accent-crimson: #a03030;
+  --highlight-gold: rgba(200,150,42,0.18);
+  --highlight-moss: rgba(74,124,89,0.15);
+  --highlight-indigo: rgba(61,90,138,0.15);
+  --panel-bg: #fffdf8;
+  --border: rgba(26,20,16,0.12);
+}
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* NAV TABS */
+.nav-tabs {
+  position: sticky; top: 0; z-index: 50;
+  background: rgba(245,240,232,0.95);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border);
+  display: flex; justify-content: center; gap: 0; padding: 0 16px;
+}
+.tab-btn {
+  padding: 14px 20px; font-size: 12px; font-weight: 500;
+  letter-spacing: 0.06em; color: rgba(26,20,16,0.45);
+  border: none; background: none; cursor: pointer;
+  border-bottom: 2px solid transparent; transition: all 0.15s; white-space: nowrap;
+}
+.tab-btn.active { color: var(--ink); border-bottom-color: var(--accent-gold); }
+.tab-btn:hover { color: var(--ink); }
+
+/* PAGES */
+.page { display: none; }
+.page.active { display: block; }
+.container { max-width: 680px; margin: 0 auto; padding: 32px 20px 80px; position: relative; z-index: 1; }
+
+/* HEADER */
+header { text-align: center; margin-bottom: 32px; }
+.label { font-size: 10px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent-gold); margin-bottom: 10px; }
+h1 { font-family: 'Shippori Mincho', serif; font-size: clamp(22px,4vw,32px); font-weight: 700; line-height: 1.2; margin-bottom: 6px; }
+.subtitle { font-size: 12px; color: rgba(26,20,16,0.45); font-weight: 300; }
+
+/* LEGEND */
+.legend { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-bottom: 20px; }
+.legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: rgba(26,20,16,0.55); }
+.legend-dot { width: 9px; height: 9px; border-radius: 2px; flex-shrink: 0; }
+
+/* AUDIO BAR */
+.audio-bar {
+  background: var(--ink); border-radius: 14px;
+  padding: 14px 20px; display: flex; align-items: center;
+  gap: 14px; margin-bottom: 24px;
+  box-shadow: 0 4px 20px rgba(26,20,16,0.18);
+}
+#playBtn {
+  width: 42px; height: 42px; border-radius: 50%;
+  background: var(--accent-gold); border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; transition: transform 0.15s, background 0.15s;
+}
+#playBtn:hover { transform: scale(1.08); background: #d9a832; }
+#playBtn:active { transform: scale(0.95); }
+#playBtn svg { width: 17px; height: 17px; fill: #1a1410; }
+.audio-info { flex: 1; min-width: 0; }
+.audio-title { color: #f5f0e8; font-size: 12px; font-weight: 500; margin-bottom: 6px; }
+.progress-track { height: 3px; background: rgba(245,240,232,0.2); border-radius: 2px; overflow: hidden; cursor: pointer; }
+.progress-fill { height: 100%; background: var(--accent-gold); border-radius: 2px; width: 0%; transition: width 0.1s linear; }
+.audio-time { color: rgba(245,240,232,0.4); font-size: 10px; margin-top: 4px; }
+.speed-btn {
+  background: rgba(245,240,232,0.1); border: 1px solid rgba(245,240,232,0.2);
+  color: #f5f0e8; font-size: 11px; font-weight: 500; border-radius: 6px;
+  padding: 5px 9px; cursor: pointer; transition: background 0.15s; white-space: nowrap;
+}
+.speed-btn:hover { background: rgba(245,240,232,0.18); }
+
+/* SCRIPT CARD */
+.script-card {
+  background: var(--panel-bg); border: 1px solid var(--border);
+  border-radius: 16px; padding: 28px 24px; margin-bottom: 16px;
+  box-shadow: 0 2px 12px rgba(26,20,16,0.06);
+  font-size: 16px; font-weight: 300;
+}
+
+/* SLASH READING */
+.slash-view .script-card { line-height: 1; font-size: 15px; }
+.chunk-line { display: block; margin-bottom: 20px; }
+.chunk-row { display: flex; align-items: baseline; flex-wrap: wrap; gap: 0; }
+.slash { color: var(--accent-gold); font-weight: 400; margin: 0 3px; opacity: 0.7; font-size: 14px; }
+.chunk { display: inline; padding: 6px 0; line-height: 2; }
+.chunk-jp {
+  display: block; font-size: 11px; color: rgba(26,20,16,0.4);
+  font-weight: 400; margin-top: 1px; margin-bottom: 8px;
+  padding-left: 2px; font-style: italic;
+}
+
+/* Normal view */
+.normal-view .script-card { line-height: 2; }
+.normal-view .script-card p { margin-bottom: 18px; }
+.normal-view .script-card p:last-child { margin-bottom: 0; }
+
+/* PHRASE HIGHLIGHTS */
+.phrase {
+  display: inline; border-radius: 4px; padding: 1px 3px;
+  cursor: pointer; transition: all 0.15s; font-weight: 400;
+}
+.phrase-gold { background: var(--highlight-gold); border-bottom: 2px solid var(--accent-gold); color: #8a6010; }
+.phrase-gold:hover { background: rgba(200,150,42,0.28); }
+.phrase-moss { background: var(--highlight-moss); border-bottom: 2px solid var(--accent-moss); color: #2a5c3a; }
+.phrase-moss:hover { background: rgba(74,124,89,0.25); }
+.phrase-indigo { background: var(--highlight-indigo); border-bottom: 2px solid var(--accent-indigo); color: #1d3a6a; }
+.phrase-indigo:hover { background: rgba(61,90,138,0.25); }
+.phrase.mastered {
+  background: rgba(74,124,89,0.08) !important;
+  border-bottom-color: rgba(74,124,89,0.3) !important;
+  color: rgba(26,20,16,0.35) !important;
+  text-decoration: line-through;
+  text-decoration-color: var(--accent-moss);
+}
+
+.hint { text-align: center; font-size: 11px; color: rgba(26,20,16,0.35); margin-top: 10px; }
+
+/* POPUP */
+.popup-overlay {
+  position: fixed; inset: 0; background: rgba(26,20,16,0.4);
+  z-index: 200; display: none; align-items: flex-end;
+  justify-content: center; backdrop-filter: blur(2px);
+}
+.popup-overlay.show { display: flex; animation: fadeIn 0.2s ease; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.popup {
+  background: var(--panel-bg); border-radius: 20px 20px 0 0;
+  padding: 24px 22px 44px; width: 100%; max-width: 680px;
+  box-shadow: 0 -8px 40px rgba(26,20,16,0.2);
+  animation: slideUp 0.25s cubic-bezier(0.16,1,0.3,1);
+  position: relative;
+}
+@keyframes slideUp { from { transform: translateY(60px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+.popup-handle { width: 36px; height: 4px; background: var(--border); border-radius: 2px; margin: 0 auto 18px; }
+.popup-type { font-size: 10px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 6px; }
+.popup-phrase { font-family: 'Shippori Mincho', serif; font-size: 20px; font-weight: 700; margin-bottom: 12px; line-height: 1.3; }
+.popup-body { font-size: 13px; line-height: 1.8; color: rgba(26,20,16,0.72); margin-bottom: 14px; }
+.popup-vs { background: rgba(26,20,16,0.04); border-radius: 10px; padding: 12px 14px; font-size: 12px; line-height: 1.7; margin-bottom: 16px; }
+.popup-vs .ok { color: var(--accent-moss); font-weight: 500; }
+.popup-vs .ng { color: var(--accent-crimson); font-weight: 500; }
+.close-btn {
+  position: absolute; top: 18px; right: 18px; width: 30px; height: 30px;
+  border-radius: 50%; background: rgba(26,20,16,0.08); border: none;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  font-size: 14px; color: var(--ink); transition: background 0.15s;
+}
+.close-btn:hover { background: rgba(26,20,16,0.15); }
+.mastery-btn {
+  width: 100%; padding: 12px; border-radius: 10px; border: 1.5px solid;
+  font-size: 13px; font-weight: 500; cursor: pointer;
+  transition: all 0.2s; display: flex; align-items: center;
+  justify-content: center; gap: 8px;
+}
+.mastery-btn.not-mastered { border-color: var(--accent-moss); color: var(--accent-moss); background: transparent; }
+.mastery-btn.not-mastered:hover { background: rgba(74,124,89,0.08); }
+.mastery-btn.is-mastered { border-color: var(--accent-moss); color: var(--panel-bg); background: var(--accent-moss); }
+
+/* FLASHCARD */
+.fc-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+.fc-title { font-family: 'Shippori Mincho', serif; font-size: 20px; font-weight: 700; }
+.fc-counter { font-size: 12px; color: rgba(26,20,16,0.4); }
+.fc-progress-bar { height: 4px; background: var(--border); border-radius: 2px; margin-bottom: 28px; overflow: hidden; }
+.fc-progress-fill { height: 100%; background: var(--accent-gold); border-radius: 2px; transition: width 0.4s ease; }
+.flashcard {
+  background: var(--panel-bg); border: 1px solid var(--border);
+  border-radius: 20px; min-height: 260px;
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; padding: 32px 24px; text-align: center;
+  cursor: pointer; position: relative;
+  box-shadow: 0 4px 24px rgba(26,20,16,0.08); transition: transform 0.15s;
+}
+.flashcard:hover { transform: translateY(-2px); }
+.flashcard:active { transform: scale(0.98); }
+.fc-front, .fc-back { width: 100%; }
+.fc-back { display: none; }
+.flashcard.flipped .fc-front { display: none; }
+.flashcard.flipped .fc-back { display: block; }
+.fc-type-badge {
+  display: inline-block; padding: 4px 10px; border-radius: 20px;
+  font-size: 10px; font-weight: 500; letter-spacing: 0.12em;
+  text-transform: uppercase; margin-bottom: 16px;
+}
+.fc-word { font-family: 'Shippori Mincho', serif; font-size: 24px; font-weight: 700; margin-bottom: 8px; line-height: 1.3; }
+.fc-tap-hint { font-size: 11px; color: rgba(26,20,16,0.35); margin-top: 16px; }
+.fc-meaning { font-size: 14px; line-height: 1.7; color: rgba(26,20,16,0.7); margin-bottom: 12px; }
+.fc-example { background: rgba(26,20,16,0.04); border-radius: 8px; padding: 10px 14px; font-size: 12px; line-height: 1.7; color: rgba(26,20,16,0.55); text-align: left; margin-bottom: 16px; }
+.fc-actions { display: flex; gap: 10px; margin-top: 6px; width: 100%; }
+.fc-action-btn {
+  flex: 1; padding: 11px; border-radius: 10px; border: 1.5px solid;
+  font-size: 12px; font-weight: 500; cursor: pointer;
+  transition: all 0.15s; display: flex; align-items: center; justify-content: center; gap: 6px;
+}
+.fc-again { border-color: var(--accent-crimson); color: var(--accent-crimson); background: transparent; }
+.fc-again:hover { background: rgba(160,48,48,0.06); }
+.fc-got { border-color: var(--accent-moss); color: var(--accent-moss); background: transparent; }
+.fc-got:hover { background: rgba(74,124,89,0.08); }
+.fc-nav { display: flex; gap: 10px; margin-top: 16px; justify-content: center; }
+.fc-nav-btn {
+  padding: 8px 20px; border-radius: 20px; border: 1px solid var(--border);
+  background: transparent; font-size: 12px; color: rgba(26,20,16,0.5);
+  cursor: pointer; transition: all 0.15s;
+}
+.fc-nav-btn:hover { border-color: var(--ink); color: var(--ink); }
+.fc-nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+.fc-reset-btn {
+  display: block; margin: 20px auto 0; padding: 8px 20px;
+  border-radius: 20px; border: 1px solid var(--border);
+  background: transparent; font-size: 11px;
+  color: rgba(26,20,16,0.4); cursor: pointer; transition: all 0.15s;
+}
+.fc-reset-btn:hover { color: var(--ink); border-color: var(--ink); }
+.fc-mastered-badge {
+  position: absolute; top: 14px; right: 14px;
+  background: var(--accent-moss); color: white;
+  font-size: 10px; font-weight: 600; letter-spacing: 0.1em;
+  padding: 3px 9px; border-radius: 20px; text-transform: uppercase;
+}
+
+/* STATS BAR */
+.stats-bar {
+  background: var(--panel-bg); border: 1px solid var(--border);
+  border-radius: 12px; padding: 14px 18px;
+  display: flex; gap: 0; margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(26,20,16,0.04);
+}
+.stat-item { flex: 1; text-align: center; }
+.stat-item + .stat-item { border-left: 1px solid var(--border); }
+.stat-num { font-family: 'Shippori Mincho', serif; font-size: 22px; font-weight: 700; }
+.stat-label { font-size: 10px; color: rgba(26,20,16,0.4); margin-top: 2px; letter-spacing: 0.05em; }
+.stat-gold { color: var(--accent-gold); }
+.stat-moss { color: var(--accent-moss); }
+
+/* FILTER CHIPS */
+.filter-chips { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+.chip {
+  padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 500;
+  border: 1px solid var(--border); background: transparent;
+  color: rgba(26,20,16,0.5); cursor: pointer; transition: all 0.15s;
+}
+.chip.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+</style>
+</head>
+<body>
+
+<nav class="nav-tabs">
+  <button class="tab-btn active" onclick="switchPage('script')">📜 スクリプト</button>
+  <button class="tab-btn" onclick="switchPage('slash')">✂️ スラッシュ</button>
+  <button class="tab-btn" onclick="switchPage('flashcard')">🃏 単語帳</button>
+</nav>
+
+<!-- ═══ PAGE: SCRIPT ═══ -->
+<div class="page active" id="page-script">
+<div class="container">
+  <header>
+    <div class="label">English Learning Script</div>
+    <h1>My Dog Coco 🐾</h1>
+    <p class="subtitle">タップして表現を学ぼう · ✓で習得済みに</p>
+  </header>
+
+  <div class="stats-bar">
+    <div class="stat-item"><div class="stat-num stat-gold" id="totalCount">10</div><div class="stat-label">フレーズ総数</div></div>
+    <div class="stat-item"><div class="stat-num stat-moss" id="masteredCount">0</div><div class="stat-label">習得済み</div></div>
+    <div class="stat-item"><div class="stat-num" id="remainCount">10</div><div class="stat-label">学習中</div></div>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:var(--accent-gold)"></div>重要フレーズ</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--accent-moss)"></div>便利表現</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--accent-indigo)"></div>語彙</div>
+  </div>
+
+  <div class="audio-bar">
+    <button id="playBtn" onclick="togglePlay()">
+      <svg id="playIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+    </button>
+    <div class="audio-info">
+      <div class="audio-title">My Dog Coco</div>
+      <div class="progress-track" onclick="seekAudio(event)">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <div class="audio-time" id="audioTime">0:00 / 0:00</div>
+    </div>
+    <button class="speed-btn" onclick="changeSpeed()">1.0×</button>
+  </div>
+
+  <div class="normal-view">
+    <div class="script-card">
+      <p>I have a dog named Coco — and <span class="phrase phrase-moss" data-key="despite">despite the name</span>, he's actually a boy! He's incredibly <span class="phrase phrase-indigo" data-key="timid">timid</span> and <span class="phrase phrase-indigo" data-key="clingy">clingy</span>, and honestly, <span class="phrase phrase-gold" data-key="cantstand">he can't stand being alone</span>.</p>
+      <p>On a typical workday, he's by himself for over ten hours. I have a pet camera set up at home, so <span class="phrase phrase-moss" data-key="checkin">I check in on him</span> now and then — and most of the time, he's just <span class="phrase phrase-moss" data-key="asleep">sound asleep</span>, which is a relief.</p>
+      <p>But <span class="phrase phrase-moss" data-key="moment">the moment I start getting ready to go out</span>, <span class="phrase phrase-gold" data-key="berserk">he goes absolutely berserk</span>. It's like he just loses it.</p>
+      <p>One time, I was watching through the camera and he <span class="phrase phrase-moss" data-key="disappeared">completely disappeared from the frame</span> — I panned around everywhere and couldn't find him anywhere. <span class="phrase phrase-gold" data-key="heart">My heart nearly stopped</span>!</p>
+      <p>I worry about him all the time. Even at work, I can't always focus knowing he's home alone. But I guess <span class="phrase phrase-moss" data-key="love">that's just what it means to love a dog this much</span>.</p>
+    </div>
+  </div>
+  <p class="hint">🐾 色付きの言葉をタップ → 解説 &amp; 習得チェック</p>
+</div>
+</div>
+
+<!-- ═══ PAGE: SLASH ═══ -->
+<div class="page" id="page-slash">
+<div class="container">
+  <header>
+    <div class="label">スラッシュリーディング</div>
+    <h1>Slash Reading</h1>
+    <p class="subtitle">意味のまとまりで読む練習 · Read in chunks</p>
+  </header>
+
+  <div class="slash-view">
+    <div class="script-card">
+
+      <div class="chunk-line">
+        <div class="chunk-row">
+          <span class="chunk">I have a dog named Coco —</span>
+          <span class="slash">/</span>
+          <span class="chunk">and <span class="phrase phrase-moss" data-key="despite">despite the name,</span></span>
+          <span class="slash">/</span>
+          <span class="chunk">he's actually a boy!</span>
+        </div>
+        <span class="chunk-jp">ドコという名前の犬を飼っています / でも名前に反して / 実は男の子なんです！</span>
+      </div>
+
+      <div class="chunk-line">
+        <div class="chunk-row">
+          <span class="chunk">He's incredibly <span class="phrase phrase-indigo" data-key="timid">timid</span> and <span class="phrase phrase-indigo" data-key="clingy">clingy,</span></span>
+          <span class="slash">/</span>
+          <span class="chunk">and honestly,</span>
+          <span class="slash">/</span>
+          <span class="chunk"><span class="phrase phrase-gold" data-key="cantstand">he can't stand being alone.</span></span>
+        </div>
+        <span class="chunk-jp">本当に臆病で甘えん坊で / 正直言って / 一人でいることに耐えられないんです。</span>
+      </div>
+
+      <div class="chunk-line">
+        <div class="chunk-row">
+          <span class="chunk">On a typical workday,</span>
+          <span class="slash">/</span>
+          <span class="chunk">he's by himself</span>
+          <span class="slash">/</span>
+          <span class="chunk">for over ten hours.</span>
+        </div>
+        <span class="chunk-jp">普通の仕事の日は / 一人で / 10時間以上います。</span>
+      </div>
+
+      <div class="chunk-line">
+        <div class="chunk-row">
+          <span class="chunk">I have a pet camera set up at home,</span>
+          <span class="slash">/</span>
+          <span class="chunk">so <span class="phrase phrase-moss" data-key="checkin">I check in on him</span> now and then —</span>
+          <span class="slash">/</span>
+          <span class="chunk">and most of the time,</span>
+          <span class="slash">/</span>
+          <span class="chunk">he's just <span class="phrase phrase-moss" data-key="asleep">sound asleep,</span> which is a relief.</span>
+        </div>
+        <span class="chunk-jp">家にペットカメラを設置しているので / 時々様子を見るんですが / たいていは / ぐっすり寝ていてほっとします。</span>
+      </div>
+
+      <div class="chunk-line">
+        <div class="chunk-row">
+          <span class="chunk">But <span class="phrase phrase-moss" data-key="moment">the moment I start getting ready to go out,</span></span>
+          <span class="slash">/</span>
+          <span class="chunk"><span class="phrase phrase-gold" data-key="berserk">he goes absolutely berserk.</span></span>
+        </div>
+        <span class="chunk-jp">でも私が出かける支度を始めた瞬間 / 完全に狂ったように吠えるんです。</span>
+      </div>
+
+      <div class="chunk-line">
+        <div class="chunk-row">
+          <span class="chunk">One time,</span>
+          <span class="slash">/</span>
+          <span class="chunk">I was watching through the camera</span>
+          <span class="slash">/</span>
+          <span class="chunk">and he <span class="phrase phrase-moss" data-key="disappeared">completely disappeared from the frame</span> —</span>
+          <span class="slash">/</span>
+          <span class="chunk">I panned around everywhere</span>
+          <span class="slash">/</span>
+          <span class="chunk">and couldn't find him anywhere.</span>
+        </div>
+        <span class="chunk-jp">ある時 / カメラで見ていたら / 完全に画面から消えてしまって / あちこちカメラを動かしたけど / どこにもいなくて。</span>
+      </div>
+
+      <div class="chunk-line">
+        <div class="chunk-row">
+          <span class="chunk"><span class="phrase phrase-gold" data-key="heart">My heart nearly stopped!</span></span>
+          <span class="slash">/</span>
+          <span class="chunk">I worry about him all the time.</span>
+          <span class="slash">/</span>
+          <span class="chunk">Even at work,</span>
+          <span class="slash">/</span>
+          <span class="chunk">I can't always focus</span>
+          <span class="slash">/</span>
+          <span class="chunk">knowing he's home alone.</span>
+        </div>
+        <span class="chunk-jp">心臓が止まりそうになりました！ / いつも心配しています。 / 仕事中でも / 集中できないことが多くて / 彼が一人でいると思うと。</span>
+      </div>
+
+      <div class="chunk-line">
+        <div class="chunk-row">
+          <span class="chunk">But I guess</span>
+          <span class="slash">/</span>
+          <span class="chunk"><span class="phrase phrase-moss" data-key="love">that's just what it means</span></span>
+          <span class="slash">/</span>
+          <span class="chunk">to love a dog this much.</span>
+        </div>
+        <span class="chunk-jp">でもそれが / そういうことなんでしょうね / こんなにも犬を愛するということは。</span>
+      </div>
+
+    </div>
+  </div>
+  <p class="hint">/ で区切られたかたまりごとに読んで、意味を確認しよう</p>
+</div>
+</div>
+
+<!-- ═══ PAGE: FLASHCARD ═══ -->
+<div class="page" id="page-flashcard">
+<div class="container">
+  <header>
+    <div class="label">単語帳 · Flashcards</div>
+    <h1>フレーズを覚えよう</h1>
+    <p class="subtitle">カードをタップして意味を確認 · Tap to flip</p>
+  </header>
+
+  <div class="filter-chips">
+    <button class="chip active" onclick="filterCards('all', this)">すべて</button>
+    <button class="chip" onclick="filterCards('gold', this)">🏅 重要</button>
+    <button class="chip" onclick="filterCards('moss', this)">💬 表現</button>
+    <button class="chip" onclick="filterCards('indigo', this)">📖 語彙</button>
+    <button class="chip" onclick="filterCards('unmastered', this)">🔄 未習得</button>
+  </div>
+
+  <div class="fc-header">
+    <div class="fc-title" id="fcTitle">カード 1 / 10</div>
+    <div class="fc-counter" id="fcMasteredLabel">習得済み: 0</div>
+  </div>
+  <div class="fc-progress-bar"><div class="fc-progress-fill" id="fcProgressFill"></div></div>
+
+  <div class="flashcard" id="flashcard" onclick="flipCard()">
+    <div class="fc-front" id="fcFront">
+      <div class="fc-type-badge" id="fcBadge"></div>
+      <div class="fc-word" id="fcWord"></div>
+      <div class="fc-tap-hint">タップして確認 →</div>
+    </div>
+    <div class="fc-back" id="fcBack">
+      <div class="fc-type-badge" id="fcBadgeBack"></div>
+      <div class="fc-word" id="fcWordBack"></div>
+      <div class="fc-meaning" id="fcMeaning"></div>
+      <div class="fc-example" id="fcExample"></div>
+      <div class="fc-actions">
+        <button class="fc-action-btn fc-again" onclick="markCard(false, event)">✕ もう一度</button>
+        <button class="fc-action-btn fc-got" onclick="markCard(true, event)">✓ 覚えた！</button>
+      </div>
+    </div>
+    <div class="fc-mastered-badge" id="fcMasteredBadge" style="display:none">✓ 習得済み</div>
+  </div>
+
+  <div class="fc-nav">
+    <button class="fc-nav-btn" id="fcPrev" onclick="prevCard()">← 前へ</button>
+    <button class="fc-nav-btn" id="fcNext" onclick="nextCard()">次へ →</button>
+  </div>
+  <button class="fc-reset-btn" onclick="resetAll()">🔄 すべてリセット</button>
+</div>
+</div>
+
+<!-- POPUP -->
+<div class="popup-overlay" id="popupOverlay" onclick="closePopup(event)">
+  <div class="popup" id="popup">
+    <div class="popup-handle"></div>
+    <button class="close-btn" onclick="closePopupDirect()">✕</button>
+    <div class="popup-type" id="popupType"></div>
+    <div class="popup-phrase" id="popupPhrase"></div>
+    <div class="popup-body" id="popupBody"></div>
+    <div class="popup-vs" id="popupVs"></div>
+    <button class="mastery-btn not-mastered" id="masteryBtn" onclick="toggleMasteryFromPopup()">
+      <span id="masteryBtnIcon">☐</span>
+      <span id="masteryBtnText">習得済みにする</span>
+    </button>
+  </div>
+</div>
+
+<script>
+const phraseData = {
+  cantstand: {
+    type: '🏅 重要フレーズ', color: '#c8962a', category: 'gold',
+    phrase: "can't stand being alone",
+    body: '「一人でいることに耐えられない」。"stand" は「我慢する・耐える」という意味で、can\'t standで「〜が嫌でたまらない」を表します。',
+    vs: '<span class="ok">✅ ネイティブ：</span> "He can\'t stand being alone."<br><span class="ng">❌ 日本人がやりがち：</span> "He doesn\'t like to be alone so much." → 回りくどい',
+    meaning: '「一人でいることに耐えられない」感情をストレートに伝える定番表現',
+    example: '"He\'s incredibly clingy, and honestly, he can\'t stand being alone."'
+  },
+  berserk: {
+    type: '🏅 重要フレーズ', color: '#c8962a', category: 'gold',
+    phrase: "goes absolutely berserk",
+    body: '「完全に狂ったように暴れる・吠える」。バイキング語由来の表現で、感情の爆発を生き生きと伝えます。"go berserk" の形でよく使われます。',
+    vs: '<span class="ok">✅ ネイティブ：</span> "He goes absolutely berserk."<br><span class="ng">❌ 日本人がやりがち：</span> "He barks very very much." → 強調の重ね方が不自然',
+    meaning: '「完全に狂ったように暴れる」感情の爆発を生き生きと表現',
+    example: '"The moment I start getting ready to go out, he goes absolutely berserk."'
+  },
+  heart: {
+    type: '🏅 重要フレーズ', color: '#c8962a', category: 'gold',
+    phrase: "My heart nearly stopped",
+    body: '「心臓が止まりそうになった」。驚きや焦りを表す慣用表現。ドラマチックに聞こえますが、ネイティブが日常的に使う自然な表現です。',
+    vs: '<span class="ok">✅ ネイティブ：</span> "My heart nearly stopped!"<br><span class="ng">❌ 日本人がやりがち：</span> "I was very surprised." → 正しいが感情が弱く伝わる',
+    meaning: '「心臓が止まりそうになった」驚き・焦りを表す慣用表現',
+    example: '"I couldn\'t find him anywhere. My heart nearly stopped!"'
+  },
+  despite: {
+    type: '💬 便利表現', color: '#4a7c59', category: 'moss',
+    phrase: "despite the name",
+    body: '「名前に反して」。despite は「〜にもかかわらず」という逆接の前置詞。"even though his name sounds like a girl\'s name" より洗練されたシンプルな表現。',
+    vs: '<span class="ok">✅ ネイティブ：</span> "Despite the name, he\'s actually a boy!"<br><span class="ng">❌ 日本人がやりがち：</span> "His name is Coco but he is a boy." → 説明的すぎる',
+    meaning: '「名前に反して」despite = 〜にもかかわらず（前置詞）',
+    example: '"I have a dog named Coco — and despite the name, he\'s actually a boy!"'
+  },
+  checkin: {
+    type: '💬 便利表現', color: '#4a7c59', category: 'moss',
+    phrase: "check in on him",
+    body: '「（カメラなどで）様子を見る・気にかける」。"watch him" より自然で、気にかけているニュアンスが加わります。人やペットの様子を確認するときに使う定番フレーズ。',
+    vs: '<span class="ok">✅ ネイティブ：</span> "I check in on him now and then."<br><span class="ng">❌ 日本人がやりがち：</span> "I see him on camera sometimes." → 動作が曖昧',
+    meaning: '「様子を見る・気にかける」気遣いのニュアンスが加わる自然な表現',
+    example: '"I have a pet camera, so I check in on him now and then."'
+  },
+  asleep: {
+    type: '💬 便利表現', color: '#4a7c59', category: 'moss',
+    phrase: "sound asleep",
+    body: '「ぐっすり眠っている」。"deeply sleeping" より自然なネイティブ表現。"sound" は「完全に・しっかりと」という意味の副詞的用法。',
+    vs: '<span class="ok">✅ ネイティブ：</span> "He\'s just sound asleep."<br><span class="ng">❌ 日本人がやりがち：</span> "He is sleeping so deeply." → 教科書的で少し不自然',
+    meaning: '「ぐっすり眠っている」"deeply sleeping"より自然なネイティブ表現',
+    example: '"Most of the time, he\'s just sound asleep, which is a relief."'
+  },
+  moment: {
+    type: '💬 便利表現', color: '#4a7c59', category: 'moss',
+    phrase: "the moment I start ~",
+    body: '「〜し始めた瞬間に」。"the moment ＋ 文" で時間の即座性を強調する便利な構文。スピーキングでよく使われます。',
+    vs: '<span class="ok">✅ ネイティブ：</span> "The moment I start getting ready, he barks."<br><span class="ng">❌ 日本人がやりがち：</span> "When I start to go out, he barks." → 少し平坦',
+    meaning: '「〜し始めた瞬間に」時間の即座性を強調する便利な構文',
+    example: '"The moment I start getting ready to go out, he goes absolutely berserk."'
+  },
+  disappeared: {
+    type: '💬 便利表現', color: '#4a7c59', category: 'moss',
+    phrase: "disappeared from the frame",
+    body: '「画面（カメラの枠）から消えた」。"frame" はカメラの画角・フレームのこと。映像・写真の文脈でよく使う自然な表現。',
+    vs: '<span class="ok">✅ ネイティブ：</span> "He disappeared from the frame."<br><span class="ng">❌ 日本人がやりがち：</span> "He was gone from the camera." → slightly awkward',
+    meaning: '「画面から消えた」カメラ映像の文脈でとても自然な表現',
+    example: '"He completely disappeared from the frame — I couldn\'t find him anywhere."'
+  },
+  timid: {
+    type: '📖 語彙', color: '#3d5a8a', category: 'indigo',
+    phrase: "timid",
+    body: '「臆病な、小心な」（形容詞）。"shy" より弱さ・怖がりのニュアンスが強い。人だけでなく動物にもよく使われる表現。',
+    vs: '<span class="ok">✅ 強度順：</span> shy（内気）→ timid（臆病）→ fearful（怖がり）<br>← ペットには timid がよく合う',
+    meaning: '「臆病な・小心な」shyより弱さ・怖がりのニュアンスが強い',
+    example: '"He\'s incredibly timid and clingy."'
+  },
+  clingy: {
+    type: '📖 語彙', color: '#3d5a8a', category: 'indigo',
+    phrase: "clingy",
+    body: '「べったりくっついてくる、甘えん坊な」（形容詞）。人・ペット両方に使える。"dependent" より口語的で愛情が感じられる表現。',
+    vs: '<span class="ok">✅ ネイティブ：</span> "He\'s so clingy — always by my side."<br><span class="ng">❌ 日本人がやりがち：</span> "He always wants to be with me." → 説明的すぎる',
+    meaning: '「べったりくっついてくる・甘えん坊な」口語的で愛情が感じられる',
+    example: '"He\'s incredibly timid and clingy."'
+  },
+  love: {
+    type: '💬 便利表現', color: '#4a7c59', category: 'moss',
+    phrase: "that's just what it means to love ~",
+    body: '「〜を愛するということはそういうことなんですよね」。"what it means to 〜" は「〜することの本質・意味」を語る洗練した構文。スピーチのクロージングにも使える。',
+    vs: '<span class="ok">✅ ネイティブ：</span> "That\'s just what it means to love a dog this much."<br><span class="ng">❌ 日本人がやりがち：</span> "I love my dog very much." → 締めとして弱い',
+    meaning: '「〜を愛するということはそういうこと」洗練したクロージング表現',
+    example: '"I guess that\'s just what it means to love a dog this much."'
+  }
+};
+
+const allKeys = Object.keys(phraseData);
+let mastered = new Set();
+let currentFilter = 'all';
+let filteredKeys = [...allKeys];
+let cardIndex = 0;
+let currentPopupKey = null;
+
+function switchPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  document.querySelectorAll('.tab-btn')[['script','slash','flashcard'].indexOf(id)].classList.add('active');
+  if (id === 'flashcard') renderCard();
+  updateStats();
+}
+
+function updateStats() {
+  const m = mastered.size;
+  document.getElementById('masteredCount').textContent = m;
+  document.getElementById('remainCount').textContent = allKeys.length - m;
+  document.getElementById('fcMasteredLabel').textContent = '習得済み: ' + m;
+  document.querySelectorAll('.phrase').forEach(el => {
+    if (mastered.has(el.dataset.key)) el.classList.add('mastered');
+    else el.classList.remove('mastered');
+  });
+}
+
+document.querySelectorAll('.phrase').forEach(el => {
+  el.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const key = el.dataset.key;
+    const d = phraseData[key];
+    if (!d) return;
+    currentPopupKey = key;
+    document.getElementById('popupType').textContent = d.type;
+    document.getElementById('popupType').style.color = d.color;
+    document.getElementById('popupPhrase').textContent = d.phrase;
+    document.getElementById('popupBody').textContent = d.body;
+    document.getElementById('popupVs').innerHTML = d.vs;
+    updateMasteryBtn(key);
+    document.getElementById('popupOverlay').classList.add('show');
+  });
+});
+
+function updateMasteryBtn(key) {
+  const btn = document.getElementById('masteryBtn');
+  if (mastered.has(key)) {
+    btn.className = 'mastery-btn is-mastered';
+    document.getElementById('masteryBtnIcon').textContent = '✓';
+    document.getElementById('masteryBtnText').textContent = '習得済み（タップで解除）';
+  } else {
+    btn.className = 'mastery-btn not-mastered';
+    document.getElementById('masteryBtnIcon').textContent = '☐';
+    document.getElementById('masteryBtnText').textContent = '習得済みにする';
+  }
+}
+
+function toggleMasteryFromPopup() {
+  if (!currentPopupKey) return;
+  if (mastered.has(currentPopupKey)) mastered.delete(currentPopupKey);
+  else mastered.add(currentPopupKey);
+  updateMasteryBtn(currentPopupKey);
+  updateStats();
+  if (document.getElementById('page-flashcard').classList.contains('active')) renderCard();
+}
+
+function closePopup(e) { if (e.target === document.getElementById('popupOverlay')) closePopupDirect(); }
+function closePopupDirect() { document.getElementById('popupOverlay').classList.remove('show'); currentPopupKey = null; }
+
+function filterCards(type, btn) {
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  currentFilter = type;
+  if (type === 'all') filteredKeys = [...allKeys];
+  else if (type === 'unmastered') filteredKeys = allKeys.filter(k => !mastered.has(k));
+  else filteredKeys = allKeys.filter(k => phraseData[k].category === type);
+  cardIndex = 0;
+  renderCard();
+}
+
+function renderCard() {
+  if (currentFilter === 'unmastered') filteredKeys = allKeys.filter(k => !mastered.has(k));
+  const total = filteredKeys.length;
+  if (total === 0) {
+    document.getElementById('fcTitle').textContent = '全部習得済み！🎉';
+    document.getElementById('fcProgressFill').style.width = '100%';
+    document.getElementById('flashcard').innerHTML = '<div style="text-align:center;padding:40px 0"><div style="font-size:48px;margin-bottom:16px">🎉</div><div style="font-family:Shippori Mincho,serif;font-size:20px;font-weight:700;margin-bottom:8px">全フレーズ習得！</div><div style="font-size:13px;color:rgba(26,20,16,0.5)">素晴らしい！フィルターを変えるか<br>リセットして続けましょう</div></div>';
+    return;
+  }
+  if (cardIndex >= total) cardIndex = total - 1;
+  const key = filteredKeys[cardIndex];
+  const d = phraseData[key];
+  const isMastered = mastered.has(key);
+  document.getElementById('fcTitle').textContent = `カード ${cardIndex + 1} / ${total}`;
+  const mastPct = (mastered.size / allKeys.length) * 100;
+  document.getElementById('fcProgressFill').style.width = mastPct + '%';
+  const fc = document.getElementById('flashcard');
+  const badgeStyle = `background:${d.color}22;color:${d.color}`;
+  fc.innerHTML = `
+    <div class="fc-front" id="fcFront">
+      <div class="fc-type-badge" style="${badgeStyle}">${d.type}</div>
+      <div class="fc-word">${d.phrase}</div>
+      <div class="fc-tap-hint">タップして確認 →</div>
+    </div>
+    <div class="fc-back" id="fcBack" style="display:none">
+      <div class="fc-type-badge" style="${badgeStyle}">${d.type}</div>
+      <div class="fc-word">${d.phrase}</div>
+      <div class="fc-meaning">${d.meaning}</div>
+      <div class="fc-example">${d.example}</div>
+      <div class="fc-actions">
+        <button class="fc-action-btn fc-again" onclick="markCard(false,event)">✕ もう一度</button>
+        <button class="fc-action-btn fc-got" onclick="markCard(true,event)">✓ 覚えた！</button>
+      </div>
+    </div>
+    ${isMastered ? '<div class="fc-mastered-badge">✓ 習得済み</div>' : ''}
+  `;
+  fc.classList.remove('flipped');
+  fc.onclick = flipCard;
+  document.getElementById('fcPrev').disabled = cardIndex === 0;
+  document.getElementById('fcNext').disabled = cardIndex === total - 1;
+}
+
+function flipCard() {
+  const fc = document.getElementById('flashcard');
+  fc.classList.toggle('flipped');
+  const front = document.getElementById('fcFront');
+  const back = document.getElementById('fcBack');
+  if (fc.classList.contains('flipped')) { front.style.display = 'none'; back.style.display = 'block'; }
+  else { front.style.display = 'block'; back.style.display = 'none'; }
+}
+
+function markCard(got, e) {
+  e.stopPropagation();
+  const key = filteredKeys[cardIndex];
+  if (got) mastered.add(key); else mastered.delete(key);
+  updateStats();
+  if (cardIndex < filteredKeys.length - 1) cardIndex++;
+  renderCard();
+}
+
+function prevCard() { if (cardIndex > 0) { cardIndex--; renderCard(); } }
+function nextCard() { if (cardIndex < filteredKeys.length - 1) { cardIndex++; renderCard(); } }
+function resetAll() { mastered.clear(); cardIndex = 0; updateStats(); renderCard(); }
+
+// AUDIO
+let speaking = false, speedIndex = 0;
+const speeds = [1.0, 0.75, 1.25];
+const speedLabels = ['1.0×', '0.75×', '1.25×'];
+const scriptText = `I have a dog named Coco — and despite the name, he's actually a boy! He's incredibly timid and clingy, and honestly, he can't stand being alone. On a typical workday, he's by himself for over ten hours. I have a pet camera set up at home, so I check in on him now and then — and most of the time, he's just sound asleep, which is a relief. But the moment I start getting ready to go out, he goes absolutely berserk. It's like he just loses it. One time, I was watching through the camera and he completely disappeared from the frame — I panned around everywhere and couldn't find him anywhere. My heart nearly stopped! I worry about him all the time. Even at work, I can't always focus knowing he's home alone. But I guess that's just what it means to love a dog this much.`;
+
+function togglePlay() {
+  if (!('speechSynthesis' in window)) { alert('音声合成が使えません'); return; }
+  if (speaking) {
+    window.speechSynthesis.cancel(); speaking = false;
+    updatePlayBtn(false);
+    document.getElementById('progressFill').style.width = '0%';
+    document.getElementById('audioTime').textContent = '0:00 / 0:00';
+    return;
+  }
+  const utt = new SpeechSynthesisUtterance(scriptText);
+  utt.lang = 'en-US'; utt.rate = speeds[speedIndex];
+  const voices = window.speechSynthesis.getVoices();
+  const v = voices.find(v => v.lang.startsWith('en') && v.localService);
+  if (v) utt.voice = v;
+  const est = scriptText.length * 60;
+  utt.onstart = () => { speaking = true; updatePlayBtn(true); animateProgress(est / speeds[speedIndex]); };
+  utt.onend = () => { speaking = false; updatePlayBtn(false); document.getElementById('progressFill').style.width = '100%'; };
+  utt.onerror = () => { speaking = false; updatePlayBtn(false); };
+  window.speechSynthesis.speak(utt);
+}
+
+let pInterval = null;
+function animateProgress(dur) {
+  clearInterval(pInterval);
+  const s = Date.now();
+  pInterval = setInterval(() => {
+    const el = Date.now() - s, pct = Math.min((el/dur)*100, 100);
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('audioTime').textContent = `${fmt(Math.floor(el/1000))} / ${fmt(Math.floor(dur/1000))}`;
+    if (pct >= 100) clearInterval(pInterval);
+  }, 100);
+}
+function fmt(s) { return `${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`; }
+function updatePlayBtn(p) {
+  document.getElementById('playIcon').innerHTML = p
+    ? '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>'
+    : '<path d="M8 5v14l11-7z"/>';
+}
+function changeSpeed() {
+  speedIndex = (speedIndex + 1) % speeds.length;
+  document.querySelector('.speed-btn').textContent = speedLabels[speedIndex];
+  if (speaking) { window.speechSynthesis.cancel(); speaking = false; updatePlayBtn(false); setTimeout(togglePlay, 100); }
+}
+function seekAudio(e) {
+  const pct = e.offsetX / e.currentTarget.offsetWidth;
+  document.getElementById('progressFill').style.width = (pct * 100) + '%';
+}
+window.speechSynthesis.onvoiceschanged = () => {};
+
+renderCard();
+updateStats();
+</script>
+</body>
+</html>
