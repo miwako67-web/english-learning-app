@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coco 瞬間英作文 フリップ</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Noto+Sans+JP:wght@400;500;700&display=swap');
+
+:root {
+  --bg: #f5f2ed;
+  --card: #ffffff;
+  --text: #2c2a26;
+  --text-sub: #6b6860;
+  --text-hint: #9c9a94;
+  --green: #3a7d5a;
+  --green-light: #e8f5ee;
+  --green-mid: #5aab7e;
+  --green-dark: #2a5e42;
+  --blue: #2c5f8a;
+  --blue-light: #e6f0f9;
+  --amber: #8a6020;
+  --amber-light: #fdf3e0;
+  --red: #933030;
+  --red-light: #fdeaea;
+  --red-mid: #c0504d;
+  --border: #e0ddd6;
+  --radius: 20px;
+  --radius-sm: 10px;
+  --shadow: 0 4px 20px rgba(0,0,0,0.09);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.13);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Header ── */
+.header {
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 20px 10px;
+  position: sticky; top: 0; z-index: 100;
+}
+.header-top {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 10px;
+}
+.app-title {
+  font-family: 'Nunito', sans-serif;
+  font-size: 19px; font-weight: 800;
+  color: var(--green);
+  display: flex; align-items: center; gap: 6px;
+}
+
+.stats-row {
+  display: flex; gap: 14px; align-items: center;
+}
+.stat-item { text-align: center; }
+.stat-n { font-size: 17px; font-weight: 700; font-family: 'Nunito', sans-serif; line-height: 1; }
+.stat-l { font-size: 10px; color: var(--text-hint); margin-top: 1px; }
+
+.nav-tabs {
+  display: flex; gap: 3px;
+}
+.nav-tab {
+  flex: 1; padding: 7px 4px;
+  border: none; border-radius: 8px;
+  background: transparent;
+  font-size: 12px; font-weight: 500;
+  color: var(--text-sub); cursor: pointer;
+  font-family: 'Noto Sans JP', sans-serif;
+  transition: all 0.15s;
+  display: flex; align-items: center; justify-content: center; gap: 3px;
+}
+.nav-tab.active { background: var(--green-light); color: var(--green); font-weight: 700; }
+.nav-tab .rbadge {
+  background: var(--red-mid); color: #fff;
+  border-radius: 10px; padding: 1px 6px;
+  font-size: 10px; font-weight: 700;
+}
+
+/* ── Progress ── */
+.progress-wrap {
+  height: 5px; background: var(--border);
+  margin: 0 20px 0;
+  border-radius: 3px; overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--green-mid), var(--green));
+  border-radius: 3px;
+  transition: width 0.5s cubic-bezier(.4,0,.2,1);
+}
+
+/* ── Content ── */
+.content { flex: 1; padding: 20px 16px 100px; max-width: 600px; margin: 0 auto; width: 100%; }
+
+/* ── Cat filter ── */
+.cat-scroll {
+  display: flex; gap: 6px; overflow-x: auto;
+  padding-bottom: 4px; margin-bottom: 18px;
+  scrollbar-width: none;
+}
+.cat-scroll::-webkit-scrollbar { display: none; }
+.cat-btn {
+  white-space: nowrap; padding: 5px 13px;
+  border-radius: 20px; border: 1.5px solid var(--border);
+  background: var(--card); font-size: 12px; font-weight: 500;
+  color: var(--text-sub); cursor: pointer;
+  font-family: 'Noto Sans JP', sans-serif;
+  transition: all 0.12s;
+}
+.cat-btn.active { background: var(--green); color: #fff; border-color: var(--green); }
+
+/* ── FLIP CARD ── */
+.flip-scene {
+  width: 100%;
+  perspective: 1200px;
+  margin-bottom: 20px;
+}
+
+.flip-card {
+  width: 100%; min-height: 280px;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.55s cubic-bezier(.4,0,.2,1);
+  cursor: pointer;
+}
+
+.flip-card.flipped {
+  transform: rotateY(180deg);
+}
+
+.card-face {
+  position: absolute; inset: 0;
+  border-radius: var(--radius);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 28px 24px;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border);
+}
+
+/* Front = Japanese (question side) */
+.card-front {
+  background: var(--card);
+}
+
+.card-front .face-label {
+  font-size: 11px; font-weight: 700; letter-spacing: 1px;
+  color: var(--text-hint); text-transform: uppercase;
+  margin-bottom: 18px;
+  background: var(--bg); padding: 4px 12px; border-radius: 20px;
+}
+
+.card-front .ja-text {
+  font-size: 22px; font-weight: 700;
+  line-height: 1.65; text-align: center;
+  color: var(--text);
+  margin-bottom: 20px;
+}
+
+.card-front .hint-row {
+  display: flex; flex-wrap: wrap; gap: 6px; justify-content: center;
+}
+.hint-chip {
+  background: var(--blue-light);
+  color: var(--blue);
+  font-size: 12px; font-weight: 600;
+  padding: 4px 12px; border-radius: 6px;
+  font-family: 'Nunito', sans-serif;
+}
+
+.card-front .tap-hint {
+  margin-top: 24px;
+  font-size: 12px; color: var(--text-hint);
+  display: flex; align-items: center; gap: 5px;
+}
+.tap-hint .tap-icon { font-size: 16px; animation: pulse 2s ease-in-out infinite; }
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.9); }
+}
+
+/* Back = English (answer side) */
+.card-back {
+  background: var(--green);
+  transform: rotateY(180deg);
+}
+
+.card-back .face-label {
+  font-size: 11px; font-weight: 700; letter-spacing: 1px;
+  color: rgba(255,255,255,0.6); text-transform: uppercase;
+  margin-bottom: 18px;
+  background: rgba(255,255,255,0.15); padding: 4px 12px; border-radius: 20px;
+}
+
+.card-back .en-text {
+  font-family: 'Nunito', sans-serif;
+  font-size: 22px; font-weight: 700;
+  line-height: 1.6; text-align: center;
+  color: #ffffff;
+  margin-bottom: 12px;
+}
+
+.card-back .alt-text {
+  font-size: 13px; color: rgba(255,255,255,0.7);
+  text-align: center; line-height: 1.6;
+  margin-bottom: 12px;
+}
+
+.card-back .key-tag {
+  background: rgba(255,255,255,0.2);
+  color: #fff;
+  font-size: 12px; font-weight: 600;
+  padding: 5px 14px; border-radius: 20px;
+  font-family: 'Nunito', sans-serif;
+  margin-bottom: 8px;
+}
+
+.card-back .info-text {
+  font-size: 12px; color: rgba(255,255,255,0.65);
+  text-align: center; line-height: 1.6;
+  padding: 0 8px;
+}
+
+/* ── Judge buttons ── */
+.judge-buttons {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 12px; margin-top: 4px;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.3s 0.3s;
+}
+.judge-buttons.visible {
+  opacity: 1; pointer-events: all;
+}
+
+.btn-judge {
+  padding: 16px 12px;
+  border-radius: var(--radius-sm);
+  border: none;
+  font-size: 15px; font-weight: 700;
+  cursor: pointer; font-family: 'Noto Sans JP', sans-serif;
+  transition: all 0.15s;
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+}
+.btn-judge:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,0.15); }
+.btn-judge:active { transform: scale(0.97); }
+
+.btn-ng {
+  background: var(--red-light);
+  color: var(--red);
+  border: 2px solid #f7c1c1;
+}
+.btn-ng:hover { background: var(--red); color: #fff; border-color: var(--red); }
+
+.btn-ok {
+  background: var(--green-light);
+  color: var(--green);
+  border: 2px solid #c0dd97;
+}
+.btn-ok:hover { background: var(--green); color: #fff; border-color: var(--green); }
+
+.btn-judge .btn-icon { font-size: 24px; }
+.btn-judge .btn-lbl { font-size: 13px; }
+.btn-judge .btn-sub { font-size: 10px; opacity: 0.7; }
+
+/* ── Card counter ── */
+.card-counter {
+  text-align: center; margin-bottom: 14px;
+  font-size: 13px; color: var(--text-hint);
+  font-family: 'Nunito', sans-serif;
+  font-weight: 600;
+}
+
+/* ── Result screen ── */
+.result-screen {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 36px 24px;
+  text-align: center;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border);
+}
+.result-emoji { font-size: 52px; margin-bottom: 10px; }
+.result-pct {
+  font-size: 68px; font-weight: 800;
+  font-family: 'Nunito', sans-serif;
+  color: var(--green); line-height: 1; margin-bottom: 8px;
+}
+.result-msg { font-size: 16px; color: var(--text-sub); margin-bottom: 28px; }
+.result-nums {
+  display: flex; justify-content: center; gap: 40px; margin-bottom: 28px;
+}
+.r-num { font-size: 32px; font-weight: 800; font-family: 'Nunito', sans-serif; }
+.r-num.ok { color: var(--green); }
+.r-num.ng { color: var(--red); }
+.r-lbl { font-size: 12px; color: var(--text-hint); margin-top: 2px; }
+.result-btns { display: flex; flex-direction: column; gap: 10px; }
+.btn-result {
+  width: 100%; padding: 14px;
+  border-radius: var(--radius-sm);
+  border: 2px solid var(--border);
+  font-size: 15px; font-weight: 700;
+  cursor: pointer; font-family: 'Noto Sans JP', sans-serif;
+  background: var(--card); color: var(--text);
+  transition: all 0.13s;
+}
+.btn-result:hover { transform: translateY(-1px); box-shadow: var(--shadow); }
+.btn-result.primary { background: var(--green); color: #fff; border-color: var(--green); }
+.btn-result.amber { border-color: var(--amber); color: var(--amber); }
+
+/* ── Vocab ── */
+.vocab-card {
+  background: var(--card); border-radius: var(--radius);
+  padding: 18px; margin-bottom: 10px;
+  box-shadow: var(--shadow); border: 1px solid var(--border);
+}
+.vocab-phrase {
+  font-size: 17px; font-weight: 700; color: var(--green);
+  font-family: 'Nunito', sans-serif; margin-bottom: 4px;
+}
+.vocab-cat { font-size: 11px; color: var(--text-hint); margin-bottom: 6px; }
+.vocab-meaning { font-size: 14px; font-weight: 500; margin-bottom: 12px; }
+.vocab-examples { display: flex; flex-direction: column; gap: 6px; }
+.ex-item { background: var(--green-light); border-radius: 8px; padding: 10px 12px; }
+.ex-en { font-size: 14px; font-weight: 600; color: var(--green); font-family: 'Nunito', sans-serif; line-height: 1.5; }
+.ex-ja { font-size: 12px; color: var(--text-sub); margin-top: 3px; line-height: 1.5; }
+
+/* ── Review ── */
+.review-item {
+  background: var(--card); border-radius: var(--radius);
+  padding: 16px 18px; margin-bottom: 10px;
+  border-left: 4px solid var(--red-mid);
+  box-shadow: var(--shadow);
+  border-top: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.ri-ja { font-size: 15px; font-weight: 700; margin-bottom: 5px; }
+.ri-en { font-size: 14px; font-weight: 600; color: var(--text-sub); font-family: 'Nunito', sans-serif; line-height: 1.5; margin-bottom: 6px; }
+.ri-key {
+  font-size: 12px; background: var(--amber-light); color: var(--amber);
+  padding: 3px 8px; border-radius: 6px; display: inline-block;
+  font-weight: 600; font-family: 'Nunito', sans-serif;
+}
+.ri-actions { display: flex; gap: 6px; margin-top: 10px; }
+.btn-sm {
+  padding: 6px 14px; border-radius: 8px; border: 1.5px solid;
+  font-size: 12px; font-weight: 700; cursor: pointer;
+  font-family: 'Noto Sans JP', sans-serif; transition: all 0.12s;
+}
+.btn-sm.green { border-color: var(--green); background: var(--green-light); color: var(--green); }
+.btn-sm.green:hover { background: var(--green); color: #fff; }
+.btn-sm.gray { border-color: var(--border); background: var(--bg); color: var(--text-sub); }
+
+.empty-state { text-align: center; padding: 56px 20px; color: var(--text-hint); }
+.empty-state .ee { font-size: 44px; margin-bottom: 12px; }
+.empty-state p { font-size: 15px; line-height: 1.8; }
+
+@media (max-width: 400px) {
+  .card-front .ja-text { font-size: 19px; }
+  .card-back .en-text { font-size: 19px; }
+  .result-pct { font-size: 56px; }
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-top">
+    <div class="app-title">🐾 Coco スピーキング</div>
+    <div class="stats-row">
+      <div class="stat-item">
+        <div class="stat-n" id="s-total" style="color:var(--text)">0</div>
+        <div class="stat-l">合計</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-n" id="s-ok" style="color:var(--green)">0</div>
+        <div class="stat-l">できた</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-n" id="s-ng" style="color:var(--red)">0</div>
+        <div class="stat-l">復習</div>
+      </div>
+    </div>
+  </div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" id="tab-practice" onclick="switchMode('practice')">🗣️ 練習</button>
+    <button class="nav-tab" id="tab-vocab" onclick="switchMode('vocab')">📖 単語帳</button>
+    <button class="nav-tab" id="tab-review" onclick="switchMode('review')">🔁 要復習<span class="rbadge" id="rbadge" style="display:none">0</span></button>
+  </div>
+</header>
+
+<div style="padding: 10px 20px 0; max-width: 600px; margin: 0 auto; width: 100%">
+  <div class="progress-wrap">
+    <div class="progress-fill" id="prog" style="width:0%"></div>
+  </div>
+</div>
+
+<div class="content">
+
+  <!-- ── PRACTICE ── -->
+  <div id="mode-practice">
+    <div class="cat-scroll" id="cat-row"></div>
+    <div class="card-counter" id="card-counter">1 / 20</div>
+
+    <div class="flip-scene">
+      <div class="flip-card" id="flip-card" onclick="flipCard()">
+        <!-- FRONT: Japanese -->
+        <div class="card-face card-front" id="card-front">
+          <div class="face-label">日本語を見て英語で言おう</div>
+          <div class="ja-text" id="ja-text">Loading...</div>
+          <div class="hint-row" id="hint-row"></div>
+          <div class="tap-hint"><span class="tap-icon">👆</span> タップで英語を確認</div>
+        </div>
+        <!-- BACK: English -->
+        <div class="card-face card-back" id="card-back">
+          <div class="face-label">Answer</div>
+          <div class="en-text" id="en-text"></div>
+          <div class="alt-text" id="alt-text"></div>
+          <div class="key-tag" id="key-tag"></div>
+          <div class="info-text" id="info-text"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="judge-buttons" id="judge-buttons">
+      <button class="btn-judge btn-ng" onclick="judge(false)">
+        <span class="btn-icon">😅</span>
+        <span class="btn-lbl">できなかった</span>
+        <span class="btn-sub">要復習に追加</span>
+      </button>
+      <button class="btn-judge btn-ok" onclick="judge(true)">
+        <span class="btn-icon">✅</span>
+        <span class="btn-lbl">できた！</span>
+        <span class="btn-sub">次へ進む</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ── VOCAB ── -->
+  <div id="mode-vocab" style="display:none">
+    <div id="vocab-list"></div>
+  </div>
+
+  <!-- ── REVIEW ── -->
+  <div id="mode-review" style="display:none">
+    <div id="review-list"></div>
+  </div>
+
+</div>
+
+<script>
+const VOCAB = [
+  {
+    phrase: "despite the name",
+    meaning: "名前とは裏腹に / 〜という名前にもかかわらず",
+    category: "逆接・対比",
+    examples: [
+      { en: "Despite the name, he's actually very gentle.", ja: "名前とは裏腹に、彼は実はとても穏やかです。" },
+      { en: "Despite the name, this café serves amazing food.", ja: "名前に反して、このカフェの料理は絶品です。" },
+      { en: "Despite the name 'beginner course', it was quite challenging.", ja: "「初心者コース」という名前に反して、かなり難しかった。" },
+      { en: "Despite the name, the 'Small Bites' restaurant has huge portions.", ja: "名前とは裏腹に、そのレストランの量はとても多い。" },
+      { en: "Despite the name, the 'Quiet Corner' café is always packed.", ja: "名前とは裏腹に、そのカフェはいつも混んでいる。" },
+      { en: "Despite the name, the 'Easy Trail' was exhausting.", ja: "名前に反して、その「楽々コース」はとてもきつかった。" },
+      { en: "Despite the name, he's a very experienced teacher.", ja: "名前からは想像できないが、彼はとても経験豊富な先生だ。" },
+      { en: "Despite the name, the product works really well.", ja: "名前とは裏腹に、その製品はとてもよく機能する。" },
+      { en: "Despite the name, this isn't a children's book at all.", ja: "名前に反して、これは全く子ども向けの本ではない。" },
+      { en: "Despite the name, the 'lightning service' took three hours.", ja: "「迅速サービス」という名前に反して、3時間かかった。" }
+    ]
+  },
+  {
+    phrase: "timid",
+    meaning: "臆病な / 内気な / おとなしい",
+    category: "性格・感情",
+    examples: [
+      { en: "She was too timid to speak up at the meeting.", ja: "彼女は内気すぎて会議で発言できなかった。" },
+      { en: "Don't be timid — just go and introduce yourself.", ja: "臆病にならないで、行って自己紹介してきなよ。" },
+      { en: "The new employee seemed a bit timid at first.", ja: "新しい社員は最初、少し内気に見えた。" },
+      { en: "He used to be timid, but he's very confident now.", ja: "彼は以前は臆病だったが、今はとても自信がある。" },
+      { en: "The timid child hid behind his mother.", ja: "内気な子どもは母親の後ろに隠れた。" },
+      { en: "Even timid people can become great leaders.", ja: "内気な人でも、すばらしいリーダーになれる。" },
+      { en: "She felt timid about asking for a raise.", ja: "彼女は昇給のお願いをするのが怖かった。" },
+      { en: "The kitten was too timid to come out from under the bed.", ja: "子猫は臆病すぎてベッドの下から出てこられなかった。" },
+      { en: "His timid voice made it hard to hear him.", ja: "彼の小さな声は聞き取りにくかった。" },
+      { en: "I was timid about traveling alone, but it was worth it.", ja: "一人旅は怖かったが、やってみてよかった。" }
+    ]
+  },
+  {
+    phrase: "clingy",
+    meaning: "べったりくっつく / 甘えん坊な / 離れたがらない",
+    category: "性格・感情",
+    examples: [
+      { en: "My little sister is really clingy when she's tired.", ja: "妹は疲れているとき、本当にべったりくっついてくる。" },
+      { en: "He gets clingy whenever I try to go out alone.", ja: "私が一人で出かけようとすると、彼はいつもべったりしてくる。" },
+      { en: "Some cats are clingy and follow you everywhere.", ja: "べったり甘える猫は、どこへでもついてくる。" },
+      { en: "The baby is very clingy today — she won't let me put her down.", ja: "赤ちゃんは今日とても甘えん坊で、降ろすと泣く。" },
+      { en: "My dog is so clingy that he follows me to the bathroom.", ja: "うちの犬はとてもべったりで、トイレまでついてくる。" },
+      { en: "She tends to be a bit clingy in new relationships.", ja: "彼女は新しい恋愛ではちょっと依存しがちだ。" },
+      { en: "Don't be so clingy — give them some space.", ja: "そんなにべったりしないで、少し距離を置いてあげて。" },
+      { en: "Kids often become clingy when they feel insecure.", ja: "子どもは不安を感じると、べったり甘えてくることが多い。" },
+      { en: "He becomes clingy whenever I'm about to leave.", ja: "私が出かけようとするたびに、彼はべったりしてくる。" },
+      { en: "The puppy was incredibly clingy on its first day home.", ja: "その子犬は家に来た初日、信じられないくらいべったりだった。" }
+    ]
+  },
+  {
+    phrase: "can't stand -ing",
+    meaning: "〜に耐えられない / 〜が我慢できない",
+    category: "感情・好み",
+    examples: [
+      { en: "I can't stand waiting in long lines.", ja: "長い行列で待つのが我慢できません。" },
+      { en: "She can't stand the smell of cigarettes.", ja: "彼女はタバコの匂いに耐えられない。" },
+      { en: "He can't stand being ignored.", ja: "彼は無視されることが我慢できない。" },
+      { en: "I can't stand eating breakfast alone.", ja: "一人で朝食をとるのが嫌でたまらない。" },
+      { en: "She can't stand people who are always late.", ja: "彼女はいつも遅刻する人が我慢できない。" },
+      { en: "I can't stand the sound of nails on a chalkboard.", ja: "黒板をひっかく音に耐えられない。" },
+      { en: "He can't stand working overtime every week.", ja: "毎週残業するのが我慢できない。" },
+      { en: "I can't stand it when people talk during movies.", ja: "映画中に話している人が我慢できない。" },
+      { en: "She can't stand feeling left out.", ja: "彼女は仲間外れにされる感覚に耐えられない。" },
+      { en: "I can't stand not knowing what will happen next.", ja: "次に何が起こるかわからない状態に耐えられない。" }
+    ]
+  },
+  {
+    phrase: "check in on ~",
+    meaning: "〜の様子を確認する / 気にかけて連絡する",
+    category: "日常動作",
+    examples: [
+      { en: "I check in on my elderly neighbor every week.", ja: "毎週、高齢の隣人の様子を確認しに行きます。" },
+      { en: "She texted to check in on me after the surgery.", ja: "手術後、彼女は様子を確認するメッセージを送ってくれた。" },
+      { en: "Don't forget to check in on your friends sometimes.", ja: "たまには友人の様子を気にかけて連絡してみて。" },
+      { en: "I always check in on my plants when I come home.", ja: "帰宅したら必ず植物の様子を確認します。" },
+      { en: "He called to check in on his parents during the storm.", ja: "嵐の中、両親の安否を確認するために電話した。" },
+      { en: "The manager checks in on the team every Monday.", ja: "マネージャーは毎週月曜日にチームの状況を確認する。" },
+      { en: "I use an app to check in on my dog while I'm at work.", ja: "仕事中、アプリで犬の様子を確認している。" },
+      { en: "She checked in on her friend after hearing the bad news.", ja: "悪い知らせを聞いて、彼女は友人の様子を確認した。" },
+      { en: "My mom always checks in on me before I go to bed.", ja: "お母さんはいつも寝る前に私の様子を見に来てくれる。" },
+      { en: "I check in on my grandparents via video call every Sunday.", ja: "毎週日曜日、ビデオ通話で祖父母の様子を確認します。" }
+    ]
+  },
+  {
+    phrase: "sound asleep",
+    meaning: "ぐっすり眠っている / 熟睡している",
+    category: "状態描写",
+    examples: [
+      { en: "The baby was sound asleep when we got home.", ja: "帰宅したとき、赤ちゃんはぐっすり眠っていた。" },
+      { en: "I was sound asleep and didn't hear the alarm.", ja: "ぐっすり寝ていてアラームが聞こえなかった。" },
+      { en: "He looked sound asleep on the couch.", ja: "彼はソファでぐっすり眠っているようだった。" },
+      { en: "The dog was sound asleep in his favorite spot.", ja: "犬はお気に入りの場所でぐっすり眠っていた。" },
+      { en: "Don't wake her — she's sound asleep.", ja: "起こさないで、彼女はぐっすり眠っているから。" },
+      { en: "He fell sound asleep during the movie.", ja: "彼は映画の途中でぐっすり眠ってしまった。" },
+      { en: "The kids were sound asleep by 8 pm.", ja: "子どもたちは夜8時にはぐっすり眠っていた。" },
+      { en: "I found my cat sound asleep on top of my laptop.", ja: "猫がノートパソコンの上でぐっすり眠っているのを見つけた。" },
+      { en: "She was sound asleep the moment her head hit the pillow.", ja: "彼女は枕に頭をつけた瞬間、ぐっすり眠った。" },
+      { en: "He was so tired he fell sound asleep on the train.", ja: "彼はとても疲れていて、電車の中でぐっすり眠ってしまった。" }
+    ]
+  },
+  {
+    phrase: "the moment ~",
+    meaning: "〜した瞬間に / 〜するやいなや",
+    category: "時・タイミング",
+    examples: [
+      { en: "The moment I walked in, everyone stopped talking.", ja: "私が入った瞬間、みんな話すのをやめた。" },
+      { en: "She smiled the moment she saw the gift.", ja: "プレゼントを見た瞬間、彼女は笑顔になった。" },
+      { en: "The moment his name was called, he stood up.", ja: "名前が呼ばれた瞬間、彼は立ち上がった。" },
+      { en: "The moment I stepped outside, it started to rain.", ja: "外に出た瞬間、雨が降り始めた。" },
+      { en: "She burst into tears the moment she heard the news.", ja: "ニュースを聞いた瞬間、彼女は泣き崩れた。" },
+      { en: "The moment I tasted it, I knew it was delicious.", ja: "食べた瞬間、おいしいとわかった。" },
+      { en: "The moment they arrived, the party came alive.", ja: "彼らが到着した瞬間、パーティーが盛り上がった。" },
+      { en: "I'll call you the moment I land.", ja: "着いた瞬間に電話します。" },
+      { en: "The moment I saw her face, I knew something was wrong.", ja: "彼女の顔を見た瞬間、何かおかしいとわかった。" },
+      { en: "He recognized me the moment I walked through the door.", ja: "私がドアから入った瞬間、彼はすぐに気づいた。" }
+    ]
+  },
+  {
+    phrase: "go absolutely berserk",
+    meaning: "完全に興奮する / 大騒ぎする / 狂ったように暴れる",
+    category: "感情・行動",
+    examples: [
+      { en: "The crowd went berserk when the band came on stage.", ja: "バンドがステージに上がった瞬間、観客は大興奮した。" },
+      { en: "My dog goes berserk every time the doorbell rings.", ja: "チャイムが鳴るたびに、うちの犬は大騒ぎする。" },
+      { en: "She went berserk when she found out about the party.", ja: "パーティーを知って、彼女は大興奮した。" },
+      { en: "The fans went absolutely berserk when the goal was scored.", ja: "ゴールが決まった瞬間、ファンは完全に熱狂した。" },
+      { en: "My cat goes berserk whenever I bring out a toy.", ja: "おもちゃを出すたびに、うちの猫は大騒ぎする。" },
+      { en: "The kids went absolutely berserk when they saw the snow.", ja: "雪を見た瞬間、子どもたちは大興奮した。" },
+      { en: "He went berserk when his team won the championship.", ja: "チームが優勝したとき、彼は大騒ぎした。" },
+      { en: "The audience went berserk at the surprise announcement.", ja: "サプライズ発表に観客は大興奮した。" },
+      { en: "She goes absolutely berserk over anything panda-related.", ja: "パンダ関連のものは何でも彼女は大騒ぎする。" },
+      { en: "The office went berserk when they won the award.", ja: "賞を取ったとき、オフィス中が大騒ぎになった。" }
+    ]
+  },
+  {
+    phrase: "disappear from the frame",
+    meaning: "カメラのフレームから消える / 画面から消える",
+    category: "状態描写",
+    examples: [
+      { en: "The cat completely disappeared from the frame.", ja: "猫がカメラのフレームから完全に消えた。" },
+      { en: "He walked off and disappeared from the frame.", ja: "彼は歩き去り、画面から消えた。" },
+      { en: "The drone flew too high and disappeared from the frame.", ja: "ドローンが高く飛びすぎて、フレームから消えた。" },
+      { en: "I panned the camera but he had disappeared from the frame.", ja: "カメラをパンしたが、彼はすでにフレームから消えていた。" },
+      { en: "The bird disappeared from the frame before I could focus.", ja: "フォーカスを合わせる前に、鳥がフレームから消えてしまった。" },
+      { en: "She walked so fast that she disappeared from the frame instantly.", ja: "彼女の歩くのが速すぎて、すぐにフレームから消えた。" },
+      { en: "The subject disappeared from the frame during the interview.", ja: "インタビュー中に被写体がフレームから消えた。" },
+      { en: "The child ran off and disappeared from the frame.", ja: "子どもが走り去り、フレームから消えた。" },
+      { en: "A fox appeared briefly and then disappeared from the frame.", ja: "キツネが一瞬現れ、すぐにフレームから消えた。" },
+      { en: "He tripped and disappeared from the frame — it was hilarious.", ja: "彼がつまずいてフレームから消えた―とても面白かった。" }
+    ]
+  },
+  {
+    phrase: "My heart nearly stopped.",
+    meaning: "心臓が止まるかと思った / 本当に驚いた・ひやっとした",
+    category: "感情表現",
+    examples: [
+      { en: "When I heard the bang, my heart nearly stopped.", ja: "大きな音がして、心臓が止まるかと思った。" },
+      { en: "My heart nearly stopped when I saw the bill.", ja: "請求書を見て、心臓が止まるかと思った。" },
+      { en: "My heart nearly stopped when the car skidded.", ja: "車がスリップした瞬間、心臓が止まるかと思った。" },
+      { en: "My heart nearly stopped when I saw the spider on my pillow.", ja: "枕の上のクモを見て、心臓が止まるかと思った。" },
+      { en: "My heart nearly stopped when I thought I'd lost my passport.", ja: "パスポートをなくしたかと思って、心臓が止まるかと思った。" },
+      { en: "My heart nearly stopped when the ladder slipped.", ja: "はしごが滑った瞬間、心臓が止まるかと思った。" },
+      { en: "My heart nearly stopped when I saw how close the car got.", ja: "車がどれだけ近づいていたか見て、心臓が止まるかと思った。" },
+      { en: "My heart nearly stopped when the lights went out suddenly.", ja: "突然電気が消えて、心臓が止まるかと思った。" },
+      { en: "My heart nearly stopped when my dog disappeared at the park.", ja: "公園で犬が見えなくなって、心臓が止まるかと思った。" },
+      { en: "My heart nearly stopped when I got a call from the hospital.", ja: "病院から電話がきて、心臓が止まるかと思った。" }
+    ]
+  },
+  {
+    phrase: "that's just what it means to ~",
+    meaning: "それが〜するということだ / 〜するとはそういうことだ",
+    category: "表現・まとめ",
+    examples: [
+      { en: "That's just what it means to be a parent.", ja: "それが親であるということだ。" },
+      { en: "That's just what it means to live in a city.", ja: "それが都市に住むということだ。" },
+      { en: "Missing them — that's just what it means to love someone.", ja: "誰かを愛するとは、相手が恋しくなること、そういうことだ。" },
+      { en: "Worrying all the time — that's just what it means to love a dog this much.", ja: "常に心配してしまう、それがこんなに犬を愛するということだ。" },
+      { en: "Sacrificing sleep — that's just what it means to have a newborn.", ja: "睡眠を削ること、それが新生児を持つということだ。" },
+      { en: "That's just what it means to run your own business.", ja: "それが自分でビジネスをするということだ。" },
+      { en: "Giving up weekends — that's just what it means to train for a marathon.", ja: "週末を犠牲にする、それがマラソンのトレーニングということだ。" },
+      { en: "That's just what it means to be truly committed.", ja: "それが本当に真剣に取り組むということだ。" },
+      { en: "Always putting others first — that's just what it means to be a good friend.", ja: "常に人を優先すること、それが良い友人であるということだ。" },
+      { en: "That's just what it means to grow up.", ja: "それが大人になるということだ。" }
+    ]
+  }
+];
+
+const QUESTIONS = [
+  // despite the name (10)
+  { ja:"名前とは裏腹に、彼は実はとても穏やかな性格です。", en:"Despite the name, he's actually very gentle.", alt:"Despite the name, he is actually very easygoing.", key:"despite the name", hint:["despite the name"], cat:"逆接・対比", info:"despite = 〜にもかかわらず（前置詞）" },
+  { ja:"この映画はタイトルとは裏腹に、子どもにも楽しめます。", en:"Despite the name, this movie is enjoyable for children too.", alt:"Despite the title, this film is fun for kids as well.", key:"despite the name", hint:["despite the name / title"], cat:"逆接・対比", info:"name / title どちらも使えます" },
+  { ja:"名前に反して、そのカフェの料理は本当においしい。", en:"Despite the name, that café serves really delicious food.", alt:"Despite the name, the food at that café is amazing.", key:"despite the name", hint:["despite the name"], cat:"逆接・対比", info:"serves = 提供する（レストランでよく使う）" },
+  { ja:"「楽々コース」という名前に反して、そのトレイルはとてもきつかった。", en:"Despite the name, the 'Easy Trail' was exhausting.", alt:"Despite the name 'Easy Trail', it was incredibly tough.", key:"despite the name", hint:["despite the name"], cat:"逆接・対比", info:"exhausting = とても疲れる" },
+  { ja:"名前とは裏腹に、そのカフェはいつも混んでいる。", en:"Despite the name, the 'Quiet Corner' café is always packed.", alt:"Despite being called 'Quiet Corner', that café is always crowded.", key:"despite the name", hint:["despite the name", "packed / crowded"], cat:"逆接・対比", info:"packed = 満員・混雑している" },
+  { ja:"名前からは想像できないが、その製品はとても使いやすい。", en:"Despite the name, the product is really easy to use.", alt:"Despite the name, it's surprisingly user-friendly.", key:"despite the name", hint:["despite the name", "easy to use"], cat:"逆接・対比", info:"user-friendly = 使いやすい" },
+  { ja:"「迅速サービス」という名前に反して、3時間かかった。", en:"Despite the name, the 'lightning service' took three hours.", alt:"Despite being called 'lightning service', it took three whole hours.", key:"despite the name", hint:["despite the name"], cat:"逆接・対比", info:"took three hours = 3時間かかった" },
+  { ja:"名前とは裏腹に、これは全く子ども向けの本ではない。", en:"Despite the name, this isn't a children's book at all.", alt:"Despite the name, this book is definitely not for kids.", key:"despite the name", hint:["despite the name", "not ~ at all"], cat:"逆接・対比", info:"not ~ at all = 全く〜ない（強調の否定）" },
+  { ja:"その名前は怖そうだが、実際にはとても友好的な犬だ。", en:"Despite the scary name, it's actually a very friendly dog.", alt:"Despite the name, that dog is surprisingly friendly.", key:"despite the name", hint:["despite the name", "friendly"], cat:"逆接・対比", info:"scary = 怖い / friendly = 友好的な" },
+  { ja:"名前に反して、彼は実はとても経験豊富な先生だ。", en:"Despite the name, he's actually a very experienced teacher.", alt:"Despite the name, he is a surprisingly experienced instructor.", key:"despite the name", hint:["despite the name", "experienced"], cat:"逆接・対比", info:"experienced = 経験豊富な" },
+
+  // timid (10)
+  { ja:"彼は臆病すぎて、知らない人に話しかけられない。", en:"He is too timid to talk to strangers.", alt:"He's too timid to speak to people he doesn't know.", key:"timid", hint:["timid", "too ~ to ..."], cat:"性格・感情", info:"too ~ to ... = 〜すぎて…できない" },
+  { ja:"新しい子猫は最初、とても内気に見えた。", en:"The new kitten looked very timid at first.", alt:"The new kitten seemed really timid at first.", key:"timid", hint:["timid", "at first"], cat:"性格・感情", info:"looked / seemed + 形容詞 = 〜に見えた" },
+  { ja:"臆病にならないで、行って自己紹介してきなよ。", en:"Don't be timid — just go and introduce yourself.", alt:"Stop being so timid and just introduce yourself.", key:"timid", hint:["timid", "introduce yourself"], cat:"性格・感情", info:"introduce yourself = 自己紹介する" },
+  { ja:"彼は以前は臆病だったが、今はとても自信がある。", en:"He used to be timid, but he's very confident now.", alt:"He was timid before, but now he's full of confidence.", key:"timid", hint:["timid", "used to / confident"], cat:"性格・感情", info:"used to be = 以前は〜だった" },
+  { ja:"内気な子どもは母親の後ろに隠れた。", en:"The timid child hid behind his mother.", alt:"The shy child hid behind his mom.", key:"timid", hint:["timid", "hid behind"], cat:"性格・感情", info:"hid = hide（隠れる）の過去形" },
+  { ja:"彼女は昇給のお願いをするのが怖かった。", en:"She felt timid about asking for a raise.", alt:"She was too timid to ask for a raise.", key:"timid", hint:["timid", "ask for a raise"], cat:"性格・感情", info:"ask for a raise = 昇給を求める" },
+  { ja:"子猫は臆病すぎてベッドの下から出てこられなかった。", en:"The kitten was too timid to come out from under the bed.", alt:"Being too timid, the kitten wouldn't come out from under the bed.", key:"timid", hint:["timid", "come out from under"], cat:"性格・感情", info:"come out from under = 〜の下から出てくる" },
+  { ja:"彼の小さな声は聞き取りにくかった。", en:"His timid voice made it hard to hear him.", alt:"His quiet, timid voice was hard to catch.", key:"timid", hint:["timid voice", "hard to hear"], cat:"性格・感情", info:"made it hard to ~ = 〜するのを難しくした" },
+  { ja:"一人旅は怖かったが、やってみてよかった。", en:"I was timid about traveling alone, but it was worth it.", alt:"Though I felt timid, traveling alone was really worth it.", key:"timid", hint:["timid", "worth it"], cat:"性格・感情", info:"worth it = やる価値がある" },
+  { ja:"内気な人でも、すばらしいリーダーになれる。", en:"Even timid people can become great leaders.", alt:"Timid people can also be great leaders.", key:"timid", hint:["timid", "great leaders"], cat:"性格・感情", info:"even = 〜でさえ（強調）" },
+
+  // clingy (10)
+  { ja:"うちの犬はとても甘えん坊で、ひとりでいることに耐えられない。", en:"My dog is very clingy and can't stand being alone.", alt:"My dog is really clingy and hates being alone.", key:"clingy", hint:["clingy", "can't stand being alone"], cat:"性格・感情", info:"clingy と can't stand を組み合わせよう" },
+  { ja:"私が一人で出かけようとすると、彼はいつもべったりしてくる。", en:"He gets clingy whenever I try to go out alone.", alt:"He becomes really clingy every time I try to leave by myself.", key:"clingy", hint:["clingy", "whenever / every time"], cat:"性格・感情", info:"whenever = 〜するたびに（= every time）" },
+  { ja:"妹は疲れているとき、本当にべったりくっついてくる。", en:"My little sister is really clingy when she's tired.", alt:"When she's tired, my younger sister gets very clingy.", key:"clingy", hint:["clingy", "when she's tired"], cat:"性格・感情", info:"clingy = 離れたがらない、甘えん坊な" },
+  { ja:"赤ちゃんは今日とても甘えん坊で、降ろすと泣く。", en:"The baby is very clingy today — she won't let me put her down.", alt:"She's being super clingy today and cries whenever I put her down.", key:"clingy", hint:["clingy", "put her down"], cat:"性格・感情", info:"put down = 降ろす" },
+  { ja:"うちの犬はとてもべったりで、トイレまでついてくる。", en:"My dog is so clingy that he follows me to the bathroom.", alt:"My dog follows me everywhere, even to the bathroom — he's so clingy.", key:"clingy", hint:["clingy", "follows me everywhere"], cat:"性格・感情", info:"so ~ that ... = とても〜なので…" },
+  { ja:"そんなにべったりしないで、少し距離を置いてあげて。", en:"Don't be so clingy — give them some space.", alt:"Stop being so clingy and give the other person some room.", key:"clingy", hint:["clingy", "give space"], cat:"性格・感情", info:"give someone some space = 距離を置く" },
+  { ja:"子どもは不安を感じると、べったり甘えてくることが多い。", en:"Kids often become clingy when they feel insecure.", alt:"Children tend to get clingy when they're feeling anxious.", key:"clingy", hint:["clingy", "insecure / anxious"], cat:"性格・感情", info:"insecure / anxious = 不安な" },
+  { ja:"彼女は新しい恋愛ではちょっと依存しがちだ。", en:"She tends to be a bit clingy in new relationships.", alt:"In new relationships, she can be a little clingy.", key:"clingy", hint:["clingy", "tends to / in relationships"], cat:"性格・感情", info:"tend to = 〜しがち" },
+  { ja:"その子犬は家に来た初日、信じられないくらいべったりだった。", en:"The puppy was incredibly clingy on its first day home.", alt:"On its first day home, the puppy was unbelievably clingy.", key:"clingy", hint:["clingy", "first day home"], cat:"性格・感情", info:"incredibly = 信じられないくらい" },
+  { ja:"私が出かけようとするたびに、彼はべったりしてくる。", en:"He becomes clingy whenever I'm about to leave.", alt:"Every time I'm about to go out, he gets super clingy.", key:"clingy", hint:["clingy", "about to leave"], cat:"性格・感情", info:"be about to = 〜しようとしている" },
+
+  // can't stand (10)
+  { ja:"彼女はタバコの匂いが我慢できない。", en:"She can't stand the smell of cigarettes.", alt:"She can't stand cigarette smoke.", key:"can't stand", hint:["can't stand"], cat:"感情・好み", info:"can't stand + 名詞 / 動名詞" },
+  { ja:"私は長い行列で待つのが我慢できない。", en:"I can't stand waiting in long lines.", alt:"I can't stand standing in long queues.", key:"can't stand -ing", hint:["can't stand -ing"], cat:"感情・好み", info:"can't stand + -ing形" },
+  { ja:"彼は無視されることが我慢できない。", en:"He can't stand being ignored.", alt:"He hates being ignored — he just can't stand it.", key:"can't stand", hint:["can't stand", "being ignored"], cat:"感情・好み", info:"being ignored = 無視されること（受動態の動名詞）" },
+  { ja:"彼女はいつも遅刻する人が我慢できない。", en:"She can't stand people who are always late.", alt:"She can't stand it when people are always late.", key:"can't stand", hint:["can't stand", "always late"], cat:"感情・好み", info:"can't stand + 人 / 状況" },
+  { ja:"一人で朝食をとるのが嫌でたまらない。", en:"I can't stand eating breakfast alone.", alt:"I really can't stand having breakfast by myself.", key:"can't stand -ing", hint:["can't stand -ing", "alone / by myself"], cat:"感情・好み", info:"by myself = 一人で（= alone）" },
+  { ja:"映画中に話している人が我慢できない。", en:"I can't stand it when people talk during movies.", alt:"I can't stand people who talk during a film.", key:"can't stand", hint:["can't stand", "during movies"], cat:"感情・好み", info:"I can't stand it when S V = 〜するとき我慢できない" },
+  { ja:"毎週残業するのが我慢できない。", en:"He can't stand working overtime every week.", alt:"He can't stand having to work overtime every single week.", key:"can't stand -ing", hint:["can't stand -ing", "overtime"], cat:"感情・好み", info:"overtime = 残業・超過労働" },
+  { ja:"次に何が起こるかわからない状態に耐えられない。", en:"I can't stand not knowing what will happen next.", alt:"I can't stand the uncertainty of not knowing what comes next.", key:"can't stand -ing", hint:["can't stand", "not knowing"], cat:"感情・好み", info:"not knowing = 知らないこと（否定の動名詞）" },
+  { ja:"彼女は仲間外れにされる感覚に耐えられない。", en:"She can't stand feeling left out.", alt:"She really can't stand being left out of things.", key:"can't stand -ing", hint:["can't stand", "left out"], cat:"感情・好み", info:"feel left out = 仲間外れにされた気がする" },
+  { ja:"黒板をひっかく音に耐えられない。", en:"I can't stand the sound of nails on a chalkboard.", alt:"The sound of nails on a chalkboard — I just can't stand it.", key:"can't stand", hint:["can't stand", "the sound of"], cat:"感情・好み", info:"nails on a chalkboard = 黒板をひっかく音（嫌な音の代名詞）" },
+
+  // check in on (10)
+  { ja:"私はペットカメラで、ときどき彼の様子を確認しています。", en:"I check in on him now and then with a pet camera.", alt:"I sometimes check in on him using a pet camera.", key:"check in on ~", hint:["check in on"], cat:"日常動作", info:"now and then = ときどき（= sometimes）" },
+  { ja:"手術後、友人が様子を確認するメッセージを送ってくれた。", en:"My friend texted to check in on me after the surgery.", alt:"A friend sent a message to check in on me after my surgery.", key:"check in on ~", hint:["check in on", "texted / message"], cat:"日常動作", info:"text = メッセージを送る（動詞）" },
+  { ja:"毎週、高齢の隣人の様子を確認しに行きます。", en:"I check in on my elderly neighbor every week.", alt:"Every week, I stop by to check in on my elderly neighbor.", key:"check in on ~", hint:["check in on", "elderly neighbor"], cat:"日常動作", info:"elderly = 高齢の / stop by = 立ち寄る" },
+  { ja:"たまには友人の様子を気にかけて連絡してみて。", en:"Don't forget to check in on your friends sometimes.", alt:"Make sure you check in on your friends from time to time.", key:"check in on ~", hint:["check in on", "from time to time"], cat:"日常動作", info:"from time to time = たまに（= sometimes）" },
+  { ja:"嵐の中、両親の安否を確認するために電話した。", en:"He called to check in on his parents during the storm.", alt:"During the storm, he phoned to check in on his parents.", key:"check in on ~", hint:["check in on", "during the storm"], cat:"日常動作", info:"during = 〜の間（前置詞）" },
+  { ja:"帰宅したら必ず植物の様子を確認します。", en:"I always check in on my plants when I come home.", alt:"Every time I get home, I check in on my plants.", key:"check in on ~", hint:["check in on", "plants"], cat:"日常動作", info:"check in on は人だけでなく物にも使える" },
+  { ja:"悪い知らせを聞いて、彼女は友人の様子を確認した。", en:"She checked in on her friend after hearing the bad news.", alt:"After hearing the bad news, she reached out to check in on her friend.", key:"check in on ~", hint:["check in on", "bad news"], cat:"日常動作", info:"reach out = 連絡を取る" },
+  { ja:"マネージャーは毎週月曜日にチームの状況を確認する。", en:"The manager checks in on the team every Monday.", alt:"Every Monday, the manager checks in on how the team is doing.", key:"check in on ~", hint:["check in on", "every Monday"], cat:"日常動作", info:"check in on = 進捗・状況を確認するときにも使う" },
+  { ja:"お母さんはいつも寝る前に私の様子を見に来てくれる。", en:"My mom always checks in on me before I go to bed.", alt:"Before bedtime, my mom always checks in on me.", key:"check in on ~", hint:["check in on", "before bed"], cat:"日常動作", info:"before I go to bed = 寝る前に" },
+  { ja:"毎週日曜日、ビデオ通話で祖父母の様子を確認します。", en:"I check in on my grandparents via video call every Sunday.", alt:"Every Sunday, I video call to check in on my grandparents.", key:"check in on ~", hint:["check in on", "via video call"], cat:"日常動作", info:"via = 〜を通じて（= through / by）" },
+
+  // sound asleep (10)
+  { ja:"帰宅したとき、赤ちゃんはぐっすり眠っていた。それで安心した。", en:"The baby was sound asleep when I got home, which was a relief.", alt:"When I got home, the baby was sound asleep — what a relief.", key:"sound asleep", hint:["sound asleep", "which was a relief"], cat:"状態描写", info:"which was a relief = それは安心だった" },
+  { ja:"彼はソファでぐっすり眠っていた。", en:"He was sound asleep on the sofa.", alt:"He fell sound asleep on the couch.", key:"sound asleep", hint:["sound asleep"], cat:"状態描写", info:"fall sound asleep = ぐっすり眠りに落ちる" },
+  { ja:"ぐっすり寝ていてアラームが聞こえなかった。", en:"I was sound asleep and didn't hear the alarm.", alt:"I was so sound asleep that I missed the alarm completely.", key:"sound asleep", hint:["sound asleep", "didn't hear the alarm"], cat:"状態描写", info:"so ~ that ... = とても〜なので…（強調）" },
+  { ja:"犬はお気に入りの場所でぐっすり眠っていた。", en:"The dog was sound asleep in his favorite spot.", alt:"My dog lay sound asleep in his usual spot.", key:"sound asleep", hint:["sound asleep", "favorite spot"], cat:"状態描写", info:"lay = lie（横になる）の過去形" },
+  { ja:"起こさないで、彼女はぐっすり眠っているから。", en:"Don't wake her — she's sound asleep.", alt:"Leave her alone, she's sound asleep.", key:"sound asleep", hint:["sound asleep", "don't wake"], cat:"状態描写", info:"leave someone alone = そっとしておく" },
+  { ja:"彼は映画の途中でぐっすり眠ってしまった。", en:"He fell sound asleep during the movie.", alt:"He was sound asleep in the middle of the movie.", key:"sound asleep", hint:["sound asleep", "during the movie"], cat:"状態描写", info:"in the middle of = 〜の途中で" },
+  { ja:"子どもたちは夜8時にはぐっすり眠っていた。", en:"The kids were sound asleep by 8 pm.", alt:"By 8 in the evening, all the kids were sound asleep.", key:"sound asleep", hint:["sound asleep", "by 8 pm"], cat:"状態描写", info:"by = 〜までに（期限・時点を示す）" },
+  { ja:"彼女は枕に頭をつけた瞬間、ぐっすり眠った。", en:"She was sound asleep the moment her head hit the pillow.", alt:"The moment her head touched the pillow, she was sound asleep.", key:"sound asleep", hint:["sound asleep", "the moment / hit the pillow"], cat:"状態描写", info:"hit the pillow = 枕に頭をつける（= fall asleep quickly）" },
+  { ja:"猫がノートパソコンの上でぐっすり眠っているのを見つけた。", en:"I found my cat sound asleep on top of my laptop.", alt:"My cat was sound asleep right on top of my laptop.", key:"sound asleep", hint:["sound asleep", "on top of"], cat:"状態描写", info:"find + 人/物 + 形容詞 = 〜が…の状態でいるのを見つける" },
+  { ja:"彼はとても疲れていて、電車の中でぐっすり眠ってしまった。", en:"He was so tired he fell sound asleep on the train.", alt:"He was exhausted and fell sound asleep on the way home.", key:"sound asleep", hint:["sound asleep", "so tired / exhausted"], cat:"状態描写", info:"exhausted = 疲れ果てた（tiredより強い）" },
+
+  // the moment (10)
+  { ja:"私が出かける準備を始めた瞬間、彼は大騒ぎし始める。", en:"The moment I start getting ready to go out, he goes absolutely berserk.", alt:"The moment I begin getting ready to leave, he freaks out completely.", key:"the moment ~", hint:["the moment ~", "go berserk"], cat:"時・タイミング", info:"the moment = 〜するやいなや（接続詞）" },
+  { ja:"彼女が部屋に入った瞬間、みんな話すのをやめた。", en:"The moment she walked into the room, everyone stopped talking.", alt:"The moment she entered the room, everyone went quiet.", key:"the moment ~", hint:["the moment ~"], cat:"時・タイミング", info:"stop -ing = 〜するのをやめる" },
+  { ja:"外に出た瞬間、雨が降り始めた。", en:"The moment I stepped outside, it started to rain.", alt:"The moment I walked out, the rain began.", key:"the moment ~", hint:["the moment ~", "it started to rain"], cat:"時・タイミング", info:"step outside = 外に出る" },
+  { ja:"ニュースを聞いた瞬間、彼女は泣き崩れた。", en:"She burst into tears the moment she heard the news.", alt:"The moment she heard the news, she burst into tears.", key:"the moment ~", hint:["the moment ~", "burst into tears"], cat:"時・タイミング", info:"burst into tears = 急に泣き出す" },
+  { ja:"食べた瞬間、おいしいとわかった。", en:"The moment I tasted it, I knew it was delicious.", alt:"I could tell it was delicious the moment I took a bite.", key:"the moment ~", hint:["the moment ~", "tasted / took a bite"], cat:"時・タイミング", info:"take a bite = 一口食べる" },
+  { ja:"彼らが到着した瞬間、パーティーが盛り上がった。", en:"The moment they arrived, the party came alive.", alt:"Things got lively the moment they showed up.", key:"the moment ~", hint:["the moment ~", "came alive / lively"], cat:"時・タイミング", info:"come alive = 活気づく" },
+  { ja:"着いた瞬間に電話します。", en:"I'll call you the moment I land.", alt:"I'll give you a call the moment I arrive.", key:"the moment ~", hint:["the moment ~", "land / arrive"], cat:"時・タイミング", info:"land = 着陸する・到着する（口語でも使う）" },
+  { ja:"彼女の顔を見た瞬間、何かおかしいとわかった。", en:"The moment I saw her face, I knew something was wrong.", alt:"Something felt off the moment I looked at her face.", key:"the moment ~", hint:["the moment ~", "something was wrong"], cat:"時・タイミング", info:"something is wrong = 何かおかしい" },
+  { ja:"プレゼントを見た瞬間、彼女は笑顔になった。", en:"She smiled the moment she saw the gift.", alt:"The moment she laid eyes on the gift, she broke into a smile.", key:"the moment ~", hint:["the moment ~", "smiled / broke into a smile"], cat:"時・タイミング", info:"lay eyes on = 目にする / break into a smile = 笑顔になる" },
+  { ja:"私がドアから入った瞬間、彼はすぐに気づいた。", en:"He recognized me the moment I walked through the door.", alt:"The moment I stepped through the door, he noticed me.", key:"the moment ~", hint:["the moment ~", "recognized / noticed"], cat:"時・タイミング", info:"recognize = 認識する / notice = 気づく" },
+
+  // go berserk (10)
+  { ja:"チャイムが鳴るたびに、うちの犬は大騒ぎする。", en:"My dog goes absolutely berserk every time the doorbell rings.", alt:"Every time the doorbell rings, my dog goes berserk.", key:"go absolutely berserk", hint:["go berserk", "every time"], cat:"感情・行動", info:"every time S V = 〜するたびに" },
+  { ja:"バンドがステージに上がった瞬間、観客は完全に熱狂した。", en:"The crowd went absolutely berserk when the band came on stage.", alt:"Fans went berserk the moment the band appeared on stage.", key:"go absolutely berserk", hint:["go berserk", "crowd / fans"], cat:"感情・行動", info:"crowd / fans = 観客（どちらも使える）" },
+  { ja:"ゴールが決まった瞬間、ファンは完全に熱狂した。", en:"The fans went absolutely berserk when the goal was scored.", alt:"The moment the goal went in, the fans went completely berserk.", key:"go absolutely berserk", hint:["go berserk", "goal was scored"], cat:"感情・行動", info:"the goal was scored = ゴールが決まった（受動態）" },
+  { ja:"おもちゃを出すたびに、うちの猫は大騒ぎする。", en:"My cat goes berserk whenever I bring out a toy.", alt:"Every time I take out a toy, my cat goes absolutely berserk.", key:"go absolutely berserk", hint:["go berserk", "whenever / toy"], cat:"感情・行動", info:"bring out = 出す / take out = 取り出す" },
+  { ja:"雪を見た瞬間、子どもたちは大興奮した。", en:"The kids went absolutely berserk when they saw the snow.", alt:"The children went completely berserk the moment they saw snow.", key:"go absolutely berserk", hint:["go berserk", "kids / snow"], cat:"感情・行動", info:"berserk は興奮やパニックの両方に使える" },
+  { ja:"チームが優勝したとき、彼は大騒ぎした。", en:"He went berserk when his team won the championship.", alt:"He absolutely lost it when his team won the championship.", key:"go absolutely berserk", hint:["go berserk", "championship"], cat:"感情・行動", info:"lose it = 自制心を失う（= go berserk）" },
+  { ja:"サプライズ発表に観客は大興奮した。", en:"The audience went berserk at the surprise announcement.", alt:"When the surprise was announced, the audience went absolutely berserk.", key:"go absolutely berserk", hint:["go berserk", "surprise announcement"], cat:"感情・行動", info:"audience = 聴衆・観客" },
+  { ja:"パンダ関連のものは何でも彼女は大騒ぎする。", en:"She goes absolutely berserk over anything panda-related.", alt:"Anything to do with pandas and she just goes berserk.", key:"go absolutely berserk", hint:["go berserk", "panda-related"], cat:"感情・行動", info:"go berserk over = 〜に対して大興奮する" },
+  { ja:"賞を取ったとき、オフィス中が大騒ぎになった。", en:"The office went berserk when they won the award.", alt:"Everyone in the office went absolutely berserk after winning the award.", key:"go absolutely berserk", hint:["go berserk", "won the award"], cat:"感情・行動", info:"win an award = 賞を受賞する" },
+  { ja:"パーティーを知って、彼女は大興奮した。", en:"She went berserk when she found out about the party.", alt:"The moment she heard about the party, she went absolutely berserk.", key:"go absolutely berserk", hint:["go berserk", "found out about"], cat:"感情・行動", info:"find out = 知る・発覚する" },
+
+  // disappear from the frame (10)
+  { ja:"カメラを見ていたら、彼がフレームから完全に消えてしまった。", en:"While I was watching through the camera, he completely disappeared from the frame.", alt:"He suddenly disappeared from the frame while I was watching.", key:"disappeared from the frame", hint:["disappeared from the frame"], cat:"状態描写", info:"while S was -ing = 〜していたとき" },
+  { ja:"ドローンが高く飛びすぎて、カメラから消えてしまった。", en:"The drone flew too high and disappeared from the frame.", alt:"The drone went too high and completely disappeared from the frame.", key:"disappeared from the frame", hint:["disappeared from the frame", "too high"], cat:"状態描写", info:"too + 形容詞 = 〜すぎる" },
+  { ja:"猫がカメラのフレームから完全に消えた。", en:"The cat completely disappeared from the frame.", alt:"Suddenly, the cat vanished from the frame.", key:"disappeared from the frame", hint:["disappeared from the frame"], cat:"状態描写", info:"vanish = 突然消える（disappearより突然さが強い）" },
+  { ja:"彼は歩き去り、画面から消えた。", en:"He walked off and disappeared from the frame.", alt:"He turned and walked away, disappearing from the frame.", key:"disappeared from the frame", hint:["disappeared from the frame", "walked off"], cat:"状態描写", info:"walk off = 歩き去る" },
+  { ja:"フォーカスを合わせる前に、鳥がフレームから消えてしまった。", en:"The bird disappeared from the frame before I could focus.", alt:"Before I had time to focus, the bird was gone from the frame.", key:"disappeared from the frame", hint:["disappeared from the frame", "before I could focus"], cat:"状態描写", info:"before I could ~ = 〜する前に、できる前に" },
+  { ja:"彼女の歩くのが速すぎて、すぐにフレームから消えた。", en:"She walked so fast that she disappeared from the frame instantly.", alt:"She moved so quickly that she instantly disappeared from the frame.", key:"disappeared from the frame", hint:["disappeared from the frame", "so fast that"], cat:"状態描写", info:"so ~ that ... = とても〜なので…すぐに" },
+  { ja:"カメラをパンしたが、彼はすでにフレームから消えていた。", en:"I panned the camera but he had disappeared from the frame.", alt:"By the time I panned over, he had already disappeared from the frame.", key:"disappeared from the frame", hint:["disappeared from the frame", "panned / by the time"], cat:"状態描写", info:"pan = カメラを横に動かす / by the time = 〜するときには" },
+  { ja:"子どもが走り去り、フレームから消えた。", en:"The child ran off and disappeared from the frame.", alt:"The child dashed away and disappeared from the frame.", key:"disappeared from the frame", hint:["disappeared from the frame", "ran off / dashed away"], cat:"状態描写", info:"dash away = 急いで走り去る" },
+  { ja:"キツネが一瞬現れ、すぐにフレームから消えた。", en:"A fox appeared briefly and then disappeared from the frame.", alt:"A fox popped into the frame for a second and then vanished.", key:"disappeared from the frame", hint:["disappeared from the frame", "briefly / for a second"], cat:"状態描写", info:"briefly = 一瞬 / pop into = ひょっと現れる" },
+  { ja:"彼がつまずいてフレームから消えた―とても面白かった。", en:"He tripped and disappeared from the frame — it was hilarious.", alt:"He stumbled and fell out of the frame — absolutely hilarious.", key:"disappeared from the frame", hint:["disappeared from the frame", "tripped / hilarious"], cat:"状態描写", info:"hilarious = 爆笑もの / stumble = よろめく" },
+
+  // My heart nearly stopped (10)
+  { ja:"請求書を見て、心臓が止まるかと思った！", en:"My heart nearly stopped when I saw the bill!", alt:"When I saw the invoice, my heart nearly stopped!", key:"My heart nearly stopped.", hint:["my heart nearly stopped"], cat:"感情表現", info:"nearly = もう少しで（= almost）" },
+  { ja:"車がスリップした瞬間、心臓が止まるかと思った。", en:"My heart nearly stopped when the car skidded.", alt:"When the car skidded, my heart nearly stopped.", key:"My heart nearly stopped.", hint:["my heart nearly stopped", "skidded"], cat:"感情表現", info:"skid = スリップする（車が滑る）" },
+  { ja:"枕の上のクモを見て、心臓が止まるかと思った。", en:"My heart nearly stopped when I saw the spider on my pillow.", alt:"I saw a spider on my pillow and my heart nearly stopped.", key:"My heart nearly stopped.", hint:["my heart nearly stopped", "spider / pillow"], cat:"感情表現", info:"spider = クモ / pillow = 枕" },
+  { ja:"パスポートをなくしたかと思って、心臓が止まるかと思った。", en:"My heart nearly stopped when I thought I'd lost my passport.", alt:"I thought I had lost my passport — my heart nearly stopped.", key:"My heart nearly stopped.", hint:["my heart nearly stopped", "lost my passport"], cat:"感情表現", info:"thought I'd lost = なくしたと思った（過去完了）" },
+  { ja:"はしごが滑った瞬間、心臓が止まるかと思った。", en:"My heart nearly stopped when the ladder slipped.", alt:"The moment the ladder slipped, my heart nearly stopped.", key:"My heart nearly stopped.", hint:["my heart nearly stopped", "ladder slipped"], cat:"感情表現", info:"ladder = はしご / slip = 滑る" },
+  { ja:"突然電気が消えて、心臓が止まるかと思った。", en:"My heart nearly stopped when the lights went out suddenly.", alt:"When the lights suddenly went out, my heart nearly stopped.", key:"My heart nearly stopped.", hint:["my heart nearly stopped", "lights went out"], cat:"感情表現", info:"the lights went out = 電気が消えた / suddenly = 突然" },
+  { ja:"大きな音がして、心臓が止まるかと思った。", en:"When I heard the bang, my heart nearly stopped.", alt:"There was a huge bang — my heart nearly stopped.", key:"My heart nearly stopped.", hint:["my heart nearly stopped", "bang / loud noise"], cat:"感情表現", info:"bang = ドン・バンという大きな音" },
+  { ja:"車がどれだけ近づいていたか見て、心臓が止まるかと思った。", en:"My heart nearly stopped when I saw how close the car got.", alt:"Seeing how close that car came, my heart nearly stopped.", key:"My heart nearly stopped.", hint:["my heart nearly stopped", "how close / car"], cat:"感情表現", info:"how close = どれだけ近いか（間接疑問文）" },
+  { ja:"公園で犬が見えなくなって、心臓が止まるかと思った。", en:"My heart nearly stopped when my dog disappeared at the park.", alt:"When I couldn't find my dog at the park, my heart nearly stopped.", key:"My heart nearly stopped.", hint:["my heart nearly stopped", "disappeared at the park"], cat:"感情表現", info:"couldn't find = 見つけられなかった" },
+  { ja:"病院から電話がきて、心臓が止まるかと思った。", en:"My heart nearly stopped when I got a call from the hospital.", alt:"Getting a call from the hospital — my heart nearly stopped.", key:"My heart nearly stopped.", hint:["my heart nearly stopped", "call from the hospital"], cat:"感情表現", info:"get a call from = 〜から電話を受ける" },
+
+  // that's just what it means to (10)
+  { ja:"それがこんなに犬を愛するということだ、ずっと心配してしまう。", en:"That's just what it means to love a dog this much — you worry all the time.", alt:"I guess that's just what it means to love a dog this much.", key:"that's just what it means to ~", hint:["that's just what it means to ~"], cat:"表現・まとめ", info:"what it means to ~ = 〜するとはどういうことか" },
+  { ja:"それが親であるということだ。", en:"That's just what it means to be a parent.", alt:"I suppose that's just what it means to be a parent.", key:"that's just what it means to ~", hint:["that's just what it means to ~"], cat:"表現・まとめ", info:"I suppose = 〜だと思う（= I guess）" },
+  { ja:"それが都市に住むということだ。", en:"That's just what it means to live in a city.", alt:"Living in a city — that's just what it means.", key:"that's just what it means to ~", hint:["that's just what it means to ~"], cat:"表現・まとめ", info:"前後を入れ替えて言うこともできる" },
+  { ja:"常に心配してしまう、それがこんなに犬を愛するということだ。", en:"Worrying all the time — that's just what it means to love a dog this much.", alt:"Always worrying — I guess that's just what it means to care so deeply.", key:"that's just what it means to ~", hint:["that's just what it means to ~", "worrying all the time"], cat:"表現・まとめ", info:"care deeply = 深く気にかける" },
+  { ja:"睡眠を削ること、それが新生児を持つということだ。", en:"Sacrificing sleep — that's just what it means to have a newborn.", alt:"Not sleeping — that's just what it means to have a baby at home.", key:"that's just what it means to ~", hint:["that's just what it means to ~", "newborn / baby"], cat:"表現・まとめ", info:"sacrificing = 犠牲にすること / newborn = 新生児" },
+  { ja:"それが自分でビジネスをするということだ。", en:"That's just what it means to run your own business.", alt:"Running your own business — that's just what it means.", key:"that's just what it means to ~", hint:["that's just what it means to ~", "run your own business"], cat:"表現・まとめ", info:"run a business = ビジネスを経営する" },
+  { ja:"週末を犠牲にする、それがマラソンのトレーニングということだ。", en:"Giving up weekends — that's just what it means to train for a marathon.", alt:"Losing your weekends — that's just what it means to train seriously.", key:"that's just what it means to ~", hint:["that's just what it means to ~", "giving up weekends"], cat:"表現・まとめ", info:"give up = 諦める・手放す" },
+  { ja:"それが本当に真剣に取り組むということだ。", en:"That's just what it means to be truly committed.", alt:"Being truly committed — that's just what it means.", key:"that's just what it means to ~", hint:["that's just what it means to ~", "committed"], cat:"表現・まとめ", info:"committed = 真剣に取り組んでいる・献身的な" },
+  { ja:"常に人を優先すること、それが良い友人であるということだ。", en:"Always putting others first — that's just what it means to be a good friend.", alt:"Putting others before yourself — that's just what it means to be a true friend.", key:"that's just what it means to ~", hint:["that's just what it means to ~", "putting others first"], cat:"表現・まとめ", info:"put others first = 人を優先する" },
+  { ja:"それが大人になるということだ。", en:"That's just what it means to grow up.", alt:"Growing up — that's just what it means.", key:"that's just what it means to ~", hint:["that's just what it means to ~", "grow up"], cat:"表現・まとめ", info:"grow up = 大人になる・成長する" },
+];
+
+const CATEGORIES = ["全て","逆接・対比","性格・感情","感情・好み","日常動作","状態描写","時・タイミング","感情・行動","感情表現","表現・まとめ"];
+// 11 phrases × 10 questions = 110 total
+
+const S = {
+  mode: "practice",
+  cat: "全て",
+  qs: [],
+  idx: 0,
+  flipped: false,
+  wrong: [],
+  correct: 0,
+  total: 0
+};
+
+function shuffle(a) {
+  let arr=[...a];
+  for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}
+  return arr;
+}
+
+function updateStats() {
+  document.getElementById("s-total").textContent = S.total;
+  document.getElementById("s-ok").textContent = S.correct;
+  document.getElementById("s-ng").textContent = S.wrong.length;
+  const b = document.getElementById("rbadge");
+  if(S.wrong.length>0){b.style.display="";b.textContent=S.wrong.length;}
+  else b.style.display="none";
+}
+
+function switchMode(m) {
+  S.mode = m;
+  ["practice","vocab","review"].forEach(id => {
+    document.getElementById("mode-"+id).style.display = m===id?"":"none";
+    document.getElementById("tab-"+id).classList.toggle("active", m===id);
+  });
+  if(m==="vocab") renderVocab();
+  if(m==="review") renderReview();
+}
+
+function getFilteredQ() {
+  return S.cat==="全て"?[...QUESTIONS]:QUESTIONS.filter(q=>q.cat===S.cat);
+}
+
+function initPractice() {
+  S.qs = shuffle(getFilteredQ());
+  S.idx = 0;
+  S.flipped = false;
+  showCard();
+}
+
+function renderCats() {
+  document.getElementById("cat-row").innerHTML = CATEGORIES.map(c =>
+    `<button class="cat-btn ${c===S.cat?'active':''}" onclick="selectCat('${c.replace(/'/g,"\\'")}')"> ${c}</button>`
+  ).join("");
+}
+
+function selectCat(c) { S.cat=c; renderCats(); initPractice(); }
+
+function showCard() {
+  const qs = S.qs;
+  if(!qs.length) {
+    document.getElementById("card-counter").textContent = "";
+    document.getElementById("ja-text").textContent = "この分類の問題がありません";
+    document.getElementById("hint-row").innerHTML = "";
+    document.getElementById("judge-buttons").classList.remove("visible");
+    return;
+  }
+  if(S.idx >= qs.length) { showResult(); return; }
+
+  const q = qs[S.idx];
+  const pct = Math.round(S.idx / qs.length * 100);
+  document.getElementById("prog").style.width = pct+"%";
+  document.getElementById("card-counter").textContent = (S.idx+1) + " / " + qs.length;
+
+  // Reset flip
+  const fc = document.getElementById("flip-card");
+  fc.classList.remove("flipped");
+  S.flipped = false;
+  document.getElementById("judge-buttons").classList.remove("visible");
+
+  // Front
+  document.getElementById("ja-text").textContent = q.ja;
+  document.getElementById("hint-row").innerHTML = q.hint.map(h=>`<span class="hint-chip">🔑 ${h}</span>`).join("");
+
+  // Back
+  document.getElementById("en-text").textContent = q.en;
+  document.getElementById("alt-text").textContent = q.alt ? "別解: "+q.alt : "";
+  document.getElementById("key-tag").textContent = "📌 "+q.key;
+  document.getElementById("info-text").textContent = q.info || "";
+}
+
+function flipCard() {
+  if(S.idx >= S.qs.length) return;
+  const fc = document.getElementById("flip-card");
+  S.flipped = !S.flipped;
+  fc.classList.toggle("flipped", S.flipped);
+  if(S.flipped) {
+    setTimeout(()=>{ document.getElementById("judge-buttons").classList.add("visible"); }, 200);
+  } else {
+    document.getElementById("judge-buttons").classList.remove("visible");
+  }
+}
+
+function judge(ok) {
+  if(!S.flipped) return;
+  const q = S.qs[S.idx];
+  S.total++;
+  if(ok) {
+    S.correct++;
+    S.wrong = S.wrong.filter(w=>w.ja!==q.ja);
+  } else {
+    if(!S.wrong.find(w=>w.ja===q.ja)) S.wrong.push(q);
+  }
+  updateStats();
+  S.idx++;
+  S.flipped = false;
+
+  // Brief flash animation
+  const fc = document.getElementById("flip-card");
+  fc.style.transition = "none";
+  fc.classList.remove("flipped");
+  document.getElementById("judge-buttons").classList.remove("visible");
+  setTimeout(()=>{
+    fc.style.transition = "";
+    showCard();
+  }, 60);
+}
+
+function showResult() {
+  document.getElementById("prog").style.width = "100%";
+  document.getElementById("card-counter").textContent = "完了！";
+  document.getElementById("judge-buttons").classList.remove("visible");
+
+  const pct = S.total>0 ? Math.round(S.correct/S.total*100) : 0;
+  const emoji = pct>=80?"🎉":pct>=50?"💪":"📚";
+  const msg = pct>=80?"素晴らしい！Cocoも大喜び🐾":pct>=50?"いい調子！もう少し頑張ろう！":"繰り返しが力になる！続けよう！";
+
+  // Replace flip card area with result
+  document.getElementById("flip-card").outerHTML = `<div id="flip-card"></div>`;
+  document.querySelector(".flip-scene").innerHTML = `
+    <div class="result-screen">
+      <div class="result-emoji">${emoji}</div>
+      <div class="result-pct">${pct}%</div>
+      <div class="result-msg">${msg}</div>
+      <div class="result-nums">
+        <div><div class="r-num ok">${S.correct}</div><div class="r-lbl">できた</div></div>
+        <div><div class="r-num ng">${S.wrong.length}</div><div class="r-lbl">要復習</div></div>
+      </div>
+      <div class="result-btns">
+        <button class="btn-result primary" onclick="location.reload()">もう一度最初から 🔄</button>
+        ${S.wrong.length>0?`<button class="btn-result amber" onclick="startWrongPractice()">間違いだけ集中練習 🔁</button>`:""}
+      </div>
+    </div>
+  `;
+}
+
+function startWrongPractice() {
+  // Rebuild DOM for practice
+  document.querySelector(".flip-scene").innerHTML = `
+    <div class="flip-card" id="flip-card" onclick="flipCard()">
+      <div class="card-face card-front" id="card-front">
+        <div class="face-label">日本語を見て英語で言おう</div>
+        <div class="ja-text" id="ja-text"></div>
+        <div class="hint-row" id="hint-row"></div>
+        <div class="tap-hint"><span class="tap-icon">👆</span> タップで英語を確認</div>
+      </div>
+      <div class="card-face card-back" id="card-back">
+        <div class="face-label">Answer</div>
+        <div class="en-text" id="en-text"></div>
+        <div class="alt-text" id="alt-text"></div>
+        <div class="key-tag" id="key-tag"></div>
+        <div class="info-text" id="info-text"></div>
+      </div>
+    </div>
+  `;
+  S.qs = shuffle([...S.wrong]);
+  S.idx = 0;
+  S.flipped = false;
+  showCard();
+}
+
+// Vocab
+function renderVocab() {
+  document.getElementById("vocab-list").innerHTML = VOCAB.map(v=>`
+    <div class="vocab-card">
+      <div class="vocab-phrase">${v.phrase}</div>
+      <div class="vocab-cat">${v.category}</div>
+      <div class="vocab-meaning">🇯🇵 ${v.meaning}</div>
+      <div class="vocab-examples">
+        ${v.examples.map(e=>`
+          <div class="ex-item">
+            <div class="ex-en">${e.en}</div>
+            <div class="ex-ja">${e.ja}</div>
+          </div>
+        `).join("")}
+      </div>
+    </div>
+  `).join("");
+}
+
+// Review
+function renderReview() {
+  const area = document.getElementById("review-list");
+  if(!S.wrong.length) {
+    area.innerHTML=`<div class="empty-state"><div class="ee">🎊</div><p>要復習の問題はありません！<br>全問マスターしました！</p></div>`;
+    return;
+  }
+  area.innerHTML = `
+    <div style="font-size:13px;color:var(--text-hint);margin-bottom:12px">${S.wrong.length}問 要復習</div>
+    ${S.wrong.map((q,i)=>`
+      <div class="review-item">
+        <div class="ri-ja">${q.ja}</div>
+        <div class="ri-en">→ ${q.en}</div>
+        <span class="ri-key">📌 ${q.key}</span>
+        <div class="ri-actions">
+          <button class="btn-sm green" onclick="markMastered(${i})">✓ 覚えた</button>
+          <button class="btn-sm gray" onclick="practiceThis(${i})">練習する →</button>
+        </div>
+      </div>
+    `).join("")}
+    <div style="margin-top:16px">
+      <button class="btn-result primary" style="width:100%;padding:14px;border-radius:10px;border:none;font-size:15px;font-weight:700;cursor:pointer;color:#fff;background:var(--green);font-family:'Noto Sans JP',sans-serif" onclick="startWrongAndSwitch()">全ての要復習をフリップ練習 🔁</button>
+    </div>
+  `;
+}
+
+function markMastered(i) { S.wrong.splice(i,1); updateStats(); renderReview(); }
+
+function practiceThis(i) {
+  S.qs = [S.wrong[i]];
+  S.idx = 0;
+  S.flipped = false;
+  switchMode("practice");
+  renderCats();
+  showCard();
+}
+
+function startWrongAndSwitch() {
+  switchMode("practice");
+  startWrongPractice();
+}
+
+// Init
+renderCats();
+initPractice();
+updateStats();
+</script>
+</body>
+</html>
