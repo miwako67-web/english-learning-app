@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CoCo's Daily Life English</title>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#1a1410;--paper:#f5f0e8;--gold:#c8962a;--moss:#4a7c59;--indigo:#3d5a8a;--crimson:#a03030;--panel:#fffdf8;--border:rgba(26,20,16,0.12);}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);min-height:100vh;}
+header{background:var(--ink);padding:18px 20px 0;position:sticky;top:0;z-index:100;}
+.h-top{display:flex;align-items:center;gap:10px;padding-bottom:14px;}
+.h-top h1{font-family:'Shippori Mincho',serif;color:var(--gold);font-size:17px;font-weight:700;flex:1;}
+.h-top p{color:rgba(245,240,232,0.45);font-size:10px;margin-top:1px;}
+.badge{background:rgba(200,150,42,0.2);border:1px solid var(--gold);color:var(--gold);font-size:10px;padding:3px 8px;border-radius:20px;white-space:nowrap;}
+nav{display:flex;}
+.tab{flex:1;padding:9px 4px;background:none;border:none;border-bottom:2px solid transparent;color:rgba(245,240,232,0.38);font-family:'DM Sans',sans-serif;font-size:10px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:2px;}
+.tab span:first-child{font-size:14px;}
+.tab.active{color:var(--gold);border-bottom-color:var(--gold);}
+main{padding:14px;max-width:600px;margin:0 auto;}
+.page{display:none;}.page.active{display:block;}
+.sec{font-family:'Shippori Mincho',serif;font-size:10px;font-weight:600;color:rgba(26,20,16,0.38);letter-spacing:.12em;text-transform:uppercase;margin:18px 0 10px;}
+
+/* CONVERSATION */
+.schips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;}
+.schip{padding:5px 13px;border-radius:20px;border:1.5px solid var(--border);background:var(--panel);font-size:11px;cursor:pointer;transition:all 0.2s;color:var(--ink);}
+.schip.active{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+.legend{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;padding:9px 12px;background:var(--panel);border:1px solid var(--border);border-radius:10px;}
+.leg{display:flex;align-items:center;gap:5px;font-size:10px;color:rgba(26,20,16,0.52);}
+.leg-dot{width:9px;height:9px;border-radius:2px;}
+.conv-card{background:var(--panel);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:14px;box-shadow:0 2px 10px rgba(26,20,16,0.05);}
+.conv-hd{background:var(--ink);padding:10px 14px;display:flex;align-items:center;justify-content:space-between;}
+.conv-lbl{font-size:11px;color:rgba(245,240,232,0.5);}
+.conv-num{font-size:11px;color:var(--gold);font-weight:500;}
+.conv-body{padding:14px;}
+.line{display:flex;gap:9px;margin-bottom:13px;align-items:flex-start;}
+.line:last-child{margin-bottom:0;}
+.sp{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;margin-top:2px;}
+.sp.me{background:rgba(200,150,42,0.15);}.sp.them{background:rgba(74,124,89,0.15);}
+.bbl{flex:1;}
+.en{font-size:14px;font-weight:400;line-height:1.6;margin-bottom:3px;}
+.jp{font-family:'Shippori Mincho',serif;font-size:11px;color:rgba(26,20,16,0.42);font-style:italic;line-height:1.5;}
+.hl{cursor:pointer;border-radius:3px;padding:0 2px;transition:opacity .15s;}
+.hl:hover{opacity:.72;}
+.hl.g{background:rgba(200,150,42,0.18);border-bottom:1.5px solid var(--gold);}
+.hl.m{background:rgba(74,124,89,0.15);border-bottom:1.5px solid var(--moss);}
+.hl.i{background:rgba(61,90,138,0.15);border-bottom:1.5px solid var(--indigo);}
+
+/* FLIP CARDS (phrase) */
+.stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-bottom:14px;}
+.sb{background:var(--panel);border:1px solid var(--border);border-radius:11px;padding:11px 7px;text-align:center;}
+.sn{font-size:20px;font-weight:500;line-height:1;margin-bottom:3px;}
+.sn.g{color:var(--gold);}.sn.m{color:var(--moss);}.sn.k{color:var(--ink);}
+.sl{font-family:'Shippori Mincho',serif;font-size:9px;color:rgba(26,20,16,0.4);}
+.fchips{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:12px;}
+.fc{padding:4px 11px;border-radius:20px;border:1.5px solid var(--border);background:var(--panel);font-size:10px;cursor:pointer;transition:all 0.2s;color:var(--ink);}
+.fc.active{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+.prog-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px;}
+.ctr{font-size:11px;color:rgba(26,20,16,0.4);}
+.pw{flex:1;height:4px;background:var(--border);border-radius:2px;margin:0 10px;overflow:hidden;}
+.pf{height:100%;background:var(--moss);border-radius:2px;transition:width .3s;}
+.rst{font-size:10px;color:rgba(26,20,16,0.35);background:none;border:none;cursor:pointer;text-decoration:underline;}
+.fcs{perspective:1000px;margin-bottom:14px;cursor:pointer;min-height:200px;}
+.fci{position:relative;transition:transform .5s cubic-bezier(.4,0,.2,1);transform-style:preserve-3d;min-height:200px;}
+.fcs.flipped .fci{transform:rotateY(180deg);}
+.ff,.fb{position:absolute;width:100%;min-height:200px;background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:22px 18px;backface-visibility:hidden;box-shadow:0 3px 18px rgba(26,20,16,0.07);}
+.fb{transform:rotateY(180deg);}
+.mpill{position:absolute;top:12px;right:12px;background:var(--moss);color:#fff;font-size:9px;padding:2px 8px;border-radius:20px;}
+.cjp{font-family:'Shippori Mincho',serif;font-size:17px;font-weight:600;line-height:1.55;margin-bottom:8px;}
+.chint{font-size:10px;color:rgba(26,20,16,0.35);font-style:italic;}
+.cen{font-size:15px;font-weight:500;line-height:1.5;margin-bottom:6px;}
+.cnote{font-family:'Shippori Mincho',serif;font-size:11px;color:rgba(26,20,16,0.52);line-height:1.65;margin-bottom:12px;}
+.cact{display:flex;gap:8px;}
+.cb{flex:1;padding:10px;border-radius:9px;border:none;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;transition:opacity .15s;}
+.cb:hover{opacity:.85;}
+.cb.r{background:rgba(160,48,48,0.1);color:var(--crimson);}
+.cb.ok{background:var(--moss);color:#fff;}
+.cnav{display:flex;align-items:center;justify-content:space-between;margin-top:6px;}
+.nb{padding:9px 18px;border-radius:9px;border:1.5px solid var(--border);background:var(--panel);font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;transition:all .2s;color:var(--ink);}
+.nb:hover{border-color:var(--ink);}
+.nb:disabled{opacity:.25;cursor:default;}
+
+/* ===== DRILL — FLIP CARD STYLE ===== */
+.word-selector{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;}
+.ws-btn{padding:6px 13px;border-radius:20px;border:1.5px solid var(--border);background:var(--panel);font-size:11px;cursor:pointer;transition:all .2s;color:var(--ink);}
+.ws-btn.active{background:var(--indigo);color:#fff;border-color:var(--indigo);}
+
+.construct-box{background:var(--ink);border-radius:14px;padding:14px 18px;margin-bottom:8px;}
+.construct-en{font-size:17px;font-weight:500;color:var(--gold);margin-bottom:3px;}
+.construct-jp{font-family:'Shippori Mincho',serif;font-size:11px;color:rgba(245,240,232,0.5);}
+
+.usage-note{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:14px;font-family:'Shippori Mincho',serif;font-size:12px;line-height:1.75;color:rgba(26,20,16,0.62);}
+.usage-note strong{color:var(--indigo);}
+
+.drill-prog-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px;}
+.drill-ctr{font-size:11px;color:rgba(26,20,16,0.4);}
+.drill-pw{flex:1;height:4px;background:var(--border);border-radius:2px;margin:0 10px;overflow:hidden;}
+.drill-pf{height:100%;background:var(--indigo);border-radius:2px;transition:width .35s;}
+.drill-rst{font-size:10px;color:rgba(26,20,16,0.35);background:none;border:none;cursor:pointer;text-decoration:underline;}
+
+/* drill flip card */
+.dfc-scene{perspective:1000px;margin-bottom:14px;cursor:pointer;min-height:230px;}
+.dfc-inner{position:relative;transition:transform .48s cubic-bezier(.4,0,.2,1);transform-style:preserve-3d;min-height:230px;}
+.dfc-scene.flipped .dfc-inner{transform:rotateY(180deg);}
+.dfc-front,.dfc-back{position:absolute;width:100%;min-height:230px;background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:24px 20px;backface-visibility:hidden;box-shadow:0 3px 18px rgba(26,20,16,0.07);}
+.dfc-back{transform:rotateY(180deg);}
+
+.dfc-num-badge{display:inline-block;font-size:10px;font-weight:600;color:rgba(26,20,16,0.3);letter-spacing:.07em;margin-bottom:14px;}
+.done-pill{font-size:9px;background:var(--moss);color:#fff;padding:2px 8px;border-radius:20px;margin-left:8px;display:none;}
+
+.dfc-jp{font-family:'Shippori Mincho',serif;font-size:17px;font-weight:600;line-height:1.65;margin-bottom:12px;}
+.dfc-hint{font-size:10px;color:rgba(26,20,16,0.35);font-style:italic;}
+
+.dfc-en{font-size:15px;font-weight:500;line-height:1.55;margin-bottom:8px;padding:10px 12px;background:rgba(74,124,89,0.07);border-radius:8px;border-left:3px solid var(--moss);}
+.dfc-key{font-size:11px;color:var(--indigo);font-weight:500;margin-bottom:14px;}
+.dfc-acts{display:flex;gap:8px;}
+.dfc-btn{flex:1;padding:10px;border-radius:9px;border:none;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;transition:opacity .15s;}
+.dfc-btn:hover{opacity:.85;}
+.dfc-btn.retry{background:rgba(160,48,48,0.1);color:var(--crimson);}
+.dfc-btn.got{background:var(--moss);color:#fff;}
+
+.drill-nav{display:flex;align-items:center;justify-content:space-between;margin-top:4px;}
+.dnb{padding:9px 18px;border-radius:9px;border:1.5px solid var(--border);background:var(--panel);font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;transition:all .2s;color:var(--ink);}
+.dnb:hover{border-color:var(--ink);}
+.dnb:disabled{opacity:.25;cursor:default;}
+
+.all-done-msg{text-align:center;padding:30px 20px;font-family:'Shippori Mincho',serif;color:rgba(26,20,16,0.5);font-size:14px;line-height:2;}
+
+/* POPUP */
+.overlay{position:fixed;inset:0;background:rgba(26,20,16,0.52);z-index:200;display:none;align-items:flex-end;backdrop-filter:blur(3px);}
+.overlay.open{display:flex;}
+.popup{background:var(--panel);width:100%;max-width:600px;margin:0 auto;border-radius:18px 18px 0 0;padding:0 0 32px;animation:su .28s cubic-bezier(.22,1,.36,1);}
+@keyframes su{from{transform:translateY(100%);opacity:0}to{transform:translateY(0);opacity:1}}
+.ph{width:34px;height:4px;background:rgba(26,20,16,0.13);border-radius:2px;margin:11px auto 0;}
+.pt{display:flex;align-items:center;justify-content:space-between;padding:12px 18px 11px;border-bottom:1px solid var(--border);}
+.ptype{font-size:11px;font-weight:500;padding:3px 9px;border-radius:20px;}
+.ptype.g{background:rgba(200,150,42,0.15);color:var(--gold);}
+.ptype.m{background:rgba(74,124,89,0.12);color:var(--moss);}
+.ptype.i{background:rgba(61,90,138,0.12);color:var(--indigo);}
+.pcls{width:26px;height:26px;border-radius:50%;border:none;background:rgba(26,20,16,0.07);cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;color:var(--ink);}
+.pc{padding:14px 18px;}
+.pp{font-size:17px;font-weight:500;margin-bottom:7px;line-height:1.4;}
+.pb{font-family:'Shippori Mincho',serif;font-size:12px;line-height:1.78;color:rgba(26,20,16,0.7);margin-bottom:12px;}
+.pvs{background:rgba(26,20,16,0.04);border:1px solid var(--border);border-radius:9px;padding:11px 13px;margin-bottom:12px;font-size:12px;line-height:1.75;}
+.pvs .ok{color:var(--moss);font-weight:500;}
+.pvs .ng{color:var(--crimson);font-weight:500;}
+.mbtn{width:100%;padding:11px;border-radius:9px;border:1.5px solid var(--moss);background:none;color:var(--moss);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;}
+.mbtn.done{background:var(--moss);color:#fff;}
+</style>
+</head>
+<body>
+<header>
+  <div class="h-top">
+    <span style="font-size:26px">🐾</span>
+    <div style="flex:1">
+      <h1>CoCo's Daily Life English</h1>
+      <p>日常の仕草・気持ちを英語で伝えよう</p>
+    </div>
+    <span class="badge">Cavoodle · 5y</span>
+  </div>
+  <nav>
+    <button class="tab active" onclick="switchTab('conv',this)"><span>💬</span><span>会話</span></button>
+    <button class="tab" onclick="switchTab('flip',this)"><span>🔄</span><span>瞬間英作文</span></button>
+    <button class="tab" onclick="switchTab('drill',this)"><span>📖</span><span>構文ドリル</span></button>
+  </nav>
+</header>
+<main>
+
+<!-- CONVERSATION -->
+<div id="page-conv" class="page active">
+  <div class="sec" style="margin-top:14px">シーンを選ぶ</div>
+  <div class="schips">
+    <button class="schip active" onclick="filterScene('all',this)">すべて</button>
+    <button class="schip" onclick="filterScene('leaving',this)">🚪 外出前</button>
+    <button class="schip" onclick="filterScene('daily',this)">☀️ 日常</button>
+    <button class="schip" onclick="filterScene('sleep',this)">🌙 就寝</button>
+    <button class="schip" onclick="filterScene('walk',this)">🦮 散歩</button>
+    <button class="schip" onclick="filterScene('alone',this)">🏠 留守番</button>
+  </div>
+  <div class="legend">
+    <div class="leg"><div class="leg-dot" style="background:var(--gold)"></div>🏅 重要フレーズ</div>
+    <div class="leg"><div class="leg-dot" style="background:var(--moss)"></div>💬 便利表現</div>
+    <div class="leg"><div class="leg-dot" style="background:var(--indigo)"></div>📖 語彙</div>
+  </div>
+  <div id="conv-list"></div>
+</div>
+
+<!-- PHRASE FLIP -->
+<div id="page-flip" class="page">
+  <div class="sec" style="margin-top:14px">進捗</div>
+  <div class="stats" id="stats"></div>
+  <div class="fchips">
+    <button class="fc active" onclick="filterCards('all',this)">すべて</button>
+    <button class="fc" onclick="filterCards('leaving',this)">🚪 外出前</button>
+    <button class="fc" onclick="filterCards('daily',this)">☀️ 日常</button>
+    <button class="fc" onclick="filterCards('sleep',this)">🌙 就寝</button>
+    <button class="fc" onclick="filterCards('walk',this)">🦮 散歩</button>
+    <button class="fc" onclick="filterCards('unmastered',this)">🔄 未習得</button>
+  </div>
+  <div class="prog-row">
+    <span class="ctr" id="ctr">カード 1/1</span>
+    <div class="pw"><div class="pf" id="pf" style="width:0%"></div></div>
+    <button class="rst" onclick="resetFlip()">リセット</button>
+  </div>
+  <div class="fcs" id="fcs" onclick="flipCard()">
+    <div class="fci" id="fci"><div class="ff" id="ff"></div><div class="fb" id="fb"></div></div>
+  </div>
+  <div class="cnav">
+    <button class="nb" id="bp" onclick="prevCard()">← 前へ</button>
+    <button class="nb" id="bn" onclick="nextCard()">次へ →</button>
+  </div>
+</div>
+
+<!-- DRILL -->
+<div id="page-drill" class="page">
+  <div class="sec" style="margin-top:14px">構文を選ぶ</div>
+  <div class="word-selector" id="word-selector"></div>
+  <div id="drill-area"></div>
+</div>
+
+</main>
+
+<!-- POPUP -->
+<div class="overlay" id="overlay" onclick="cpbg(event)">
+  <div class="popup">
+    <div class="ph"></div>
+    <div class="pt"><span class="ptype" id="ptype"></span><button class="pcls" onclick="cp()">✕</button></div>
+    <div class="pc">
+      <div class="pp" id="pp"></div>
+      <div class="pb" id="pb"></div>
+      <div class="pvs" id="pvs"></div>
+      <button class="mbtn" id="mbtn" onclick="toggleM()">✓ 習得済みにする</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── PHRASE DATA ──────────────────────────────────────────────
+const PD={
+  sense_diff:{cat:'leaving',type:'🏅 重要フレーズ',category:'g',emoji:'🚪',jp:'仕事と遊びの外出を感覚的に分かっている',phrase:'She can somehow tell the difference between work and play.',note:'can tell the difference は「違いが分かる」。somehow で「なぜか・不思議と」というニュアンスが出ます。',vs:'<span class="ok">✅ She can tell the difference between work and play.</span><br><span class="ng">❌ She understands the difference of work and play.</span>',meaning:'なぜか違いが分かる',ex:'She can somehow tell the difference between work and play!'},
+  hold_back:{cat:'leaving',type:'🏅 重要フレーズ',category:'g',emoji:'🚪',jp:'全力で私を引き止めようとする',phrase:'She tries so hard to stop me from leaving.',note:'stop A from -ing は「Aが〜するのを止める」。try so hard で「全力で試みる」という必死さが伝わります。',vs:'<span class="ok">✅ She tries so hard to stop me from leaving.</span><br><span class="ng">❌ She tries to not let me go out.</span>',meaning:'全力で行かせまいとする',ex:'She tries so hard to stop me from leaving — it breaks my heart!'},
+  jumps_on_lap:{cat:'leaving',type:'💬 便利表現',category:'m',emoji:'🚪',jp:'膝の上にひょいっと乗ってくる',phrase:'She jumps onto my lap as if to say "don\'t go."',note:'as if to say ... は「〜と言わんばかりに」。犬の気持ちを言葉に乗せるときに使えます。',vs:'<span class="ok">✅ She jumps onto my lap as if to say "don\'t leave."</span><br><span class="ng">❌ She jumps on me because she doesn\'t want me to go.</span>',meaning:'「行かないで」と言わんばかりに膝に乗る',ex:'She jumps onto my lap as if to say "don\'t go" — melts my heart!'},
+  separation_anxiety:{cat:'leaving',type:'📖 語彙',category:'i',emoji:'🚪',jp:'分離不安・一人になるとパニックになる',phrase:'She has separation anxiety when I\'m away.',note:'separation anxiety は分離不安の正式名称。英語圏でも広く認知されている言葉です。',vs:'<span class="ok">✅ She has separation anxiety — she panics when I\'m gone.</span><br><span class="ng">❌ She gets nervous and panics when she is alone.</span>',meaning:'分離不安',ex:'Cavoodles can have separation anxiety, so I use a dog camera.'},
+  eyes_follow:{cat:'daily',type:'🏅 重要フレーズ',category:'g',emoji:'☀️',jp:'私が動くたびに目がパチッとあく',phrase:'Her eyes snap open every time I move.',note:'snap open は「パチッと開く」。every time I move で「私が動くたびに」。',vs:'<span class="ok">✅ Her eyes snap open the moment I move.</span><br><span class="ng">❌ Her eyes open quickly when I move.</span>',meaning:'動くたびに目がパチッと開く',ex:'Her eyes snap open every time I move — the world\'s lightest sleeper!'},
+  head_toward_me:{cat:'daily',type:'💬 便利表現',category:'m',emoji:'☀️',jp:'寝ていても頭だけ私の方に向けている',phrase:'Even when she\'s asleep, her head is always turned toward me.',note:'even when ... は「〜していても」という譲歩表現。turned toward me で状態を描写。',vs:'<span class="ok">✅ Even when asleep, her head is turned toward me.</span><br><span class="ng">❌ She sleeps but her face looks at me direction.</span>',meaning:'寝ていても私の方を向いている',ex:'Even when napping, her head is always turned toward me — my little stalker!'},
+  unconditional_love:{cat:'daily',type:'🏅 重要フレーズ',category:'g',emoji:'☀️',jp:'無償の愛で愛してくれる',phrase:'She loves me unconditionally, no matter what.',note:'unconditionally は「無条件に」。no matter what で「何があっても」と強調。',vs:'<span class="ok">✅ She loves me unconditionally, no matter what.</span><br><span class="ng">❌ She loves me without any condition.</span>',meaning:'何があっても無条件に愛してくれる',ex:'Dogs love you unconditionally — no matter what kind of day you\'ve had.'},
+  sleep_cheek:{cat:'sleep',type:'🏅 重要フレーズ',category:'g',emoji:'🌙',jp:'枕の横に頭をのせて顔を見ながら寝る',phrase:'She rests her head on my pillow and falls asleep facing me.',note:'rest her head on ... は「〜に頭を乗せる」。facing me で「私の方を向いて」。',vs:'<span class="ok">✅ She rests her head on my pillow and sleeps facing me.</span><br><span class="ng">❌ She puts her head near my pillow and sleeps toward me.</span>',meaning:'枕に頭を乗せて顔を見て寝る',ex:'She rests her head on my pillow every night — I love watching her sleep.'},
+  heartbeat_breath:{cat:'sleep',type:'💬 便利表現',category:'m',emoji:'🌙',jp:'寝息と鼓動を聞いて安心する',phrase:'Listening to her breathing and heartbeat is so soothing.',note:'soothing は「心が落ち着く・癒される」。listening to ... で自然な構文。',vs:'<span class="ok">✅ Her breathing and heartbeat are so soothing.</span><br><span class="ng">❌ I feel calm when I hear her sleeping sounds.</span>',meaning:'呼吸と鼓動が心を落ち着かせる',ex:'Nothing is more soothing than listening to her breathe while she sleeps.'},
+  greet_everyone:{cat:'walk',type:'🏅 重要フレーズ',category:'g',emoji:'🦮',jp:'散歩で会う人一人一人に挨拶しに行く',phrase:'She goes up to greet every single person we pass.',note:'go up to は「〜に近づいていく」。every single person で「出会う人全員」という強調。',vs:'<span class="ok">✅ She goes up to greet every single person on our walk.</span><br><span class="ng">❌ She says hello to all people she meets.</span>',meaning:'出会う人全員に挨拶しに行く',ex:'She goes up to greet every single person — she thinks everyone is her friend!'},
+  melts_hearts:{cat:'walk',type:'💬 便利表現',category:'m',emoji:'🦮',jp:'みんなすっかりメロメロになる',phrase:'She melts everyone\'s heart instantly.',note:'melt someone\'s heart は「メロメロにする」という慣用表現。instantly で「瞬時に」。',vs:'<span class="ok">✅ She melts everyone\'s heart — no one can resist her!</span><br><span class="ng">❌ Everyone likes her very much immediately.</span>',meaning:'誰もがすぐメロメロになる',ex:'She melts everyone\'s heart the moment they see her fluffy face!'},
+  dog_camera:{cat:'alone',type:'📖 語彙',category:'i',emoji:'🏠',jp:'ドッグカメラで常に監視している',phrase:'I keep an eye on her with a dog camera while I\'m at work.',note:'keep an eye on は「〜を見張る・監視する」という慣用句。',vs:'<span class="ok">✅ I keep an eye on her with a dog camera.</span><br><span class="ng">❌ I watch her with a camera for dogs at work.</span>',meaning:'ドッグカメラで見守る',ex:'I keep an eye on her with a dog camera — peace of mind while I\'m out!'}
+};
+
+// ── CONVERSATION DATA ────────────────────────────────────────
+const CONVS=[
+  {scene:'leaving',label:'🚪 外出前 — 仕事か遊びかを感じ取る',lines:[{sp:'them',en:'Does she know when you\'re leaving?',jp:'出かけるのが分かるんですか？'},{sp:'me',en:'Yes! <span class="hl g" onclick="openPopup(\'sense_diff\')">She can somehow tell the difference between work and play.</span> When I\'m going out for fun, she goes crazy!',jp:'そうなんです！仕事と遊びの外出を何となく感じ取れるんです。'},{sp:'them',en:'What does she do?',jp:'何をするんですか？'},{sp:'me',en:'<span class="hl g" onclick="openPopup(\'hold_back\')">She tries so hard to stop me from leaving</span> — barking, sitting on my feet, everything!',jp:'全力で引き止めようとするんですよ！'}]},
+  {scene:'leaving',label:'🚪 外出前 — 膝に乗ってくる',lines:[{sp:'them',en:'She looks like she doesn\'t want you to go!',jp:'行かせたくなさそうですね！'},{sp:'me',en:'<span class="hl m" onclick="openPopup(\'jumps_on_lap\')">She jumps onto my lap as if to say "don\'t go."</span> How can I resist?',jp:'「行かないで」って言わんばかりに膝に飛び乗ってくるんです。'},{sp:'them',en:'Oh that\'s so sweet!',jp:'かわいいですね！'},{sp:'me',en:'She <span class="hl i" onclick="openPopup(\'separation_anxiety\')">has separation anxiety</span> — she really struggles when I\'m away.',jp:'分離不安があって、私がいないと本当に辛そうなんです。'}]},
+  {scene:'daily',label:'☀️ 日常 — 目がパチッと開く',lines:[{sp:'them',en:'Is she always watching you?',jp:'いつも見てるんですか？'},{sp:'me',en:'Always! <span class="hl g" onclick="openPopup(\'eyes_follow\')">Her eyes snap open every time I move.</span> Even from across the room!',jp:'ずっとです！私が動くたびに目がパチッと開くんですよ。'},{sp:'them',en:'Ha, like a little stalker!',jp:'笑、ストーカーみたいですね！'},{sp:'me',en:'And <span class="hl m" onclick="openPopup(\'head_toward_me\')">even when she\'s asleep, her head is always turned toward me.</span>',jp:'寝ていても頭が必ず私の方を向いているんです。'}]},
+  {scene:'daily',label:'☀️ 日常 — 無償の愛',lines:[{sp:'them',en:'You two are so close!',jp:'本当に仲がいいですね！'},{sp:'me',en:'She <span class="hl g" onclick="openPopup(\'unconditional_love\')">loves me unconditionally, no matter what.</span> I learn so much from her.',jp:'何があっても無条件に愛してくれるんです。本当に彼女から学ぶことがたくさんあります。'},{sp:'them',en:'That\'s beautiful.',jp:'素晴らしいですね。'},{sp:'me',en:'Dogs teach you what it means to trust completely and love without judgment.',jp:'犬って、完全に信頼することや見返りを求めずに愛することを教えてくれるんです。'}]},
+  {scene:'sleep',label:'🌙 就寝 — 枕に頭を乗せて寝る',lines:[{sp:'them',en:'Does she sleep with you?',jp:'一緒に寝るんですか？'},{sp:'me',en:'Every night! <span class="hl g" onclick="openPopup(\'sleep_cheek\')">She rests her head on my pillow and falls asleep facing me.</span>',jp:'毎晩です！枕の横に頭を乗せて、私の顔を見ながら眠るんですよ。'},{sp:'them',en:'That must be so cozy!',jp:'それは癒しですね！'},{sp:'me',en:'<span class="hl m" onclick="openPopup(\'heartbeat_breath\')">Listening to her breathing and heartbeat is so soothing.</span> Best feeling ever.',jp:'寝息と鼓動を聞いているとすごく安心するんです。最高の時間です。'}]},
+  {scene:'walk',label:'🦮 散歩 — 全員に挨拶',lines:[{sp:'them',en:'She\'s so friendly!',jp:'すごく人懐っこいですね！'},{sp:'me',en:'<span class="hl g" onclick="openPopup(\'greet_everyone\')">She goes up to greet every single person we pass.</span> She thinks the whole world is her friend!',jp:'散歩で会う人全員に挨拶しに行くんですよ！'},{sp:'them',en:'Can I pet her?',jp:'撫でていいですか？'},{sp:'me',en:'Of course! <span class="hl m" onclick="openPopup(\'melts_hearts\')">She melts everyone\'s heart instantly.</span> You won\'t want to let go!',jp:'もちろんです！誰もがすぐメロメロになるので、離したくなくなりますよ！'}]},
+  {scene:'alone',label:'🏠 留守番 — ドッグカメラで見守る',lines:[{sp:'them',en:'Are you worried when she\'s home alone?',jp:'お留守番の時、心配じゃないですか？'},{sp:'me',en:'I used to be! But now <span class="hl i" onclick="openPopup(\'dog_camera\')">I keep an eye on her with a dog camera while I\'m at work.</span>',jp:'前は心配でした！でも今はドッグカメラで仕事中も見守れるので安心です。'},{sp:'them',en:'What does she do all day?',jp:'一日中何してるんですか？'},{sp:'me',en:'Mostly sleeping! About 10 hours. Occasionally she barks at a loud noise.',jp:'ほぼ寝てます！10時間くらいは寝てますね。たまに大きな音で吠えますが。'}]}
+];
+
+// ── DRILL DATA ───────────────────────────────────────────────
+const DRILLS=[
+{id:'tell_diff',label:'tell the difference',construct:'tell the difference between A and B',meaning:'AとBの違いが分かる・見分ける',note:'<strong>ポイント：</strong>between で比較対象を示す。"I can\'t tell them apart." も同義。疑問文では "Can you tell the difference?" だけでも通じる。',examples:[
+{jp:'バターとマーガリンの違い、分かりますか？',en:'Can you tell the difference between butter and margarine?',key:'tell the difference between A and B'},
+{jp:'子供の頃は、双子の見分けがつかなかった。',en:"When I was a kid, I couldn't tell the difference between the twins.",key:"couldn't tell the difference between ..."},
+{jp:'専門家でも本物と偽物の違いが分からないことがある。',en:"Even experts sometimes can't tell the difference between a real one and a fake.",key:"even ... can't tell the difference"},
+{jp:'この2つのコーヒーの違い、分かる？',en:'Can you tell the difference between these two coffees?',key:'Can you tell the difference between ...?'},
+{jp:'訓練すれば、微妙な音の違いも分かるようになる。',en:"With practice, you'll be able to tell even subtle differences.",key:'be able to tell the difference'},
+{jp:'彼女は日本語と中国語の違いがすぐ分かる。',en:'She can instantly tell the difference between Japanese and Chinese.',key:'can instantly tell the difference between ...'},
+{jp:'疲れていると、大事なこととそうでないことの区別がつかなくなる。',en:"When I'm tired, I can't tell the difference between what matters and what doesn't.",key:"can't tell the difference between what ... and what ..."},
+{jp:'笑顔が本物か偽物かは、目を見れば分かる。',en:"You can tell the difference between a real smile and a fake one just by looking at the eyes.",key:'tell the difference between a real ... and a fake one'},
+{jp:'慣れると、良い仕事と悪い仕事の違いが肌で分かってくる。',en:'As you gain experience, you start to feel the difference between good work and bad.',key:'feel the difference between ...'},
+{jp:'CoCoは仕事と遊びの外出の違いを感覚的に分かっている。',en:'CoCo can somehow tell the difference between a work outing and a fun one.',key:'somehow tell the difference between ...'}
+]},
+{id:'stop_from',label:'stop A from -ing',construct:'stop A from -ing',meaning:'Aが〜するのを止める・防ぐ',note:'<strong>ポイント：</strong>from の後は必ず -ing 形。"prevent A from -ing" も同義でフォーマルな場面に使える。自分自身を止める場合は "stop myself from -ing"。',examples:[
+{jp:'彼女は私が部屋を出るのを止めた。',en:'She stopped me from leaving the room.',key:'stop A from -ing'},
+{jp:'何が彼女の夢を追うことを妨げているの？',en:"What's stopping her from chasing her dreams?",key:"What's stopping A from -ing?"},
+{jp:'フェンスが犬が逃げ出すのを防いでいる。',en:'The fence stops the dog from escaping.',key:'stop A from -ing'},
+{jp:'集中力が途切れないようにしている。',en:"I'm trying to stop myself from getting distracted.",key:'stop myself from -ing'},
+{jp:'その規則が人々が写真を撮るのを禁じている。',en:'The rule stops people from taking photos.',key:'stop people from -ing'},
+{jp:'薬が痛みが広がるのを止めてくれる。',en:'The medicine stops the pain from spreading.',key:'stop A from -ing'},
+{jp:'彼を止める方法がない。',en:"There's nothing to stop him from doing it.",key:'nothing to stop A from -ing'},
+{jp:'雨でも彼女の朝のランニングを止められない。',en:"Even the rain can't stop her from running every morning.",key:"can't stop A from -ing"},
+{jp:'何があっても、彼女の決意を止めることはできない。',en:"Nothing can stop her from going after what she wants.",key:'nothing can stop A from -ing'},
+{jp:'CoCoは全力で私が出かけるのを止めようとする。',en:'CoCo tries so hard to stop me from leaving.',key:'try hard to stop A from -ing'}
+]},
+{id:'as_if',label:'as if to say "..."',construct:'as if to say "..."',meaning:'〜と言わんばかりに',note:'<strong>ポイント：</strong>言葉を持たない相手（犬・赤ちゃん・自然など）の「気持ち」を表現するときに最適。as if to say の後に引用符で気持ちを入れる。',examples:[
+{jp:'彼は頷いた、まるで「分かった」と言わんばかりに。',en:'He nodded as if to say "I understand."',key:'as if to say "..."'},
+{jp:'彼女は首を振った、まるで「信じられない」と言わんばかりに。',en:'She shook her head as if to say "I can\'t believe it."',key:'as if to say "..."'},
+{jp:'猫が窓を引っかいた、まるで「入れて」と言わんばかりに。',en:'The cat scratched the window as if to say "let me in."',key:'as if to say "..."'},
+{jp:'空が暗くなった、まるで「嵐が来るよ」と言わんばかりに。',en:'The sky darkened as if to say "a storm is coming."',key:'as if to say "..."'},
+{jp:'彼は微笑んだ、まるで「秘密を知ってるよ」と言わんばかりに。',en:'He smiled as if to say "I know your secret."',key:'as if to say "..."'},
+{jp:'彼女は目を丸くした、まるで「本当に？」と言わんばかりに。',en:'She raised her eyebrows as if to say "really?"',key:'as if to say "..."'},
+{jp:'犬がしっぽを振った、まるで「大好き！」と言わんばかりに。',en:'The dog wagged its tail as if to say "I love you!"',key:'as if to say "..."'},
+{jp:'彼は肩をすくめた、まるで「どうでもいい」と言わんばかりに。',en:'He shrugged as if to say "I don\'t care."',key:'as if to say "..."'},
+{jp:'彼女は手を振った、まるで「大丈夫、行って」と言わんばかりに。',en:'She waved her hand as if to say "go on, it\'s fine."',key:'as if to say "..."'},
+{jp:'CoCoが膝に乗ってきた、まるで「どこにも行かせないよ」と言わんばかりに。',en:'CoCo jumped onto my lap as if to say "you\'re not going anywhere."',key:'as if to say "..."'}
+]},
+{id:'every_time',label:'every time',construct:'every time + 主語 + 動詞, 〜',meaning:'〜するたびに',note:'<strong>ポイント：</strong>every time は接続詞として使える。whenever と同義。文頭にも文中にも置けて汎用性が高い。',examples:[
+{jp:'電話が鳴るたびに、彼女はびっくりする。',en:'Every time the phone rings, she jumps.',key:'every time + 動詞, ...'},
+{jp:'この曲を聴くたびに、学生時代を思い出す。',en:'Every time I hear this song, I think of my school days.',key:'every time I hear ...'},
+{jp:'雨が降るたびに、屋根から水が漏れる。',en:'Every time it rains, the roof leaks.',key:'every time it rains, ...'},
+{jp:'彼が笑うたびに、部屋が明るくなる。',en:'Every time he laughs, the whole room lights up.',key:'every time + 主語 + 動詞'},
+{jp:'新しいアップデートが来るたびに、何かが壊れる。',en:"Every time there's a new update, something breaks.",key:"every time there's ..."},
+{jp:'彼女に会うたびに、元気をもらえる。',en:'Every time I see her, she cheers me up.',key:'every time I see ...'},
+{jp:'この道を通るたびに、あのカフェに寄りたくなる。',en:'Every time I pass this street, I want to stop by that café.',key:'every time I pass ...'},
+{jp:'母が電話するたびに、30分は話す羽目になる。',en:'Every time my mom calls, we end up talking for at least 30 minutes.',key:'every time ... calls, we end up -ing'},
+{jp:'CoCoは私が動くたびに目がパチッと開く。',en:"Every time I move, CoCo's eyes snap open.",key:'every time I move, ...'},
+{jp:'CoCoを見るたびに、無条件に愛されている気がする。',en:'Every time I look at CoCo, I feel completely loved.',key:'every time I look at ...'}
+]},
+{id:'unconditional',label:'unconditionally',construct:'love ... unconditionally / no matter what',meaning:'無条件に〜する・何があっても',note:'<strong>ポイント：</strong>unconditionally は副詞として動詞を修飾。no matter what は「何があろうとも」で文末・文中どちらにも置ける。セットで使うと強調になる。',examples:[
+{jp:'親は子供を無条件に愛します。',en:'Parents love their children unconditionally.',key:'love ... unconditionally'},
+{jp:'彼女は何があっても彼を支えます。',en:'She supports him no matter what.',key:'no matter what'},
+{jp:'真の友情は無条件です。',en:'True friendship is unconditional.',key:'unconditional（形容詞）'},
+{jp:'何があっても、あなたの味方です。',en:"I'm on your side, no matter what.",key:'no matter what（文末）'},
+{jp:'彼は結果に関係なく、チームを無条件に信じていた。',en:'He believed in his team unconditionally, regardless of results.',key:'unconditionally, regardless of ...'},
+{jp:'何があっても彼女は諦めなかった。',en:'She never gave up, no matter what happened.',key:'no matter what happened'},
+{jp:'本当の愛は見返りを求めない。',en:'Unconditional love asks for nothing in return.',key:'Unconditional love'},
+{jp:'何があっても、家族はずっとそこにいる。',en:'No matter what, family will always be there.',key:'No matter what, ... will always ...'},
+{jp:'彼らはどんな状況でもお互いを支え合う。',en:'They support each other unconditionally, in any situation.',key:'unconditionally, in any situation'},
+{jp:'CoCoは何があっても私を無条件に愛してくれる。',en:'CoCo loves me unconditionally, no matter what I do.',key:'unconditionally, no matter what'}
+]},
+{id:'soothing',label:'soothing',construct:'soothing / so soothing',meaning:'心が落ち着く・癒される',note:'<strong>ポイント：</strong>soothing は形容詞。"so soothing" "incredibly soothing" と強調できる。名詞の前にも置ける（a soothing voice）。',examples:[
+{jp:'雨音はとても癒されます。',en:'The sound of rain is so soothing.',key:'so soothing'},
+{jp:'彼女の声は穏やかで心が落ち着く。',en:'Her voice is calm and soothing.',key:'calm and soothing'},
+{jp:'温かいお茶は緊張をほぐしてくれる。',en:'A warm cup of tea is incredibly soothing.',key:'incredibly soothing'},
+{jp:'波の音はとても安らぎます。',en:'The sound of waves is so soothing.',key:'so soothing'},
+{jp:'ラベンダーの香りは癒しの効果がある。',en:'The scent of lavender has a soothing effect.',key:'a soothing effect'},
+{jp:'彼の音楽は聴くと心が落ち着く。',en:'His music is soothing to listen to.',key:'soothing to listen to'},
+{jp:'暖炉の炎を見ているととても落ち着く。',en:'Watching the fireplace is so soothing.',key:'so soothing'},
+{jp:'自然の中を歩くのは心が落ち着く。',en:'Walking in nature is really soothing for the mind.',key:'soothing for the mind'},
+{jp:'彼女の笑顔はとても癒される。',en:'Her smile is genuinely soothing.',key:'genuinely soothing'},
+{jp:'CoCoの寝息と鼓動を聞くのは、本当に心が安らぐ。',en:"Listening to CoCo's breathing and heartbeat is incredibly soothing.",key:'incredibly soothing'}
+]},
+{id:'melt_hearts',label:"melt someone's heart",construct:"melt someone's heart",meaning:'〜の心を溶かす・メロメロにする',note:'<strong>ポイント：</strong>melt は「溶かす」が転じて「感動させる・メロメロにする」。"No one can resist her" もセットで使えるとより自然。',examples:[
+{jp:'赤ちゃんの笑顔は誰の心もメロメロにする。',en:"A baby's smile melts everyone's heart.",key:"melt everyone's heart"},
+{jp:'その子犬の顔が彼女の心を溶かした。',en:"The puppy's face completely melted her heart.",key:"melted her heart"},
+{jp:'彼の優しい言葉が私の心を溶かした。',en:'His kind words melted my heart.',key:'melted my heart'},
+{jp:'その映画の結末は私の心を溶かした。',en:'The ending of that movie completely melted my heart.',key:'completely melted my heart'},
+{jp:'彼女は一言で彼の心をメロメロにした。',en:'She melted his heart with just one sentence.',key:'melted his heart with ...'},
+{jp:'子供からの手紙は先生の心を溶かした。',en:"The letter from the child melted the teacher's heart.",key:"melted the teacher's heart"},
+{jp:'こんなかわいい顔を見たら心が溶けますよね。',en:'How can you not melt when you see that face?',key:'How can you not melt ...?'},
+{jp:'老夫婦の姿が観客の心を溶かした。',en:"The elderly couple melted the audience's hearts.",key:"melted the audience's hearts"},
+{jp:'そのシーンを見て、心が溶けそうになった。',en:'That scene was so touching — it almost melted my heart.',key:'almost melted my heart'},
+{jp:'CoCoは会う人全員の心を瞬時にメロメロにする。',en:'CoCo melts the heart of everyone she meets, instantly.',key:"melts the heart of everyone she meets"}
+]},
+{id:'keep_eye',label:'keep an eye on',construct:'keep an eye on ...',meaning:'〜を見守る・目を光らせる',note:'<strong>ポイント：</strong>watch より自然な「気にかけながら見る」表現。"Can you keep an eye on ...?" と頼む形でもよく使われる。',examples:[
+{jp:'子供から目を離さないでください。',en:'Please keep an eye on the children.',key:'keep an eye on ...'},
+{jp:'私が外出中、猫を見ていてもらえますか？',en:"Can you keep an eye on my cat while I'm out?",key:'Can you keep an eye on ...?'},
+{jp:'天気予報に目を光らせておいてください。',en:'Keep an eye on the weather forecast.',key:'keep an eye on ...'},
+{jp:'彼はチームの進捗を常に見守っている。',en:'He keeps an eye on the progress at all times.',key:'keeps an eye on ... at all times'},
+{jp:'その株価に注目していてください。',en:'Keep an eye on that stock price.',key:'keep an eye on ...'},
+{jp:'彼女は留守中、家を見張ってくれた。',en:"She kept an eye on the house while we were away.",key:'kept an eye on ...'},
+{jp:'何か変わったことがあれば教えてください。',en:"Keep an eye on things and let me know if anything changes.",key:'keep an eye on things'},
+{jp:'私は常に自分の健康状態に気をつけている。',en:'I always keep an eye on my health.',key:'keep an eye on my health'},
+{jp:'管理者はシステムを常に監視している。',en:'The manager keeps an eye on the system around the clock.',key:'keeps an eye on ... around the clock'},
+{jp:'仕事中もドッグカメラでCoCoを見守っている。',en:"I keep an eye on CoCo with a dog camera even while I'm at work.",key:'keep an eye on ... even while ...'}
+]}
+];
+
+// ── STATE ────────────────────────────────────────────────────
+let mastered=new Set(JSON.parse(localStorage.getItem('coco_d4_m')||'[]'));
+let flipFiltered=Object.keys(PD),flipIdx=0,flipped=false,currentKey=null;
+// drill: per-drill card index + done set
+let drillState={};
+DRILLS.forEach(d=>{
+  drillState[d.id]={
+    idx:0,
+    flipped:false,
+    done:new Set(JSON.parse(localStorage.getItem('coco_d4_'+d.id)||'[]'))
+  };
+});
+let currentDrillId=DRILLS[0].id;
+
+function saveM(){localStorage.setItem('coco_d4_m',JSON.stringify([...mastered]));}
+function saveDone(id){localStorage.setItem('coco_d4_'+id,JSON.stringify([...drillState[id].done]));}
+
+// ── TABS ─────────────────────────────────────────────────────
+function switchTab(p,btn){
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+  document.getElementById('page-'+p).classList.add('active');
+  btn.classList.add('active');
+  if(p==='flip') renderCards();
+  if(p==='drill') renderDrillPage();
+}
+
+// ── CONVERSATION ─────────────────────────────────────────────
+function filterScene(scene,btn){
+  document.querySelectorAll('.schip').forEach(c=>c.classList.remove('active'));
+  btn.classList.add('active');
+  renderConv(scene);
+}
+function renderConv(scene='all'){
+  const data=scene==='all'?CONVS:CONVS.filter(c=>c.scene===scene);
+  document.getElementById('conv-list').innerHTML=data.map((c,i)=>`
+    <div class="conv-card">
+      <div class="conv-hd"><span class="conv-lbl">${c.label}</span><span class="conv-num">#${i+1}</span></div>
+      <div class="conv-body">${c.lines.map(l=>`
+        <div class="line">
+          <div class="sp ${l.sp}">${l.sp==='me'?'🙋':'👤'}</div>
+          <div class="bbl"><div class="en">${l.en}</div><div class="jp">${l.jp}</div></div>
+        </div>`).join('')}
+      </div>
+    </div>`).join('');
+}
+
+// ── PHRASE FLIP CARDS ────────────────────────────────────────
+function filterCards(type,btn){
+  document.querySelectorAll('.fc').forEach(c=>c.classList.remove('active'));
+  btn.classList.add('active');
+  if(type==='all') flipFiltered=Object.keys(PD);
+  else if(type==='unmastered') flipFiltered=Object.keys(PD).filter(k=>!mastered.has(k));
+  else flipFiltered=Object.keys(PD).filter(k=>PD[k].cat===type);
+  flipIdx=0; flipped=false;
+  document.getElementById('fcs').classList.remove('flipped');
+  renderCards();
+}
+function renderCards(){
+  const total=flipFiltered.length;
+  const m=[...mastered].filter(k=>PD[k]).length;
+  document.getElementById('stats').innerHTML=`
+    <div class="sb"><div class="sn g">${Object.keys(PD).length}</div><div class="sl">総フレーズ</div></div>
+    <div class="sb"><div class="sn m">${m}</div><div class="sl">習得済み</div></div>
+    <div class="sb"><div class="sn k">${Object.keys(PD).length-m}</div><div class="sl">学習中</div></div>`;
+  if(total===0){document.getElementById('ff').innerHTML='<div style="padding:20px;text-align:center;font-family:Shippori Mincho,serif;color:rgba(26,20,16,0.4)">カードがありません</div>';return;}
+  if(flipIdx>=total) flipIdx=total-1;
+  const k=flipFiltered[flipIdx]; const d=PD[k]; const isMastered=mastered.has(k);
+  const mf=[...mastered].filter(x=>flipFiltered.includes(x)).length;
+  document.getElementById('ctr').textContent=`カード ${flipIdx+1} / ${total}`;
+  document.getElementById('pf').style.width=(mf/total*100)+'%';
+  document.getElementById('ff').innerHTML=`${isMastered?'<span class="mpill">✓ 習得済み</span>':''}<span style="font-size:36px;display:block;margin-bottom:12px">${d.emoji}</span><div class="cjp">${d.jp}</div><div class="chint">タップして英語を確認 →</div>`;
+  document.getElementById('fb').innerHTML=`${isMastered?'<span class="mpill">✓ 習得済み</span>':''}<div class="cen">${d.phrase}</div><div class="cnote">${d.meaning} — ${d.ex}</div><div class="cact"><button class="cb r" onclick="retryC(event)">✕ もう一度</button><button class="cb ok" onclick="markG(event,'${k}')">✓ 覚えた！</button></div>`;
+  document.getElementById('bp').disabled=flipIdx===0;
+  document.getElementById('bn').disabled=flipIdx===total-1;
+}
+function flipCard(){flipped=!flipped;document.getElementById('fcs').classList.toggle('flipped');}
+function prevCard(){if(flipIdx>0){flipIdx--;flipped=false;document.getElementById('fcs').classList.remove('flipped');renderCards();}}
+function nextCard(){if(flipIdx<flipFiltered.length-1){flipIdx++;flipped=false;document.getElementById('fcs').classList.remove('flipped');renderCards();}}
+function retryC(e){e.stopPropagation();flipped=false;document.getElementById('fcs').classList.remove('flipped');}
+function markG(e,k){e.stopPropagation();mastered.add(k);saveM();setTimeout(()=>{flipped=false;document.getElementById('fcs').classList.remove('flipped');if(flipIdx<flipFiltered.length-1)flipIdx++;renderCards();},280);}
+function resetFlip(){mastered.clear();saveM();flipIdx=0;flipped=false;document.getElementById('fcs').classList.remove('flipped');renderCards();}
+
+// ── DRILL (FLIP CARD STYLE) ──────────────────────────────────
+function renderDrillPage(){
+  document.getElementById('word-selector').innerHTML=DRILLS.map(d=>`
+    <button class="ws-btn ${d.id===currentDrillId?'active':''}" onclick="selectDrill('${d.id}',this)">${d.label}</button>`).join('');
+  renderDrillCard();
+}
+
+function selectDrill(id,btn){
+  currentDrillId=id;
+  document.querySelectorAll('.ws-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderDrillCard();
+}
+
+function renderDrillCard(){
+  const d=DRILLS.find(x=>x.id===currentDrillId);
+  const st=drillState[d.id];
+  const total=d.examples.length;
+  const doneCount=st.done.size;
+  const idx=st.idx;
+  const ex=d.examples[idx];
+  const isDone=st.done.has(idx);
+
+  document.getElementById('drill-area').innerHTML=`
+    <div class="construct-box">
+      <div class="construct-en">${d.construct}</div>
+      <div class="construct-jp">${d.meaning}</div>
+    </div>
+    <div class="usage-note">${d.note}</div>
+
+    <div class="drill-prog-row">
+      <span class="drill-ctr">例文 ${idx+1} / ${total}</span>
+      <div class="drill-pw"><div class="drill-pf" style="width:${doneCount/total*100}%"></div></div>
+      <button class="drill-rst" onclick="drillReset('${d.id}')">リセット</button>
+    </div>
+
+    <div class="dfc-scene ${st.flipped?'flipped':''}" id="dfc" onclick="drillFlip()">
+      <div class="dfc-inner">
+        <div class="dfc-front">
+          <div class="dfc-num-badge">例文 ${idx+1} / ${total}${isDone?'<span class="done-pill" style="display:inline">✓ OK</span>':''}</div>
+          <div class="dfc-jp">${ex.jp}</div>
+          <div class="dfc-hint">タップして英語を確認 →</div>
+        </div>
+        <div class="dfc-back">
+          <div class="dfc-num-badge">例文 ${idx+1} / ${total}${isDone?'<span class="done-pill" style="display:inline">✓ OK</span>':''}</div>
+          <div class="dfc-en">${ex.en}</div>
+          <div class="dfc-key">🔑 ${ex.key}</div>
+          <div class="dfc-acts">
+            <button class="dfc-btn retry" onclick="drillRetry(event,'${d.id}')">✕ もう一度</button>
+            <button class="dfc-btn got"   onclick="drillGot(event,'${d.id}',${idx})">✓ できた！</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="drill-nav">
+      <button class="dnb" ${idx===0?'disabled':''} onclick="drillPrev('${d.id}')">← 前へ</button>
+      <button class="dnb" ${idx===total-1?'disabled':''} onclick="drillNext('${d.id}')">次へ →</button>
+    </div>
+
+    ${doneCount===total?`<div class="all-done-msg">🎉 全 ${total} 問完了！<br>素晴らしい！</div>`:''}
+  `;
+}
+
+function drillFlip(){
+  const st=drillState[currentDrillId];
+  st.flipped=!st.flipped;
+  const el=document.getElementById('dfc');
+  if(el) el.classList.toggle('flipped');
+}
+
+function drillRetry(e,id){
+  e.stopPropagation();
+  drillState[id].flipped=false;
+  const el=document.getElementById('dfc');
+  if(el) el.classList.remove('flipped');
+}
+
+function drillGot(e,id,idx){
+  e.stopPropagation();
+  drillState[id].done.add(idx);
+  saveDone(id);
+  drillState[id].flipped=false;
+  const total=DRILLS.find(x=>x.id===id).examples.length;
+  if(idx<total-1) drillState[id].idx=idx+1;
+  renderDrillCard();
+}
+
+function drillPrev(id){
+  if(drillState[id].idx>0){drillState[id].idx--;drillState[id].flipped=false;renderDrillCard();}
+}
+function drillNext(id){
+  const total=DRILLS.find(x=>x.id===id).examples.length;
+  if(drillState[id].idx<total-1){drillState[id].idx++;drillState[id].flipped=false;renderDrillCard();}
+}
+function drillReset(id){
+  drillState[id].done.clear();drillState[id].idx=0;drillState[id].flipped=false;
+  saveDone(id);renderDrillCard();
+}
+
+// ── POPUP ────────────────────────────────────────────────────
+function openPopup(key){
+  const d=PD[key];if(!d)return;currentKey=key;
+  document.getElementById('ptype').textContent=d.type;
+  document.getElementById('ptype').className='ptype '+d.category;
+  document.getElementById('pp').textContent=d.phrase;
+  document.getElementById('pb').textContent=d.note;
+  document.getElementById('pvs').innerHTML=d.vs;
+  const btn=document.getElementById('mbtn');
+  btn.textContent=mastered.has(key)?'✓ 習得済み！':'✓ 習得済みにする';
+  btn.className='mbtn'+(mastered.has(key)?' done':'');
+  document.getElementById('overlay').classList.add('open');
+}
+function cp(){document.getElementById('overlay').classList.remove('open');}
+function cpbg(e){if(e.target===document.getElementById('overlay'))cp();}
+function toggleM(){
+  if(!currentKey)return;
+  mastered.has(currentKey)?mastered.delete(currentKey):mastered.add(currentKey);
+  saveM();
+  const btn=document.getElementById('mbtn');
+  btn.textContent=mastered.has(currentKey)?'✓ 習得済み！':'✓ 習得済みにする';
+  btn.className='mbtn'+(mastered.has(currentKey)?' done':'');
+  renderCards();
+}
+
+// INIT
+renderConv();
+renderCards();
+</script>
+</body>
+</html>
