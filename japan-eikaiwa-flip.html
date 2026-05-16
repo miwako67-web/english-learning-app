@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Must-Visit Places in Japan 瞬間英作文</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Noto+Sans+JP:wght@400;500;700&display=swap');
+
+:root {
+  --bg: #f7f3ee;
+  --card: #ffffff;
+  --text: #2c2a26;
+  --text-sub: #6b6860;
+  --text-hint: #9c9a94;
+  --red: #c0392b;
+  --red-light: #fdf0ee;
+  --red-mid: #e05a4a;
+  --gold: #c9860a;
+  --gold-light: #fdf6e3;
+  --green: #2e7d52;
+  --green-light: #eaf5ee;
+  --green-mid: #4aab78;
+  --blue: #1a5f8a;
+  --blue-light: #e6f2fb;
+  --border: #e4dfd8;
+  --radius: 20px;
+  --radius-sm: 10px;
+  --shadow: 0 4px 20px rgba(0,0,0,0.09);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.13);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Header ── */
+.header {
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 20px 10px;
+  position: sticky; top: 0; z-index: 100;
+}
+.header-top {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 10px;
+}
+.app-title {
+  font-family: 'Nunito', sans-serif;
+  font-size: 18px; font-weight: 800;
+  color: var(--red);
+  display: flex; align-items: center; gap: 6px;
+}
+
+.stats-row { display: flex; gap: 14px; align-items: center; }
+.stat-item { text-align: center; }
+.stat-n { font-size: 17px; font-weight: 700; font-family: 'Nunito', sans-serif; line-height: 1; }
+.stat-l { font-size: 10px; color: var(--text-hint); margin-top: 1px; }
+
+.nav-tabs { display: flex; gap: 3px; }
+.nav-tab {
+  flex: 1; padding: 7px 4px;
+  border: none; border-radius: 8px;
+  background: transparent;
+  font-size: 12px; font-weight: 500;
+  color: var(--text-sub); cursor: pointer;
+  font-family: 'Noto Sans JP', sans-serif;
+  transition: all 0.15s;
+  display: flex; align-items: center; justify-content: center; gap: 3px;
+}
+.nav-tab.active { background: var(--red-light); color: var(--red); font-weight: 700; }
+.nav-tab .rbadge {
+  background: var(--red-mid); color: #fff;
+  border-radius: 10px; padding: 1px 6px;
+  font-size: 10px; font-weight: 700;
+}
+
+/* ── Progress ── */
+.progress-outer { padding: 8px 20px 0; max-width: 600px; margin: 0 auto; width: 100%; }
+.progress-wrap {
+  height: 5px; background: var(--border);
+  border-radius: 3px; overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--red-mid), var(--red));
+  border-radius: 3px;
+  transition: width 0.5s cubic-bezier(.4,0,.2,1);
+}
+
+/* ── Content ── */
+.content { flex: 1; padding: 16px 16px 100px; max-width: 600px; margin: 0 auto; width: 100%; }
+
+/* ── Cat filter ── */
+.cat-scroll {
+  display: flex; gap: 6px; overflow-x: auto;
+  padding-bottom: 4px; margin-bottom: 16px;
+  scrollbar-width: none;
+}
+.cat-scroll::-webkit-scrollbar { display: none; }
+.cat-btn {
+  white-space: nowrap; padding: 5px 13px;
+  border-radius: 20px; border: 1.5px solid var(--border);
+  background: var(--card); font-size: 12px; font-weight: 500;
+  color: var(--text-sub); cursor: pointer;
+  font-family: 'Noto Sans JP', sans-serif;
+  transition: all 0.12s;
+}
+.cat-btn.active { background: var(--red); color: #fff; border-color: var(--red); }
+
+/* ── FLIP CARD ── */
+.flip-scene { width: 100%; perspective: 1200px; margin-bottom: 18px; }
+
+.flip-card {
+  width: 100%; min-height: 290px;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.55s cubic-bezier(.4,0,.2,1);
+  cursor: pointer;
+}
+.flip-card.flipped { transform: rotateY(180deg); }
+
+.card-face {
+  position: absolute; inset: 0;
+  border-radius: var(--radius);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 28px 24px;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border);
+}
+
+.card-front { background: var(--card); }
+.card-front .face-label {
+  font-size: 11px; font-weight: 700; letter-spacing: 1px;
+  color: var(--text-hint);
+  margin-bottom: 16px;
+  background: var(--bg); padding: 4px 12px; border-radius: 20px;
+}
+.card-front .ja-text {
+  font-size: 21px; font-weight: 700;
+  line-height: 1.65; text-align: center;
+  color: var(--text); margin-bottom: 18px;
+}
+.card-front .hint-row {
+  display: flex; flex-wrap: wrap; gap: 6px; justify-content: center;
+}
+.hint-chip {
+  background: var(--blue-light); color: var(--blue);
+  font-size: 12px; font-weight: 600;
+  padding: 4px 12px; border-radius: 6px;
+  font-family: 'Nunito', sans-serif;
+}
+.card-front .tap-hint {
+  margin-top: 22px; font-size: 12px; color: var(--text-hint);
+  display: flex; align-items: center; gap: 5px;
+}
+.tap-icon { font-size: 16px; animation: pulse 2s ease-in-out infinite; }
+@keyframes pulse {
+  0%,100%{opacity:1;transform:scale(1)}
+  50%{opacity:0.5;transform:scale(0.9)}
+}
+
+.card-back {
+  background: linear-gradient(135deg, #c0392b 0%, #e05a4a 100%);
+  transform: rotateY(180deg);
+}
+.card-back .face-label {
+  font-size: 11px; font-weight: 700; letter-spacing: 1px;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 16px;
+  background: rgba(255,255,255,0.15); padding: 4px 12px; border-radius: 20px;
+}
+.card-back .en-text {
+  font-family: 'Nunito', sans-serif;
+  font-size: 21px; font-weight: 700;
+  line-height: 1.6; text-align: center;
+  color: #fff; margin-bottom: 10px;
+}
+.card-back .alt-text {
+  font-size: 13px; color: rgba(255,255,255,0.72);
+  text-align: center; line-height: 1.6; margin-bottom: 10px;
+}
+.card-back .key-tag {
+  background: rgba(255,255,255,0.2); color: #fff;
+  font-size: 12px; font-weight: 600;
+  padding: 5px 14px; border-radius: 20px;
+  font-family: 'Nunito', sans-serif; margin-bottom: 8px;
+}
+.card-back .info-text {
+  font-size: 12px; color: rgba(255,255,255,0.65);
+  text-align: center; line-height: 1.6; padding: 0 8px;
+}
+
+/* ── Judge buttons ── */
+.judge-buttons {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 12px; margin-top: 4px;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.3s 0.3s;
+}
+.judge-buttons.visible { opacity: 1; pointer-events: all; }
+
+.btn-judge {
+  padding: 16px 12px; border-radius: var(--radius-sm);
+  border: none; font-size: 15px; font-weight: 700;
+  cursor: pointer; font-family: 'Noto Sans JP', sans-serif;
+  transition: all 0.15s;
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+}
+.btn-judge:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,0.15); }
+.btn-judge:active { transform: scale(0.97); }
+.btn-ng { background: var(--red-light); color: var(--red); border: 2px solid #f5c6c0; }
+.btn-ng:hover { background: var(--red); color: #fff; border-color: var(--red); }
+.btn-ok { background: var(--green-light); color: var(--green); border: 2px solid #b8dfc8; }
+.btn-ok:hover { background: var(--green); color: #fff; border-color: var(--green); }
+.btn-judge .btn-icon { font-size: 24px; }
+.btn-judge .btn-lbl { font-size: 13px; }
+.btn-judge .btn-sub { font-size: 10px; opacity: 0.7; }
+
+.card-counter {
+  text-align: center; margin-bottom: 12px;
+  font-size: 13px; color: var(--text-hint);
+  font-family: 'Nunito', sans-serif; font-weight: 600;
+}
+
+/* ── Result ── */
+.result-screen {
+  background: var(--card); border-radius: var(--radius);
+  padding: 36px 24px; text-align: center;
+  box-shadow: var(--shadow-lg); border: 1px solid var(--border);
+}
+.result-emoji { font-size: 52px; margin-bottom: 10px; }
+.result-pct { font-size: 68px; font-weight: 800; font-family: 'Nunito', sans-serif; color: var(--red); line-height: 1; margin-bottom: 8px; }
+.result-msg { font-size: 16px; color: var(--text-sub); margin-bottom: 28px; }
+.result-nums { display: flex; justify-content: center; gap: 40px; margin-bottom: 28px; }
+.r-num { font-size: 32px; font-weight: 800; font-family: 'Nunito', sans-serif; }
+.r-num.ok { color: var(--green); }
+.r-num.ng { color: var(--red); }
+.r-lbl { font-size: 12px; color: var(--text-hint); margin-top: 2px; }
+.result-btns { display: flex; flex-direction: column; gap: 10px; }
+.btn-result {
+  width: 100%; padding: 14px; border-radius: var(--radius-sm);
+  border: 2px solid var(--border); font-size: 15px; font-weight: 700;
+  cursor: pointer; font-family: 'Noto Sans JP', sans-serif;
+  background: var(--card); color: var(--text); transition: all 0.13s;
+}
+.btn-result:hover { transform: translateY(-1px); box-shadow: var(--shadow); }
+.btn-result.primary { background: var(--red); color: #fff; border-color: var(--red); }
+.btn-result.amber { border-color: var(--gold); color: var(--gold); }
+
+/* ── Vocab ── */
+.vocab-card {
+  background: var(--card); border-radius: var(--radius);
+  padding: 18px; margin-bottom: 10px;
+  box-shadow: var(--shadow); border: 1px solid var(--border);
+}
+.vocab-phrase { font-size: 17px; font-weight: 700; color: var(--red); font-family: 'Nunito', sans-serif; margin-bottom: 4px; }
+.vocab-cat { font-size: 11px; color: var(--text-hint); margin-bottom: 6px; }
+.vocab-meaning { font-size: 14px; font-weight: 500; margin-bottom: 12px; }
+.vocab-examples { display: flex; flex-direction: column; gap: 6px; }
+.ex-item { background: var(--red-light); border-radius: 8px; padding: 10px 12px; }
+.ex-en { font-size: 14px; font-weight: 600; color: var(--red); font-family: 'Nunito', sans-serif; line-height: 1.5; }
+.ex-ja { font-size: 12px; color: var(--text-sub); margin-top: 3px; line-height: 1.5; }
+
+/* ── Review ── */
+.review-item {
+  background: var(--card); border-radius: var(--radius);
+  padding: 16px 18px; margin-bottom: 10px;
+  border-left: 4px solid var(--gold);
+  box-shadow: var(--shadow);
+  border-top: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.ri-ja { font-size: 15px; font-weight: 700; margin-bottom: 5px; }
+.ri-en { font-size: 14px; font-weight: 600; color: var(--text-sub); font-family: 'Nunito', sans-serif; line-height: 1.5; margin-bottom: 6px; }
+.ri-key { font-size: 12px; background: var(--gold-light); color: var(--gold); padding: 3px 8px; border-radius: 6px; display: inline-block; font-weight: 600; font-family: 'Nunito', sans-serif; }
+.ri-actions { display: flex; gap: 6px; margin-top: 10px; }
+.btn-sm { padding: 6px 14px; border-radius: 8px; border: 1.5px solid; font-size: 12px; font-weight: 700; cursor: pointer; font-family: 'Noto Sans JP', sans-serif; transition: all 0.12s; }
+.btn-sm.green { border-color: var(--green); background: var(--green-light); color: var(--green); }
+.btn-sm.green:hover { background: var(--green); color: #fff; }
+.btn-sm.gray { border-color: var(--border); background: var(--bg); color: var(--text-sub); }
+
+.empty-state { text-align: center; padding: 56px 20px; color: var(--text-hint); }
+.empty-state .ee { font-size: 44px; margin-bottom: 12px; }
+.empty-state p { font-size: 15px; line-height: 1.8; }
+
+@media(max-width:400px){
+  .card-front .ja-text{font-size:18px}
+  .card-back .en-text{font-size:18px}
+  .result-pct{font-size:52px}
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-top">
+    <div class="app-title">🗾 Japan スピーキング</div>
+    <div class="stats-row">
+      <div class="stat-item"><div class="stat-n" id="s-total" style="color:var(--text)">0</div><div class="stat-l">合計</div></div>
+      <div class="stat-item"><div class="stat-n" id="s-ok" style="color:var(--green)">0</div><div class="stat-l">できた</div></div>
+      <div class="stat-item"><div class="stat-n" id="s-ng" style="color:var(--red)">0</div><div class="stat-l">復習</div></div>
+    </div>
+  </div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" id="tab-practice" onclick="switchMode('practice')">🗣️ 練習</button>
+    <button class="nav-tab" id="tab-vocab" onclick="switchMode('vocab')">📖 単語帳</button>
+    <button class="nav-tab" id="tab-review" onclick="switchMode('review')">🔁 要復習<span class="rbadge" id="rbadge" style="display:none">0</span></button>
+  </div>
+</header>
+
+<div class="progress-outer">
+  <div class="progress-wrap"><div class="progress-fill" id="prog" style="width:0%"></div></div>
+</div>
+
+<div class="content">
+  <div id="mode-practice">
+    <div class="cat-scroll" id="cat-row"></div>
+    <div class="card-counter" id="card-counter"></div>
+    <div class="flip-scene">
+      <div class="flip-card" id="flip-card" onclick="flipCard()">
+        <div class="card-face card-front" id="card-front">
+          <div class="face-label">日本語を見て英語で言おう</div>
+          <div class="ja-text" id="ja-text"></div>
+          <div class="hint-row" id="hint-row"></div>
+          <div class="tap-hint"><span class="tap-icon">👆</span> タップで英語を確認</div>
+        </div>
+        <div class="card-face card-back">
+          <div class="face-label">Answer</div>
+          <div class="en-text" id="en-text"></div>
+          <div class="alt-text" id="alt-text"></div>
+          <div class="key-tag" id="key-tag"></div>
+          <div class="info-text" id="info-text"></div>
+        </div>
+      </div>
+    </div>
+    <div class="judge-buttons" id="judge-buttons">
+      <button class="btn-judge btn-ng" onclick="judge(false)">
+        <span class="btn-icon">😅</span><span class="btn-lbl">できなかった</span><span class="btn-sub">要復習に追加</span>
+      </button>
+      <button class="btn-judge btn-ok" onclick="judge(true)">
+        <span class="btn-icon">✅</span><span class="btn-lbl">できた！</span><span class="btn-sub">次へ進む</span>
+      </button>
+    </div>
+  </div>
+
+  <div id="mode-vocab" style="display:none"><div id="vocab-list"></div></div>
+  <div id="mode-review" style="display:none"><div id="review-list"></div></div>
+</div>
+
+<script>
+const VOCAB = [
+  {
+    phrase: "you've gotta check out",
+    meaning: "絶対に〜を見てみて / ぜひ〜に行くべき",
+    category: "おすすめ表現",
+    examples: [
+      { en: "You've gotta check out Kyoto if you visit Japan.", ja: "日本に来たら京都は絶対に行くべきだよ。" },
+      { en: "You've gotta check out this new restaurant downtown.", ja: "街のあの新しいレストラン、絶対に行ってみて。" },
+      { en: "You've gotta check out this documentary — it's amazing.", ja: "このドキュメンタリー絶対に見て、すごいから。" },
+      { en: "You've gotta check out the view from the top floor.", ja: "最上階からの眺めは絶対に見てみて。" },
+      { en: "If you're into art, you've gotta check out that gallery.", ja: "アートが好きなら、あのギャラリーは絶対見てほしい。" },
+      { en: "You've gotta check out their summer menu — it's incredible.", ja: "夏のメニューは絶対チェックして、信じられないくらいおいしい。" },
+      { en: "You've gotta check out this app — it'll change your life.", ja: "このアプリ絶対チェックして、生活が変わるから。" },
+      { en: "Before you leave, you've gotta check out the local market.", ja: "帰る前に地元の市場は絶対のぞいてみて。" },
+      { en: "You've gotta check out their website for more details.", ja: "詳しくはウェブサイトを絶対チェックして。" },
+      { en: "You've gotta check out this book — I couldn't put it down.", ja: "この本絶対読んで、手が止まらなかったから。" }
+    ]
+  },
+  {
+    phrase: "totally different vibes",
+    meaning: "全く違う雰囲気・空気感",
+    category: "描写・比較",
+    examples: [
+      { en: "Kyoto and Osaka have totally different vibes.", ja: "京都と大阪は全く違う雰囲気を持っている。" },
+      { en: "The two cafés are close by but have totally different vibes.", ja: "2つのカフェは近くにあるけど、雰囲気が全然違う。" },
+      { en: "Day and night, this place has totally different vibes.", ja: "昼と夜では、この場所は全く違う雰囲気がある。" },
+      { en: "The first half and second half of the movie have totally different vibes.", ja: "映画の前半と後半では全く違う雰囲気がある。" },
+      { en: "Their new album has totally different vibes from the last one.", ja: "彼らの新しいアルバムは前のとは全然違う雰囲気だ。" },
+      { en: "Summer and winter here have totally different vibes.", ja: "ここの夏と冬は全く違う雰囲気がある。" },
+      { en: "The two sisters have totally different vibes.", ja: "その二人の姉妹は全く違う雰囲気を持っている。" },
+      { en: "These two neighborhoods have totally different vibes.", ja: "この二つの地域は全く違う雰囲気だ。" },
+      { en: "The upstairs and downstairs areas have totally different vibes.", ja: "上の階と下の階では全然雰囲気が違う。" },
+      { en: "Their old and new offices have totally different vibes.", ja: "昔と今のオフィスは全く雰囲気が違う。" }
+    ]
+  },
+  {
+    phrase: "is all about",
+    meaning: "〜が全てだ / 〜に尽きる / 〜が魅力の中心",
+    category: "強調表現",
+    examples: [
+      { en: "Kyoto is all about the scenery and traditional buildings.", ja: "京都は景色と伝統的な建物に尽きる。" },
+      { en: "This restaurant is all about fresh, local ingredients.", ja: "このレストランは新鮮な地元食材が全てだ。" },
+      { en: "For me, travel is all about meeting new people.", ja: "私にとって旅行は新しい人と出会うことが全てだ。" },
+      { en: "Spring in Japan is all about the cherry blossoms.", ja: "日本の春は桜に尽きる。" },
+      { en: "Their brand is all about sustainability.", ja: "彼らのブランドは持続可能性が全てだ。" },
+      { en: "The new policy is all about cutting costs.", ja: "新しい方針はコスト削減が全てだ。" },
+      { en: "His cooking style is all about simplicity.", ja: "彼の料理スタイルはシンプルさが全てだ。" },
+      { en: "This workout is all about building core strength.", ja: "このトレーニングはコアの筋肉を鍛えることが全てだ。" },
+      { en: "The festival is all about celebrating local culture.", ja: "そのフェスティバルは地元文化を祝うことが全てだ。" },
+      { en: "Being a good leader is all about listening.", ja: "優れたリーダーであることは聞くことに尽きる。" }
+    ]
+  },
+  {
+    phrase: "absolutely unmissable",
+    meaning: "絶対に見逃せない / 必見の",
+    category: "おすすめ表現",
+    examples: [
+      { en: "Kinkaku-ji is absolutely unmissable when in Kyoto.", ja: "京都では金閣寺は絶対に見逃せない。" },
+      { en: "The sunset from this point is absolutely unmissable.", ja: "この場所からの夕日は絶対に見逃せない。" },
+      { en: "Their spring collection is absolutely unmissable.", ja: "彼らの春のコレクションは絶対に見逃せない。" },
+      { en: "This documentary is absolutely unmissable for history lovers.", ja: "このドキュメンタリーは歴史好きには絶対に見逃せない。" },
+      { en: "The final episode is absolutely unmissable.", ja: "最終回は絶対に見逃せない。" },
+      { en: "For coffee fans, this café is absolutely unmissable.", ja: "コーヒー好きにとって、このカフェは絶対に見逃せない。" },
+      { en: "The opening ceremony was absolutely unmissable.", ja: "開会式は絶対に見逃せなかった。" },
+      { en: "His performance last night was absolutely unmissable.", ja: "昨夜の彼のパフォーマンスは絶対に見逃せなかった。" },
+      { en: "The night market here is absolutely unmissable.", ja: "ここのナイトマーケットは絶対に見逃せない。" },
+      { en: "That sale was absolutely unmissable — everything was 70% off.", ja: "あのセールは絶対に見逃せなかった、全品70%オフだったから。" }
+    ]
+  },
+  {
+    phrase: "gorgeous",
+    meaning: "とても美しい / 豪華な / 素晴らしい",
+    category: "描写・感嘆",
+    examples: [
+      { en: "The garden around Kinkaku-ji is gorgeous.", ja: "金閣寺周辺の庭園はとても美しい。" },
+      { en: "What a gorgeous sunset!", ja: "なんて美しい夕日なんだろう！" },
+      { en: "She wore a gorgeous dress to the party.", ja: "彼女はパーティーに豪華なドレスを着ていった。" },
+      { en: "The view from the mountain top was absolutely gorgeous.", ja: "山頂からの景色は本当に素晴らしかった。" },
+      { en: "The cherry blossoms in full bloom are gorgeous.", ja: "満開の桜はとても美しい。" },
+      { en: "They have a gorgeous new office in the city center.", ja: "彼らは市内中心部にとても素敵な新しいオフィスを持っている。" },
+      { en: "The interior design of this café is gorgeous.", ja: "このカフェのインテリアデザインはとても素敵だ。" },
+      { en: "What gorgeous weather we're having today!", ja: "今日は本当に素晴らしい天気だ！" },
+      { en: "The pictures from your trip look gorgeous.", ja: "旅行の写真がとてもきれいに見える。" },
+      { en: "She has a gorgeous smile that lights up the room.", ja: "彼女の笑顔はとても素敵で部屋を明るくする。" }
+    ]
+  },
+  {
+    phrase: "dreamlike",
+    meaning: "夢のような / 幻想的な / 現実離れした",
+    category: "描写・感嘆",
+    examples: [
+      { en: "Walking through the bamboo forest felt almost dreamlike.", ja: "竹林を歩くのはほとんど夢のような感覚だった。" },
+      { en: "The whole experience was dreamlike — I still can't believe it happened.", ja: "全体の体験が夢のようで、まだ信じられない。" },
+      { en: "The fog over the mountains created a dreamlike atmosphere.", ja: "山にかかる霧が夢幻的な雰囲気を作り出していた。" },
+      { en: "The wedding venue had a dreamlike quality to it.", ja: "結婚式の会場には夢のような雰囲気があった。" },
+      { en: "Seeing the Northern Lights was a dreamlike experience.", ja: "オーロラを見るのは夢のような体験だった。" },
+      { en: "The light through the trees gave the forest a dreamlike glow.", ja: "木漏れ日が森に夢幻的な輝きを与えていた。" },
+      { en: "The whole city looks dreamlike when it snows.", ja: "雪が降ると街全体が夢のように見える。" },
+      { en: "Her voice has a dreamlike quality that draws you in.", ja: "彼女の声には人を引き込む夢幻的な質感がある。" },
+      { en: "The festival lights created a dreamlike scene.", ja: "お祭りの灯りが夢幻的な光景を作り出していた。" },
+      { en: "It all felt dreamlike, like stepping into a painting.", ja: "まるで絵の中に入り込んだような夢のような感覚だった。" }
+    ]
+  },
+  {
+    phrase: "misty",
+    meaning: "霞がかった / 霧のかかった / 幻想的にかすんだ",
+    category: "描写・感嘆",
+    examples: [
+      { en: "Kinkaku-ji in the early morning has a soft, misty atmosphere.", ja: "早朝の金閣寺は柔らかく霞がかった雰囲気がある。" },
+      { en: "The mountains were misty after the rain.", ja: "雨の後、山々は霧に包まれていた。" },
+      { en: "I love misty mornings — everything looks so peaceful.", ja: "霞がかった朝が好き、全てがとても穏やかに見える。" },
+      { en: "The valley was wrapped in a misty haze.", ja: "谷は霞がかった霧に包まれていた。" },
+      { en: "She had misty eyes after watching the film.", ja: "映画を見た後、彼女の目は潤んでいた。" },
+      { en: "The lake looks stunning on misty mornings.", ja: "霧の朝の湖は息をのむほど美しい。" },
+      { en: "A misty rain fell softly over the garden.", ja: "細かい霧雨が庭に静かに降り注いだ。" },
+      { en: "The forest was cool and misty after the shower.", ja: "夕立の後、森は涼しく霞がかっていた。" },
+      { en: "The city looked magical in the misty evening light.", ja: "霧がかった夕暮れの光の中で街が幻想的に見えた。" },
+      { en: "Hiking through the misty hills was unforgettable.", ja: "霞がかった丘をハイキングするのは忘れられない体験だった。" }
+    ]
+  },
+  {
+    phrase: "breathtaking",
+    meaning: "息をのむほど美しい / 圧倒的な / 驚くほど素晴らしい",
+    category: "描写・感嘆",
+    examples: [
+      { en: "The view from the top was breathtaking.", ja: "頂上からの景色は息をのむほど美しかった。" },
+      { en: "The performance was absolutely breathtaking.", ja: "そのパフォーマンスは本当に息をのむほど素晴らしかった。" },
+      { en: "The waterfall was breathtaking — I couldn't look away.", ja: "その滝は息をのむほど美しく、目が離せなかった。" },
+      { en: "Seeing Mount Fuji up close is breathtaking.", ja: "富士山を間近で見ると息をのむほど素晴らしい。" },
+      { en: "The bride looked breathtaking in her white dress.", ja: "花嫁は白いドレスで息をのむほど美しく見えた。" },
+      { en: "The architecture of the old cathedral is breathtaking.", ja: "古い大聖堂の建築は息をのむほど素晴らしい。" },
+      { en: "The speed at which she solved the problem was breathtaking.", ja: "彼女が問題を解いたスピードは驚くほどだった。" },
+      { en: "The autumn foliage in Nikko is breathtaking.", ja: "日光の紅葉は息をのむほど美しい。" },
+      { en: "We had a breathtaking view of the ocean from our room.", ja: "部屋から息をのむほど美しい海の眺めがあった。" },
+      { en: "It was a breathtaking moment that I'll never forget.", ja: "それは決して忘れられない息をのむような瞬間だった。" }
+    ]
+  },
+  {
+    phrase: "shift gears completely",
+    meaning: "がらりと方向を変える / 全く別のモードに切り替える",
+    category: "切り替え・転換",
+    examples: [
+      { en: "When you head to Osaka, you shift gears completely.", ja: "大阪に向かうと、がらりとモードが変わる。" },
+      { en: "After the meeting, we shifted gears completely and went out for drinks.", ja: "会議の後、がらりと気分を変えて飲みに行った。" },
+      { en: "In the second half, the team shifted gears completely.", ja: "後半、チームはがらりと戦い方を変えた。" },
+      { en: "She shifted gears completely and started her own business.", ja: "彼女はがらりと方向転換して自分のビジネスを始めた。" },
+      { en: "The documentary shifts gears completely in its final act.", ja: "そのドキュメンタリーは最終章でがらりとトーンが変わる。" },
+      { en: "After retirement, he shifted gears completely and took up painting.", ja: "退職後、彼はがらりと方向を変えて絵を始めた。" },
+      { en: "The conversation shifted gears completely when she arrived.", ja: "彼女が到着すると、会話の雰囲気がガラリと変わった。" },
+      { en: "You need to shift gears completely if you want to succeed here.", ja: "ここで成功したいなら、がらりと考え方を変える必要がある。" },
+      { en: "The brand shifted gears completely with its latest campaign.", ja: "そのブランドは最新キャンペーンで戦略をがらりと変えた。" },
+      { en: "Let's shift gears completely and talk about something fun.", ja: "がらりと話題を変えて、楽しいことを話しましょう。" }
+    ]
+  },
+  {
+    phrase: "on another level",
+    meaning: "次元が違う / 別格だ / レベルが桁違い",
+    category: "強調表現",
+    examples: [
+      { en: "The street food scene in Osaka is on another level.", ja: "大阪のストリートフードは別格だ。" },
+      { en: "Her dedication to her craft is on another level.", ja: "仕事への彼女の献身は次元が違う。" },
+      { en: "The hospitality here is on another level.", ja: "ここのおもてなしは別格だ。" },
+      { en: "His skills as a chef are on another level.", ja: "シェフとしての彼の腕前は次元が違う。" },
+      { en: "The technology in this country is on another level.", ja: "この国のテクノロジーは別格だ。" },
+      { en: "The crowd's energy at the concert was on another level.", ja: "コンサートの観客のエネルギーは次元が違った。" },
+      { en: "Their customer service is on another level compared to others.", ja: "彼らのカスタマーサービスは他とは比べ物にならない。" },
+      { en: "The ramen at that shop is on another level.", ja: "あのお店のラーメンは別格だ。" },
+      { en: "His performance tonight was on another level.", ja: "今夜の彼のパフォーマンスは次元が違った。" },
+      { en: "The view from there is on another level — you have to see it.", ja: "そこからの眺めは別格だよ、絶対見なきゃ。" }
+    ]
+  },
+  {
+    phrase: "That combo alone",
+    meaning: "その組み合わせだけで / それだけでもう十分",
+    category: "まとめ・強調",
+    examples: [
+      { en: "Kyoto for beauty, Osaka for food — that combo alone makes Japan worth the trip.", ja: "美しさの京都、食の大阪、その組み合わせだけで日本は訪れる価値がある。" },
+      { en: "Great coffee and free Wi-Fi — that combo alone keeps me coming back.", ja: "おいしいコーヒーと無料Wi-Fi、その組み合わせだけで何度も来てしまう。" },
+      { en: "Ocean view and fresh seafood — that combo alone is worth the drive.", ja: "海の眺めと新鮮な海産物、その組み合わせだけでドライブする価値がある。" },
+      { en: "Good location and affordable rent — that combo alone sold me.", ja: "良い立地と手頃な家賃、その組み合わせだけで決めた。" },
+      { en: "Fast delivery and great quality — that combo alone makes them stand out.", ja: "速い配送と高品質、その組み合わせだけで際立っている。" },
+      { en: "Kind staff and delicious food — that combo alone earned them a 5-star review.", ja: "親切なスタッフとおいしい料理、その組み合わせだけで5つ星のレビューをつけた。" },
+      { en: "Her humor and intelligence — that combo alone makes her unforgettable.", ja: "彼女のユーモアと知性、その組み合わせだけで忘れられない存在だ。" },
+      { en: "Warm weather and no crowds — that combo alone was perfect.", ja: "暖かい天気と混雑なし、その組み合わせだけで完璧だった。" },
+      { en: "The music and the lights — that combo alone made the night magical.", ja: "音楽と照明、その組み合わせだけでその夜を魔法のようにした。" },
+      { en: "Flexibility and good pay — that combo alone made it the ideal job.", ja: "柔軟性と良い給与、その組み合わせだけで理想的な仕事だった。" }
+    ]
+  }
+];
+
+const QUESTIONS = [
+  // you've gotta check out (10)
+  {ja:"日本に来たら京都は絶対に行くべきだよ。",en:"You've gotta check out Kyoto if you visit Japan.",alt:"If you ever visit Japan, you've gotta check out Kyoto.",key:"you've gotta check out",hint:["you've gotta check out"],cat:"おすすめ表現",info:"gotta = got to（〜しなければならない）のカジュアル形"},
+  {ja:"街のあの新しいレストラン、絶対に行ってみて。",en:"You've gotta check out this new restaurant downtown.",alt:"You have to check out that new restaurant in town.",key:"you've gotta check out",hint:["you've gotta check out"],cat:"おすすめ表現",info:"downtown = 市内中心部、繁華街"},
+  {ja:"このドキュメンタリー絶対に見て、すごいから。",en:"You've gotta check out this documentary — it's amazing.",alt:"You really need to check out this documentary, it's incredible.",key:"you've gotta check out",hint:["you've gotta check out"],cat:"おすすめ表現",info:"— it's amazing でおすすめの理由を続けられる"},
+  {ja:"最上階からの眺めは絶対に見てみて。",en:"You've gotta check out the view from the top floor.",alt:"Make sure you check out the view from the top floor.",key:"you've gotta check out",hint:["you've gotta check out","top floor"],cat:"おすすめ表現",info:"top floor = 最上階"},
+  {ja:"アートが好きなら、あのギャラリーは絶対見てほしい。",en:"If you're into art, you've gotta check out that gallery.",alt:"You've gotta check out that gallery if you're an art lover.",key:"you've gotta check out",hint:["you've gotta check out","if you're into"],cat:"おすすめ表現",info:"be into = 〜が好き、〜に興味がある"},
+  {ja:"帰る前に地元の市場は絶対のぞいてみて。",en:"Before you leave, you've gotta check out the local market.",alt:"Don't leave without checking out the local market.",key:"you've gotta check out",hint:["you've gotta check out","before you leave"],cat:"おすすめ表現",info:"local market = 地元の市場、朝市"},
+  {ja:"このアプリ絶対チェックして、生活が変わるから。",en:"You've gotta check out this app — it'll change your life.",alt:"You need to check out this app, it's life-changing.",key:"you've gotta check out",hint:["you've gotta check out"],cat:"おすすめ表現",info:"it'll change your life = 生活が変わる（強いおすすめ）"},
+  {ja:"この本絶対読んで、手が止まらなかったから。",en:"You've gotta check out this book — I couldn't put it down.",alt:"You should really check out this book, I couldn't stop reading it.",key:"you've gotta check out",hint:["you've gotta check out","couldn't put it down"],cat:"おすすめ表現",info:"couldn't put it down = 夢中で読んだ、手放せなかった"},
+  {ja:"夏のメニューは絶対チェックして、信じられないくらいおいしい。",en:"You've gotta check out their summer menu — it's incredible.",alt:"Their summer menu is incredible, you've gotta check it out.",key:"you've gotta check out",hint:["you've gotta check out","summer menu"],cat:"おすすめ表現",info:"incredible = 信じられないほどすばらしい"},
+  {ja:"詳しくはウェブサイトを絶対チェックして。",en:"You've gotta check out their website for more details.",alt:"Make sure to check out their website for more information.",key:"you've gotta check out",hint:["you've gotta check out","for more details"],cat:"おすすめ表現",info:"for more details = 詳しくは"},
+
+  // totally different vibes (10)
+  {ja:"京都と大阪は全く違う雰囲気を持っている。",en:"Kyoto and Osaka have totally different vibes.",alt:"Kyoto and Osaka give off totally different vibes.",key:"totally different vibes",hint:["totally different vibes"],cat:"描写・比較",info:"vibe = 雰囲気、空気感（カジュアルな表現）"},
+  {ja:"2つのカフェは近くにあるけど、雰囲気が全然違う。",en:"The two cafés are close by but have totally different vibes.",alt:"Those two cafés are nearby but give off totally different vibes.",key:"totally different vibes",hint:["totally different vibes","close by but"],cat:"描写・比較",info:"close by = 近くに"},
+  {ja:"昼と夜では、この場所は全く違う雰囲気がある。",en:"Day and night, this place has totally different vibes.",alt:"This place has totally different vibes during the day and at night.",key:"totally different vibes",hint:["totally different vibes","day and night"],cat:"描写・比較",info:"day and night で昼夜の対比を表現"},
+  {ja:"彼らの新しいアルバムは前のとは全然違う雰囲気だ。",en:"Their new album has totally different vibes from the last one.",alt:"Compared to the last album, the new one has totally different vibes.",key:"totally different vibes",hint:["totally different vibes","from the last one"],cat:"描写・比較",info:"from the last one = 前のと比べて"},
+  {ja:"ここの夏と冬は全く違う雰囲気がある。",en:"Summer and winter here have totally different vibes.",alt:"This place has totally different vibes in summer versus winter.",key:"totally different vibes",hint:["totally different vibes","summer and winter"],cat:"描写・比較",info:"versus = 〜と比べて"},
+  {ja:"この二つの地域は全く違う雰囲気だ。",en:"These two neighborhoods have totally different vibes.",alt:"The two districts give off totally different vibes.",key:"totally different vibes",hint:["totally different vibes","neighborhoods"],cat:"描写・比較",info:"neighborhood = 地域、近所"},
+  {ja:"映画の前半と後半では全く違う雰囲気がある。",en:"The first half and second half of the movie have totally different vibes.",alt:"The movie's first and second halves have totally different vibes.",key:"totally different vibes",hint:["totally different vibes","first half / second half"],cat:"描写・比較",info:"first half / second half = 前半 / 後半"},
+  {ja:"その二人の姉妹は全く違う雰囲気を持っている。",en:"The two sisters have totally different vibes.",alt:"Those sisters give off totally different vibes.",key:"totally different vibes",hint:["totally different vibes"],cat:"描写・比較",info:"give off = 発する、醸し出す"},
+  {ja:"上の階と下の階では全然雰囲気が違う。",en:"The upstairs and downstairs areas have totally different vibes.",alt:"Upstairs and downstairs give off totally different vibes.",key:"totally different vibes",hint:["totally different vibes","upstairs / downstairs"],cat:"描写・比較",info:"upstairs / downstairs = 上の階 / 下の階"},
+  {ja:"昔と今のオフィスは全く雰囲気が違う。",en:"Their old and new offices have totally different vibes.",alt:"The old office and the new one have totally different vibes.",key:"totally different vibes",hint:["totally different vibes","old and new"],cat:"描写・比較",info:"old and new で過去と現在を対比できる"},
+
+  // is all about (10)
+  {ja:"京都は景色と伝統的な建物に尽きる。",en:"Kyoto is all about the scenery and traditional buildings.",alt:"When it comes to Kyoto, it's all about the scenery and history.",key:"is all about",hint:["is all about"],cat:"強調表現",info:"is all about = 〜が全てだ、〜に尽きる"},
+  {ja:"このレストランは新鮮な地元食材が全てだ。",en:"This restaurant is all about fresh, local ingredients.",alt:"Fresh local ingredients — that's what this restaurant is all about.",key:"is all about",hint:["is all about","fresh / local"],cat:"強調表現",info:"fresh local ingredients = 新鮮な地元食材"},
+  {ja:"私にとって旅行は新しい人と出会うことが全てだ。",en:"For me, travel is all about meeting new people.",alt:"Travel, for me, is all about the people you meet.",key:"is all about",hint:["is all about","for me"],cat:"強調表現",info:"For me, ... で個人の考えを伝える"},
+  {ja:"日本の春は桜に尽きる。",en:"Spring in Japan is all about the cherry blossoms.",alt:"When it comes to spring in Japan, it's all about the cherry blossoms.",key:"is all about",hint:["is all about","cherry blossoms"],cat:"強調表現",info:"cherry blossoms = 桜（複数形で使うことが多い）"},
+  {ja:"彼らのブランドは持続可能性が全てだ。",en:"Their brand is all about sustainability.",alt:"Sustainability is what their brand is all about.",key:"is all about",hint:["is all about","sustainability"],cat:"強調表現",info:"sustainability = 持続可能性"},
+  {ja:"彼の料理スタイルはシンプルさが全てだ。",en:"His cooking style is all about simplicity.",alt:"When it comes to his cooking, it's all about keeping it simple.",key:"is all about",hint:["is all about","simplicity"],cat:"強調表現",info:"simplicity = シンプルさ、簡潔さ"},
+  {ja:"そのフェスティバルは地元文化を祝うことが全てだ。",en:"The festival is all about celebrating local culture.",alt:"Celebrating local culture — that's what the festival is all about.",key:"is all about",hint:["is all about","celebrating / local culture"],cat:"強調表現",info:"celebrate = 祝う、称える"},
+  {ja:"優れたリーダーであることは聞くことに尽きる。",en:"Being a good leader is all about listening.",alt:"Good leadership is all about how well you listen.",key:"is all about",hint:["is all about","listening / leader"],cat:"強調表現",info:"Being a good leader = 優れたリーダーであること（動名詞構文）"},
+  {ja:"このトレーニングはコアの筋肉を鍛えることが全てだ。",en:"This workout is all about building core strength.",alt:"Building core strength — that's what this workout is all about.",key:"is all about",hint:["is all about","core strength"],cat:"強調表現",info:"core strength = コアの筋肉、体幹"},
+  {ja:"新しい方針はコスト削減が全てだ。",en:"The new policy is all about cutting costs.",alt:"Cutting costs — that's what the new policy is all about.",key:"is all about",hint:["is all about","cutting costs"],cat:"強調表現",info:"cut costs = コストを削減する"},
+
+  // absolutely unmissable (10)
+  {ja:"京都では金閣寺は絶対に見逃せない。",en:"Kinkaku-ji is absolutely unmissable when in Kyoto.",alt:"When in Kyoto, Kinkaku-ji is absolutely unmissable.",key:"absolutely unmissable",hint:["absolutely unmissable"],cat:"おすすめ表現",info:"unmissable = 見逃せない（must-see とも言う）"},
+  {ja:"この場所からの夕日は絶対に見逃せない。",en:"The sunset from this point is absolutely unmissable.",alt:"You can't miss the sunset from here — it's absolutely unmissable.",key:"absolutely unmissable",hint:["absolutely unmissable","sunset"],cat:"おすすめ表現",info:"sunset = 夕日、日没"},
+  {ja:"最終回は絶対に見逃せない。",en:"The final episode is absolutely unmissable.",alt:"Don't miss the final episode — it's absolutely unmissable.",key:"absolutely unmissable",hint:["absolutely unmissable","final episode"],cat:"おすすめ表現",info:"final episode = 最終回"},
+  {ja:"コーヒー好きにとって、このカフェは絶対に見逃せない。",en:"For coffee fans, this café is absolutely unmissable.",alt:"If you're a coffee lover, this café is absolutely unmissable.",key:"absolutely unmissable",hint:["absolutely unmissable","for coffee fans"],cat:"おすすめ表現",info:"For 〜 fans = 〜好きにとって"},
+  {ja:"このドキュメンタリーは歴史好きには絶対に見逃せない。",en:"This documentary is absolutely unmissable for history lovers.",alt:"History lovers will find this documentary absolutely unmissable.",key:"absolutely unmissable",hint:["absolutely unmissable","history lovers"],cat:"おすすめ表現",info:"history lovers = 歴史好き"},
+  {ja:"彼らの春のコレクションは絶対に見逃せない。",en:"Their spring collection is absolutely unmissable.",alt:"Make sure you don't miss their spring collection — it's unmissable.",key:"absolutely unmissable",hint:["absolutely unmissable","spring collection"],cat:"おすすめ表現",info:"collection = コレクション、シリーズ"},
+  {ja:"開会式は絶対に見逃せなかった。",en:"The opening ceremony was absolutely unmissable.",alt:"Everyone had to see the opening ceremony — it was absolutely unmissable.",key:"absolutely unmissable",hint:["absolutely unmissable","opening ceremony"],cat:"おすすめ表現",info:"opening ceremony = 開会式"},
+  {ja:"昨夜の彼のパフォーマンスは絶対に見逃せなかった。",en:"His performance last night was absolutely unmissable.",alt:"Last night's performance was absolutely unmissable.",key:"absolutely unmissable",hint:["absolutely unmissable","last night"],cat:"おすすめ表現",info:"performance = 演技、パフォーマンス"},
+  {ja:"ここのナイトマーケットは絶対に見逃せない。",en:"The night market here is absolutely unmissable.",alt:"If you come here, the night market is absolutely unmissable.",key:"absolutely unmissable",hint:["absolutely unmissable","night market"],cat:"おすすめ表現",info:"night market = ナイトマーケット、夜市"},
+  {ja:"あのセールは絶対に見逃せなかった、全品70%オフだったから。",en:"That sale was absolutely unmissable — everything was 70% off.",alt:"The sale was absolutely unmissable with 70% off everything.",key:"absolutely unmissable",hint:["absolutely unmissable","70% off"],cat:"おすすめ表現",info:"% off = 〜%引き（数字の後にoffをつける）"},
+
+  // gorgeous (10)
+  {ja:"金閣寺周辺の庭園はとても美しい。",en:"The garden around Kinkaku-ji is gorgeous.",alt:"The gardens surrounding Kinkaku-ji are absolutely gorgeous.",key:"gorgeous",hint:["gorgeous"],cat:"描写・感嘆",info:"gorgeous = beautiful より感情的で強い表現"},
+  {ja:"なんて美しい夕日なんだろう！",en:"What a gorgeous sunset!",alt:"The sunset is so gorgeous!",key:"gorgeous",hint:["gorgeous","What a ~!"],cat:"描写・感嘆",info:"What a + 形容詞 + 名詞! = 感嘆文"},
+  {ja:"山頂からの景色は本当に素晴らしかった。",en:"The view from the mountain top was absolutely gorgeous.",alt:"From the mountain top, the view was just gorgeous.",key:"gorgeous",hint:["gorgeous","mountain top"],cat:"描写・感嘆",info:"absolutely = 本当に（強調副詞）"},
+  {ja:"満開の桜はとても美しい。",en:"The cherry blossoms in full bloom are gorgeous.",alt:"Cherry blossoms at their peak are just gorgeous.",key:"gorgeous",hint:["gorgeous","in full bloom"],cat:"描写・感嘆",info:"in full bloom = 満開で"},
+  {ja:"今日は本当に素晴らしい天気だ！",en:"What gorgeous weather we're having today!",alt:"The weather today is absolutely gorgeous!",key:"gorgeous",hint:["gorgeous","What ~ we're having!"],cat:"描写・感嘆",info:"What gorgeous weather we're having! = 感嘆の定型表現"},
+  {ja:"このカフェのインテリアデザインはとても素敵だ。",en:"The interior design of this café is gorgeous.",alt:"This café has such gorgeous interior design.",key:"gorgeous",hint:["gorgeous","interior design"],cat:"描写・感嘆",info:"interior design = インテリアデザイン、内装"},
+  {ja:"彼女はパーティーに豪華なドレスを着ていった。",en:"She wore a gorgeous dress to the party.",alt:"She showed up to the party in a gorgeous dress.",key:"gorgeous",hint:["gorgeous","wore / dress"],cat:"描写・感嘆",info:"show up = 現れる、やってくる"},
+  {ja:"旅行の写真がとてもきれいに見える。",en:"The pictures from your trip look gorgeous.",alt:"Your travel photos are gorgeous!",key:"gorgeous",hint:["gorgeous","pictures / photos"],cat:"描写・感嘆",info:"look gorgeous = とても美しく見える"},
+  {ja:"彼女の笑顔はとても素敵で部屋を明るくする。",en:"She has a gorgeous smile that lights up the room.",alt:"Her gorgeous smile lights up every room she walks into.",key:"gorgeous",hint:["gorgeous","lights up the room"],cat:"描写・感嘆",info:"light up the room = 部屋を明るくする（笑顔の常套句）"},
+  {ja:"彼らは市内中心部にとても素敵な新しいオフィスを持っている。",en:"They have a gorgeous new office in the city center.",alt:"Their new office in the city center is gorgeous.",key:"gorgeous",hint:["gorgeous","city center"],cat:"描写・感嘆",info:"city center = 市内中心部（= downtown）"},
+
+  // dreamlike (10)
+  {ja:"竹林を歩くのはほとんど夢のような感覚だった。",en:"Walking through the bamboo forest felt almost dreamlike.",alt:"The bamboo forest had an almost dreamlike quality.",key:"dreamlike",hint:["dreamlike","bamboo forest"],cat:"描写・感嘆",info:"bamboo forest = 竹林"},
+  {ja:"全体の体験が夢のようで、まだ信じられない。",en:"The whole experience was dreamlike — I still can't believe it happened.",alt:"It was such a dreamlike experience that I still can't believe it was real.",key:"dreamlike",hint:["dreamlike","can't believe"],cat:"描写・感嘆",info:"I still can't believe it = まだ信じられない"},
+  {ja:"山にかかる霧が夢幻的な雰囲気を作り出していた。",en:"The fog over the mountains created a dreamlike atmosphere.",alt:"With the fog rolling over the mountains, the whole scene was dreamlike.",key:"dreamlike",hint:["dreamlike","fog / atmosphere"],cat:"描写・感嘆",info:"atmosphere = 雰囲気、空気感"},
+  {ja:"オーロラを見るのは夢のような体験だった。",en:"Seeing the Northern Lights was a dreamlike experience.",alt:"Watching the Northern Lights felt completely dreamlike.",key:"dreamlike",hint:["dreamlike","Northern Lights"],cat:"描写・感嘆",info:"Northern Lights = オーロラ（= Aurora Borealis）"},
+  {ja:"雪が降ると街全体が夢のように見える。",en:"The whole city looks dreamlike when it snows.",alt:"When snow falls, the city takes on a dreamlike appearance.",key:"dreamlike",hint:["dreamlike","when it snows"],cat:"描写・感嘆",info:"take on = 〜の様相を呈する"},
+  {ja:"お祭りの灯りが夢幻的な光景を作り出していた。",en:"The festival lights created a dreamlike scene.",alt:"The glow of the festival lights made everything look dreamlike.",key:"dreamlike",hint:["dreamlike","festival lights"],cat:"描写・感嘆",info:"glow = 輝き、柔らかな光"},
+  {ja:"木漏れ日が森に夢幻的な輝きを与えていた。",en:"The light through the trees gave the forest a dreamlike glow.",alt:"Sunlight filtering through the trees gave the forest a dreamlike quality.",key:"dreamlike",hint:["dreamlike","light through trees"],cat:"描写・感嘆",info:"filter through = 差し込む（光が葉の間から）"},
+  {ja:"結婚式の会場には夢のような雰囲気があった。",en:"The wedding venue had a dreamlike quality to it.",alt:"Everything about the wedding venue felt dreamlike.",key:"dreamlike",hint:["dreamlike","wedding venue"],cat:"描写・感嘆",info:"wedding venue = 結婚式場"},
+  {ja:"まるで絵の中に入り込んだような夢のような感覚だった。",en:"It all felt dreamlike, like stepping into a painting.",alt:"The whole thing was dreamlike — like walking into a work of art.",key:"dreamlike",hint:["dreamlike","stepping into a painting"],cat:"描写・感嘆",info:"step into = 〜の中に入り込む"},
+  {ja:"彼女の声には人を引き込む夢幻的な質感がある。",en:"Her voice has a dreamlike quality that draws you in.",alt:"There's something dreamlike about her voice that pulls you in.",key:"dreamlike",hint:["dreamlike","draws you in"],cat:"描写・感嘆",info:"draw someone in = 引き込む、魅了する"},
+
+  // misty (10)
+  {ja:"早朝の金閣寺は柔らかく霞がかった雰囲気がある。",en:"Kinkaku-ji in the early morning has a soft, misty atmosphere.",alt:"Early morning at Kinkaku-ji is soft and misty.",key:"misty",hint:["misty","early morning"],cat:"描写・感嘆",info:"early morning = 早朝"},
+  {ja:"雨の後、山々は霧に包まれていた。",en:"The mountains were misty after the rain.",alt:"After the rain, the mountains were covered in a misty haze.",key:"misty",hint:["misty","after the rain"],cat:"描写・感嘆",info:"haze = 霞、もや"},
+  {ja:"霞がかった朝が好き、全てがとても穏やかに見える。",en:"I love misty mornings — everything looks so peaceful.",alt:"Misty mornings are my favorite — everything seems so calm.",key:"misty",hint:["misty","peaceful / calm"],cat:"描写・感嘆",info:"peaceful = 穏やかな / calm = 静かな"},
+  {ja:"霧の朝の湖は息をのむほど美しい。",en:"The lake looks stunning on misty mornings.",alt:"On misty mornings, the lake is simply breathtaking.",key:"misty",hint:["misty","lake / stunning"],cat:"描写・感嘆",info:"stunning = 息をのむほど美しい（= breathtaking）"},
+  {ja:"霧がかった夕暮れの光の中で街が幻想的に見えた。",en:"The city looked magical in the misty evening light.",alt:"In the misty evening light, the city looked truly magical.",key:"misty",hint:["misty","magical / evening light"],cat:"描写・感嘆",info:"magical = 魔法のような、幻想的な"},
+  {ja:"霞がかった丘をハイキングするのは忘れられない体験だった。",en:"Hiking through the misty hills was unforgettable.",alt:"Walking through the misty hills was an unforgettable experience.",key:"misty",hint:["misty","hiking / unforgettable"],cat:"描写・感嘆",info:"unforgettable = 忘れられない"},
+  {ja:"谷は霞がかった霧に包まれていた。",en:"The valley was wrapped in a misty haze.",alt:"A misty haze wrapped around the entire valley.",key:"misty",hint:["misty","valley / wrapped in"],cat:"描写・感嘆",info:"be wrapped in = 〜に包まれている"},
+  {ja:"映画を見た後、彼女の目は潤んでいた。",en:"She had misty eyes after watching the film.",alt:"Her eyes were a little misty after the movie.",key:"misty",hint:["misty eyes","after watching"],cat:"描写・感嘆",info:"misty eyes = 目が潤む（感動で涙ぐむ）"},
+  {ja:"細かい霧雨が庭に静かに降り注いだ。",en:"A misty rain fell softly over the garden.",alt:"Soft, misty rain drifted over the garden.",key:"misty",hint:["misty rain","garden"],cat:"描写・感嘆",info:"drift = そっと漂う、静かに流れる"},
+  {ja:"夕立の後、森は涼しく霞がかっていた。",en:"The forest was cool and misty after the shower.",alt:"After the shower, the forest felt cool and delightfully misty.",key:"misty",hint:["misty","after the shower / forest"],cat:"描写・感嘆",info:"shower = にわか雨、夕立"},
+
+  // breathtaking (10)
+  {ja:"頂上からの景色は息をのむほど美しかった。",en:"The view from the top was breathtaking.",alt:"Standing at the top, the view was simply breathtaking.",key:"breathtaking",hint:["breathtaking"],cat:"描写・感嘆",info:"breathtaking = 文字通り息が止まるほど美しい"},
+  {ja:"富士山を間近で見ると息をのむほど素晴らしい。",en:"Seeing Mount Fuji up close is breathtaking.",alt:"Getting up close to Mount Fuji is a breathtaking experience.",key:"breathtaking",hint:["breathtaking","up close"],cat:"描写・感嘆",info:"up close = 間近で、近くで"},
+  {ja:"その滝は息をのむほど美しく、目が離せなかった。",en:"The waterfall was breathtaking — I couldn't look away.",alt:"I couldn't take my eyes off the waterfall — it was breathtaking.",key:"breathtaking",hint:["breathtaking","couldn't look away"],cat:"描写・感嘆",info:"couldn't look away = 目が離せなかった"},
+  {ja:"そのパフォーマンスは本当に息をのむほど素晴らしかった。",en:"The performance was absolutely breathtaking.",alt:"I've never seen a performance that breathtaking before.",key:"breathtaking",hint:["breathtaking","performance"],cat:"描写・感嘆",info:"absolutely = 全く（強調）"},
+  {ja:"花嫁は白いドレスで息をのむほど美しく見えた。",en:"The bride looked breathtaking in her white dress.",alt:"She was breathtaking in her white wedding dress.",key:"breathtaking",hint:["breathtaking","bride / white dress"],cat:"描写・感嘆",info:"bride = 花嫁"},
+  {ja:"古い大聖堂の建築は息をのむほど素晴らしい。",en:"The architecture of the old cathedral is breathtaking.",alt:"The old cathedral has breathtaking architecture.",key:"breathtaking",hint:["breathtaking","architecture / cathedral"],cat:"描写・感嘆",info:"cathedral = 大聖堂 / architecture = 建築"},
+  {ja:"日光の紅葉は息をのむほど美しい。",en:"The autumn foliage in Nikko is breathtaking.",alt:"Nikko's autumn colors are simply breathtaking.",key:"breathtaking",hint:["breathtaking","autumn foliage"],cat:"描写・感嘆",info:"autumn foliage = 紅葉（foliage = 葉、木の葉）"},
+  {ja:"部屋から息をのむほど美しい海の眺めがあった。",en:"We had a breathtaking view of the ocean from our room.",alt:"The view of the ocean from our room was breathtaking.",key:"breathtaking",hint:["breathtaking","ocean view / room"],cat:"描写・感嘆",info:"ocean view = 海の眺め"},
+  {ja:"それは決して忘れられない息をのむような瞬間だった。",en:"It was a breathtaking moment that I'll never forget.",alt:"That breathtaking moment will stay with me forever.",key:"breathtaking",hint:["breathtaking","never forget"],cat:"描写・感嘆",info:"stay with me = ずっと記憶に残る"},
+  {ja:"彼女が問題を解いたスピードは驚くほどだった。",en:"The speed at which she solved the problem was breathtaking.",alt:"She solved the problem at a breathtaking speed.",key:"breathtaking",hint:["breathtaking","speed / solved"],cat:"描写・感嘆",info:"breathtaking は景色だけでなくスピードや才能にも使える"},
+
+  // shift gears completely (10)
+  {ja:"大阪に向かうと、がらりとモードが変わる。",en:"When you head to Osaka, you shift gears completely.",alt:"Heading to Osaka means shifting gears completely.",key:"shift gears completely",hint:["shift gears completely"],cat:"切り替え・転換",info:"shift gears = ギアを変える → 方向・モードを切り替える"},
+  {ja:"後半、チームはがらりと戦い方を変えた。",en:"In the second half, the team shifted gears completely.",alt:"The team completely shifted gears in the second half.",key:"shift gears completely",hint:["shift gears completely","second half"],cat:"切り替え・転換",info:"in the second half = 後半に"},
+  {ja:"彼女はがらりと方向転換して自分のビジネスを始めた。",en:"She shifted gears completely and started her own business.",alt:"She made a complete gear shift and launched her own company.",key:"shift gears completely",hint:["shift gears completely","own business"],cat:"切り替え・転換",info:"start your own business = 自分のビジネスを始める"},
+  {ja:"会議の後、がらりと気分を変えて飲みに行った。",en:"After the meeting, we shifted gears completely and went out for drinks.",alt:"We shifted gears completely after the meeting and headed out for drinks.",key:"shift gears completely",hint:["shift gears completely","after the meeting"],cat:"切り替え・転換",info:"go out for drinks = 飲みに行く"},
+  {ja:"退職後、彼はがらりと方向を変えて絵を始めた。",en:"After retirement, he shifted gears completely and took up painting.",alt:"He shifted gears completely after retiring and started painting.",key:"shift gears completely",hint:["shift gears completely","retirement / painting"],cat:"切り替え・転換",info:"take up = 〜を始める（新しい趣味など）"},
+  {ja:"ここで成功したいなら、がらりと考え方を変える必要がある。",en:"You need to shift gears completely if you want to succeed here.",alt:"If you want to make it here, you'll need to shift gears completely.",key:"shift gears completely",hint:["shift gears completely","succeed"],cat:"切り替え・転換",info:"make it = 成功する、うまくやっていく"},
+  {ja:"彼女が到着すると、会話の雰囲気がガラリと変わった。",en:"The conversation shifted gears completely when she arrived.",alt:"When she walked in, the whole conversation shifted gears completely.",key:"shift gears completely",hint:["shift gears completely","conversation"],cat:"切り替え・転換",info:"when she walked in = 彼女が入ってきたとき"},
+  {ja:"がらりと話題を変えて、楽しいことを話しましょう。",en:"Let's shift gears completely and talk about something fun.",alt:"Why don't we shift gears completely and discuss something more fun?",key:"shift gears completely",hint:["shift gears completely","talk about something fun"],cat:"切り替え・転換",info:"Why don't we ~ = 〜しませんか？（提案）"},
+  {ja:"そのブランドは最新キャンペーンで戦略をがらりと変えた。",en:"The brand shifted gears completely with its latest campaign.",alt:"With its new campaign, the brand has shifted gears completely.",key:"shift gears completely",hint:["shift gears completely","campaign / brand"],cat:"切り替え・転換",info:"campaign = キャンペーン、広告活動"},
+  {ja:"そのドキュメンタリーは最終章でがらりとトーンが変わる。",en:"The documentary shifts gears completely in its final act.",alt:"In its final act, the documentary shifts gears completely.",key:"shift gears completely",hint:["shift gears completely","final act / documentary"],cat:"切り替え・転換",info:"final act = 最終章、クライマックス"},
+
+  // on another level (10)
+  {ja:"大阪のストリートフードは別格だ。",en:"The street food scene in Osaka is on another level.",alt:"Osaka's street food is truly on another level.",key:"on another level",hint:["on another level"],cat:"強調表現",info:"on another level = 次元が違う、別格"},
+  {ja:"ここのおもてなしは別格だ。",en:"The hospitality here is on another level.",alt:"The level of hospitality here is just on another level.",key:"on another level",hint:["on another level","hospitality"],cat:"強調表現",info:"hospitality = おもてなし、歓待"},
+  {ja:"シェフとしての彼の腕前は次元が違う。",en:"His skills as a chef are on another level.",alt:"As a chef, his skills are truly on another level.",key:"on another level",hint:["on another level","skills / chef"],cat:"強調表現",info:"skills as a ~ = 〜としての腕前"},
+  {ja:"この国のテクノロジーは別格だ。",en:"The technology in this country is on another level.",alt:"When it comes to technology, this country is on another level.",key:"on another level",hint:["on another level","technology"],cat:"強調表現",info:"when it comes to = 〜に関しては"},
+  {ja:"彼女の仕事への献身は次元が違う。",en:"Her dedication to her craft is on another level.",alt:"The dedication she puts into her work is on another level.",key:"on another level",hint:["on another level","dedication"],cat:"強調表現",info:"dedication = 献身、熱心さ / craft = 技、仕事"},
+  {ja:"コンサートの観客のエネルギーは次元が違った。",en:"The crowd's energy at the concert was on another level.",alt:"At the concert, the energy from the crowd was on another level.",key:"on another level",hint:["on another level","crowd's energy"],cat:"強調表現",info:"crowd's energy = 観客のエネルギー"},
+  {ja:"あのお店のラーメンは別格だ。",en:"The ramen at that shop is on another level.",alt:"That ramen shop's food is on another level.",key:"on another level",hint:["on another level","ramen"],cat:"強調表現",info:"at that shop = あのお店の"},
+  {ja:"今夜の彼のパフォーマンスは次元が違った。",en:"His performance tonight was on another level.",alt:"Tonight, his performance was just on another level.",key:"on another level",hint:["on another level","performance"],cat:"強調表現",info:"tonight = 今夜（副詞として使う）"},
+  {ja:"彼らのカスタマーサービスは他とは比べ物にならない。",en:"Their customer service is on another level compared to others.",alt:"Compared to other companies, their customer service is on another level.",key:"on another level",hint:["on another level","compared to others"],cat:"強調表現",info:"compared to = 〜と比べて"},
+  {ja:"そこからの眺めは別格だよ、絶対見なきゃ。",en:"The view from there is on another level — you have to see it.",alt:"You have to see the view from there — it's on another level.",key:"on another level",hint:["on another level","you have to see it"],cat:"強調表現",info:"you have to see it = 絶対見てほしい（強いおすすめ）"},
+
+  // That combo alone (10)
+  {ja:"美しさの京都、食の大阪、その組み合わせだけで日本は訪れる価値がある。",en:"Kyoto for beauty, Osaka for food — that combo alone makes Japan worth the trip.",alt:"That combo alone — Kyoto's beauty and Osaka's food — makes Japan worth visiting.",key:"That combo alone",hint:["that combo alone"],cat:"まとめ・強調",info:"that combo alone = その組み合わせだけで（aloneが強調）"},
+  {ja:"おいしいコーヒーと無料Wi-Fi、その組み合わせだけで何度も来てしまう。",en:"Great coffee and free Wi-Fi — that combo alone keeps me coming back.",alt:"That combo alone — great coffee and free Wi-Fi — keeps me returning.",key:"That combo alone",hint:["that combo alone","keeps me coming back"],cat:"まとめ・強調",info:"keep -ing = 〜し続ける"},
+  {ja:"海の眺めと新鮮な海産物、その組み合わせだけでドライブする価値がある。",en:"Ocean view and fresh seafood — that combo alone is worth the drive.",alt:"That combo alone — ocean view and fresh seafood — makes the drive worthwhile.",key:"That combo alone",hint:["that combo alone","worth the drive"],cat:"まとめ・強調",info:"worth the drive = ドライブする価値がある"},
+  {ja:"良い立地と手頃な家賃、その組み合わせだけで決めた。",en:"Good location and affordable rent — that combo alone sold me.",alt:"That combo alone — good location and affordable rent — made me decide.",key:"That combo alone",hint:["that combo alone","sold me"],cat:"まとめ・強調",info:"sold me = 納得させた、決め手になった"},
+  {ja:"速い配送と高品質、その組み合わせだけで際立っている。",en:"Fast delivery and great quality — that combo alone makes them stand out.",alt:"That combo alone — speed and quality — is what makes them stand out.",key:"That combo alone",hint:["that combo alone","stand out"],cat:"まとめ・強調",info:"stand out = 際立つ、目立つ"},
+  {ja:"親切なスタッフとおいしい料理、その組み合わせだけで5つ星のレビューをつけた。",en:"Kind staff and delicious food — that combo alone earned them a 5-star review.",alt:"That combo alone — wonderful staff and amazing food — deserved a 5-star rating.",key:"That combo alone",hint:["that combo alone","5-star review"],cat:"まとめ・強調",info:"earn = 獲得する、勝ち取る"},
+  {ja:"彼女のユーモアと知性、その組み合わせだけで忘れられない存在だ。",en:"Her humor and intelligence — that combo alone makes her unforgettable.",alt:"That combo alone — her wit and intelligence — makes her truly unforgettable.",key:"That combo alone",hint:["that combo alone","unforgettable"],cat:"まとめ・強調",info:"wit = 機知、ユーモアのセンス"},
+  {ja:"暖かい天気と混雑なし、その組み合わせだけで完璧だった。",en:"Warm weather and no crowds — that combo alone was perfect.",alt:"That combo alone — warm weather with no crowds — made it perfect.",key:"That combo alone",hint:["that combo alone","no crowds"],cat:"まとめ・強調",info:"no crowds = 混雑なし（旅行でよく使う）"},
+  {ja:"音楽と照明、その組み合わせだけでその夜を魔法のようにした。",en:"The music and the lights — that combo alone made the night magical.",alt:"That combo alone — the music and lighting — made the whole night magical.",key:"That combo alone",hint:["that combo alone","made the night magical"],cat:"まとめ・強調",info:"make + 名詞 + 形容詞 = 〜を〜にする"},
+  {ja:"柔軟性と良い給与、その組み合わせだけで理想的な仕事だった。",en:"Flexibility and good pay — that combo alone made it the ideal job.",alt:"That combo alone — flexibility and great pay — made it the ideal position.",key:"That combo alone",hint:["that combo alone","flexibility / pay"],cat:"まとめ・強調",info:"flexibility = 柔軟性 / pay = 給与、報酬"},
+];
+
+const CATEGORIES = ["全て","おすすめ表現","描写・比較","強調表現","描写・感嘆","切り替え・転換","まとめ・強調"];
+
+const S = {
+  mode:"practice", cat:"全て", qs:[], idx:0, flipped:false,
+  wrong:[], correct:0, total:0
+};
+
+function shuffle(a){let arr=[...a];for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}return arr;}
+
+function updateStats(){
+  document.getElementById("s-total").textContent=S.total;
+  document.getElementById("s-ok").textContent=S.correct;
+  document.getElementById("s-ng").textContent=S.wrong.length;
+  const b=document.getElementById("rbadge");
+  if(S.wrong.length>0){b.style.display="";b.textContent=S.wrong.length;}
+  else b.style.display="none";
+}
+
+function switchMode(m){
+  S.mode=m;
+  ["practice","vocab","review"].forEach(id=>{
+    document.getElementById("mode-"+id).style.display=m===id?"":"none";
+    document.getElementById("tab-"+id).classList.toggle("active",m===id);
+  });
+  if(m==="vocab")renderVocab();
+  if(m==="review")renderReview();
+}
+
+function getFilteredQ(){return S.cat==="全て"?[...QUESTIONS]:QUESTIONS.filter(q=>q.cat===S.cat);}
+
+function initPractice(){S.qs=shuffle(getFilteredQ());S.idx=0;S.flipped=false;showCard();}
+
+function renderCats(){
+  document.getElementById("cat-row").innerHTML=CATEGORIES.map(c=>
+    `<button class="cat-btn ${c===S.cat?'active':''}" onclick="selectCat('${c.replace(/'/g,"\\'")}')"> ${c}</button>`
+  ).join("");
+}
+
+function selectCat(c){S.cat=c;renderCats();initPractice();}
+
+function showCard(){
+  const qs=S.qs;
+  if(!qs.length){
+    document.getElementById("card-counter").textContent="";
+    document.getElementById("ja-text").textContent="この分類の問題がありません";
+    document.getElementById("hint-row").innerHTML="";
+    document.getElementById("judge-buttons").classList.remove("visible");
+    return;
+  }
+  if(S.idx>=qs.length){showResult();return;}
+  const q=qs[S.idx];
+  const pct=Math.round(S.idx/qs.length*100);
+  document.getElementById("prog").style.width=pct+"%";
+  document.getElementById("card-counter").textContent=(S.idx+1)+" / "+qs.length;
+  const fc=document.getElementById("flip-card");
+  fc.classList.remove("flipped");
+  S.flipped=false;
+  document.getElementById("judge-buttons").classList.remove("visible");
+  document.getElementById("ja-text").textContent=q.ja;
+  document.getElementById("hint-row").innerHTML=q.hint.map(h=>`<span class="hint-chip">🔑 ${h}</span>`).join("");
+  document.getElementById("en-text").textContent=q.en;
+  document.getElementById("alt-text").textContent=q.alt?"別解: "+q.alt:"";
+  document.getElementById("key-tag").textContent="📌 "+q.key;
+  document.getElementById("info-text").textContent=q.info||"";
+}
+
+function flipCard(){
+  if(S.idx>=S.qs.length)return;
+  S.flipped=!S.flipped;
+  document.getElementById("flip-card").classList.toggle("flipped",S.flipped);
+  if(S.flipped){
+    setTimeout(()=>document.getElementById("judge-buttons").classList.add("visible"),200);
+  } else {
+    document.getElementById("judge-buttons").classList.remove("visible");
+  }
+}
+
+function judge(ok){
+  if(!S.flipped)return;
+  const q=S.qs[S.idx];
+  S.total++;
+  if(ok){S.correct++;S.wrong=S.wrong.filter(w=>w.ja!==q.ja);}
+  else if(!S.wrong.find(w=>w.ja===q.ja))S.wrong.push(q);
+  updateStats();S.idx++;S.flipped=false;
+  const fc=document.getElementById("flip-card");
+  fc.style.transition="none";fc.classList.remove("flipped");
+  document.getElementById("judge-buttons").classList.remove("visible");
+  setTimeout(()=>{fc.style.transition="";showCard();},60);
+}
+
+function showResult(){
+  document.getElementById("prog").style.width="100%";
+  document.getElementById("card-counter").textContent="完了！";
+  document.getElementById("judge-buttons").classList.remove("visible");
+  const pct=S.total>0?Math.round(S.correct/S.total*100):0;
+  const emoji=pct>=80?"🎉":pct>=50?"💪":"📚";
+  const msg=pct>=80?"素晴らしい！また日本に行きたくなった？🗾":pct>=50?"いい調子！もう少し頑張ろう！":"繰り返しが力になる！続けよう！";
+  document.querySelector(".flip-scene").innerHTML=`
+    <div class="result-screen">
+      <div class="result-emoji">${emoji}</div>
+      <div class="result-pct">${pct}%</div>
+      <div class="result-msg">${msg}</div>
+      <div class="result-nums">
+        <div><div class="r-num ok">${S.correct}</div><div class="r-lbl">できた</div></div>
+        <div><div class="r-num ng">${S.wrong.length}</div><div class="r-lbl">要復習</div></div>
+      </div>
+      <div class="result-btns">
+        <button class="btn-result primary" onclick="location.reload()">もう一度最初から 🔄</button>
+        ${S.wrong.length>0?`<button class="btn-result amber" onclick="startWrongPractice()">間違いだけ集中練習 🔁</button>`:""}
+      </div>
+    </div>`;
+}
+
+function startWrongPractice(){
+  document.querySelector(".flip-scene").innerHTML=`
+    <div class="flip-card" id="flip-card" onclick="flipCard()">
+      <div class="card-face card-front" id="card-front">
+        <div class="face-label">日本語を見て英語で言おう</div>
+        <div class="ja-text" id="ja-text"></div>
+        <div class="hint-row" id="hint-row"></div>
+        <div class="tap-hint"><span class="tap-icon">👆</span> タップで英語を確認</div>
+      </div>
+      <div class="card-face card-back">
+        <div class="face-label">Answer</div>
+        <div class="en-text" id="en-text"></div>
+        <div class="alt-text" id="alt-text"></div>
+        <div class="key-tag" id="key-tag"></div>
+        <div class="info-text" id="info-text"></div>
+      </div>
+    </div>`;
+  S.qs=shuffle([...S.wrong]);S.idx=0;S.flipped=false;showCard();
+}
+
+function renderVocab(){
+  document.getElementById("vocab-list").innerHTML=VOCAB.map(v=>`
+    <div class="vocab-card">
+      <div class="vocab-phrase">${v.phrase}</div>
+      <div class="vocab-cat">${v.category}</div>
+      <div class="vocab-meaning">🇯🇵 ${v.meaning}</div>
+      <div class="vocab-examples">${v.examples.map(e=>`
+        <div class="ex-item">
+          <div class="ex-en">${e.en}</div>
+          <div class="ex-ja">${e.ja}</div>
+        </div>`).join("")}
+      </div>
+    </div>`).join("");
+}
+
+function renderReview(){
+  const area=document.getElementById("review-list");
+  if(!S.wrong.length){
+    area.innerHTML=`<div class="empty-state"><div class="ee">🎊</div><p>要復習の問題はありません！<br>全問マスターしました！</p></div>`;
+    return;
+  }
+  area.innerHTML=`
+    <div style="font-size:13px;color:var(--text-hint);margin-bottom:12px">${S.wrong.length}問 要復習</div>
+    ${S.wrong.map((q,i)=>`
+      <div class="review-item">
+        <div class="ri-ja">${q.ja}</div>
+        <div class="ri-en">→ ${q.en}</div>
+        <span class="ri-key">📌 ${q.key}</span>
+        <div class="ri-actions">
+          <button class="btn-sm green" onclick="markMastered(${i})">✓ 覚えた</button>
+          <button class="btn-sm gray" onclick="practiceThis(${i})">練習する →</button>
+        </div>
+      </div>`).join("")}
+    <div style="margin-top:16px">
+      <button style="width:100%;padding:14px;border-radius:10px;border:none;font-size:15px;font-weight:700;cursor:pointer;color:#fff;background:var(--red);font-family:'Noto Sans JP',sans-serif" onclick="startWrongAndSwitch()">全ての要復習をフリップ練習 🔁</button>
+    </div>`;
+}
+
+function markMastered(i){S.wrong.splice(i,1);updateStats();renderReview();}
+function practiceThis(i){S.qs=[S.wrong[i]];S.idx=0;S.flipped=false;switchMode("practice");renderCats();showCard();}
+function startWrongAndSwitch(){switchMode("practice");startWrongPractice();}
+
+renderCats();initPractice();updateStats();
+</script>
+</body>
+</html>
