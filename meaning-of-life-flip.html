@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Meaning of Life 瞬間英作文</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Noto+Sans+JP:wght@400;500;700&display=swap');
+
+:root {
+  --bg: #f0ede8;
+  --card: #ffffff;
+  --text: #2c2a26;
+  --text-sub: #6b6860;
+  --text-hint: #9c9a94;
+  --indigo: #3d3a8c;
+  --indigo-light: #eeecfb;
+  --indigo-mid: #5e5ac4;
+  --teal: #1e6b5e;
+  --teal-light: #e5f4f1;
+  --teal-mid: #2e9e87;
+  --amber: #8a6020;
+  --amber-light: #fdf6e3;
+  --red: #a32d2d;
+  --red-light: #fdeaea;
+  --border: #e0dbd2;
+  --radius: 20px;
+  --radius-sm: 10px;
+  --shadow: 0 4px 20px rgba(0,0,0,0.09);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.13);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 20px 10px;
+  position: sticky; top: 0; z-index: 100;
+}
+.header-top {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 10px;
+}
+.app-title {
+  font-family: 'Nunito', sans-serif;
+  font-size: 17px; font-weight: 800;
+  color: var(--indigo);
+  display: flex; align-items: center; gap: 6px;
+}
+
+.stats-row { display: flex; gap: 14px; }
+.stat-item { text-align: center; }
+.stat-n { font-size: 17px; font-weight: 700; font-family: 'Nunito', sans-serif; line-height: 1; }
+.stat-l { font-size: 10px; color: var(--text-hint); margin-top: 1px; }
+
+.nav-tabs { display: flex; gap: 3px; }
+.nav-tab {
+  flex: 1; padding: 7px 4px;
+  border: none; border-radius: 8px;
+  background: transparent;
+  font-size: 12px; font-weight: 500;
+  color: var(--text-sub); cursor: pointer;
+  font-family: 'Noto Sans JP', sans-serif;
+  transition: all 0.15s;
+  display: flex; align-items: center; justify-content: center; gap: 3px;
+}
+.nav-tab.active { background: var(--indigo-light); color: var(--indigo); font-weight: 700; }
+.nav-tab .rbadge {
+  background: var(--red); color: #fff;
+  border-radius: 10px; padding: 1px 6px;
+  font-size: 10px; font-weight: 700;
+}
+
+.progress-outer { padding: 8px 20px 0; max-width: 600px; margin: 0 auto; width: 100%; }
+.progress-wrap { height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; }
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--indigo-mid), var(--indigo));
+  border-radius: 3px;
+  transition: width 0.5s cubic-bezier(.4,0,.2,1);
+}
+
+.content { flex: 1; padding: 16px 16px 100px; max-width: 600px; margin: 0 auto; width: 100%; }
+
+.cat-scroll {
+  display: flex; gap: 6px; overflow-x: auto;
+  padding-bottom: 4px; margin-bottom: 16px;
+  scrollbar-width: none;
+}
+.cat-scroll::-webkit-scrollbar { display: none; }
+.cat-btn {
+  white-space: nowrap; padding: 5px 13px;
+  border-radius: 20px; border: 1.5px solid var(--border);
+  background: var(--card); font-size: 12px; font-weight: 500;
+  color: var(--text-sub); cursor: pointer;
+  font-family: 'Noto Sans JP', sans-serif;
+  transition: all 0.12s;
+}
+.cat-btn.active { background: var(--indigo); color: #fff; border-color: var(--indigo); }
+
+.flip-scene { width: 100%; perspective: 1200px; margin-bottom: 18px; }
+
+.flip-card {
+  width: 100%; min-height: 290px;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.55s cubic-bezier(.4,0,.2,1);
+  cursor: pointer;
+}
+.flip-card.flipped { transform: rotateY(180deg); }
+
+.card-face {
+  position: absolute; inset: 0;
+  border-radius: var(--radius);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 28px 24px;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border);
+}
+
+.card-front { background: var(--card); }
+.card-front .face-label {
+  font-size: 11px; font-weight: 700; letter-spacing: 1px;
+  color: var(--text-hint);
+  margin-bottom: 16px;
+  background: var(--bg); padding: 4px 12px; border-radius: 20px;
+}
+.card-front .ja-text {
+  font-size: 20px; font-weight: 700;
+  line-height: 1.7; text-align: center;
+  color: var(--text); margin-bottom: 18px;
+}
+.card-front .hint-row {
+  display: flex; flex-wrap: wrap; gap: 6px; justify-content: center;
+}
+.hint-chip {
+  background: var(--indigo-light); color: var(--indigo);
+  font-size: 12px; font-weight: 600;
+  padding: 4px 12px; border-radius: 6px;
+  font-family: 'Nunito', sans-serif;
+}
+.card-front .tap-hint {
+  margin-top: 22px; font-size: 12px; color: var(--text-hint);
+  display: flex; align-items: center; gap: 5px;
+}
+.tap-icon { font-size: 16px; animation: pulse 2s ease-in-out infinite; }
+@keyframes pulse {
+  0%,100%{opacity:1;transform:scale(1)}
+  50%{opacity:0.5;transform:scale(0.9)}
+}
+
+.card-back {
+  background: linear-gradient(135deg, #3d3a8c 0%, #5e5ac4 100%);
+  transform: rotateY(180deg);
+}
+.card-back .face-label {
+  font-size: 11px; font-weight: 700; letter-spacing: 1px;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 16px;
+  background: rgba(255,255,255,0.15); padding: 4px 12px; border-radius: 20px;
+}
+.card-back .en-text {
+  font-family: 'Nunito', sans-serif;
+  font-size: 20px; font-weight: 700;
+  line-height: 1.6; text-align: center;
+  color: #fff; margin-bottom: 10px;
+}
+.card-back .alt-text {
+  font-size: 13px; color: rgba(255,255,255,0.72);
+  text-align: center; line-height: 1.6; margin-bottom: 10px;
+}
+.card-back .key-tag {
+  background: rgba(255,255,255,0.2); color: #fff;
+  font-size: 12px; font-weight: 600;
+  padding: 5px 14px; border-radius: 20px;
+  font-family: 'Nunito', sans-serif; margin-bottom: 8px;
+}
+.card-back .info-text {
+  font-size: 12px; color: rgba(255,255,255,0.65);
+  text-align: center; line-height: 1.6; padding: 0 8px;
+}
+
+.judge-buttons {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 12px; margin-top: 4px;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.3s 0.3s;
+}
+.judge-buttons.visible { opacity: 1; pointer-events: all; }
+
+.btn-judge {
+  padding: 16px 12px; border-radius: var(--radius-sm);
+  border: none; font-size: 15px; font-weight: 700;
+  cursor: pointer; font-family: 'Noto Sans JP', sans-serif;
+  transition: all 0.15s;
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+}
+.btn-judge:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,0.15); }
+.btn-judge:active { transform: scale(0.97); }
+.btn-ng { background: var(--red-light); color: var(--red); border: 2px solid #f7c1c1; }
+.btn-ng:hover { background: var(--red); color: #fff; border-color: var(--red); }
+.btn-ok { background: var(--teal-light); color: var(--teal); border: 2px solid #9fd4cc; }
+.btn-ok:hover { background: var(--teal); color: #fff; border-color: var(--teal); }
+.btn-judge .btn-icon { font-size: 24px; }
+.btn-judge .btn-lbl { font-size: 13px; }
+.btn-judge .btn-sub { font-size: 10px; opacity: 0.7; }
+
+.card-counter {
+  text-align: center; margin-bottom: 12px;
+  font-size: 13px; color: var(--text-hint);
+  font-family: 'Nunito', sans-serif; font-weight: 600;
+}
+
+.result-screen {
+  background: var(--card); border-radius: var(--radius);
+  padding: 36px 24px; text-align: center;
+  box-shadow: var(--shadow-lg); border: 1px solid var(--border);
+}
+.result-emoji { font-size: 52px; margin-bottom: 10px; }
+.result-pct { font-size: 68px; font-weight: 800; font-family: 'Nunito', sans-serif; color: var(--indigo); line-height: 1; margin-bottom: 8px; }
+.result-msg { font-size: 16px; color: var(--text-sub); margin-bottom: 28px; }
+.result-nums { display: flex; justify-content: center; gap: 40px; margin-bottom: 28px; }
+.r-num { font-size: 32px; font-weight: 800; font-family: 'Nunito', sans-serif; }
+.r-num.ok { color: var(--teal); }
+.r-num.ng { color: var(--red); }
+.r-lbl { font-size: 12px; color: var(--text-hint); margin-top: 2px; }
+.result-btns { display: flex; flex-direction: column; gap: 10px; }
+.btn-result {
+  width: 100%; padding: 14px; border-radius: var(--radius-sm);
+  border: 2px solid var(--border); font-size: 15px; font-weight: 700;
+  cursor: pointer; font-family: 'Noto Sans JP', sans-serif;
+  background: var(--card); color: var(--text); transition: all 0.13s;
+}
+.btn-result:hover { transform: translateY(-1px); box-shadow: var(--shadow); }
+.btn-result.primary { background: var(--indigo); color: #fff; border-color: var(--indigo); }
+.btn-result.amber { border-color: var(--amber); color: var(--amber); }
+
+.vocab-card {
+  background: var(--card); border-radius: var(--radius);
+  padding: 18px; margin-bottom: 10px;
+  box-shadow: var(--shadow); border: 1px solid var(--border);
+}
+.vocab-phrase { font-size: 17px; font-weight: 700; color: var(--indigo); font-family: 'Nunito', sans-serif; margin-bottom: 4px; }
+.vocab-cat { font-size: 11px; color: var(--text-hint); margin-bottom: 6px; }
+.vocab-meaning { font-size: 14px; font-weight: 500; margin-bottom: 12px; }
+.vocab-examples { display: flex; flex-direction: column; gap: 6px; }
+.ex-item { background: var(--indigo-light); border-radius: 8px; padding: 10px 12px; }
+.ex-en { font-size: 14px; font-weight: 600; color: var(--indigo); font-family: 'Nunito', sans-serif; line-height: 1.5; }
+.ex-ja { font-size: 12px; color: var(--text-sub); margin-top: 3px; line-height: 1.5; }
+
+.review-item {
+  background: var(--card); border-radius: var(--radius);
+  padding: 16px 18px; margin-bottom: 10px;
+  border-left: 4px solid var(--amber);
+  box-shadow: var(--shadow);
+  border-top: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.ri-ja { font-size: 15px; font-weight: 700; margin-bottom: 5px; }
+.ri-en { font-size: 14px; font-weight: 600; color: var(--text-sub); font-family: 'Nunito', sans-serif; line-height: 1.5; margin-bottom: 6px; }
+.ri-key { font-size: 12px; background: var(--amber-light); color: var(--amber); padding: 3px 8px; border-radius: 6px; display: inline-block; font-weight: 600; font-family: 'Nunito', sans-serif; }
+.ri-actions { display: flex; gap: 6px; margin-top: 10px; }
+.btn-sm { padding: 6px 14px; border-radius: 8px; border: 1.5px solid; font-size: 12px; font-weight: 700; cursor: pointer; font-family: 'Noto Sans JP', sans-serif; transition: all 0.12s; }
+.btn-sm.teal { border-color: var(--teal); background: var(--teal-light); color: var(--teal); }
+.btn-sm.teal:hover { background: var(--teal); color: #fff; }
+.btn-sm.gray { border-color: var(--border); background: var(--bg); color: var(--text-sub); }
+
+.empty-state { text-align: center; padding: 56px 20px; color: var(--text-hint); }
+.empty-state .ee { font-size: 44px; margin-bottom: 12px; }
+.empty-state p { font-size: 15px; line-height: 1.8; }
+
+@media(max-width:400px){
+  .card-front .ja-text{font-size:17px}
+  .card-back .en-text{font-size:17px}
+  .result-pct{font-size:52px}
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-top">
+    <div class="app-title">🌌 Meaning of Life</div>
+    <div class="stats-row">
+      <div class="stat-item"><div class="stat-n" id="s-total" style="color:var(--text)">0</div><div class="stat-l">合計</div></div>
+      <div class="stat-item"><div class="stat-n" id="s-ok" style="color:var(--teal)">0</div><div class="stat-l">できた</div></div>
+      <div class="stat-item"><div class="stat-n" id="s-ng" style="color:var(--red)">0</div><div class="stat-l">復習</div></div>
+    </div>
+  </div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" id="tab-practice" onclick="switchMode('practice')">🗣️ 練習</button>
+    <button class="nav-tab" id="tab-vocab" onclick="switchMode('vocab')">📖 単語帳</button>
+    <button class="nav-tab" id="tab-review" onclick="switchMode('review')">🔁 要復習<span class="rbadge" id="rbadge" style="display:none">0</span></button>
+  </div>
+</header>
+
+<div class="progress-outer">
+  <div class="progress-wrap"><div class="progress-fill" id="prog" style="width:0%"></div></div>
+</div>
+
+<div class="content">
+  <div id="mode-practice">
+    <div class="cat-scroll" id="cat-row"></div>
+    <div class="card-counter" id="card-counter"></div>
+    <div class="flip-scene">
+      <div class="flip-card" id="flip-card" onclick="flipCard()">
+        <div class="card-face card-front">
+          <div class="face-label">日本語を見て英語で言おう</div>
+          <div class="ja-text" id="ja-text"></div>
+          <div class="hint-row" id="hint-row"></div>
+          <div class="tap-hint"><span class="tap-icon">👆</span> タップで英語を確認</div>
+        </div>
+        <div class="card-face card-back">
+          <div class="face-label">Answer</div>
+          <div class="en-text" id="en-text"></div>
+          <div class="alt-text" id="alt-text"></div>
+          <div class="key-tag" id="key-tag"></div>
+          <div class="info-text" id="info-text"></div>
+        </div>
+      </div>
+    </div>
+    <div class="judge-buttons" id="judge-buttons">
+      <button class="btn-judge btn-ng" onclick="judge(false)">
+        <span class="btn-icon">😅</span><span class="btn-lbl">できなかった</span><span class="btn-sub">要復習に追加</span>
+      </button>
+      <button class="btn-judge btn-ok" onclick="judge(true)">
+        <span class="btn-icon">✅</span><span class="btn-lbl">できた！</span><span class="btn-sub">次へ進む</span>
+      </button>
+    </div>
+  </div>
+  <div id="mode-vocab" style="display:none"><div id="vocab-list"></div></div>
+  <div id="mode-review" style="display:none"><div id="review-list"></div></div>
+</div>
+
+<script>
+const VOCAB = [
+  {
+    phrase: "keeps creeping back",
+    meaning: "じわじわと戻ってくる / いつの間にか頭をもたげてくる",
+    category: "思考・感情",
+    examples: [
+      { en: "That question keeps creeping back no matter how busy I get.", ja: "どれだけ忙しくても、その問いはじわじわと戻ってくる。" },
+      { en: "The doubt keeps creeping back every time I make a decision.", ja: "決断するたびに、疑いがじわじわと戻ってくる。" },
+      { en: "An old memory keeps creeping back whenever I hear that song.", ja: "その曲を聴くたびに、古い記憶がじわじわと蘇ってくる。" },
+      { en: "The anxiety keeps creeping back even after therapy.", ja: "カウンセリングの後でも、不安はじわじわと戻ってくる。" },
+      { en: "That feeling of loneliness keeps creeping back at night.", ja: "夜になると、孤独感がじわじわと戻ってくる。" },
+      { en: "The idea keeps creeping back — maybe I should just try it.", ja: "そのアイデアがじわじわと頭に戻ってくる、やってみるべきかもしれない。" },
+      { en: "His name keeps creeping back into my thoughts.", ja: "彼の名前が何度もじわじわと頭に浮かんでくる。" },
+      { en: "The regret keeps creeping back whenever I think about it.", ja: "そのことを考えるたびに、後悔がじわじわと戻ってくる。" },
+      { en: "That question keeps creeping back: did I make the right choice?", ja: "その問いがじわじわと戻ってくる、正しい選択をしたのだろうか？" },
+      { en: "No matter how much I distract myself, the worry keeps creeping back.", ja: "どれだけ気を紛らわせても、心配がじわじわと戻ってくる。" }
+    ]
+  },
+  {
+    phrase: "have come to terms with",
+    meaning: "〜を受け入れる / 〜と折り合いをつける",
+    category: "受容・理解",
+    examples: [
+      { en: "I have come to terms with the idea that life may have no inherent meaning.", ja: "人生に本質的な意味がないかもしれないという考えを受け入れた。" },
+      { en: "She has come to terms with losing the competition.", ja: "彼女は試合に負けたことを受け入れた。" },
+      { en: "It took years, but he finally came to terms with his past.", ja: "何年もかかったが、彼はついに自分の過去と折り合いをつけた。" },
+      { en: "I'm slowly coming to terms with the fact that things change.", ja: "物事は変わるという事実を、少しずつ受け入れつつある。" },
+      { en: "Have you come to terms with the decision you made?", ja: "自分が下した決断と折り合いはつきましたか？" },
+      { en: "She's still struggling to come to terms with the diagnosis.", ja: "彼女はまだ診断結果を受け入れることに苦しんでいる。" },
+      { en: "Coming to terms with failure is part of growing.", ja: "失敗と折り合いをつけることは成長の一部だ。" },
+      { en: "He came to terms with the fact that not everyone would like him.", ja: "全員に好かれるわけではないという事実と折り合いをつけた。" },
+      { en: "I've come to terms with living alone — it has its own peace.", ja: "一人暮らしと折り合いをつけた、それなりの静けさがある。" },
+      { en: "Coming to terms with uncertainty is a lifelong practice.", ja: "不確かさを受け入れることは、一生をかけた修行だ。" }
+    ]
+  },
+  {
+    phrase: "existential",
+    meaning: "実存的な / 存在に関わる / 実存主義的な",
+    category: "哲学・思考",
+    examples: [
+      { en: "I still feel a kind of existential ache — a heaviness that's hard to shake.", ja: "実存的な痛み、振り払いがたい重さを今でも感じる。" },
+      { en: "He went through an existential crisis after losing his job.", ja: "仕事を失った後、彼は実存的な危機に陥った。" },
+      { en: "These are existential questions that philosophers have wrestled with for centuries.", ja: "これらは哲学者たちが何世紀にもわたって格闘してきた実存的な問いだ。" },
+      { en: "The pandemic forced many people to face existential fears.", ja: "パンデミックは多くの人に実存的な恐怖と向き合わせた。" },
+      { en: "Late nights often bring on existential thoughts.", ja: "深夜はしばしば実存的な思考を呼び起こす。" },
+      { en: "She felt an existential emptiness despite her success.", ja: "成功しているにもかかわらず、彼女は実存的な空虚感を感じた。" },
+      { en: "Art can help us deal with existential anxiety.", ja: "芸術は実存的な不安に対処するのに役立つことがある。" },
+      { en: "Climate change poses an existential threat to humanity.", ja: "気候変動は人類にとって実存的な脅威となっている。" },
+      { en: "Teenagers often go through existential phases.", ja: "十代の若者はしばしば実存的な時期を経験する。" },
+      { en: "That book helped me understand my own existential fears.", ja: "その本は自分の実存的な恐怖を理解する助けになった。" }
+    ]
+  },
+  {
+    phrase: "contradiction",
+    meaning: "矛盾 / 逆説 / 相反するもの",
+    category: "哲学・思考",
+    examples: [
+      { en: "That contradiction is exhausting — it still matters even when nothing should.", ja: "その矛盾は消耗する、何も重要でないはずなのに、それでも重要だと感じてしまう。" },
+      { en: "There's a contradiction between what he says and what he does.", ja: "彼の言葉と行動の間には矛盾がある。" },
+      { en: "I'm full of contradictions — that's what makes me human.", ja: "私は矛盾だらけだ、それが人間たる所以だ。" },
+      { en: "The contradiction at the heart of this argument is hard to ignore.", ja: "この議論の核心にある矛盾は無視しがたい。" },
+      { en: "She lived with the contradiction of loving solitude but craving connection.", ja: "孤独を愛しながらもつながりを求めるという矛盾の中で彼女は生きた。" },
+      { en: "Holding two contradictions at once is the mark of a complex thinker.", ja: "二つの矛盾を同時に抱えられることが、複雑な思考者の証だ。" },
+      { en: "Life is full of contradictions — embrace them.", ja: "人生は矛盾に満ちている、それを受け入れよう。" },
+      { en: "The contradiction between freedom and responsibility never fully resolves.", ja: "自由と責任の矛盾は完全には解消されない。" },
+      { en: "He noticed the contradiction in her words immediately.", ja: "彼はすぐに彼女の言葉の矛盾に気づいた。" },
+      { en: "That's the beautiful contradiction of being alive.", ja: "それが生きているということの美しい矛盾だ。" }
+    ]
+  },
+  {
+    phrase: "stepping back",
+    meaning: "一歩引いて考える / 距離を置く / 俯瞰する",
+    category: "内省・思考",
+    examples: [
+      { en: "One thing that helps me is stepping back and thinking of all this as a simulation.", ja: "一歩引いて、これ全てをシミュレーションとして捉えることが助けになる。" },
+      { en: "Sometimes stepping back is the best thing you can do.", ja: "時には一歩引くことが最善の選択だ。" },
+      { en: "Try stepping back from the situation before reacting.", ja: "反応する前に、状況から一歩引いてみて。" },
+      { en: "Stepping back helped me see the bigger picture.", ja: "一歩引くことで、より大きな視点が見えた。" },
+      { en: "She needed to step back and take a breath.", ja: "彼女は一歩引いて、息をつく必要があった。" },
+      { en: "Stepping back from social media improved his mental health.", ja: "SNSから距離を置くことで、彼のメンタルヘルスが改善した。" },
+      { en: "By stepping back, I realized I had been overreacting.", ja: "一歩引くことで、過剰反応していたことに気づいた。" },
+      { en: "Stepping back from a conflict can bring unexpected clarity.", ja: "対立から一歩引くことで、思いがけない明晰さが生まれることがある。" },
+      { en: "I've been stepping back from that friendship for a while now.", ja: "しばらくその友情から距離を置いている。" },
+      { en: "Stepping back doesn't mean giving up — it means gaining perspective.", ja: "一歩引くことは諦めではなく、視点を得ることだ。" }
+    ]
+  },
+  {
+    phrase: "sitting with the uncertainty",
+    meaning: "不確かさと共にいる / 答えのない状態に留まる / 不安を抱えたまま過ごす",
+    category: "受容・内省",
+    examples: [
+      { en: "Sitting with the uncertainty might be the whole point.", ja: "不確かさと共にいることが、全ての核心かもしれない。" },
+      { en: "Learning to sit with uncertainty is one of the hardest things.", ja: "不確かさと共にいることを学ぶのは、最も難しいことの一つだ。" },
+      { en: "Instead of forcing an answer, try sitting with the uncertainty.", ja: "答えを無理に出そうとせず、不確かさの中に留まってみて。" },
+      { en: "She's getting better at sitting with uncertainty rather than panicking.", ja: "彼女はパニックにならず不確かさと共にいることが上手くなってきた。" },
+      { en: "Sitting with the uncertainty of the future is part of being alive.", ja: "未来の不確かさと共にいることは、生きることの一部だ。" },
+      { en: "Therapy helped me sit with the uncertainty instead of avoiding it.", ja: "カウンセリングのおかげで、不確かさから逃げずに共にいられるようになった。" },
+      { en: "He's still sitting with the uncertainty of his career path.", ja: "彼はまだキャリアの不確かさの中に留まっている。" },
+      { en: "Sitting with uncertainty is not weakness — it's wisdom.", ja: "不確かさと共にいることは弱さではなく、知恵だ。" },
+      { en: "Can you sit with the uncertainty for just a little longer?", ja: "もう少しだけ不確かさの中に留まることができますか？" },
+      { en: "The ability to sit with uncertainty separates the calm from the anxious.", ja: "不確かさと共にいられるかどうかが、穏やかな人と不安な人を分ける。" }
+    ]
+  },
+  {
+    phrase: "resolution",
+    meaning: "解決 / 決意 / 決断 / 解答",
+    category: "哲学・思考",
+    examples: [
+      { en: "Not resolution, but presence — that might be the whole point.", ja: "解決ではなく、存在すること、それが全ての核心かもしれない。" },
+      { en: "Sometimes there is no clean resolution — and that's okay.", ja: "時にはすっきりした解決などなく、それでいいのだ。" },
+      { en: "She found resolution by forgiving herself.", ja: "自分を許すことで、彼女は解決を見出した。" },
+      { en: "The story ended without resolution, which felt strangely honest.", ja: "その物語は解決なく終わったが、不思議と正直に感じた。" },
+      { en: "His New Year's resolution was to worry less.", ja: "彼の新年の決意は、あまり心配しないことだった。" },
+      { en: "We reached a resolution after hours of discussion.", ja: "何時間もの話し合いの後、解決に至った。" },
+      { en: "Resolution isn't always possible — sometimes we just adapt.", ja: "解決が常に可能なわけではない、時には適応するだけだ。" },
+      { en: "The conflict came to a peaceful resolution.", ja: "その対立は平和的な解決に至った。" },
+      { en: "She made a firm resolution to change her habits.", ja: "彼女は習慣を変えるという固い決意を持った。" },
+      { en: "The image displayed at a higher resolution than expected.", ja: "その画像は予想より高解像度で表示された。" }
+    ]
+  },
+  {
+    phrase: "presence",
+    meaning: "存在（すること） / 今ここにいること / 現前性",
+    category: "受容・内省",
+    examples: [
+      { en: "Not resolution, but presence — being here, now, fully.", ja: "解決ではなく、存在すること、今ここに完全にいること。" },
+      { en: "Her presence in the room changed the whole atmosphere.", ja: "部屋における彼女の存在が、雰囲気全体を変えた。" },
+      { en: "Mindfulness is all about cultivating presence.", ja: "マインドフルネスは現在への存在感を育てることが全てだ。" },
+      { en: "His presence was felt even when he said nothing.", ja: "彼は何も言わなくても、その存在感が伝わってきた。" },
+      { en: "Children teach us the gift of presence.", ja: "子どもたちは今この瞬間にいることの贈り物を教えてくれる。" },
+      { en: "Full presence in a conversation is rare and valuable.", ja: "会話における完全な存在感は稀で、価値がある。" },
+      { en: "I'm learning to choose presence over productivity.", ja: "生産性より存在することを選ぶことを学んでいる。" },
+      { en: "There's a healing power in simply being in someone's presence.", ja: "誰かのそばにいるだけで、癒しの力がある。" },
+      { en: "Practice presence — it's the only moment that truly exists.", ja: "存在することを実践しよう、今この瞬間だけが本当に存在するのだから。" },
+      { en: "His calming presence made everyone feel at ease.", ja: "彼の落ち着いた存在感が、みんなを安心させた。" }
+    ]
+  }
+];
+
+const QUESTIONS = [
+  // keeps creeping back (10)
+  {ja:"どれだけ忙しくても、その問いはじわじわと戻ってくる。",en:"That question keeps creeping back no matter how busy I get.",alt:"No matter how busy I get, that question keeps creeping back.",key:"keeps creeping back",hint:["keeps creeping back","no matter how"],cat:"思考・感情",info:"no matter how + 形容詞 = どれほど〜でも"},
+  {ja:"決断するたびに、疑いがじわじわと戻ってくる。",en:"The doubt keeps creeping back every time I make a decision.",alt:"Every time I decide something, the doubt keeps creeping back.",key:"keeps creeping back",hint:["keeps creeping back","every time"],cat:"思考・感情",info:"every time S V = 〜するたびに"},
+  {ja:"その曲を聴くたびに、古い記憶がじわじわと蘇ってくる。",en:"An old memory keeps creeping back whenever I hear that song.",alt:"Whenever that song plays, an old memory keeps creeping back.",key:"keeps creeping back",hint:["keeps creeping back","whenever"],cat:"思考・感情",info:"whenever = 〜するときはいつも（= every time）"},
+  {ja:"カウンセリングの後でも、不安はじわじわと戻ってくる。",en:"The anxiety keeps creeping back even after therapy.",alt:"Even after therapy, the anxiety keeps creeping back.",key:"keeps creeping back",hint:["keeps creeping back","even after"],cat:"思考・感情",info:"even after = 〜の後でさえ（逆接を強調）"},
+  {ja:"夜になると、孤独感がじわじわと戻ってくる。",en:"That feeling of loneliness keeps creeping back at night.",alt:"At night, the loneliness keeps creeping back.",key:"keeps creeping back",hint:["keeps creeping back","at night"],cat:"思考・感情",info:"feeling of loneliness = 孤独感"},
+  {ja:"彼の名前が何度もじわじわと頭に浮かんでくる。",en:"His name keeps creeping back into my thoughts.",alt:"I keep finding his name creeping back into my mind.",key:"keeps creeping back",hint:["keeps creeping back","into my thoughts"],cat:"思考・感情",info:"creep back into = 〜の中にじわじわと戻ってくる"},
+  {ja:"そのアイデアがじわじわと頭に戻ってくる、やってみるべきかもしれない。",en:"The idea keeps creeping back — maybe I should just try it.",alt:"That idea keeps creeping back into my head — maybe it's worth trying.",key:"keeps creeping back",hint:["keeps creeping back"],cat:"思考・感情",info:"maybe I should just ~ = 〜してみるべきかもしれない"},
+  {ja:"そのことを考えるたびに、後悔がじわじわと戻ってくる。",en:"The regret keeps creeping back whenever I think about it.",alt:"Whenever I think about it, the regret keeps creeping back.",key:"keeps creeping back",hint:["keeps creeping back","regret"],cat:"思考・感情",info:"regret = 後悔"},
+  {ja:"その問いがじわじわと戻ってくる、正しい選択をしたのだろうか？",en:"That question keeps creeping back: did I make the right choice?",alt:"I keep asking myself — did I make the right choice? It keeps creeping back.",key:"keeps creeping back",hint:["keeps creeping back","right choice"],cat:"思考・感情",info:"did I make the right choice? = 正しい選択をしたのか？（自問）"},
+  {ja:"どれだけ気を紛らわせても、心配がじわじわと戻ってくる。",en:"No matter how much I distract myself, the worry keeps creeping back.",alt:"The worry keeps creeping back no matter how I try to distract myself.",key:"keeps creeping back",hint:["keeps creeping back","distract myself"],cat:"思考・感情",info:"distract oneself = 気を紛らわせる"},
+
+  // have come to terms with (10)
+  {ja:"人生に本質的な意味がないかもしれないという考えを受け入れた。",en:"I have come to terms with the idea that life may have no inherent meaning.",alt:"I've come to accept that life may have no inherent meaning.",key:"have come to terms with",hint:["have come to terms with"],cat:"受容・理解",info:"inherent = 本来備わった、固有の"},
+  {ja:"彼女は試合に負けたことを受け入れた。",en:"She has come to terms with losing the competition.",alt:"She finally came to terms with the fact that she lost.",key:"have come to terms with",hint:["have come to terms with"],cat:"受容・理解",info:"come to terms with + 動名詞 / 名詞"},
+  {ja:"何年もかかったが、彼はついに自分の過去と折り合いをつけた。",en:"It took years, but he finally came to terms with his past.",alt:"He eventually came to terms with his past, though it took years.",key:"have come to terms with",hint:["have come to terms with","finally / eventually"],cat:"受容・理解",info:"it took years = 何年もかかった"},
+  {ja:"物事は変わるという事実を、少しずつ受け入れつつある。",en:"I'm slowly coming to terms with the fact that things change.",alt:"I'm gradually coming to terms with the reality that things change.",key:"have come to terms with",hint:["coming to terms with","slowly / gradually"],cat:"受容・理解",info:"gradually / slowly = 少しずつ"},
+  {ja:"自分が下した決断と折り合いはつきましたか？",en:"Have you come to terms with the decision you made?",alt:"Are you at peace with the decision you made?",key:"have come to terms with",hint:["come to terms with","decision"],cat:"受容・理解",info:"at peace with = 〜と折り合いがついて（= come to terms with）"},
+  {ja:"失敗と折り合いをつけることは成長の一部だ。",en:"Coming to terms with failure is part of growing.",alt:"Part of growing up is learning to come to terms with failure.",key:"have come to terms with",hint:["coming to terms with","failure / growing"],cat:"受容・理解",info:"part of growing = 成長の一部"},
+  {ja:"全員に好かれるわけではないという事実と折り合いをつけた。",en:"He came to terms with the fact that not everyone would like him.",alt:"He accepted that not everyone would like him.",key:"have come to terms with",hint:["came to terms with","not everyone"],cat:"受容・理解",info:"not everyone = 全員が〜するわけではない"},
+  {ja:"一人暮らしと折り合いをつけた、それなりの静けさがある。",en:"I've come to terms with living alone — it has its own peace.",alt:"Living alone is something I've come to terms with — there's a quiet beauty to it.",key:"have come to terms with",hint:["come to terms with","living alone"],cat:"受容・理解",info:"it has its own ~ = それ独自の〜がある"},
+  {ja:"不確かさを受け入れることは、一生をかけた修行だ。",en:"Coming to terms with uncertainty is a lifelong practice.",alt:"Learning to come to terms with uncertainty takes a lifetime.",key:"have come to terms with",hint:["coming to terms with","uncertainty / lifelong"],cat:"受容・理解",info:"lifelong = 一生にわたる / practice = 修行、実践"},
+  {ja:"彼女はまだ診断結果を受け入れることに苦しんでいる。",en:"She's still struggling to come to terms with the diagnosis.",alt:"She hasn't been able to come to terms with her diagnosis yet.",key:"have come to terms with",hint:["come to terms with","diagnosis / struggling"],cat:"受容・理解",info:"diagnosis = 診断（結果）/ struggle to = 〜するのに苦しむ"},
+
+  // existential (10)
+  {ja:"実存的な痛み、振り払いがたい重さを今でも感じる。",en:"I still feel a kind of existential ache — a heaviness that's hard to shake.",alt:"There's still an existential heaviness that I can't quite shake.",key:"existential",hint:["existential","hard to shake"],cat:"哲学・思考",info:"hard to shake = 振り払いがたい / ache = 鈍い痛み"},
+  {ja:"仕事を失った後、彼は実存的な危機に陥った。",en:"He went through an existential crisis after losing his job.",alt:"Losing his job sent him into an existential crisis.",key:"existential",hint:["existential crisis"],cat:"哲学・思考",info:"go through = 経験する、経る"},
+  {ja:"深夜はしばしば実存的な思考を呼び起こす。",en:"Late nights often bring on existential thoughts.",alt:"Late at night, existential thoughts tend to surface.",key:"existential",hint:["existential","late nights"],cat:"哲学・思考",info:"bring on = 引き起こす / surface = 表面化する"},
+  {ja:"パンデミックは多くの人に実存的な恐怖と向き合わせた。",en:"The pandemic forced many people to face existential fears.",alt:"Many people were forced to confront existential fears during the pandemic.",key:"existential",hint:["existential","forced to face"],cat:"哲学・思考",info:"force someone to = 〜に強いる / confront = 直面する"},
+  {ja:"成功しているにもかかわらず、彼女は実存的な空虚感を感じた。",en:"She felt an existential emptiness despite her success.",alt:"Despite all her success, she still felt an existential void.",key:"existential",hint:["existential","despite / emptiness"],cat:"哲学・思考",info:"void / emptiness = 空虚、虚無感 / despite = 〜にもかかわらず"},
+  {ja:"芸術は実存的な不安に対処するのに役立つことがある。",en:"Art can help us deal with existential anxiety.",alt:"Sometimes art is the best way to process existential anxiety.",key:"existential",hint:["existential anxiety","deal with"],cat:"哲学・思考",info:"deal with = 対処する / process = 処理する、消化する"},
+  {ja:"気候変動は人類にとって実存的な脅威となっている。",en:"Climate change poses an existential threat to humanity.",alt:"Climate change is an existential threat that we cannot ignore.",key:"existential",hint:["existential threat","climate change"],cat:"哲学・思考",info:"pose a threat = 脅威をもたらす / humanity = 人類"},
+  {ja:"十代の若者はしばしば実存的な時期を経験する。",en:"Teenagers often go through existential phases.",alt:"It's common for teenagers to go through existential phases.",key:"existential",hint:["existential","teenagers"],cat:"哲学・思考",info:"go through a phase = ある段階を経験する"},
+  {ja:"その本は自分の実存的な恐怖を理解する助けになった。",en:"That book helped me understand my own existential fears.",alt:"Reading that book gave me insight into my existential fears.",key:"existential",hint:["existential fears","helped me understand"],cat:"哲学・思考",info:"give insight into = 〜への洞察を与える"},
+  {ja:"これらは哲学者たちが何世紀にもわたって格闘してきた実存的な問いだ。",en:"These are existential questions that philosophers have wrestled with for centuries.",alt:"Philosophers have wrestled with these existential questions for centuries.",key:"existential",hint:["existential questions","wrestled with"],cat:"哲学・思考",info:"wrestle with = 格闘する、取り組む / for centuries = 何世紀にもわたって"},
+
+  // contradiction (10)
+  {ja:"その矛盾は消耗する、何も重要でないはずなのに、それでも重要だと感じてしまう。",en:"That contradiction is exhausting — it still matters even when nothing should.",alt:"It's an exhausting contradiction: nothing should matter, and yet it does.",key:"contradiction",hint:["contradiction","exhausting"],cat:"哲学・思考",info:"exhausting = 消耗する / it still matters = それでも重要だ"},
+  {ja:"彼の言葉と行動の間には矛盾がある。",en:"There's a contradiction between what he says and what he does.",alt:"What he says and what he does are a contradiction.",key:"contradiction",hint:["contradiction","between ~ and ~"],cat:"哲学・思考",info:"between A and B = AとBの間に"},
+  {ja:"私は矛盾だらけだ、それが人間たる所以だ。",en:"I'm full of contradictions — that's what makes me human.",alt:"Being full of contradictions is what makes us human.",key:"contradiction",hint:["contradiction","full of"],cat:"哲学・思考",info:"be full of = 〜に満ちている / that's what makes ~ = それが〜たる所以"},
+  {ja:"人生は矛盾に満ちている、それを受け入れよう。",en:"Life is full of contradictions — embrace them.",alt:"Life is full of contradictions, and that's something to embrace.",key:"contradiction",hint:["contradiction","embrace"],cat:"哲学・思考",info:"embrace = 受け入れる、抱きしめる"},
+  {ja:"自由と責任の矛盾は完全には解消されない。",en:"The contradiction between freedom and responsibility never fully resolves.",alt:"Freedom and responsibility will always be in contradiction.",key:"contradiction",hint:["contradiction","freedom / responsibility"],cat:"哲学・思考",info:"resolve = 解決する / never fully = 完全には決して〜ない"},
+  {ja:"孤独を愛しながらもつながりを求めるという矛盾の中で彼女は生きた。",en:"She lived with the contradiction of loving solitude but craving connection.",alt:"She held the contradiction of craving both solitude and connection.",key:"contradiction",hint:["contradiction","solitude / craving"],cat:"哲学・思考",info:"solitude = 孤独 / crave = 強く求める / connection = つながり"},
+  {ja:"それが生きているということの美しい矛盾だ。",en:"That's the beautiful contradiction of being alive.",alt:"Being alive is itself a beautiful contradiction.",key:"contradiction",hint:["contradiction","beautiful / being alive"],cat:"哲学・思考",info:"the beautiful contradiction of ~ = 〜の美しい矛盾"},
+  {ja:"二つの矛盾を同時に抱えられることが、複雑な思考者の証だ。",en:"Holding two contradictions at once is the mark of a complex thinker.",alt:"A complex thinker can hold two contradictions at the same time.",key:"contradiction",hint:["contradiction","at once / mark of"],cat:"哲学・思考",info:"the mark of = 〜の証、特徴 / at once = 同時に"},
+  {ja:"彼はすぐに彼女の言葉の矛盾に気づいた。",en:"He noticed the contradiction in her words immediately.",alt:"He immediately caught the contradiction in what she said.",key:"contradiction",hint:["contradiction","noticed / immediately"],cat:"哲学・思考",info:"catch a contradiction = 矛盾を見つける"},
+  {ja:"この議論の核心にある矛盾は無視しがたい。",en:"The contradiction at the heart of this argument is hard to ignore.",alt:"At the heart of this argument lies a contradiction that's hard to ignore.",key:"contradiction",hint:["contradiction","at the heart of","hard to ignore"],cat:"哲学・思考",info:"at the heart of = 〜の核心に / hard to ignore = 無視しがたい"},
+
+  // stepping back (10)
+  {ja:"一歩引いて、これ全てをシミュレーションとして捉えることが助けになる。",en:"One thing that helps me is stepping back and thinking of all this as a simulation.",alt:"Stepping back and treating this all as a simulation is what helps me.",key:"stepping back",hint:["stepping back"],cat:"内省・思考",info:"think of A as B = AをBとして捉える"},
+  {ja:"時には一歩引くことが最善の選択だ。",en:"Sometimes stepping back is the best thing you can do.",alt:"There are times when stepping back is the wisest move.",key:"stepping back",hint:["stepping back"],cat:"内省・思考",info:"the wisest move = 最も賢い行動"},
+  {ja:"反応する前に、状況から一歩引いてみて。",en:"Try stepping back from the situation before reacting.",alt:"Before you react, try to step back from the situation.",key:"stepping back",hint:["stepping back","before reacting"],cat:"内省・思考",info:"react = 反応する / situation = 状況"},
+  {ja:"一歩引くことで、より大きな視点が見えた。",en:"Stepping back helped me see the bigger picture.",alt:"By stepping back, I was able to see the bigger picture.",key:"stepping back",hint:["stepping back","bigger picture"],cat:"内省・思考",info:"see the bigger picture = 大局を見る、全体像を捉える"},
+  {ja:"彼女は一歩引いて、息をつく必要があった。",en:"She needed to step back and take a breath.",alt:"She had to step back and breathe for a moment.",key:"stepping back",hint:["step back","take a breath"],cat:"内省・思考",info:"take a breath = 息をつく / for a moment = 少しの間"},
+  {ja:"SNSから距離を置くことで、彼のメンタルヘルスが改善した。",en:"Stepping back from social media improved his mental health.",alt:"His mental health improved after stepping back from social media.",key:"stepping back",hint:["stepping back from","social media"],cat:"内省・思考",info:"step back from = 〜から距離を置く"},
+  {ja:"一歩引くことで、過剰反応していたことに気づいた。",en:"By stepping back, I realized I had been overreacting.",alt:"Stepping back made me realize I was overreacting.",key:"stepping back",hint:["stepping back","overreacting"],cat:"内省・思考",info:"overreact = 過剰反応する"},
+  {ja:"対立から一歩引くことで、思いがけない明晰さが生まれることがある。",en:"Stepping back from a conflict can bring unexpected clarity.",alt:"Sometimes stepping back from conflict brings surprising clarity.",key:"stepping back",hint:["stepping back","conflict / clarity"],cat:"内省・思考",info:"clarity = 明晰さ / unexpected = 思いがけない"},
+  {ja:"一歩引くことは諦めではなく、視点を得ることだ。",en:"Stepping back doesn't mean giving up — it means gaining perspective.",alt:"Stepping back isn't giving up; it's gaining a new perspective.",key:"stepping back",hint:["stepping back","gaining perspective"],cat:"内省・思考",info:"gain perspective = 視点を得る / give up = 諦める"},
+  {ja:"しばらくその友情から距離を置いている。",en:"I've been stepping back from that friendship for a while now.",alt:"For a while now, I've been creating some distance from that friendship.",key:"stepping back",hint:["stepping back from","for a while"],cat:"内省・思考",info:"for a while now = しばらくの間 / create distance = 距離を置く"},
+
+  // sitting with the uncertainty (10)
+  {ja:"不確かさと共にいることが、全ての核心かもしれない。",en:"Sitting with the uncertainty might be the whole point.",alt:"Maybe sitting with the uncertainty is the whole point.",key:"sitting with the uncertainty",hint:["sitting with the uncertainty"],cat:"受容・内省",info:"the whole point = 全ての核心、本質"},
+  {ja:"不確かさと共にいることを学ぶのは、最も難しいことの一つだ。",en:"Learning to sit with uncertainty is one of the hardest things.",alt:"One of the hardest things is learning to sit with uncertainty.",key:"sitting with the uncertainty",hint:["sit with uncertainty"],cat:"受容・内省",info:"one of the hardest things = 最も難しいことの一つ"},
+  {ja:"答えを無理に出そうとせず、不確かさの中に留まってみて。",en:"Instead of forcing an answer, try sitting with the uncertainty.",alt:"Rather than forcing a resolution, try sitting with the uncertainty.",key:"sitting with the uncertainty",hint:["sitting with the uncertainty","instead of forcing"],cat:"受容・内省",info:"instead of = 〜の代わりに / force = 無理に〜する"},
+  {ja:"パニックにならず不確かさと共にいることが上手くなってきた。",en:"She's getting better at sitting with uncertainty rather than panicking.",alt:"Instead of panicking, she's learning to sit with uncertainty.",key:"sitting with the uncertainty",hint:["sitting with uncertainty","rather than panicking"],cat:"受容・内省",info:"get better at = 〜が上手くなる / rather than = 〜より"},
+  {ja:"未来の不確かさと共にいることは、生きることの一部だ。",en:"Sitting with the uncertainty of the future is part of being alive.",alt:"Part of being alive is sitting with uncertainty about the future.",key:"sitting with the uncertainty",hint:["sitting with the uncertainty","part of being alive"],cat:"受容・内省",info:"part of being alive = 生きることの一部"},
+  {ja:"カウンセリングのおかげで、不確かさから逃げずに共にいられるようになった。",en:"Therapy helped me sit with the uncertainty instead of avoiding it.",alt:"Thanks to therapy, I can now sit with uncertainty rather than running from it.",key:"sitting with the uncertainty",hint:["sit with the uncertainty","instead of avoiding"],cat:"受容・内省",info:"instead of avoiding = 避けずに / run from = 〜から逃げる"},
+  {ja:"不確かさと共にいることは弱さではなく、知恵だ。",en:"Sitting with uncertainty is not weakness — it's wisdom.",alt:"It takes wisdom, not weakness, to sit with uncertainty.",key:"sitting with the uncertainty",hint:["sitting with uncertainty","wisdom / weakness"],cat:"受容・内省",info:"wisdom = 知恵 / weakness = 弱さ"},
+  {ja:"もう少しだけ不確かさの中に留まることができますか？",en:"Can you sit with the uncertainty for just a little longer?",alt:"Try to sit with the uncertainty for a little longer.",key:"sitting with the uncertainty",hint:["sit with the uncertainty","a little longer"],cat:"受容・内省",info:"a little longer = もう少し長く"},
+  {ja:"不確かさと共にいられるかどうかが、穏やかな人と不安な人を分ける。",en:"The ability to sit with uncertainty separates the calm from the anxious.",alt:"Those who can sit with uncertainty tend to be calmer than those who can't.",key:"sitting with the uncertainty",hint:["sit with uncertainty","calm / anxious"],cat:"受容・内省",info:"separate A from B = AとBを分ける / calm = 穏やかな / anxious = 不安な"},
+  {ja:"彼はまだキャリアの不確かさの中に留まっている。",en:"He's still sitting with the uncertainty of his career path.",alt:"He hasn't resolved the uncertainty about his career — he's still sitting with it.",key:"sitting with the uncertainty",hint:["sitting with the uncertainty","career path"],cat:"受容・内省",info:"career path = キャリアの方向性"},
+
+  // resolution (10)
+  {ja:"解決ではなく、存在すること、それが全ての核心かもしれない。",en:"Not resolution, but presence — that might be the whole point.",alt:"Maybe the point isn't resolution, but presence.",key:"resolution",hint:["resolution","the whole point"],cat:"哲学・思考",info:"not A, but B = AではなくB（対比構文）"},
+  {ja:"時にはすっきりした解決などなく、それでいいのだ。",en:"Sometimes there is no clean resolution — and that's okay.",alt:"Not every situation has a clean resolution, and that's alright.",key:"resolution",hint:["resolution","clean / that's okay"],cat:"哲学・思考",info:"clean resolution = すっきりした解決 / that's okay = それでいい"},
+  {ja:"自分を許すことで、彼女は解決を見出した。",en:"She found resolution by forgiving herself.",alt:"Forgiving herself was how she finally found resolution.",key:"resolution",hint:["resolution","forgiving herself"],cat:"哲学・思考",info:"find resolution = 解決を見出す / forgive oneself = 自分を許す"},
+  {ja:"その物語は解決なく終わったが、不思議と正直に感じた。",en:"The story ended without resolution, which felt strangely honest.",alt:"It ended without resolution — and somehow that felt more honest.",key:"resolution",hint:["resolution","without resolution"],cat:"哲学・思考",info:"without resolution = 解決なく / strangely = 不思議と"},
+  {ja:"彼の新年の決意は、あまり心配しないことだった。",en:"His New Year's resolution was to worry less.",alt:"His resolution for the new year was to stop worrying so much.",key:"resolution",hint:["resolution","New Year's / worry less"],cat:"哲学・思考",info:"New Year's resolution = 新年の抱負、決意"},
+  {ja:"何時間もの話し合いの後、解決に至った。",en:"We reached a resolution after hours of discussion.",alt:"After hours of talking, we finally came to a resolution.",key:"resolution",hint:["resolution","after hours of discussion"],cat:"哲学・思考",info:"reach a resolution = 解決に至る / hours of = 何時間もの"},
+  {ja:"解決が常に可能なわけではない、時には適応するだけだ。",en:"Resolution isn't always possible — sometimes we just adapt.",alt:"Not everything has a resolution — sometimes we simply adapt.",key:"resolution",hint:["resolution","adapt"],cat:"哲学・思考",info:"adapt = 適応する / not always = 常に〜とは限らない"},
+  {ja:"その対立は平和的な解決に至った。",en:"The conflict came to a peaceful resolution.",alt:"They reached a peaceful resolution to the conflict.",key:"resolution",hint:["resolution","peaceful / conflict"],cat:"哲学・思考",info:"come to a resolution = 解決に至る / peaceful = 平和的な"},
+  {ja:"彼女は習慣を変えるという固い決意を持った。",en:"She made a firm resolution to change her habits.",alt:"She resolved firmly to change her habits.",key:"resolution",hint:["resolution","firm / habits"],cat:"哲学・思考",info:"firm = 固い / make a resolution = 決意する"},
+  {ja:"解決策を求めるよりも、不確かさの中に留まることの方が重要かもしれない。",en:"Sitting with uncertainty may matter more than seeking resolution.",alt:"Perhaps sitting with uncertainty is more valuable than chasing resolution.",key:"resolution",hint:["resolution","sitting with uncertainty"],cat:"哲学・思考",info:"matter more than = 〜より重要だ / seek / chase = 求める"},
+
+  // presence (10)
+  {ja:"解決ではなく、存在すること、今ここに完全にいること。",en:"Not resolution, but presence — being here, now, fully.",alt:"The goal isn't resolution — it's presence, being fully here.",key:"presence",hint:["presence","being here now"],cat:"受容・内省",info:"fully = 完全に / being here, now = 今ここにいること"},
+  {ja:"部屋における彼女の存在が、雰囲気全体を変えた。",en:"Her presence in the room changed the whole atmosphere.",alt:"The whole atmosphere shifted the moment she entered — her presence was undeniable.",key:"presence",hint:["presence","atmosphere"],cat:"受容・内省",info:"atmosphere = 雰囲気 / undeniable = 否定できない"},
+  {ja:"マインドフルネスは現在への存在感を育てることが全てだ。",en:"Mindfulness is all about cultivating presence.",alt:"The whole practice of mindfulness is about developing presence.",key:"presence",hint:["presence","mindfulness / cultivating"],cat:"受容・内省",info:"cultivate = 育てる、養う / mindfulness = マインドフルネス"},
+  {ja:"彼は何も言わなくても、その存在感が伝わってきた。",en:"His presence was felt even when he said nothing.",alt:"Even in silence, his presence filled the room.",key:"presence",hint:["presence","even when / even in silence"],cat:"受容・内省",info:"be felt = 感じられる / fill the room = 部屋を満たす"},
+  {ja:"子どもたちは今この瞬間にいることの贈り物を教えてくれる。",en:"Children teach us the gift of presence.",alt:"Kids remind us what it means to be truly present.",key:"presence",hint:["presence","gift of"],cat:"受容・内省",info:"the gift of = 〜という贈り物 / truly present = 完全に今ここにいる"},
+  {ja:"会話における完全な存在感は稀で、価値がある。",en:"Full presence in a conversation is rare and valuable.",alt:"Being fully present in a conversation is rare — and incredibly valuable.",key:"presence",hint:["presence","rare / valuable"],cat:"受容・内省",info:"rare = 稀な / valuable = 価値がある"},
+  {ja:"生産性より存在することを選ぶことを学んでいる。",en:"I'm learning to choose presence over productivity.",alt:"I'm working on valuing presence more than productivity.",key:"presence",hint:["presence","over productivity"],cat:"受容・内省",info:"A over B = BよりAを優先する / productivity = 生産性"},
+  {ja:"誰かのそばにいるだけで、癒しの力がある。",en:"There's a healing power in simply being in someone's presence.",alt:"Just being in someone's presence can have a healing effect.",key:"presence",hint:["presence","healing power"],cat:"受容・内省",info:"healing power = 癒しの力 / simply = 単純に、ただ"},
+  {ja:"存在することを実践しよう、今この瞬間だけが本当に存在するのだから。",en:"Practice presence — it's the only moment that truly exists.",alt:"Be present — the only moment that truly exists is this one.",key:"presence",hint:["presence","the only moment"],cat:"受容・内省",info:"the only moment that truly exists = 本当に存在する唯一の瞬間"},
+  {ja:"彼の落ち着いた存在感が、みんなを安心させた。",en:"His calming presence made everyone feel at ease.",alt:"Everyone felt at ease in his calming presence.",key:"presence",hint:["presence","calming / at ease"],cat:"受容・内省",info:"calming = 落ち着かせる / feel at ease = 安心する"},
+];
+
+const CATEGORIES = ["全て","思考・感情","受容・理解","哲学・思考","内省・思考","受容・内省"];
+
+const S = {
+  mode:"practice", cat:"全て", qs:[], idx:0, flipped:false,
+  wrong:[], correct:0, total:0
+};
+
+function shuffle(a){let arr=[...a];for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}return arr;}
+
+function updateStats(){
+  document.getElementById("s-total").textContent=S.total;
+  document.getElementById("s-ok").textContent=S.correct;
+  document.getElementById("s-ng").textContent=S.wrong.length;
+  const b=document.getElementById("rbadge");
+  if(S.wrong.length>0){b.style.display="";b.textContent=S.wrong.length;}
+  else b.style.display="none";
+}
+
+function switchMode(m){
+  S.mode=m;
+  ["practice","vocab","review"].forEach(id=>{
+    document.getElementById("mode-"+id).style.display=m===id?"":"none";
+    document.getElementById("tab-"+id).classList.toggle("active",m===id);
+  });
+  if(m==="vocab")renderVocab();
+  if(m==="review")renderReview();
+}
+
+function getFilteredQ(){return S.cat==="全て"?[...QUESTIONS]:QUESTIONS.filter(q=>q.cat===S.cat);}
+function initPractice(){S.qs=shuffle(getFilteredQ());S.idx=0;S.flipped=false;showCard();}
+
+function renderCats(){
+  document.getElementById("cat-row").innerHTML=CATEGORIES.map(c=>
+    `<button class="cat-btn ${c===S.cat?'active':''}" onclick="selectCat('${c.replace(/'/g,"\\'")}')"> ${c}</button>`
+  ).join("");
+}
+function selectCat(c){S.cat=c;renderCats();initPractice();}
+
+function showCard(){
+  const qs=S.qs;
+  if(!qs.length){
+    document.getElementById("card-counter").textContent="";
+    document.getElementById("ja-text").textContent="この分類の問題がありません";
+    document.getElementById("hint-row").innerHTML="";
+    document.getElementById("judge-buttons").classList.remove("visible");
+    return;
+  }
+  if(S.idx>=qs.length){showResult();return;}
+  const q=qs[S.idx];
+  document.getElementById("prog").style.width=Math.round(S.idx/qs.length*100)+"%";
+  document.getElementById("card-counter").textContent=(S.idx+1)+" / "+qs.length;
+  const fc=document.getElementById("flip-card");
+  fc.classList.remove("flipped");S.flipped=false;
+  document.getElementById("judge-buttons").classList.remove("visible");
+  document.getElementById("ja-text").textContent=q.ja;
+  document.getElementById("hint-row").innerHTML=q.hint.map(h=>`<span class="hint-chip">🔑 ${h}</span>`).join("");
+  document.getElementById("en-text").textContent=q.en;
+  document.getElementById("alt-text").textContent=q.alt?"別解: "+q.alt:"";
+  document.getElementById("key-tag").textContent="📌 "+q.key;
+  document.getElementById("info-text").textContent=q.info||"";
+}
+
+function flipCard(){
+  if(S.idx>=S.qs.length)return;
+  S.flipped=!S.flipped;
+  document.getElementById("flip-card").classList.toggle("flipped",S.flipped);
+  if(S.flipped)setTimeout(()=>document.getElementById("judge-buttons").classList.add("visible"),200);
+  else document.getElementById("judge-buttons").classList.remove("visible");
+}
+
+function judge(ok){
+  if(!S.flipped)return;
+  const q=S.qs[S.idx];
+  S.total++;
+  if(ok){S.correct++;S.wrong=S.wrong.filter(w=>w.ja!==q.ja);}
+  else if(!S.wrong.find(w=>w.ja===q.ja))S.wrong.push(q);
+  updateStats();S.idx++;S.flipped=false;
+  const fc=document.getElementById("flip-card");
+  fc.style.transition="none";fc.classList.remove("flipped");
+  document.getElementById("judge-buttons").classList.remove("visible");
+  setTimeout(()=>{fc.style.transition="";showCard();},60);
+}
+
+function showResult(){
+  document.getElementById("prog").style.width="100%";
+  document.getElementById("card-counter").textContent="完了！";
+  document.getElementById("judge-buttons").classList.remove("visible");
+  const pct=S.total>0?Math.round(S.correct/S.total*100):0;
+  const emoji=pct>=80?"✨":pct>=50?"💪":"📚";
+  const msg=pct>=80?"素晴らしい！存在することを感じられた？🌌":pct>=50?"いい調子！もう少し頑張ろう！":"繰り返しが力になる！続けよう！";
+  document.querySelector(".flip-scene").innerHTML=`
+    <div class="result-screen">
+      <div class="result-emoji">${emoji}</div>
+      <div class="result-pct">${pct}%</div>
+      <div class="result-msg">${msg}</div>
+      <div class="result-nums">
+        <div><div class="r-num ok">${S.correct}</div><div class="r-lbl">できた</div></div>
+        <div><div class="r-num ng">${S.wrong.length}</div><div class="r-lbl">要復習</div></div>
+      </div>
+      <div class="result-btns">
+        <button class="btn-result primary" onclick="location.reload()">もう一度最初から 🔄</button>
+        ${S.wrong.length>0?`<button class="btn-result amber" onclick="startWrongPractice()">間違いだけ集中練習 🔁</button>`:""}
+      </div>
+    </div>`;
+}
+
+function startWrongPractice(){
+  document.querySelector(".flip-scene").innerHTML=`
+    <div class="flip-card" id="flip-card" onclick="flipCard()">
+      <div class="card-face card-front">
+        <div class="face-label">日本語を見て英語で言おう</div>
+        <div class="ja-text" id="ja-text"></div>
+        <div class="hint-row" id="hint-row"></div>
+        <div class="tap-hint"><span class="tap-icon">👆</span> タップで英語を確認</div>
+      </div>
+      <div class="card-face card-back">
+        <div class="face-label">Answer</div>
+        <div class="en-text" id="en-text"></div>
+        <div class="alt-text" id="alt-text"></div>
+        <div class="key-tag" id="key-tag"></div>
+        <div class="info-text" id="info-text"></div>
+      </div>
+    </div>`;
+  S.qs=shuffle([...S.wrong]);S.idx=0;S.flipped=false;showCard();
+}
+
+function renderVocab(){
+  document.getElementById("vocab-list").innerHTML=VOCAB.map(v=>`
+    <div class="vocab-card">
+      <div class="vocab-phrase">${v.phrase}</div>
+      <div class="vocab-cat">${v.category}</div>
+      <div class="vocab-meaning">🇯🇵 ${v.meaning}</div>
+      <div class="vocab-examples">${v.examples.map(e=>`
+        <div class="ex-item">
+          <div class="ex-en">${e.en}</div>
+          <div class="ex-ja">${e.ja}</div>
+        </div>`).join("")}
+      </div>
+    </div>`).join("");
+}
+
+function renderReview(){
+  const area=document.getElementById("review-list");
+  if(!S.wrong.length){
+    area.innerHTML=`<div class="empty-state"><div class="ee">🎊</div><p>要復習の問題はありません！<br>全問マスターしました！</p></div>`;
+    return;
+  }
+  area.innerHTML=`
+    <div style="font-size:13px;color:var(--text-hint);margin-bottom:12px">${S.wrong.length}問 要復習</div>
+    ${S.wrong.map((q,i)=>`
+      <div class="review-item">
+        <div class="ri-ja">${q.ja}</div>
+        <div class="ri-en">→ ${q.en}</div>
+        <span class="ri-key">📌 ${q.key}</span>
+        <div class="ri-actions">
+          <button class="btn-sm teal" onclick="markMastered(${i})">✓ 覚えた</button>
+          <button class="btn-sm gray" onclick="practiceThis(${i})">練習する →</button>
+        </div>
+      </div>`).join("")}
+    <div style="margin-top:16px">
+      <button style="width:100%;padding:14px;border-radius:10px;border:none;font-size:15px;font-weight:700;cursor:pointer;color:#fff;background:var(--indigo);font-family:'Noto Sans JP',sans-serif" onclick="startWrongAndSwitch()">全ての要復習をフリップ練習 🔁</button>
+    </div>`;
+}
+
+function markMastered(i){S.wrong.splice(i,1);updateStats();renderReview();}
+function practiceThis(i){S.qs=[S.wrong[i]];S.idx=0;S.flipped=false;switchMode("practice");renderCats();showCard();}
+function startWrongAndSwitch(){switchMode("practice");startWrongPractice();}
+
+renderCats();initPractice();updateStats();
+</script>
+</body>
+</html>
