@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>瞬間反射トレーニング — 家の中の日常動作</title>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:#1a1410; --paper:#f5f0e8; --gold:#c8962a; --moss:#4a7c59;
+  --indigo:#3d5a8a; --crimson:#a03030; --panel:#fffdf8; --border:rgba(26,20,16,0.12);
+  --warn:#c86a2a;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);min-height:100vh;}
+
+/* HEADER */
+header{background:var(--ink);padding:16px 20px 0;position:sticky;top:0;z-index:100;}
+.h-top{display:flex;align-items:center;gap:10px;padding-bottom:14px;}
+.h-logo{font-size:22px;}
+.h-titles{flex:1;}
+.h-titles h1{font-family:'Shippori Mincho',serif;color:var(--gold);font-size:16px;font-weight:700;}
+.h-titles p{color:rgba(245,240,232,0.42);font-size:10px;margin-top:1px;}
+.h-score{text-align:right;}
+.h-score .num{font-size:20px;font-weight:500;color:var(--gold);}
+.h-score .lbl{font-family:'Shippori Mincho',serif;font-size:9px;color:rgba(245,240,232,0.4);}
+nav{display:flex;}
+.tab{flex:1;padding:8px 4px;background:none;border:none;border-bottom:2px solid transparent;
+  color:rgba(245,240,232,0.38);font-family:'DM Sans',sans-serif;font-size:10px;cursor:pointer;
+  transition:all .2s;display:flex;flex-direction:column;align-items:center;gap:2px;}
+.tab span:first-child{font-size:13px;}
+.tab.active{color:var(--gold);border-bottom-color:var(--gold);}
+
+main{padding:14px;max-width:600px;margin:0 auto;}
+.page{display:none;}.page.active{display:block;}
+.sec{font-family:'Shippori Mincho',serif;font-size:10px;font-weight:600;
+  color:rgba(26,20,16,0.35);letter-spacing:.12em;text-transform:uppercase;margin:16px 0 10px;}
+
+/* CATEGORY CHIPS */
+.cat-chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;}
+.cat-chip{padding:5px 12px;border-radius:20px;border:1.5px solid var(--border);
+  background:var(--panel);font-size:11px;cursor:pointer;transition:all .2s;color:var(--ink);}
+.cat-chip.active{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+
+/* TRAIN MODE SELECTOR */
+.mode-cards{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px;}
+.mode-card{background:var(--panel);border:1.5px solid var(--border);border-radius:14px;
+  padding:14px 12px;cursor:pointer;transition:all .2s;text-align:center;}
+.mode-card:hover{border-color:var(--gold);}
+.mode-card.selected{border-color:var(--gold);background:rgba(200,150,42,0.07);}
+.mode-emoji{font-size:24px;margin-bottom:6px;}
+.mode-name{font-size:13px;font-weight:500;margin-bottom:3px;}
+.mode-desc{font-family:'Shippori Mincho',serif;font-size:10px;color:rgba(26,20,16,0.45);line-height:1.5;}
+
+.start-btn{width:100%;padding:14px;border-radius:12px;border:none;background:var(--ink);
+  color:var(--gold);font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;
+  cursor:pointer;transition:opacity .2s;letter-spacing:.03em;}
+.start-btn:hover{opacity:.85;}
+
+/* TRAINING AREA */
+.train-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.train-prog-wrap{flex:1;height:5px;background:var(--border);border-radius:3px;margin:0 12px;overflow:hidden;}
+.train-prog-fill{height:100%;background:var(--gold);border-radius:3px;transition:width .4s;}
+.train-ctr{font-size:11px;color:rgba(26,20,16,0.4);}
+.quit-btn{font-size:11px;color:rgba(26,20,16,0.35);background:none;border:none;cursor:pointer;text-decoration:underline;}
+
+/* TIMER RING */
+.timer-wrap{display:flex;justify-content:center;margin-bottom:14px;}
+.timer-ring{position:relative;width:64px;height:64px;}
+.timer-ring svg{transform:rotate(-90deg);}
+.timer-ring circle{fill:none;stroke-width:5;}
+.timer-bg{stroke:var(--border);}
+.timer-fg{stroke:var(--gold);stroke-linecap:round;transition:stroke-dashoffset .1s linear,stroke .3s;}
+.timer-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-size:18px;font-weight:500;color:var(--ink);}
+
+/* FLASH CARD */
+.flash-card{background:var(--panel);border:1.5px solid var(--border);border-radius:18px;
+  padding:28px 22px;text-align:center;margin-bottom:14px;
+  box-shadow:0 4px 24px rgba(26,20,16,0.08);min-height:180px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  cursor:pointer;transition:border-color .2s;}
+.flash-card.revealed{border-color:var(--moss);}
+.flash-card.correct{border-color:var(--moss);background:rgba(74,124,89,0.06);}
+.flash-card.wrong{border-color:var(--crimson);background:rgba(160,48,48,0.04);}
+
+.card-cat{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+  color:rgba(26,20,16,0.3);margin-bottom:10px;}
+.card-jp{font-family:'Shippori Mincho',serif;font-size:22px;font-weight:700;
+  line-height:1.5;margin-bottom:6px;color:var(--ink);}
+.card-sub{font-family:'Shippori Mincho',serif;font-size:12px;color:rgba(26,20,16,0.4);
+  margin-bottom:14px;font-style:italic;}
+.card-hint{font-size:11px;color:rgba(26,20,16,0.3);font-style:italic;}
+.card-en{font-size:19px;font-weight:500;line-height:1.45;margin-bottom:6px;display:none;}
+.card-alt{font-size:12px;color:rgba(26,20,16,0.45);display:none;font-style:italic;margin-bottom:10px;}
+.card-tip{font-family:'Shippori Mincho',serif;font-size:11px;color:var(--indigo);
+  background:rgba(61,90,138,0.08);border-radius:6px;padding:6px 10px;display:none;line-height:1.6;}
+.flash-card.revealed .card-en{display:block;}
+.flash-card.revealed .card-alt{display:block;}
+.flash-card.revealed .card-tip{display:block;}
+.flash-card.revealed .card-hint{display:none;}
+
+/* ACTION BUTTONS */
+.action-row{display:flex;gap:8px;margin-bottom:10px;}
+.act-btn{flex:1;padding:13px;border-radius:12px;border:none;
+  font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:opacity .15s;}
+.act-btn:hover{opacity:.85;}
+.act-reveal{background:var(--indigo);color:#fff;flex:2;}
+.act-ok{background:var(--moss);color:#fff;}
+.act-ng{background:rgba(160,48,48,0.12);color:var(--crimson);}
+.act-row2{display:flex;gap:8px;}
+.act-skip{flex:1;padding:9px;border-radius:9px;border:1.5px solid var(--border);
+  background:var(--panel);font-family:'DM Sans',sans-serif;font-size:11px;cursor:pointer;color:rgba(26,20,16,0.45);}
+
+/* LOOP MODE banner */
+.loop-banner{background:rgba(200,150,42,0.1);border:1px solid rgba(200,150,42,0.3);
+  border-radius:10px;padding:8px 12px;margin-bottom:12px;font-family:'Shippori Mincho',serif;
+  font-size:12px;color:var(--gold);text-align:center;}
+
+/* RESULT PAGE */
+.result-wrap{text-align:center;padding:20px 0;}
+.result-emoji{font-size:52px;margin-bottom:12px;}
+.result-title{font-family:'Shippori Mincho',serif;font-size:20px;font-weight:700;margin-bottom:6px;}
+.result-sub{font-size:13px;color:rgba(26,20,16,0.5);margin-bottom:24px;font-family:'Shippori Mincho',serif;}
+.result-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:24px;}
+.rs{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:12px 8px;text-align:center;}
+.rs-num{font-size:24px;font-weight:500;line-height:1;margin-bottom:3px;}
+.rs-num.g{color:var(--moss);}.rs-num.r{color:var(--crimson);}.rs-num.b{color:var(--indigo);}
+.rs-lbl{font-family:'Shippori Mincho',serif;font-size:9px;color:rgba(26,20,16,0.4);}
+.result-btns{display:flex;flex-direction:column;gap:8px;}
+.res-btn{padding:13px;border-radius:12px;border:none;font-family:'DM Sans',sans-serif;
+  font-size:13px;font-weight:500;cursor:pointer;transition:opacity .2s;}
+.res-btn:hover{opacity:.85;}
+.res-btn.primary{background:var(--crimson);color:#fff;}
+.res-btn.secondary{background:var(--ink);color:var(--paper);}
+.res-btn.tertiary{background:var(--panel);color:var(--ink);border:1.5px solid var(--border);}
+
+/* LIST PAGE */
+.list-item{background:var(--panel);border:1px solid var(--border);border-radius:11px;
+  padding:12px 14px;margin-bottom:7px;display:flex;align-items:center;gap:12px;}
+.li-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.li-jp{font-family:'Shippori Mincho',serif;font-size:14px;font-weight:600;margin-bottom:2px;}
+.li-en{font-size:13px;color:rgba(26,20,16,0.6);}
+.li-cat{font-size:9px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+  color:rgba(26,20,16,0.3);margin-bottom:3px;}
+.li-done{margin-left:auto;font-size:10px;background:var(--moss);color:#fff;
+  padding:2px 7px;border-radius:20px;display:none;flex-shrink:0;}
+.li-done.show{display:inline;}
+
+/* STATS PAGE */
+.overall-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;}
+.os{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px 12px;text-align:center;}
+.os-num{font-size:26px;font-weight:500;line-height:1;margin-bottom:4px;}
+.os-num.g{color:var(--moss);}.os-num.gold{color:var(--gold);}
+.os-lbl{font-family:'Shippori Mincho',serif;font-size:10px;color:rgba(26,20,16,0.4);}
+.cat-stat{background:var(--panel);border:1px solid var(--border);border-radius:11px;
+  padding:12px 14px;margin-bottom:8px;}
+.cs-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+.cs-name{font-size:13px;font-weight:500;}
+.cs-pct{font-size:12px;color:var(--moss);font-weight:500;}
+.cs-bar{height:4px;background:var(--border);border-radius:2px;overflow:hidden;}
+.cs-fill{height:100%;background:var(--moss);border-radius:2px;transition:width .5s;}
+.reset-all-btn{width:100%;padding:11px;border-radius:10px;border:1.5px solid var(--border);
+  background:var(--panel);font-family:'DM Sans',sans-serif;font-size:12px;
+  color:rgba(26,20,16,0.4);cursor:pointer;margin-top:12px;}
+.reset-all-btn:hover{border-color:var(--crimson);color:var(--crimson);}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="h-top">
+    <div class="h-logo">🏠</div>
+    <div class="h-titles">
+      <h1>瞬間反射トレーニング</h1>
+      <p>家の中の日常動作 — 100フレーズ</p>
+    </div>
+    <div class="h-score">
+      <div class="num" id="h-mastered">0</div>
+      <div class="lbl">習得済み</div>
+    </div>
+  </div>
+  <nav>
+    <button class="tab active" onclick="switchTab('train',this)"><span>⚡</span><span>トレーニング</span></button>
+    <button class="tab" onclick="switchTab('list',this)"><span>📋</span><span>一覧</span></button>
+    <button class="tab" onclick="switchTab('stats',this)"><span>📊</span><span>記録</span></button>
+  </nav>
+</header>
+
+<main>
+
+<!-- ===== TRAIN PAGE ===== -->
+<div id="page-train" class="page active">
+  <div id="train-setup">
+    <div class="sec" style="margin-top:14px">カテゴリを選ぶ</div>
+    <div class="cat-chips" id="cat-chips"></div>
+    <div class="sec">モードを選ぶ</div>
+    <div class="mode-cards">
+      <div class="mode-card selected" id="mode-normal" onclick="selectMode('normal')">
+        <div class="mode-emoji">🃏</div>
+        <div class="mode-name">通常モード</div>
+        <div class="mode-desc">全フレーズを1枚ずつ練習。自分のペースで。</div>
+      </div>
+      <div class="mode-card" id="mode-timer" onclick="selectMode('timer')">
+        <div class="mode-emoji">⏱️</div>
+        <div class="mode-name">タイマーモード</div>
+        <div class="mode-desc">3秒以内に口から出せるか。反射力を鍛える。</div>
+      </div>
+      <div class="mode-card" id="mode-loop" onclick="selectMode('loop')">
+        <div class="mode-emoji">🔁</div>
+        <div class="mode-name">ループモード</div>
+        <div class="mode-desc">言えなかった表現だけを5回連続正解まで繰り返す。</div>
+      </div>
+      <div class="mode-card" id="mode-review" onclick="selectMode('review')">
+        <div class="mode-emoji">🔄</div>
+        <div class="mode-name">復習モード</div>
+        <div class="mode-desc">未習得・間違えたフレーズだけをまとめて練習。</div>
+      </div>
+    </div>
+    <button class="start-btn" onclick="startTraining()">トレーニング開始 →</button>
+  </div>
+
+  <div id="train-area" style="display:none">
+    <div class="train-hd">
+      <span class="train-ctr" id="train-ctr">1 / 10</span>
+      <div class="train-prog-wrap"><div class="train-prog-fill" id="train-prog" style="width:0%"></div></div>
+      <button class="quit-btn" onclick="quitTraining()">終了</button>
+    </div>
+    <div id="loop-banner" class="loop-banner" style="display:none">🔁 ループモード — あと<span id="loop-remain"></span>回正解で卒業！</div>
+    <div id="timer-wrap" class="timer-wrap" style="display:none">
+      <div class="timer-ring">
+        <svg width="64" height="64" viewBox="0 0 64 64">
+          <circle class="timer-bg" cx="32" cy="32" r="27"/>
+          <circle class="timer-fg" id="timer-circle" cx="32" cy="32" r="27"
+            stroke-dasharray="169.6" stroke-dashoffset="0"/>
+        </svg>
+        <div class="timer-num" id="timer-num">3</div>
+      </div>
+    </div>
+    <div class="flash-card" id="flash-card" onclick="revealCard()">
+      <div class="card-cat" id="card-cat"></div>
+      <div class="card-jp"  id="card-jp"></div>
+      <div class="card-sub" id="card-sub"></div>
+      <div class="card-hint">タップして英語を確認</div>
+      <div class="card-en"  id="card-en"></div>
+      <div class="card-alt" id="card-alt"></div>
+      <div class="card-tip" id="card-tip"></div>
+    </div>
+    <div class="action-row" id="action-row">
+      <button class="act-btn act-reveal" id="btn-reveal" onclick="revealCard()">英語を見る</button>
+      <button class="act-btn act-ok" id="btn-ok" onclick="markOk()" style="display:none">✓ 言えた！</button>
+      <button class="act-btn act-ng" id="btn-ng" onclick="markNg()" style="display:none">✕ 言えなかった</button>
+    </div>
+    <div class="act-row2">
+      <button class="act-skip" onclick="skipCard()">スキップ →</button>
+    </div>
+  </div>
+
+  <div id="train-result" style="display:none">
+    <div class="result-wrap">
+      <div class="result-emoji" id="res-emoji">🎉</div>
+      <div class="result-title" id="res-title">セッション完了！</div>
+      <div class="result-sub" id="res-sub"></div>
+      <div class="result-stats">
+        <div class="rs"><div class="rs-num g" id="res-ok">0</div><div class="rs-lbl">言えた！</div></div>
+        <div class="rs"><div class="rs-num r" id="res-ng">0</div><div class="rs-lbl">言えなかった</div></div>
+        <div class="rs"><div class="rs-num b" id="res-total">0</div><div class="rs-lbl">総問数</div></div>
+      </div>
+      <div class="result-btns">
+        <button class="res-btn primary" id="res-loop-btn" onclick="startLoopFromResult()" style="display:none">🔁 言えなかった分をループ練習</button>
+        <button class="res-btn secondary" onclick="backToSetup()">もう一度設定から</button>
+        <button class="res-btn tertiary" onclick="switchTab('stats',document.querySelectorAll(\'.tab\')[2])">記録を見る</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== LIST PAGE ===== -->
+<div id="page-list" class="page">
+  <div class="sec" style="margin-top:14px">カテゴリで絞り込む</div>
+  <div class="cat-chips" id="list-cat-chips"></div>
+  <div id="list-items"></div>
+</div>
+
+<!-- ===== STATS PAGE ===== -->
+<div id="page-stats" class="page">
+  <div class="sec" style="margin-top:14px">全体の進捗</div>
+  <div class="overall-stats">
+    <div class="os"><div class="os-num g" id="st-mastered">0</div><div class="os-lbl">習得済み</div></div>
+    <div class="os"><div class="os-num gold" id="st-total">100</div><div class="os-lbl">総フレーズ数</div></div>
+  </div>
+  <div class="sec">カテゴリ別</div>
+  <div id="cat-stats"></div>
+  <button class="reset-all-btn" onclick="resetAllData()">↺ 全データをリセット</button>
+</div>
+
+</main>
+
+<script>
+// ============================================================
+// PHRASE DATA — 100 phrases, 10 categories
+// ============================================================
+const PHRASES = [
+  // 🚪 移動・位置（10）
+  {id:1,cat:'移動・位置',jp:'どけて',sub:'邪魔なとき',en:'Move. / Get out of the way.',alt:'もっとカジュアル: Scoot over.',tip:'Moveだけでも十分伝わる。Get out of the way はやや強め。'},
+  {id:2,cat:'移動・位置',jp:'ちょっとそこ退いて',sub:'少しだけ場所を空けて',en:'Could you move a little?',alt:'Scoot over a bit.',tip:'Could you ...? で丁寧さが出る。'},
+  {id:3,cat:'移動・位置',jp:'ここに来て',sub:'近くに呼ぶ',en:'Come here.',alt:'Come over here.',tip:'シンプルにCome here.が最も自然。'},
+  {id:4,cat:'移動・位置',jp:'あっちに行って',sub:'離れてほしい',en:'Go over there.',alt:'Step aside.',tip:'Step aside はフォーマルな場面にも使える。'},
+  {id:5,cat:'移動・位置',jp:'ここに座って',sub:'席を指定する',en:'Sit here.',alt:'Have a seat here.',tip:'Have a seat は少し丁寧なバージョン。'},
+  {id:6,cat:'移動・位置',jp:'立って',sub:'座っている人に',en:'Stand up.',alt:'Get up.',tip:'Get up の方が日常会話では多く使われる。'},
+  {id:7,cat:'移動・位置',jp:'寝て',sub:'横になって',en:'Lie down.',alt:'Go lie down.',tip:'犬にも人にも使える。Go lie down. はより指示的。'},
+  {id:8,cat:'移動・位置',jp:'こっちに向いて',sub:'向きを変えて',en:'Turn this way.',alt:'Face this way.',tip:'Turn / Face どちらも自然。'},
+  {id:9,cat:'移動・位置',jp:'前に進んで',sub:'もう少し前に',en:'Move forward.',alt:'Step forward.',tip:'Step forward はより一歩という感じ。'},
+  {id:10,cat:'移動・位置',jp:'後ろに下がって',sub:'後退して',en:'Step back.',alt:'Move back.',tip:'Step back は危険回避の場面でもよく使う。'},
+
+  // 📦 物の操作（10）
+  {id:11,cat:'物の操作',jp:'棚に上げて',sub:'高いところに置く',en:'Put it on the shelf.',alt:'Can you put that up on the shelf?',tip:'Put it + 場所 が基本パターン。'},
+  {id:12,cat:'物の操作',jp:'これ持って',sub:'手渡す・持ってもらう',en:'Hold this.',alt:'Can you hold this for me?',tip:'Hold this. は一番シンプルで自然。'},
+  {id:13,cat:'物の操作',jp:'置いといて',sub:'とりあえず置いて',en:'Just put it down.',alt:'Leave it there.',tip:'Leave it there. は「そこに置いておいて」のニュアンス。'},
+  {id:14,cat:'物の操作',jp:'持ってきて',sub:'取ってきて',en:'Bring it here.',alt:'Can you grab that for me?',tip:'Grab は口語でよく使われる「取ってくる」。'},
+  {id:15,cat:'物の操作',jp:'向こうに持っていって',sub:'別の場所へ',en:'Take it over there.',alt:'Put it over there.',tip:'Take it + 場所 で「持っていく」。'},
+  {id:16,cat:'物の操作',jp:'開けて',sub:'箱・扉など',en:'Open it.',alt:'Can you open this?',tip:'シンプルに Open it. でOK。'},
+  {id:17,cat:'物の操作',jp:'閉めて',sub:'ドア・窓など',en:'Close it.',alt:'Shut it.',tip:'Shut it. はよりカジュアル。怒った感じにも聞こえることがある。'},
+  {id:18,cat:'物の操作',jp:'捨てといて',sub:'ゴミを捨てる',en:'Throw it away.',alt:'Toss it.',tip:'Toss it. は口語でカジュアル。'},
+  {id:19,cat:'物の操作',jp:'片付けて',sub:'散らかったものを',en:'Put it away.',alt:'Clean this up.',tip:'Put it away は「元の場所に戻す」感覚。'},
+  {id:20,cat:'物の操作',jp:'引っ張って',sub:'引っ張る動作',en:'Pull it.',alt:'Give it a pull.',tip:'Give it a pull. は「一回引いてみて」のニュアンス。'},
+
+  // 🍳 料理・台所（10）
+  {id:21,cat:'料理・台所',jp:'火をつけて',sub:'コンロなど',en:'Turn on the stove.',alt:'Light the stove.',tip:'Turn on は電気・ガス全般に使える。'},
+  {id:22,cat:'料理・台所',jp:'火を止めて',sub:'コンロを消す',en:'Turn off the stove.',alt:'Turn down the heat.',tip:'Turn down the heat は「火を弱める」。'},
+  {id:23,cat:'料理・台所',jp:'混ぜて',sub:'かき混ぜる',en:'Stir it.',alt:'Mix it up.',tip:'Stir は鍋の中をかき回す。Mix はより全体を混ぜる感じ。'},
+  {id:24,cat:'料理・台所',jp:'切って',sub:'包丁で',en:'Cut it.',alt:'Chop it up.',tip:'Chop it up は「細かく切る」。Slice は「薄く切る」。'},
+  {id:25,cat:'料理・台所',jp:'洗って',sub:'野菜・食器など',en:'Wash it.',alt:'Rinse it off.',tip:'Rinse it off は「さっと水で洗い流す」。'},
+  {id:26,cat:'料理・台所',jp:'温めて',sub:'電子レンジで',en:'Heat it up.',alt:'Warm it up. / Microwave it.',tip:'Microwave it. はレンジで温める場合に使える。'},
+  {id:27,cat:'料理・台所',jp:'冷蔵庫に入れて',sub:'保存する',en:'Put it in the fridge.',alt:'Pop it in the fridge.',tip:'Pop it in はよりカジュアルで自然な口語表現。'},
+  {id:28,cat:'料理・台所',jp:'お皿に盛って',sub:'料理を盛り付ける',en:'Plate it.',alt:'Put it on a plate.',tip:'Plate it. は料理用語として自然。'},
+  {id:29,cat:'料理・台所',jp:'沸騰するまで待って',sub:'お湯を沸かす',en:'Wait until it boils.',alt:'Let it come to a boil.',tip:'Let it come to a boil. のほうがネイティブ的。'},
+  {id:30,cat:'料理・台所',jp:'味見して',sub:'塩加減など確認',en:'Have a taste.',alt:'Try it and see.',tip:'Have a taste. はシンプルで自然な表現。'},
+
+  // 🧹 掃除・整理（10）
+  {id:31,cat:'掃除・整理',jp:'掃除機をかけて',sub:'床を掃除',en:'Vacuum the floor.',alt:'Run the vacuum.',tip:'Run the vacuum. はよりカジュアルな言い方。'},
+  {id:32,cat:'掃除・整理',jp:'拭いて',sub:'テーブルなど',en:'Wipe it down.',alt:'Give it a wipe.',tip:'Give it a wipe. は「ちょっと拭いて」というカジュアルな表現。'},
+  {id:33,cat:'掃除・整理',jp:'洗濯して',sub:'洗濯機を回す',en:'Do the laundry.',alt:'Run a load of laundry.',tip:'Run a load は「一回洗濯機を回す」。'},
+  {id:34,cat:'掃除・整理',jp:'洗濯物を干して',sub:'洗濯後',en:'Hang up the laundry.',alt:'Hang out the washing.',tip:'どちらも自然。地域によって表現が違う。'},
+  {id:35,cat:'掃除・整理',jp:'たたんで',sub:'洗濯物を',en:'Fold it.',alt:'Fold the laundry.',tip:'Fold it. だけでたたむ動作を表現できる。'},
+  {id:36,cat:'掃除・整理',jp:'ゴミを出して',sub:'ゴミ捨て場へ',en:'Take out the trash.',alt:'Put the garbage out.',tip:'Take out the trash. が最もよく使われる。'},
+  {id:37,cat:'掃除・整理',jp:'窓を開けて換気して',sub:'空気を入れ替える',en:'Open the window and air it out.',alt:'Let some fresh air in.',tip:'Let some fresh air in. がネイティブらしい自然な表現。'},
+  {id:38,cat:'掃除・整理',jp:'整理して',sub:'散らかったものを',en:'Tidy it up.',alt:'Organize this.',tip:'Tidy up はイギリス英語でよく使われるが米語でも通じる。'},
+  {id:39,cat:'掃除・整理',jp:'床を掃いて',sub:'ほうきで',en:'Sweep the floor.',alt:'Give the floor a sweep.',tip:'Sweep the floor. が基本。'},
+  {id:40,cat:'掃除・整理',jp:'汚れを落として',sub:'こびりついた汚れ',en:'Scrub it off.',alt:'Get the stain out.',tip:'Scrub は力を入れてこする感じ。Get the stain out は「汚れを落とす」。'},
+
+  // 💡 電気・スイッチ（10）
+  {id:41,cat:'電気・スイッチ',jp:'電気をつけて',sub:'部屋の照明',en:'Turn on the light.',alt:'Switch on the light.',tip:'どちらも自然。Turn on が最も一般的。'},
+  {id:42,cat:'電気・スイッチ',jp:'電気を消して',sub:'照明を消す',en:'Turn off the light.',alt:'Switch off the light.',tip:'Turn off the light. が最も一般的。'},
+  {id:43,cat:'電気・スイッチ',jp:'テレビをつけて',sub:'',en:'Turn on the TV.',alt:'Put the TV on.',tip:'Put the TV on. はイギリス英語でよく使われる。'},
+  {id:44,cat:'電気・スイッチ',jp:'テレビを消して',sub:'',en:'Turn off the TV.',alt:'Switch off the TV.',tip:'Turn off the TV. が最も一般的。'},
+  {id:45,cat:'電気・スイッチ',jp:'音量を上げて',sub:'テレビ・音楽',en:'Turn it up.',alt:'Can you turn up the volume?',tip:'Turn it up. だけで通じる。とても使いやすい。'},
+  {id:46,cat:'電気・スイッチ',jp:'音量を下げて',sub:'静かにして',en:'Turn it down.',alt:'Can you lower the volume?',tip:'Turn it down. は音量だけでなく「抑えて」の意味でも使える。'},
+  {id:47,cat:'電気・スイッチ',jp:'エアコンをつけて',sub:'',en:'Turn on the AC.',alt:'Put the air conditioning on.',tip:'AC は air conditioning の略。日常会話では AC が一般的。'},
+  {id:48,cat:'電気・スイッチ',jp:'充電して',sub:'スマホなど',en:'Charge it.',alt:'Put it on charge.',tip:'Put it on charge. はイギリス英語。Charge it. が最も簡単。'},
+  {id:49,cat:'電気・スイッチ',jp:'Wi-Fiにつないで',sub:'',en:'Connect to the Wi-Fi.',alt:'Get on the Wi-Fi.',tip:'Get on the Wi-Fi. はよりカジュアル。'},
+  {id:50,cat:'電気・スイッチ',jp:'アラームをセットして',sub:'目覚まし',en:'Set an alarm.',alt:'Set your alarm for [time].',tip:'Set an alarm for 7. のように時間を加えるとより自然。'},
+
+  // 🛁 お風呂・トイレ（10）
+  {id:51,cat:'お風呂・トイレ',jp:'お風呂を沸かして',sub:'お湯を張る',en:'Run a bath.',alt:'Fill up the tub.',tip:'Run a bath. は「お風呂を準備する」定番表現。'},
+  {id:52,cat:'お風呂・トイレ',jp:'シャワーを浴びて',sub:'',en:'Take a shower.',alt:'Have a shower.',tip:'Take a shower（米）Have a shower（英）どちらも正しい。'},
+  {id:53,cat:'お風呂・トイレ',jp:'タオルを取って',sub:'',en:'Grab a towel.',alt:'Get me a towel.',tip:'Grab は「取ってくる」の口語表現。'},
+  {id:54,cat:'お風呂・トイレ',jp:'石鹸を出して',sub:'補充する',en:'Refill the soap.',alt:'Put out some soap.',tip:'Refill は「補充する」。Put out は「用意する」。'},
+  {id:55,cat:'お風呂・トイレ',jp:'水をとめて',sub:'蛇口・シャワー',en:'Turn off the water.',alt:'Shut off the tap.',tip:'Turn off the water. が最も汎用性が高い。'},
+  {id:56,cat:'お風呂・トイレ',jp:'手を洗って',sub:'',en:'Wash your hands.',alt:'Go wash your hands.',tip:'Go wash your hands. は子供などへの指示でよく使う。'},
+  {id:57,cat:'お風呂・トイレ',jp:'歯を磨いて',sub:'',en:'Brush your teeth.',alt:'Go brush your teeth.',tip:'シンプルに Brush your teeth. でOK。'},
+  {id:58,cat:'お風呂・トイレ',jp:'髪を乾かして',sub:'ドライヤーで',en:'Dry your hair.',alt:'Use the hair dryer.',tip:'Dry your hair. がシンプルで自然。'},
+  {id:59,cat:'お風呂・トイレ',jp:'鏡を見て',sub:'',en:'Look in the mirror.',alt:'Check yourself in the mirror.',tip:'Check yourself in the mirror. は「ちゃんと確認して」のニュアンス。'},
+  {id:60,cat:'お風呂・トイレ',jp:'お湯を入れ直して',sub:'冷めたとき',en:'Reheat the bath.',alt:'Top up the hot water.',tip:'Top up は「補充する」。Top up the hot water. がネイティブらしい。'},
+
+  // 😴 就寝・起床（10）
+  {id:61,cat:'就寝・起床',jp:'もう寝て',sub:'就寝の指示',en:'Go to bed.',alt:'Time for bed.',tip:'Time for bed. は子供への定番フレーズ。大人にも使える。'},
+  {id:62,cat:'就寝・起床',jp:'起きて',sub:'朝、起こす',en:'Wake up.',alt:'Get up. / Rise and shine.',tip:'Rise and shine. は「元気よく起きて」という明るい表現。'},
+  {id:63,cat:'就寝・起床',jp:'電気消して寝て',sub:'',en:'Turn off the light and go to sleep.',alt:'Lights out.',tip:'Lights out. は軍隊・寮などで使われるが日常でも通じる。'},
+  {id:64,cat:'就寝・起床',jp:'毛布をかけて',sub:'',en:'Put a blanket on.',alt:'Cover yourself with the blanket.',tip:'Put a blanket on. がシンプルで自然。'},
+  {id:65,cat:'就寝・起床',jp:'もう少し寝ていいよ',sub:'',en:'You can sleep a little longer.',alt:'Sleep in a bit.',tip:'Sleep in は「いつもより長く寝る」。Sleep in a bit. で「もう少し寝て」。'},
+  {id:66,cat:'就寝・起床',jp:'枕を整えて',sub:'',en:'Fix your pillow.',alt:'Fluff up the pillow.',tip:'Fluff up は枕を膨らませる動作。'},
+  {id:67,cat:'就寝・起床',jp:'布団を干して',sub:'',en:'Air out the futon.',alt:'Put the futon out to dry.',tip:'Futon はそのまま英語になっている。'},
+  {id:68,cat:'就寝・起床',jp:'カーテンを開けて',sub:'朝、明るくする',en:'Open the curtains.',alt:'Pull back the curtains.',tip:'Pull back the curtains. がよりネイティブらしい表現。'},
+  {id:69,cat:'就寝・起床',jp:'静かにして',sub:'寝ている人がいる',en:'Keep it down.',alt:'Please be quiet.',tip:'Keep it down. は「音を小さくして」という日常的な表現。'},
+  {id:70,cat:'就寝・起床',jp:'もうすぐ起こすよ',sub:'',en:'I\'ll wake you up soon.',alt:'I\'ll come get you in a bit.',tip:'I\'ll come get you in a bit. は「もうすぐ起こしに来る」という温かい表現。'},
+
+  // 👕 着替え・身支度（10）
+  {id:71,cat:'着替え・身支度',jp:'着替えて',sub:'',en:'Get changed.',alt:'Change your clothes.',tip:'Get changed. がよりカジュアルで自然。'},
+  {id:72,cat:'着替え・身支度',jp:'靴を履いて',sub:'',en:'Put your shoes on.',alt:'Slip on your shoes.',tip:'Slip on は「サッと履く」。Put your shoes on が基本。'},
+  {id:73,cat:'着替え・身支度',jp:'上着を着て',sub:'寒いとき',en:'Put on a jacket.',alt:'Grab a jacket.',tip:'Grab a jacket. は「ジャケット持って」というニュアンスもある。'},
+  {id:74,cat:'着替え・身支度',jp:'脱いで',sub:'コートなど',en:'Take it off.',alt:'Take off your coat.',tip:'Take it off. はシンプルで最もよく使われる。'},
+  {id:75,cat:'着替え・身支度',jp:'ボタンを留めて',sub:'',en:'Button it up.',alt:'Do up the buttons.',tip:'Do up はイギリス英語でよく使われる。'},
+  {id:76,cat:'着替え・身支度',jp:'ジッパーを上げて',sub:'',en:'Zip it up.',alt:'Do up the zipper.',tip:'Zip it up. がシンプルで一番自然。'},
+  {id:77,cat:'着替え・身支度',jp:'髪を整えて',sub:'',en:'Fix your hair.',alt:'Do your hair.',tip:'Do your hair. は「ちゃんとセットして」というニュアンス。'},
+  {id:78,cat:'着替え・身支度',jp:'準備して',sub:'出かける前に',en:'Get ready.',alt:'Hurry up and get ready.',tip:'Get ready. が最もシンプルで使いやすい。'},
+  {id:79,cat:'着替え・身支度',jp:'荷物をまとめて',sub:'',en:'Pack your things.',alt:'Get your stuff together.',tip:'Get your stuff together. はよりカジュアルな表現。'},
+  {id:80,cat:'着替え・身支度',jp:'マスクして',sub:'',en:'Put on your mask.',alt:'Wear your mask.',tip:'どちらも自然。Put on はより動作的なニュアンス。'},
+
+  // 🗣️ 依頼・確認（10）
+  {id:81,cat:'依頼・確認',jp:'ちょっと待って',sub:'少しだけ',en:'Hang on.',alt:'Just a sec. / One moment.',tip:'Hang on. はとてもよく使われる口語表現。'},
+  {id:82,cat:'依頼・確認',jp:'もう一回言って',sub:'聞き取れなかった',en:'Say that again.',alt:'Could you repeat that?',tip:'Say that again. がカジュアル。Could you repeat that? は丁寧。'},
+  {id:83,cat:'依頼・確認',jp:'もっとゆっくり言って',sub:'',en:'Could you slow down?',alt:'Speak more slowly, please.',tip:'Could you slow down? がより自然な口語表現。'},
+  {id:84,cat:'依頼・確認',jp:'確認してみて',sub:'',en:'Check it.',alt:'Double-check it.',tip:'Double-check は「念のため再確認する」。'},
+  {id:85,cat:'依頼・確認',jp:'後で教えて',sub:'',en:'Let me know later.',alt:'Tell me later.',tip:'Let me know later. がよりネイティブらしい表現。'},
+  {id:86,cat:'依頼・確認',jp:'急いで',sub:'',en:'Hurry up.',alt:'Come on, let\'s go.',tip:'Come on, let\'s go. は「さあ行くよ」という感じで自然。'},
+  {id:87,cat:'依頼・確認',jp:'気をつけて',sub:'',en:'Be careful.',alt:'Watch out.',tip:'Watch out. は「危ない！」という緊急のニュアンス。Be careful. は全般的な注意。'},
+  {id:88,cat:'依頼・確認',jp:'大丈夫？',sub:'',en:'You okay?',alt:'Are you alright?',tip:'You okay? はカジュアルな確認。Are you alright? は少し丁寧。'},
+  {id:89,cat:'依頼・確認',jp:'手伝って',sub:'',en:'Can you help me?',alt:'Give me a hand.',tip:'Give me a hand. は口語でとてもよく使われる。'},
+  {id:90,cat:'依頼・確認',jp:'そのままにしておいて',sub:'触らないで',en:'Leave it.',alt:'Don\'t touch it.',tip:'Leave it. はシンプルで強い指示。Don\'t touch it. はより明示的。'},
+
+  // 🐶 ペット・日常（10）
+  {id:91,cat:'ペット・日常',jp:'ごはんあげて',sub:'ペットに',en:'Feed them.',alt:'Give them their food.',tip:'Feed them. がシンプルで一番自然。'},
+  {id:92,cat:'ペット・日常',jp:'水を換えて',sub:'ペットの水',en:'Change the water.',alt:'Refill the water bowl.',tip:'Refill the water bowl. はより具体的。'},
+  {id:93,cat:'ペット・日常',jp:'撫でてあげて',sub:'',en:'Give them a pat.',alt:'Pet them.',tip:'Give them a pat. は軽く撫でる感じ。Pet them. は動詞として使う。'},
+  {id:94,cat:'ペット・日常',jp:'連れてきて',sub:'ペットを呼ぶ',en:'Bring them here.',alt:'Call them over.',tip:'Call them over. は「呼び寄せる」。'},
+  {id:95,cat:'ペット・日常',jp:'外に出してあげて',sub:'',en:'Let them out.',alt:'Take them outside.',tip:'Let them out. は「扉を開けて出す」。Take them outside. は連れて行く感じ。'},
+  {id:96,cat:'ペット・日常',jp:'植物に水をあげて',sub:'',en:'Water the plants.',alt:'Give the plants some water.',tip:'Water the plants. が最もシンプルで自然。'},
+  {id:97,cat:'ペット・日常',jp:'郵便を取ってきて',sub:'',en:'Get the mail.',alt:'Grab the mail.',tip:'Grab the mail. はよりカジュアル。'},
+  {id:98,cat:'ペット・日常',jp:'ドアに鍵かけて',sub:'',en:'Lock the door.',alt:'Make sure the door is locked.',tip:'Make sure the door is locked. は「ちゃんと確認して」のニュアンス。'},
+  {id:99,cat:'ペット・日常',jp:'窓閉めて',sub:'',en:'Close the window.',alt:'Shut the window.',tip:'どちらも自然。Shut はより強い感じ。'},
+  {id:100,cat:'ペット・日常',jp:'カメラを確認して',sub:'防犯カメラ・ドアカメラ',en:'Check the camera.',alt:'Have a look at the camera.',tip:'Have a look at the camera. は「ちょっと見てみて」のニュアンス。'},
+];
+
+const CATS = [...new Set(PHRASES.map(p=>p.cat))];
+const CAT_COLORS = {
+  '移動・位置':'#c8962a','物の操作':'#4a7c59','料理・台所':'#a03030',
+  '掃除・整理':'#3d5a8a','電気・スイッチ':'#7a5a2a','お風呂・トイレ':'#2a7a7a',
+  '就寝・起床':'#5a2a7a','着替え・身支度':'#7a2a5a','依頼・確認':'#2a5a2a','ペット・日常':'#c8962a'
+};
+
+// ── STATE ──
+let masteredSet = new Set(JSON.parse(localStorage.getItem('hd_mastered')||'[]'));
+let wrongSet = new Set(JSON.parse(localStorage.getItem('hd_wrong')||'[]'));
+let sessionOk=0, sessionNg=0;
+let currentMode='normal', selectedCat='all';
+let queue=[], qIdx=0, isRevealed=false;
+let timerInterval=null, timerLeft=3;
+let loopCounts={};// id -> consecutive ok count
+const LOOP_TARGET=5;
+
+function saveState(){
+  localStorage.setItem('hd_mastered',JSON.stringify([...masteredSet]));
+  localStorage.setItem('hd_wrong',JSON.stringify([...wrongSet]));
+}
+
+// ── TABS ──
+function switchTab(p, btn){
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+  document.getElementById('page-'+p).classList.add('active');
+  btn.classList.add('active');
+  if(p==='list') renderList();
+  if(p==='stats') renderStats();
+  updateHeader();
+}
+
+// ── HEADER ──
+function updateHeader(){
+  document.getElementById('h-mastered').textContent = masteredSet.size;
+}
+
+// ── SETUP ──
+function initSetup(){
+  // cat chips (train)
+  const cc = document.getElementById('cat-chips');
+  cc.innerHTML = `<button class="cat-chip active" onclick="selectCat('all',this)">すべて (${PHRASES.length})</button>`;
+  CATS.forEach(c=>{
+    const n = PHRASES.filter(p=>p.cat===c).length;
+    cc.innerHTML += `<button class="cat-chip" onclick="selectCat('${c}',this)">${c} (${n})</button>`;
+  });
+}
+
+function selectCat(cat, btn){
+  selectedCat=cat;
+  document.querySelectorAll('#cat-chips .cat-chip').forEach(c=>c.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function selectMode(mode){
+  currentMode=mode;
+  document.querySelectorAll('.mode-card').forEach(c=>c.classList.remove('selected'));
+  document.getElementById('mode-'+mode).classList.add('selected');
+}
+
+// ── TRAINING ──
+function startTraining(){
+  let pool = selectedCat==='all' ? [...PHRASES] : PHRASES.filter(p=>p.cat===selectedCat);
+  if(currentMode==='review'){
+    pool = pool.filter(p=>!masteredSet.has(p.id) || wrongSet.has(p.id));
+    if(pool.length===0){alert('復習するフレーズがありません！');return;}
+  }
+  // shuffle
+  for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]];}
+  queue=pool; qIdx=0; sessionOk=0; sessionNg=0;
+  loopCounts={};
+  document.getElementById('train-setup').style.display='none';
+  document.getElementById('train-result').style.display='none';
+  document.getElementById('train-area').style.display='block';
+  document.getElementById('loop-banner').style.display= currentMode==='loop'?'block':'none';
+  document.getElementById('timer-wrap').style.display= currentMode==='timer'?'flex':'none';
+  showCard();
+}
+
+function showCard(){
+  if(qIdx>=queue.length){endTraining();return;}
+  const p=queue[qIdx];
+  isRevealed=false;
+  const card=document.getElementById('flash-card');
+  card.className='flash-card';
+  document.getElementById('card-cat').textContent=p.cat;
+  document.getElementById('card-jp').textContent=p.jp;
+  document.getElementById('card-sub').textContent=p.sub||'';
+  document.getElementById('card-en').textContent=p.en;
+  document.getElementById('card-alt').textContent=p.alt?'💡 '+p.alt:'';
+  document.getElementById('card-tip').textContent=p.tip?'🔑 '+p.tip:'';
+  document.getElementById('btn-reveal').style.display='inline-block';
+  document.getElementById('btn-ok').style.display='none';
+  document.getElementById('btn-ng').style.display='none';
+  // progress
+  document.getElementById('train-ctr').textContent=`${qIdx+1} / ${queue.length}`;
+  document.getElementById('train-prog').style.width=((qIdx/queue.length)*100)+'%';
+  // loop banner
+  if(currentMode==='loop'){
+    const cnt=loopCounts[p.id]||0;
+    document.getElementById('loop-remain').textContent=LOOP_TARGET-cnt;
+  }
+  // timer
+  if(currentMode==='timer') startTimer();
+}
+
+function startTimer(){
+  clearInterval(timerInterval);
+  timerLeft=3;
+  updateTimerUI(3,3);
+  timerInterval=setInterval(()=>{
+    timerLeft-=0.1;
+    if(timerLeft<=0){clearInterval(timerInterval);timerLeft=0;revealCard();}
+    updateTimerUI(timerLeft,3);
+  },100);
+}
+
+function updateTimerUI(val,max){
+  const circ=169.6;
+  const offset=circ*(1-val/max);
+  document.getElementById('timer-circle').style.strokeDashoffset=offset;
+  document.getElementById('timer-num').textContent=Math.ceil(val);
+  const pct=val/max;
+  document.getElementById('timer-circle').style.stroke=
+    pct>0.5?'#c8962a':pct>0.25?'#c86a2a':'#a03030';
+}
+
+function revealCard(){
+  if(isRevealed) return;
+  isRevealed=true;
+  clearInterval(timerInterval);
+  const card=document.getElementById('flash-card');
+  card.classList.add('revealed');
+  document.getElementById('btn-reveal').style.display='none';
+  document.getElementById('btn-ok').style.display='inline-block';
+  document.getElementById('btn-ng').style.display='inline-block';
+}
+
+function markOk(){
+  const p=queue[qIdx];
+  sessionOk++;
+  wrongSet.delete(p.id);
+  if(currentMode==='loop'){
+    loopCounts[p.id]=(loopCounts[p.id]||0)+1;
+    if(loopCounts[p.id]>=LOOP_TARGET){
+      masteredSet.add(p.id);
+      saveState();
+      qIdx++;
+    } else {
+      // re-insert at random position ahead
+      const insertAt=qIdx+1+Math.floor(Math.random()*Math.min(5,queue.length-qIdx-1));
+      queue.splice(insertAt,0,p);
+      qIdx++;
+    }
+  } else {
+    masteredSet.add(p.id);
+    saveState();
+    qIdx++;
+  }
+  updateHeader();
+  showCard();
+}
+
+function markNg(){
+  const p=queue[qIdx];
+  sessionNg++;
+  wrongSet.add(p.id);
+  if(currentMode==='loop'){
+    loopCounts[p.id]=0;
+    const insertAt=qIdx+1+Math.floor(Math.random()*Math.min(4,queue.length-qIdx-1));
+    queue.splice(Math.min(insertAt,queue.length),0,p);
+  }
+  saveState();
+  qIdx++;
+  showCard();
+}
+
+function skipCard(){ qIdx++; showCard(); }
+
+function quitTraining(){
+  clearInterval(timerInterval);
+  backToSetup();
+}
+
+function endTraining(){
+  clearInterval(timerInterval);
+  document.getElementById('train-area').style.display='none';
+  document.getElementById('train-result').style.display='block';
+  const total=sessionOk+sessionNg;
+  const pct=total>0?Math.round(sessionOk/total*100):0;
+  document.getElementById('res-ok').textContent=sessionOk;
+  document.getElementById('res-ng').textContent=sessionNg;
+  document.getElementById('res-total').textContent=total;
+  const emoji=pct>=80?'🎉':pct>=50?'💪':'🔥';
+  document.getElementById('res-emoji').textContent=emoji;
+  document.getElementById('res-title').textContent=
+    pct>=80?'素晴らしい！':pct>=50?'いい調子！':'もう一息！';
+  document.getElementById('res-sub').textContent=
+    `正解率 ${pct}%（${sessionOk}/${total}）`;
+  const loopBtn=document.getElementById('res-loop-btn');
+  loopBtn.style.display=sessionNg>0&&currentMode!=='loop'?'block':'none';
+  updateHeader();
+}
+
+function startLoopFromResult(){
+  currentMode='loop';
+  const ng=[...wrongSet];
+  if(ng.length===0){alert('間違えたフレーズがありません！');return;}
+  queue=PHRASES.filter(p=>ng.includes(p.id));
+  for(let i=queue.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[queue[i],queue[j]]=[queue[j],queue[i]];}
+  qIdx=0;sessionOk=0;sessionNg=0;loopCounts={};
+  document.getElementById('train-result').style.display='none';
+  document.getElementById('train-area').style.display='block';
+  document.getElementById('loop-banner').style.display='block';
+  document.getElementById('timer-wrap').style.display='none';
+  showCard();
+}
+
+function backToSetup(){
+  document.getElementById('train-area').style.display='none';
+  document.getElementById('train-result').style.display='none';
+  document.getElementById('train-setup').style.display='block';
+}
+
+// ── LIST ──
+function renderList(){
+  // list cat chips
+  const lcc=document.getElementById('list-cat-chips');
+  lcc.innerHTML=`<button class="cat-chip active" onclick="filterList('all',this)">すべて</button>`;
+  CATS.forEach(c=>{ lcc.innerHTML+=`<button class="cat-chip" onclick="filterList('${c}',this)">${c}</button>`; });
+  filterList('all',lcc.firstElementChild);
+}
+
+function filterList(cat, btn){
+  document.querySelectorAll('#list-cat-chips .cat-chip').forEach(c=>c.classList.remove('active'));
+  btn.classList.add('active');
+  const pool=cat==='all'?PHRASES:PHRASES.filter(p=>p.cat===cat);
+  const el=document.getElementById('list-items');
+  el.innerHTML=pool.map(p=>`
+    <div class="list-item">
+      <div class="li-dot" style="background:${CAT_COLORS[p.cat]||'#888'}"></div>
+      <div style="flex:1">
+        <div class="li-cat">${p.cat}</div>
+        <div class="li-jp">${p.jp}</div>
+        <div class="li-en">${p.en}</div>
+      </div>
+      <div class="li-done ${masteredSet.has(p.id)?'show':''}">✓ 習得</div>
+    </div>`).join('');
+}
+
+// ── STATS ──
+function renderStats(){
+  document.getElementById('st-mastered').textContent=masteredSet.size;
+  document.getElementById('st-total').textContent=PHRASES.length;
+  const cs=document.getElementById('cat-stats');
+  cs.innerHTML=CATS.map(c=>{
+    const total=PHRASES.filter(p=>p.cat===c).length;
+    const done=PHRASES.filter(p=>p.cat===c&&masteredSet.has(p.id)).length;
+    const pct=Math.round(done/total*100);
+    return `<div class="cat-stat">
+      <div class="cs-top">
+        <span class="cs-name">${c}</span>
+        <span class="cs-pct">${done}/${total} (${pct}%)</span>
+      </div>
+      <div class="cs-bar"><div class="cs-fill" style="width:${pct}%;background:${CAT_COLORS[c]||'var(--moss)'}"></div></div>
+    </div>`;
+  }).join('');
+}
+
+function resetAllData(){
+  if(!confirm('全データをリセットしますか？')) return;
+  masteredSet.clear(); wrongSet.clear(); saveState();
+  updateHeader(); renderStats();
+}
+
+// INIT
+initSetup();
+updateHeader();
+</script>
+</body>
+</html>
