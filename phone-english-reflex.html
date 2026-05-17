@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📞 電話英語 瞬間反射 — オーストラリア生活版</title>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1a1410;--paper:#f5f0e8;--gold:#c8962a;--moss:#4a7c59;
+  --indigo:#3d5a8a;--crimson:#a03030;--panel:#fffdf8;--border:rgba(26,20,16,0.12);
+  --warn:#c86a2a;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);min-height:100vh;}
+
+header{background:var(--ink);padding:16px 20px 0;position:sticky;top:0;z-index:100;}
+.h-top{display:flex;align-items:center;gap:10px;padding-bottom:14px;}
+.h-titles{flex:1;}
+.h-titles h1{font-family:'Shippori Mincho',serif;color:var(--gold);font-size:16px;font-weight:700;}
+.h-titles p{color:rgba(245,240,232,0.42);font-size:10px;margin-top:1px;}
+.h-score{text-align:right;}
+.h-score .num{font-size:20px;font-weight:500;color:var(--gold);}
+.h-score .lbl{font-family:'Shippori Mincho',serif;font-size:9px;color:rgba(245,240,232,0.4);}
+nav{display:flex;}
+.tab{flex:1;padding:8px 4px;background:none;border:none;border-bottom:2px solid transparent;
+  color:rgba(245,240,232,0.38);font-family:'DM Sans',sans-serif;font-size:10px;cursor:pointer;
+  transition:all .2s;display:flex;flex-direction:column;align-items:center;gap:2px;}
+.tab span:first-child{font-size:13px;}
+.tab.active{color:var(--gold);border-bottom-color:var(--gold);}
+
+main{padding:14px;max-width:600px;margin:0 auto;}
+.page{display:none;}.page.active{display:block;}
+.sec{font-family:'Shippori Mincho',serif;font-size:10px;font-weight:600;
+  color:rgba(26,20,16,0.35);letter-spacing:.12em;text-transform:uppercase;margin:16px 0 10px;}
+
+.cat-chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;}
+.cat-chip{padding:5px 12px;border-radius:20px;border:1.5px solid var(--border);
+  background:var(--panel);font-size:11px;cursor:pointer;transition:all .2s;color:var(--ink);}
+.cat-chip.active{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+
+.mode-cards{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px;}
+.mode-card{background:var(--panel);border:1.5px solid var(--border);border-radius:14px;
+  padding:14px 12px;cursor:pointer;transition:all .2s;text-align:center;}
+.mode-card:hover{border-color:var(--gold);}
+.mode-card.selected{border-color:var(--gold);background:rgba(200,150,42,0.07);}
+.mode-emoji{font-size:24px;margin-bottom:6px;}
+.mode-name{font-size:13px;font-weight:500;margin-bottom:3px;}
+.mode-desc{font-family:'Shippori Mincho',serif;font-size:10px;color:rgba(26,20,16,0.45);line-height:1.5;}
+
+.start-btn{width:100%;padding:14px;border-radius:12px;border:none;background:var(--ink);
+  color:var(--gold);font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;
+  cursor:pointer;transition:opacity .2s;}
+.start-btn:hover{opacity:.85;}
+
+.train-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.train-prog-wrap{flex:1;height:5px;background:var(--border);border-radius:3px;margin:0 12px;overflow:hidden;}
+.train-prog-fill{height:100%;background:var(--gold);border-radius:3px;transition:width .4s;}
+.train-ctr{font-size:11px;color:rgba(26,20,16,0.4);}
+.quit-btn{font-size:11px;color:rgba(26,20,16,0.35);background:none;border:none;cursor:pointer;text-decoration:underline;}
+
+.timer-wrap{display:flex;justify-content:center;margin-bottom:14px;}
+.timer-ring{position:relative;width:64px;height:64px;}
+.timer-ring svg{transform:rotate(-90deg);}
+.timer-ring circle{fill:none;stroke-width:5;}
+.timer-bg{stroke:var(--border);}
+.timer-fg{stroke:var(--gold);stroke-linecap:round;transition:stroke-dashoffset .1s linear,stroke .3s;}
+.timer-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-size:18px;font-weight:500;color:var(--ink);}
+
+.loop-banner{background:rgba(200,150,42,0.1);border:1px solid rgba(200,150,42,0.3);
+  border-radius:10px;padding:8px 12px;margin-bottom:12px;font-family:'Shippori Mincho',serif;
+  font-size:12px;color:var(--gold);text-align:center;}
+
+/* STAR badge for power phrases */
+.power-badge{display:inline-block;background:rgba(200,150,42,0.15);color:var(--gold);
+  font-size:9px;font-weight:600;padding:2px 7px;border-radius:20px;
+  letter-spacing:.05em;margin-bottom:8px;}
+
+.flash-card{background:var(--panel);border:1.5px solid var(--border);border-radius:18px;
+  padding:24px 20px;text-align:center;margin-bottom:14px;
+  box-shadow:0 4px 24px rgba(26,20,16,0.08);min-height:200px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  cursor:pointer;transition:border-color .2s;}
+.flash-card.revealed{border-color:var(--moss);}
+
+.card-cat{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+  color:rgba(26,20,16,0.3);margin-bottom:8px;}
+.card-situation{font-family:'Shippori Mincho',serif;font-size:11px;color:var(--indigo);
+  background:rgba(61,90,138,0.08);border-radius:6px;padding:5px 10px;margin-bottom:12px;
+  line-height:1.55;}
+.card-jp{font-family:'Shippori Mincho',serif;font-size:20px;font-weight:700;
+  line-height:1.55;margin-bottom:4px;color:var(--ink);}
+.card-hint{font-size:11px;color:rgba(26,20,16,0.3);font-style:italic;margin-top:8px;}
+.card-en{font-size:17px;font-weight:500;line-height:1.5;margin-bottom:6px;display:none;text-align:left;}
+.card-alt{font-size:12px;color:rgba(26,20,16,0.5);display:none;font-style:italic;
+  margin-bottom:8px;text-align:left;}
+.card-tip{font-family:'Shippori Mincho',serif;font-size:11px;color:var(--indigo);
+  background:rgba(61,90,138,0.08);border-radius:6px;padding:8px 10px;display:none;
+  line-height:1.65;text-align:left;width:100%;}
+.flash-card.revealed .card-en{display:block;}
+.flash-card.revealed .card-alt{display:block;}
+.flash-card.revealed .card-tip{display:block;}
+.flash-card.revealed .card-hint{display:none;}
+
+.action-row{display:flex;gap:8px;margin-bottom:10px;}
+.act-btn{flex:1;padding:13px;border-radius:12px;border:none;
+  font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:opacity .15s;}
+.act-btn:hover{opacity:.85;}
+.act-reveal{background:var(--indigo);color:#fff;flex:2;}
+.act-ok{background:var(--moss);color:#fff;}
+.act-ng{background:rgba(160,48,48,0.12);color:var(--crimson);}
+.act-row2{display:flex;gap:8px;}
+.act-skip{flex:1;padding:9px;border-radius:9px;border:1.5px solid var(--border);
+  background:var(--panel);font-family:'DM Sans',sans-serif;font-size:11px;cursor:pointer;color:rgba(26,20,16,0.45);}
+
+.result-wrap{text-align:center;padding:20px 0;}
+.result-emoji{font-size:52px;margin-bottom:12px;}
+.result-title{font-family:'Shippori Mincho',serif;font-size:20px;font-weight:700;margin-bottom:6px;}
+.result-sub{font-size:13px;color:rgba(26,20,16,0.5);margin-bottom:24px;font-family:'Shippori Mincho',serif;}
+.result-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:24px;}
+.rs{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:12px 8px;text-align:center;}
+.rs-num{font-size:24px;font-weight:500;line-height:1;margin-bottom:3px;}
+.rs-num.g{color:var(--moss);}.rs-num.r{color:var(--crimson);}.rs-num.b{color:var(--indigo);}
+.rs-lbl{font-family:'Shippori Mincho',serif;font-size:9px;color:rgba(26,20,16,0.4);}
+.result-btns{display:flex;flex-direction:column;gap:8px;}
+.res-btn{padding:13px;border-radius:12px;border:none;font-family:'DM Sans',sans-serif;
+  font-size:13px;font-weight:500;cursor:pointer;transition:opacity .2s;}
+.res-btn:hover{opacity:.85;}
+.res-btn.primary{background:var(--crimson);color:#fff;}
+.res-btn.secondary{background:var(--ink);color:var(--paper);}
+.res-btn.tertiary{background:var(--panel);color:var(--ink);border:1.5px solid var(--border);}
+
+.list-item{background:var(--panel);border:1px solid var(--border);border-radius:11px;
+  padding:12px 14px;margin-bottom:7px;display:flex;align-items:flex-start;gap:12px;}
+.li-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:6px;}
+.li-body{flex:1;}
+.li-cat{font-size:9px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:rgba(26,20,16,0.3);margin-bottom:2px;}
+.li-jp{font-family:'Shippori Mincho',serif;font-size:14px;font-weight:600;margin-bottom:3px;}
+.li-en{font-size:12px;color:rgba(26,20,16,0.6);line-height:1.5;}
+.li-done{margin-left:auto;font-size:10px;background:var(--moss);color:#fff;
+  padding:2px 7px;border-radius:20px;display:none;flex-shrink:0;}
+.li-done.show{display:inline;}
+
+.overall-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;}
+.os{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px 12px;text-align:center;}
+.os-num{font-size:26px;font-weight:500;line-height:1;margin-bottom:4px;}
+.os-num.g{color:var(--moss);}.os-num.gold{color:var(--gold);}
+.os-lbl{font-family:'Shippori Mincho',serif;font-size:10px;color:rgba(26,20,16,0.4);}
+.cat-stat{background:var(--panel);border:1px solid var(--border);border-radius:11px;padding:12px 14px;margin-bottom:8px;}
+.cs-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+.cs-name{font-size:13px;font-weight:500;}
+.cs-pct{font-size:12px;color:var(--moss);font-weight:500;}
+.cs-bar{height:4px;background:var(--border);border-radius:2px;overflow:hidden;}
+.cs-fill{height:100%;background:var(--moss);border-radius:2px;transition:width .5s;}
+.reset-all-btn{width:100%;padding:11px;border-radius:10px;border:1.5px solid var(--border);
+  background:var(--panel);font-family:'DM Sans',sans-serif;font-size:12px;
+  color:rgba(26,20,16,0.4);cursor:pointer;margin-top:12px;}
+.reset-all-btn:hover{border-color:var(--crimson);color:var(--crimson);}
+
+/* POWER PHRASES SECTION */
+.power-section{background:rgba(200,150,42,0.07);border:1.5px solid rgba(200,150,42,0.25);
+  border-radius:14px;padding:16px;margin-bottom:16px;}
+.power-title{font-family:'Shippori Mincho',serif;font-size:12px;font-weight:700;
+  color:var(--gold);margin-bottom:12px;display:flex;align-items:center;gap:6px;}
+.power-item{margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid rgba(200,150,42,0.15);}
+.power-item:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none;}
+.power-en{font-size:14px;font-weight:500;margin-bottom:3px;}
+.power-jp{font-family:'Shippori Mincho',serif;font-size:12px;color:rgba(26,20,16,0.55);margin-bottom:4px;}
+.power-why{font-family:'Shippori Mincho',serif;font-size:11px;color:var(--indigo);
+  background:rgba(61,90,138,0.08);border-radius:6px;padding:5px 8px;line-height:1.6;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="h-top">
+    <span style="font-size:26px">📞</span>
+    <div class="h-titles">
+      <h1>電話英語 瞬間反射</h1>
+      <p>オーストラリア日常生活 — 100フレーズ</p>
+    </div>
+    <div class="h-score">
+      <div class="num" id="h-mastered">0</div>
+      <div class="lbl">習得済み</div>
+    </div>
+  </div>
+  <nav>
+    <button class="tab active" onclick="switchTab('train',this)"><span>⚡</span><span>トレーニング</span></button>
+    <button class="tab" onclick="switchTab('power',this)"><span>⭐</span><span>必殺技</span></button>
+    <button class="tab" onclick="switchTab('list',this)"><span>📋</span><span>一覧</span></button>
+    <button class="tab" onclick="switchTab('stats',this)"><span>📊</span><span>記録</span></button>
+  </nav>
+</header>
+
+<main>
+
+<!-- ===== TRAIN PAGE ===== -->
+<div id="page-train" class="page active">
+  <div id="train-setup">
+    <div class="sec" style="margin-top:14px">カテゴリを選ぶ</div>
+    <div class="cat-chips" id="cat-chips"></div>
+    <div class="sec">モードを選ぶ</div>
+    <div class="mode-cards">
+      <div class="mode-card selected" id="mode-normal" onclick="selectMode('normal')">
+        <div class="mode-emoji">🃏</div>
+        <div class="mode-name">通常モード</div>
+        <div class="mode-desc">全フレーズを1枚ずつ。自分のペースで。</div>
+      </div>
+      <div class="mode-card" id="mode-timer" onclick="selectMode('timer')">
+        <div class="mode-emoji">⏱️</div>
+        <div class="mode-name">タイマーモード</div>
+        <div class="mode-desc">3秒以内に口から出せるか。電話の本番を想定。</div>
+      </div>
+      <div class="mode-card" id="mode-loop" onclick="selectMode('loop')">
+        <div class="mode-emoji">🔁</div>
+        <div class="mode-name">ループモード</div>
+        <div class="mode-desc">言えなかった表現を5回連続正解まで繰り返す。</div>
+      </div>
+      <div class="mode-card" id="mode-review" onclick="selectMode('review')">
+        <div class="mode-emoji">🔄</div>
+        <div class="mode-name">復習モード</div>
+        <div class="mode-desc">未習得・間違えたフレーズだけを集中練習。</div>
+      </div>
+    </div>
+    <button class="start-btn" onclick="startTraining()">トレーニング開始 →</button>
+  </div>
+
+  <div id="train-area" style="display:none">
+    <div class="train-hd">
+      <span class="train-ctr" id="train-ctr">1 / 10</span>
+      <div class="train-prog-wrap"><div class="train-prog-fill" id="train-prog" style="width:0%"></div></div>
+      <button class="quit-btn" onclick="quitTraining()">終了</button>
+    </div>
+    <div id="loop-banner" class="loop-banner" style="display:none">🔁 ループモード — あと<span id="loop-remain"></span>回正解で卒業！</div>
+    <div id="timer-wrap" class="timer-wrap" style="display:none">
+      <div class="timer-ring">
+        <svg width="64" height="64" viewBox="0 0 64 64">
+          <circle class="timer-bg" cx="32" cy="32" r="27"/>
+          <circle class="timer-fg" id="timer-circle" cx="32" cy="32" r="27"
+            stroke-dasharray="169.6" stroke-dashoffset="0"/>
+        </svg>
+        <div class="timer-num" id="timer-num">3</div>
+      </div>
+    </div>
+    <div class="flash-card" id="flash-card" onclick="revealCard()">
+      <div class="card-cat"       id="card-cat"></div>
+      <div class="card-situation" id="card-situation"></div>
+      <div class="card-jp"        id="card-jp"></div>
+      <div class="card-hint">タップして英語を確認</div>
+      <div class="card-en"        id="card-en"></div>
+      <div class="card-alt"       id="card-alt"></div>
+      <div class="card-tip"       id="card-tip"></div>
+    </div>
+    <div class="action-row" id="action-row">
+      <button class="act-btn act-reveal" id="btn-reveal" onclick="revealCard()">英語を見る</button>
+      <button class="act-btn act-ok" id="btn-ok" onclick="markOk()" style="display:none">✓ 言えた！</button>
+      <button class="act-btn act-ng" id="btn-ng" onclick="markNg()" style="display:none">✕ 言えなかった</button>
+    </div>
+    <div class="act-row2">
+      <button class="act-skip" onclick="skipCard()">スキップ →</button>
+    </div>
+  </div>
+
+  <div id="train-result" style="display:none">
+    <div class="result-wrap">
+      <div class="result-emoji" id="res-emoji">🎉</div>
+      <div class="result-title"  id="res-title">完了！</div>
+      <div class="result-sub"    id="res-sub"></div>
+      <div class="result-stats">
+        <div class="rs"><div class="rs-num g" id="res-ok">0</div><div class="rs-lbl">言えた！</div></div>
+        <div class="rs"><div class="rs-num r" id="res-ng">0</div><div class="rs-lbl">言えなかった</div></div>
+        <div class="rs"><div class="rs-num b" id="res-total">0</div><div class="rs-lbl">総問数</div></div>
+      </div>
+      <div class="result-btns">
+        <button class="res-btn primary" id="res-loop-btn" onclick="startLoopFromResult()" style="display:none">🔁 言えなかった分をループ練習</button>
+        <button class="res-btn secondary" onclick="backToSetup()">もう一度設定から</button>
+        <button class="res-btn tertiary" onclick="switchTab('stats',document.querySelectorAll('.tab')[3])">記録を見る</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== POWER PAGE ===== -->
+<div id="page-power" class="page">
+  <div class="sec" style="margin-top:14px">⭐ 必殺フレーズ — これだけ覚えれば変わる</div>
+  <p style="font-family:'Shippori Mincho',serif;font-size:12px;color:rgba(26,20,16,0.5);margin-bottom:16px;line-height:1.75;">
+    オーストラリアの電話対応で特に効果的なフレーズを厳選しました。<br>
+    これを言うだけで相手の対応が変わります。
+  </p>
+
+  <div class="power-section">
+    <div class="power-title">😤 ぐるぐる転送されるとき</div>
+    <div class="power-item">
+      <div class="power-en">I've already been transferred twice. Before you transfer me again, could you confirm the next person can actually help me?</div>
+      <div class="power-jp">すでに2回転送されました。また転送される前に、次の方が対応できるか確認していただけますか？</div>
+      <div class="power-why">🔑 これを言うと相手が確認してから転送するようになる。「already been transferred」が効く。</div>
+    </div>
+    <div class="power-item">
+      <div class="power-en">I've explained my situation several times already. Could I please speak to a supervisor?</div>
+      <div class="power-jp">すでに何度も説明しました。上の方とお話しできますか？</div>
+      <div class="power-why">🔑 supervisor（上司）を求めると対応が変わる。これは権利なので遠慮なく言ってOK。</div>
+    </div>
+    <div class="power-item">
+      <div class="power-en">Can I get a reference number for this call?</div>
+      <div class="power-jp">この電話の参照番号をいただけますか？</div>
+      <div class="power-why">🔑 最重要！記録に残るということを相手が意識するので適当な対応ができなくなる。</div>
+    </div>
+  </div>
+
+  <div class="power-section">
+    <div class="power-title">🤝 約束と違うとき・確認するとき</div>
+    <div class="power-item">
+      <div class="power-en">I was told that [内容] would happen. Can you explain why that hasn't happened?</div>
+      <div class="power-jp">〜になると言われていました。なぜそうなっていないか説明していただけますか？</div>
+      <div class="power-why">🔑 感情的にならず事実として伝える。「I was told」が重要で責任の所在を明確にする。</div>
+    </div>
+    <div class="power-item">
+      <div class="power-en">Could you confirm that in writing, please? Or send me an email summary?</div>
+      <div class="power-jp">それを書面で確認していただけますか？またはメールで要約を送っていただけますか？</div>
+      <div class="power-why">🔑 証拠を残す最強フレーズ。口約束をなくす。必ず言うべき。</div>
+    </div>
+    <div class="power-item">
+      <div class="power-en">Just to confirm — you're saying that [内容], correct? I want to make sure I understand.</div>
+      <div class="power-jp">確認させてください——〜とおっしゃっているんですね？正しく理解したいと思いまして。</div>
+      <div class="power-why">🔑 相手の言ったことを繰り返すことで、間違いを防ぎ記録にもなる。</div>
+    </div>
+  </div>
+
+  <div class="power-section">
+    <div class="power-title">📋 申し込み後・次のステップを確認</div>
+    <div class="power-item">
+      <div class="power-en">What happens after I submit this? What's the next step?</div>
+      <div class="power-jp">申し込んだ後、どうなりますか？次のステップを教えてください。</div>
+      <div class="power-why">🔑 「What happens next?」は電話英語の定番。これで全体の流れが分かる。</div>
+    </div>
+    <div class="power-item">
+      <div class="power-en">Can you guarantee that? Or is that just an estimate?</div>
+      <div class="power-jp">それは確約ですか？それとも目安ですか？</div>
+      <div class="power-why">🔑 guarantee（確約）という言葉を使うことで相手に責任を意識させる。</div>
+    </div>
+    <div class="power-item">
+      <div class="power-en">How will I know when this is done? Will you contact me, or should I follow up?</div>
+      <div class="power-jp">完了したらどうやって分かりますか？連絡していただけますか？それとも私から確認すべきですか？</div>
+      <div class="power-why">🔑 フォローアップの方法を最初に確認しておく。後で「聞いてない」を防ぐ。</div>
+    </div>
+  </div>
+
+  <div class="power-section">
+    <div class="power-title">🔁 聞き取れないとき — 焦らず使う3選</div>
+    <div class="power-item">
+      <div class="power-en">I'm sorry, I didn't quite catch that. Could you say that again?</div>
+      <div class="power-jp">すみません、よく聞き取れませんでした。もう一度おっしゃっていただけますか？</div>
+      <div class="power-why">🔑 "didn't catch"が最も自然。何度でも使ってOK。遠慮しない。</div>
+    </div>
+    <div class="power-item">
+      <div class="power-en">Could you spell that for me, please?</div>
+      <div class="power-jp">スペルを教えていただけますか？</div>
+      <div class="power-why">🔑 名前・住所・参照番号は必ずスペルで確認。これが証拠になる。</div>
+    </div>
+    <div class="power-item">
+      <div class="power-en">I'm sorry, the line is a bit unclear. Could you speak up a little?</div>
+      <div class="power-jp">すみません、少し聞こえにくいです。もう少し大きな声でお話しいただけますか？</div>
+      <div class="power-why">🔑 相手のせいにせず「line（電波）」のせいにするとお互い気持ちよく対応できる。</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== LIST PAGE ===== -->
+<div id="page-list" class="page">
+  <div class="sec" style="margin-top:14px">カテゴリで絞り込む</div>
+  <div class="cat-chips" id="list-cat-chips"></div>
+  <div id="list-items"></div>
+</div>
+
+<!-- ===== STATS PAGE ===== -->
+<div id="page-stats" class="page">
+  <div class="sec" style="margin-top:14px">全体の進捗</div>
+  <div class="overall-stats">
+    <div class="os"><div class="os-num g" id="st-mastered">0</div><div class="os-lbl">習得済み</div></div>
+    <div class="os"><div class="os-num gold" id="st-total">100</div><div class="os-lbl">総フレーズ数</div></div>
+  </div>
+  <div class="sec">カテゴリ別進捗</div>
+  <div id="cat-stats"></div>
+  <button class="reset-all-btn" onclick="resetAllData()">↺ 全データをリセット</button>
+</div>
+
+</main>
+
+<script>
+const PHRASES = [
+  // 📞 電話の出だし・用件を伝える (10)
+  {id:1,cat:'電話の出だし',situation:'電話をかけた最初の一言',jp:'予約をしたいのですが',en:"Hello, I'd like to make a reservation, please.",alt:'Hi, I was hoping to book ...',tip:"I'd like to ... が電話英語で最も使える出だし。Hello / Hi をつけると丁寧な印象に。"},
+  {id:2,cat:'電話の出だし',situation:'用件をすぐ伝える',jp:'〜についてお電話しました',en:"I'm calling to ask about [件名].",alt:"I'm calling regarding [件名].",tip:"I'm calling to ... で用件を即座に伝えられる。regarding はより丁寧でフォーマル。"},
+  {id:3,cat:'電話の出だし',situation:'担当者を呼び出す',jp:'担当者の方はいらっしゃいますか？',en:"Could I speak to someone in charge, please?",alt:"Could I speak to the relevant department?",tip:'someone in charge で「担当者」を表現。名前が分かれば Could I speak to [名前]? でOK。'},
+  {id:4,cat:'電話の出だし',situation:'予約確認のとき',jp:'予約の確認をしたいのですが',en:"I'd like to check on my booking, please.",alt:"I'm calling to confirm my reservation.",tip:'check on は「確認する」。confirm my reservation でも自然。'},
+  {id:5,cat:'電話の出だし',situation:'かけ直しのとき',jp:'後でかけ直します',en:"I'll call back later. Thank you.",alt:"I'll try again later.",tip:"I'll call back が最も一般的。「また電話します」のシンプルな表現。"},
+  {id:6,cat:'電話の出だし',situation:'伝言を残すとき',jp:'伝言をお願いできますか？',en:"Could I leave a message, please?",alt:"Can I leave my name and number?",tip:'leave a message が伝言を残す定番表現。名前と番号も一緒に伝えるとベター。'},
+  {id:7,cat:'電話の出だし',situation:'営業時間を確認',jp:'営業時間を教えていただけますか？',en:"What are your business hours?",alt:"When are you open?",tip:'business hours が正式。When are you open? はカジュアルで口語的。'},
+  {id:8,cat:'電話の出だし',situation:'待ってほしいとき',jp:'少々お待ちいただけますか？',en:"Could you hold on a moment, please?",alt:"Just a moment, please.",tip:'hold on は「待つ」の口語表現。Just a moment. はシンプルで使いやすい。'},
+  {id:9,cat:'電話の出だし',situation:'自分の名前を伝える',jp:'〜と申します',en:"My name is [名前].",alt:"This is [名前] speaking.",tip:'This is [名前] speaking. は電話特有の自己紹介。よりプロフェッショナルな印象。'},
+  {id:10,cat:'電話の出だし',situation:'相手の会社を確認',jp:'〜でよろしいですか？',en:"Is this [会社名/店名]?",alt:"Am I speaking to [会社名]?",tip:'かけ間違い防止と確認に使う。最初に確認すると安心。'},
+
+  // 🏨 ホテル・宿泊予約 (10)
+  {id:11,cat:'ホテル予約',situation:'部屋を予約する',jp:'2泊予約したいのですが',en:"I'd like to book a room for two nights, please.",alt:"I'd like to make a reservation for two nights.",tip:"book a room / make a reservation どちらも自然。nights（泊数）を最初に伝えると話がスムーズ。"},
+  {id:12,cat:'ホテル予約',situation:'空室確認',jp:'〇月〇日に空きはありますか？',en:"Do you have any availability on [日付]?",alt:"Is there a room available on [日付]?",tip:'availability（空き状況）を聞くのがプロっぽい表現。'},
+  {id:13,cat:'ホテル予約',situation:'禁煙室を希望',jp:'禁煙室をお願いできますか？',en:"Could I request a non-smoking room, please?",alt:"I'd prefer a non-smoking room if possible.",tip:'if possible をつけると柔らかい依頼になる。'},
+  {id:14,cat:'ホテル予約',situation:'チェックイン時間確認',jp:'チェックインは何時からですか？',en:"What time is check-in?",alt:"From what time can I check in?",tip:'シンプルに What time is check-in? で十分。覚えやすい。'},
+  {id:15,cat:'ホテル予約',situation:'朝食付きか確認',jp:'朝食は含まれていますか？',en:"Is breakfast included?",alt:"Does the rate include breakfast?",tip:'Is breakfast included? が最もシンプル。rate（宿泊料金）を使うとより自然。'},
+  {id:16,cat:'ホテル予約',situation:'料金を確認',jp:'1泊いくらですか？',en:"How much is it per night?",alt:"What's the rate per night?",tip:'per night で「1泊あたり」。rate はホテルでよく使われる料金の表現。'},
+  {id:17,cat:'ホテル予約',situation:'早期チェックイン希望',jp:'早めにチェックインできますか？',en:"Is early check-in possible?",alt:"Could I check in before the standard time?",tip:'early check-in という表現はホテルで広く通じる。'},
+  {id:18,cat:'ホテル予約',situation:'駐車場を確認',jp:'駐車場はありますか？',en:"Do you have parking available?",alt:"Is there parking on site?",tip:'on site は「敷地内に」という意味。'},
+  {id:19,cat:'ホテル予約',situation:'予約番号を確認',jp:'予約番号を教えていただけますか？',en:"Could I get a confirmation number, please?",alt:"Can you give me a booking reference?",tip:'confirmation number / booking reference は同じ意味。必ず聞いて記録する。'},
+  {id:20,cat:'ホテル予約',situation:'特別リクエスト',jp:'静かな部屋をお願いできますか？',en:"Could I request a quiet room, please?",alt:"I'd prefer a room away from the elevator.",tip:'具体的に伝えると対応してもらいやすい。away from the elevator（エレベーターから離れた）など。'},
+
+  // 🏥 病院・歯医者・薬局 (10)
+  {id:21,cat:'病院・医療',situation:'予約を取る',jp:'予約を取りたいのですが',en:"I'd like to make an appointment, please.",alt:"I'd like to book an appointment.",tip:'appointment が医療予約の正式な表現。reservation ではなく appointment を使う。'},
+  {id:22,cat:'病院・医療',situation:'緊急度を伝える',jp:'なるべく早く診ていただけますか？',en:"Is there anything available as soon as possible? It's quite urgent.",alt:"I need to be seen urgently.",tip:'quite urgent で緊急性を伝える。as soon as possible（ASAP）もよく使われる。'},
+  {id:23,cat:'病院・医療',situation:'症状を伝える',jp:'〜が痛いのですが',en:"I've been having pain in [部位].",alt:"I have a pain in my [部位].",tip:"I've been having ... は「しばらく〜が続いている」のニュアンス。"},
+  {id:24,cat:'病院・医療',situation:'保険を確認',jp:'保険は使えますか？',en:"Do you accept [保険名] insurance?",alt:"Are you covered by my insurance?",tip:'accept insurance で「保険が使えるか」を確認。保険会社名も一緒に伝えると早い。'},
+  {id:25,cat:'病院・医療',situation:'予約変更',jp:'予約の日程を変更したいのですが',en:"I need to reschedule my appointment.",alt:"I'd like to change my appointment.",tip:'reschedule が「日程変更」の正式表現。cancel と間違えないよう注意。'},
+  {id:26,cat:'病院・医療',situation:'待ち時間確認',jp:'待ち時間はどのくらいですか？',en:"How long is the wait?",alt:"What's the estimated waiting time?",tip:'How long is the wait? がシンプルで自然。'},
+  {id:27,cat:'病院・医療',situation:'薬について確認',jp:'この薬の飲み方を教えてください',en:"Could you explain how to take this medication?",alt:"How often should I take this?",tip:'medication が薬の正式表現。How often（何回）も一緒に聞くとよい。'},
+  {id:28,cat:'病院・医療',situation:'紹介状が必要なとき',jp:'専門医を紹介していただけますか？',en:"Could you refer me to a specialist?",alt:"Do I need a referral?",tip:'referral がオーストラリアの医療システムで重要な単語。GP（一般医）からもらう。'},
+  {id:29,cat:'病院・医療',situation:'結果を確認',jp:'検査結果はいつ出ますか？',en:"When will my test results be ready?",alt:"How long will it take for the results to come back?",tip:'come back は結果が「出る・戻ってくる」というイメージ。'},
+  {id:30,cat:'病院・医療',situation:'費用の確認',jp:'費用はどのくらいかかりますか？',en:"How much will this cost?",alt:"What's the out-of-pocket cost?",tip:'out-of-pocket cost は「自己負担額」のオーストラリアで頻出の表現。'},
+
+  // 🏦 銀行・保険・公共機関 (10)
+  {id:31,cat:'銀行・公共機関',situation:'口座について問い合わせ',jp:'口座についてお電話しました',en:"I'm calling about my account.",alt:"I have a question about my account.",tip:"I'm calling about ... で用件が即座に伝わる。account（口座）は銀行・公共機関共通。"},
+  {id:32,cat:'銀行・公共機関',situation:'住所変更',jp:'住所変更をしたいのですが',en:"I need to update my address.",alt:"I'd like to change my address on file.",tip:'on file は「記録上の」。update my address がシンプルで自然。'},
+  {id:33,cat:'銀行・公共機関',situation:'明細が届かない',jp:'明細が届いていないのですが',en:"I didn't receive my statement.",alt:"My statement hasn't arrived.",tip:"statement が明細・請求書。hasn't arrived で「まだ届いていない」。"},
+  {id:34,cat:'銀行・公共機関',situation:'担当部署を確認',jp:'担当部署に回していただけますか？',en:"Could you transfer me to the right department?",alt:"Who should I speak to about this?",tip:'the right department で「担当部署」。転送前に確認してもらうことが重要。'},
+  {id:35,cat:'銀行・公共機関',situation:'手続きの流れを確認',jp:'この手続きはどうすればいいですか？',en:"What do I need to do to [手続き内容]?",alt:"What's the process for this?",tip:"What's the process? は手続きの流れ全体を聞く便利フレーズ。"},
+  {id:36,cat:'銀行・公共機関',situation:'書類について',jp:'どんな書類が必要ですか？',en:"What documents do I need to bring?",alt:"What paperwork is required?",tip:'documents / paperwork どちらも書類。bring（持参）かpost（郵送）かも確認するとよい。'},
+  {id:37,cat:'銀行・公共機関',situation:'処理状況の確認',jp:'申し込みの状況を確認したいのですが',en:"I'd like to check the status of my application.",alt:"Can you tell me where my application is at?",tip:'status of my application がオーストラリアでよく使われる表現。'},
+  {id:38,cat:'銀行・公共機関',situation:'料金の請求が違う',jp:'請求額が違うと思うのですが',en:"I think there's an error in my bill.",alt:"I've been charged incorrectly.",tip:'error in my bill で「請求書の間違い」。charged incorrectly は「間違って請求された」。'},
+  {id:39,cat:'銀行・公共機関',situation:'Centrelinkなど',jp:'〜の給付を申請したいのですが',en:"I'd like to apply for [給付名].",alt:"How do I claim [給付名]?",tip:'apply for が申請、claim が給付請求。Centrelink、Medicare などでよく使う。'},
+  {id:40,cat:'銀行・公共機関',situation:'次回の確認',jp:'次に何をすればいいですか？',en:"What's the next step for me?",alt:"What do I need to do from here?",tip:"What's the next step? は汎用性が高く、どんな手続きにも使える。"},
+
+  // 📦 配送・修理・業者 (10)
+  {id:41,cat:'配送・業者',situation:'配送状況確認',jp:'荷物がまだ届いていません',en:"My package hasn't arrived yet.",alt:"I'm still waiting for my delivery.",tip:"hasn't arrived yet で「まだ届いていない」。order number（注文番号）を手元に準備しておく。"},
+  {id:42,cat:'配送・業者',situation:'修理の依頼',jp:'修理をお願いしたいのですが',en:"I'd like to arrange a repair, please.",alt:"I need to get something fixed.",tip:'arrange a repair で「修理の手配をする」。get something fixed はよりカジュアル。'},
+  {id:43,cat:'配送・業者',situation:'業者に来てもらう',jp:'いつ来ていただけますか？',en:"When is the earliest you can come?",alt:"What's the soonest available time?",tip:'earliest / soonest で「最も早い日時」を聞く。'},
+  {id:44,cat:'配送・業者',situation:'配達時間の変更',jp:'配達時間を変更できますか？',en:"Can I reschedule the delivery?",alt:"Is there a way to change the delivery time?",tip:'reschedule the delivery で配達の日時変更。'},
+  {id:45,cat:'配送・業者',situation:'不在票が入っていた',jp:'不在票が入っていたのですが',en:"I missed a delivery. Can I arrange redelivery?",alt:"I wasn't home for my delivery. What can I do?",tip:'missed a delivery で「不在だった」。redelivery（再配達）を使う。'},
+  {id:46,cat:'配送・業者',situation:'商品が壊れていた',jp:'届いた商品が壊れていました',en:"The item arrived damaged.",alt:"My order arrived in a damaged condition.",tip:'arrived damaged がシンプルで正確な表現。写真も撮っておくとよい。'},
+  {id:47,cat:'配送・業者',situation:'見積もりを取る',jp:'見積もりをいただけますか？',en:"Could I get a quote, please?",alt:"Can you give me an estimate?",tip:'quote が正式な見積もり。estimate は概算。オーストラリアでは quote がよく使われる。'},
+  {id:48,cat:'配送・業者',situation:'追跡番号を確認',jp:'追跡番号を教えていただけますか？',en:"Could I get the tracking number?",alt:"What's the tracking number for my order?",tip:'tracking number で「追跡番号」。配送会社のサイトで確認できる。'},
+  {id:49,cat:'配送・業者',situation:'返品・交換',jp:'返品・交換したいのですが',en:"I'd like to return or exchange this, please.",alt:"I need to send this back.",tip:'return（返品）exchange（交換）。send this back はカジュアル表現。'},
+  {id:50,cat:'配送・業者',situation:'いつ届くか確認',jp:'いつ届く予定ですか？',en:"When is the expected delivery date?",alt:"When should I expect my order to arrive?",tip:'expected delivery date が正式な表現。should I expect もよく使われる。'},
+
+  // 🔄 変更・キャンセル (10)
+  {id:51,cat:'変更・キャンセル',situation:'予約変更',jp:'予約を変更したいのですが',en:"I'd like to change my reservation.",alt:"I need to reschedule my booking.",tip:"I'd like to change / reschedule どちらも自然。booking と reservation は同じ意味で使える。"},
+  {id:52,cat:'変更・キャンセル',situation:'キャンセル',jp:'予約をキャンセルしたいのですが',en:"I'd like to cancel my booking, please.",alt:"I need to cancel my reservation.",tip:'cancel my booking がシンプル。参照番号（reference number）を手元に準備。'},
+  {id:53,cat:'変更・キャンセル',situation:'キャンセル料確認',jp:'キャンセル料はかかりますか？',en:"Is there a cancellation fee?",alt:"Will I be charged for cancelling?",tip:'cancellation fee がキャンセル料。be charged for cancelling でも同じ意味。'},
+  {id:54,cat:'変更・キャンセル',situation:'返金確認',jp:'返金していただけますか？',en:"Could I get a refund, please?",alt:"Am I entitled to a refund?",tip:'entitled to は「〜を受ける権利がある」。Am I entitled to a refund? はより強い表現。'},
+  {id:55,cat:'変更・キャンセル',situation:'日程変更',jp:'〇月〇日に変更できますか？',en:"Can I move my booking to [日付]?",alt:"Is [日付] available instead?",tip:'move my booking to ... で「〜に変更する」。instead をつけると代替の日程感が出る。'},
+  {id:56,cat:'変更・キャンセル',situation:'人数変更',jp:'人数を変更できますか？',en:"Can I modify the number of guests?",alt:"I need to change the number of people in my booking.",tip:'modify（変更する）はフォーマルな場面で使いやすい。'},
+  {id:57,cat:'変更・キャンセル',situation:'ポリシー確認',jp:'キャンセルポリシーを教えてください',en:"What's your cancellation policy?",alt:"What are the terms for cancelling?",tip:"What's your ... policy? は各種ポリシーを確認する汎用フレーズ。"},
+  {id:58,cat:'変更・キャンセル',situation:'予約ミスの修正',jp:'予約に間違いがありました',en:"I made a mistake in my booking. Could you help me fix it?",alt:"There's an error in my reservation.",tip:'made a mistake は自分のミスを認める表現。an error in my reservation はより中立的。'},
+  {id:59,cat:'変更・キャンセル',situation:'ウェイティングリスト',jp:'キャンセル待ちに入れますか？',en:"Is there a waitlist I can be added to?",alt:"Can you put me on the waiting list?",tip:'waitlist / waiting list どちらも使える。put me on が「リストに入れる」。'},
+  {id:60,cat:'変更・キャンセル',situation:'代替案を求める',jp:'他に選択肢はありますか？',en:"Are there any other options available?",alt:"Is there anything else you can offer?",tip:"What else can you do for me? もよく使われる。オーストラリアでは遠慮なく聞いてOK。"},
+
+  // 🔁 聞き返し・聞き取り確認 (10)
+  {id:61,cat:'聞き返し・確認',situation:'聞き取れなかったとき',jp:'すみません、もう一度おっしゃっていただけますか？',en:"I'm sorry, could you say that again?",alt:"I didn't quite catch that. Could you repeat it?",tip:"didn't catch が最も自然。「catch＝聞き取る」。何度使ってもOK。恥ずかしくない。"},
+  {id:62,cat:'聞き返し・確認',situation:'ゆっくり話してほしい',jp:'もう少しゆっくり話していただけますか？',en:"Could you speak a little more slowly, please?",alt:"Could you slow down a bit?",tip:'slow down がカジュアルで言いやすい。a bit をつけると柔らかい。'},
+  {id:63,cat:'聞き返し・確認',situation:'スペルを確認',jp:'スペルを教えていただけますか？',en:"Could you spell that for me, please?",alt:"How do you spell that?",tip:'名前・住所・参照番号は必ずスペルで確認。証拠になる。'},
+  {id:64,cat:'聞き返し・確認',situation:'番号の確認',jp:'番号をもう一度おっしゃっていただけますか？',en:"Could you repeat the number for me?",alt:"Can you go over that number again?",tip:'go over は「もう一度確認する」。電話番号・参照番号に使える。'},
+  {id:65,cat:'聞き返し・確認',situation:'内容の確認',jp:'〜とおっしゃいましたね？',en:"Just to confirm — you said [内容], correct?",alt:"So you're saying that [内容], right?",tip:'Just to confirm が確認の定番フレーズ。correct? をつけて念押し。'},
+  {id:66,cat:'聞き返し・確認',situation:'電波が悪い',jp:'少し聞こえにくいです',en:"I'm sorry, the line is a bit unclear.",alt:"Sorry, I'm having trouble hearing you.",tip:"line（電話回線）のせいにすることでお互い気持ちよく話せる。"},
+  {id:67,cat:'聞き返し・確認',situation:'大きな声で話してほしい',jp:'もう少し大きな声でお話しいただけますか？',en:"Could you speak up a little, please?",alt:"I'm having a hard time hearing you. Could you speak louder?",tip:'speak up が「声を大きくする」。louder よりも自然な表現。'},
+  {id:68,cat:'聞き返し・確認',situation:'理解できていないとき',jp:'正しく理解できていないかもしれません',en:"I'm not sure I understood correctly. Could you clarify?",alt:"Sorry, I'm a bit confused. Could you explain that again?",tip:'clarify は「明確にする」。I\'m confused（混乱している）も使いやすい。'},
+  {id:69,cat:'聞き返し・確認',situation:'メモを取るとき',jp:'少しメモを取らせてください',en:"Could you hold on a moment? I'm just writing that down.",alt:"Let me grab a pen.",tip:"hold on（少し待って）。writing that down（書き留める）。Let me grab a pen もカジュアルで自然。"},
+  {id:70,cat:'聞き返し・確認',situation:'まとめて確認',jp:'念のため確認させてください',en:"Let me just read that back to you — [内容]. Is that correct?",alt:"So just to recap, [内容], right?",tip:'read back to you は「読み返して確認する」。これをするだけでミスが大幅に減る。'},
+
+  // 😤 ぐるぐる転送・トラブル対応 (10)
+  {id:71,cat:'転送・トラブル',situation:'何度も転送されるとき',jp:'すでに何度も転送されました',en:"I've already been transferred several times.",alt:"I keep getting passed around.",tip:"I keep getting passed around がネイティブっぽい表現。「たらい回し」そのもの。"},
+  {id:72,cat:'転送・トラブル',situation:'転送前に確認を求める',jp:'転送前に確認していただけますか？',en:"Before you transfer me, could you confirm the next person can actually help me?",alt:"Could you make sure someone can help me before transferring?",tip:'これを言うだけで無駄な転送がなくなる。actually がポイント。'},
+  {id:73,cat:'転送・トラブル',situation:'上司を求める',jp:'上の方とお話しできますか？',en:"Could I speak to a supervisor, please?",alt:"I'd like to escalate this. Can I speak to a manager?",tip:'escalate this（上に上げる）という言葉が効く。権利なので遠慮なく言ってOK。'},
+  {id:74,cat:'転送・トラブル',situation:'参照番号を求める',jp:'この電話の参照番号をいただけますか？',en:"Can I get a reference number for this call?",alt:"Could you give me a case number?",tip:'最重要！相手が記録を意識するので対応が変わる。必ず最後に聞く。'},
+  {id:75,cat:'転送・トラブル',situation:'約束と違うとき',jp:'〜になると言われていました',en:"I was told that [内容] would happen.",alt:"Someone from your office said [内容].",tip:"I was told が「言われた」の受動態。責任の所在を明確にする効果がある。"},
+  {id:76,cat:'転送・トラブル',situation:'なぜそうなったか確認',jp:'なぜそうなっていないか教えていただけますか？',en:"Can you explain why that hasn't happened?",alt:"What went wrong here?",tip:'What went wrong? はシンプルで直接的。感情的にならず事実として聞く。'},
+  {id:77,cat:'転送・トラブル',situation:'書面での確認を求める',jp:'書面で確認していただけますか？',en:"Could you confirm that in writing, please?",alt:"Can you send me an email about this?",tip:'in writing（書面で）が証拠を残す最強フレーズ。後でトラブルになったとき役立つ。'},
+  {id:78,cat:'転送・トラブル',situation:'クレームを伝える',jp:'これは納得できません',en:"I'm not satisfied with this outcome.",alt:"This isn't acceptable, I'm afraid.",tip:"I'm afraid をつけると角が立たない。不満を丁寧に伝える表現。"},
+  {id:79,cat:'転送・トラブル',situation:'折り返しを求める',jp:'折り返しのために番号を残せますか？',en:"Could I leave my number for a callback?",alt:"Can someone call me back about this?",tip:'callback（折り返し電話）。Could I leave my number が自然。'},
+  {id:80,cat:'転送・トラブル',situation:'解決を求める',jp:'この問題を解決していただけますか？',en:"I need this issue to be resolved.",alt:"I'd like this sorted out today if possible.",tip:'sorted out はオーストラリア英語でよく使われる「解決する」の表現。'},
+
+  // 📋 申し込み後・次のステップ確認 (10)
+  {id:81,cat:'次のステップ確認',situation:'申し込み後の流れ',jp:'申し込んだ後どうなりますか？',en:"What happens after I submit this?",alt:"What's the process from here?",tip:"What happens next? / What's the process? は電話で最もよく使われる流れ確認フレーズ。"},
+  {id:82,cat:'次のステップ確認',situation:'次のアクション',jp:'次に私は何をすればいいですか？',en:"What's the next step for me?",alt:"What do I need to do from here?",tip:"What's the next step? は汎用性最高。どんな手続きにも使える。"},
+  {id:83,cat:'次のステップ確認',situation:'処理期間確認',jp:'通常どのくらい時間がかかりますか？',en:"How long does this usually take?",alt:"What's the typical processing time?",tip:'processing time（処理時間）はフォーマルな場面で使いやすい。'},
+  {id:84,cat:'次のステップ確認',situation:'確認の連絡が来るか',jp:'確認の連絡は来ますか？',en:"Will I receive a confirmation?",alt:"How will I know when this is processed?",tip:'receive a confirmation で「確認の連絡を受ける」。メールか郵便かも確認するとよい。'},
+  {id:85,cat:'次のステップ確認',situation:'確約かどうか確認',jp:'それは確約ですか？それとも目安ですか？',en:"Can you guarantee that? Or is that just an estimate?",alt:"Is that definite, or could it change?",tip:'guarantee（確約）という言葉で相手に責任を意識させる。定期的に使うべき表現。'},
+  {id:86,cat:'次のステップ確認',situation:'フォローアップの方法',jp:'完了したらどうやって分かりますか？',en:"How will I know when this is done?",alt:"Will you contact me, or should I follow up?",tip:'follow up（確認連絡をする）はビジネス英語の重要語。'},
+  {id:87,cat:'次のステップ確認',situation:'必要書類の確認',jp:'他に必要なものはありますか？',en:"Is there anything else I need to provide?",alt:"Do you need anything else from me?",tip:'anything else をつけることで漏れを防ぐ。電話の最後に必ず使う。'},
+  {id:88,cat:'次のステップ確認',situation:'こうなると言われたが',jp:'〜になると説明されたのですが',en:"I was told [内容] would happen. Is that still the case?",alt:"I was under the impression that [内容].",tip:'Is that still the case? で「今もそうですか？」の確認。I was under the impression も便利。'},
+  {id:89,cat:'次のステップ確認',situation:'問題が起きたときの連絡先',jp:'問題が起きたら誰に連絡すればいいですか？',en:"Who should I contact if there's a problem?",alt:"Is there a direct number I can call?",tip:'direct number（直通番号）を聞いておくと次回スムーズ。'},
+  {id:90,cat:'次のステップ確認',situation:'変更の可能性確認',jp:'後で変更は可能ですか？',en:"Is it possible to make changes later?",alt:"Can I update this after submitting?",tip:'after submitting（提出後）はフォーム・申し込み全般に使える。'},
+
+  // 📝 電話を締めくくる (10)
+  {id:91,cat:'電話の締め',situation:'確認番号をもらう',jp:'確認番号をいただけますか？',en:"Could I get a confirmation number, please?",alt:"Can I have a reference number for my records?",tip:'for my records（記録のために）をつけると丁寧さが増す。必ず電話終了前に聞く。'},
+  {id:92,cat:'電話の締め',situation:'メールで送ってもらう',jp:'確認メールを送っていただけますか？',en:"Could you send me a confirmation email, please?",alt:"Is it possible to get this in writing?",tip:'in writing（書面で）は証拠として重要。できれば毎回お願いする。'},
+  {id:93,cat:'電話の締め',situation:'内容の最終確認',jp:'念のため確認させてください',en:"Just to recap — [内容]. Is that correct?",alt:"So just to confirm everything — [内容], right?",tip:'recap（要約して確認する）は電話の最後に必ず使うべき習慣。'},
+  {id:94,cat:'電話の締め',situation:'担当者の名前を確認',jp:'お名前を教えていただけますか？',en:"Could I get your name, please?",alt:"May I ask who I spoke with today?",tip:'名前を聞いておくと後でフォローしやすい。誰と話したか記録に残る。'},
+  {id:95,cat:'電話の締め',situation:'次の連絡について',jp:'また何かあれば連絡します',en:"I'll call back if I have any questions.",alt:"I'll follow up if anything else comes up.",tip:'follow up（追加確認する）はよく使われるビジネス表現。'},
+  {id:96,cat:'電話の締め',situation:'待機することを伝える',jp:'確認のご連絡をお待ちしています',en:"I'll wait to hear from you.",alt:"I look forward to your confirmation.",tip:'hear from you で「連絡をもらう」。look forward to は少し丁寧。'},
+  {id:97,cat:'電話の締め',situation:'感謝を伝える',jp:'いろいろとありがとうございました',en:"Thank you so much for your help.",alt:"I really appreciate your assistance.",tip:'assistance（サポート）はフォーマルな感謝表現。help よりも少し丁寧。'},
+  {id:98,cat:'電話の締め',situation:'忍耐への感謝',jp:'ご対応いただきありがとうございました',en:"I appreciate your patience.",alt:"Thanks for bearing with me.",tip:"Thanks for bearing with me はカジュアルで温かい表現。特に何度も聞き直したときに使うと良い。"},
+  {id:99,cat:'電話の締め',situation:'他に確認することがないか',jp:'他に確認しておくことはありますか？',en:"Is there anything else I should know?",alt:"Is there anything else on your end?",tip:'on your end は「そちら側に」という意味。相手に確認の機会を与える。'},
+  {id:100,cat:'電話の締め',situation:'締めのあいさつ',jp:'よろしくお願いします。良い一日を。',en:"Thank you. I look forward to hearing from you. Have a good day.",alt:"Thanks so much. Speak soon!",tip:"Speak soon! はカジュアルで温かいオーストラリアらしい締めのひとこと。"},
+];
+
+const CATS=[...new Set(PHRASES.map(p=>p.cat))];
+const CAT_COLORS={'電話の出だし':'#c8962a','ホテル予約':'#4a7c59','病院・医療':'#a03030',
+  '銀行・公共機関':'#3d5a8a','配送・業者':'#7a5a2a','変更・キャンセル':'#2a7a7a',
+  '聞き返し・確認':'#5a2a7a','転送・トラブル':'#c86a2a','次のステップ確認':'#2a5a7a','電話の締め':'#4a7c59'};
+
+let masteredSet=new Set(JSON.parse(localStorage.getItem('ph_mastered')||'[]'));
+let wrongSet=new Set(JSON.parse(localStorage.getItem('ph_wrong')||'[]'));
+let sessionOk=0,sessionNg=0,currentMode='normal',selectedCat='all';
+let queue=[],qIdx=0,isRevealed=false,timerInterval=null,timerLeft=3,loopCounts={};
+const LOOP_TARGET=5;
+
+function saveState(){
+  localStorage.setItem('ph_mastered',JSON.stringify([...masteredSet]));
+  localStorage.setItem('ph_wrong',JSON.stringify([...wrongSet]));
+}
+function updateHeader(){document.getElementById('h-mastered').textContent=masteredSet.size;}
+
+function switchTab(p,btn){
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+  document.getElementById('page-'+p).classList.add('active');
+  btn.classList.add('active');
+  if(p==='list') renderList();
+  if(p==='stats') renderStats();
+}
+
+function initSetup(){
+  const cc=document.getElementById('cat-chips');
+  cc.innerHTML=`<button class="cat-chip active" onclick="selectCat('all',this)">すべて (${PHRASES.length})</button>`;
+  CATS.forEach(c=>{
+    const n=PHRASES.filter(p=>p.cat===c).length;
+    cc.innerHTML+=`<button class="cat-chip" onclick="selectCat('${c}',this)">${c} (${n})</button>`;
+  });
+}
+
+function selectCat(cat,btn){
+  selectedCat=cat;
+  document.querySelectorAll('#cat-chips .cat-chip').forEach(c=>c.classList.remove('active'));
+  btn.classList.add('active');
+}
+function selectMode(mode){
+  currentMode=mode;
+  document.querySelectorAll('.mode-card').forEach(c=>c.classList.remove('selected'));
+  document.getElementById('mode-'+mode).classList.add('selected');
+}
+
+function startTraining(){
+  let pool=selectedCat==='all'?[...PHRASES]:PHRASES.filter(p=>p.cat===selectedCat);
+  if(currentMode==='review'){
+    pool=pool.filter(p=>!masteredSet.has(p.id)||wrongSet.has(p.id));
+    if(pool.length===0){alert('復習するフレーズがありません！');return;}
+  }
+  for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]];}
+  queue=pool;qIdx=0;sessionOk=0;sessionNg=0;loopCounts={};
+  document.getElementById('train-setup').style.display='none';
+  document.getElementById('train-result').style.display='none';
+  document.getElementById('train-area').style.display='block';
+  document.getElementById('loop-banner').style.display=currentMode==='loop'?'block':'none';
+  document.getElementById('timer-wrap').style.display=currentMode==='timer'?'flex':'none';
+  showCard();
+}
+
+function showCard(){
+  if(qIdx>=queue.length){endTraining();return;}
+  const p=queue[qIdx];
+  isRevealed=false;
+  const card=document.getElementById('flash-card');
+  card.className='flash-card';
+  document.getElementById('card-cat').textContent=p.cat;
+  document.getElementById('card-situation').textContent=p.situation||'';
+  document.getElementById('card-jp').textContent=p.jp;
+  document.getElementById('card-en').textContent=p.en;
+  document.getElementById('card-alt').textContent=p.alt?'💡 '+p.alt:'';
+  document.getElementById('card-tip').textContent=p.tip?'🔑 '+p.tip:'';
+  document.getElementById('btn-reveal').style.display='inline-block';
+  document.getElementById('btn-ok').style.display='none';
+  document.getElementById('btn-ng').style.display='none';
+  document.getElementById('train-ctr').textContent=`${qIdx+1} / ${queue.length}`;
+  document.getElementById('train-prog').style.width=((qIdx/queue.length)*100)+'%';
+  if(currentMode==='loop'){
+    const cnt=loopCounts[p.id]||0;
+    document.getElementById('loop-remain').textContent=LOOP_TARGET-cnt;
+  }
+  if(currentMode==='timer') startTimer();
+}
+
+function startTimer(){
+  clearInterval(timerInterval);timerLeft=3;updateTimerUI(3,3);
+  timerInterval=setInterval(()=>{
+    timerLeft-=0.1;
+    if(timerLeft<=0){clearInterval(timerInterval);timerLeft=0;revealCard();}
+    updateTimerUI(timerLeft,3);
+  },100);
+}
+function updateTimerUI(val,max){
+  const offset=169.6*(1-val/max);
+  document.getElementById('timer-circle').style.strokeDashoffset=offset;
+  document.getElementById('timer-num').textContent=Math.ceil(val);
+  document.getElementById('timer-circle').style.stroke=val>2?'#c8962a':val>1?'#c86a2a':'#a03030';
+}
+
+function revealCard(){
+  if(isRevealed)return;
+  isRevealed=true;
+  clearInterval(timerInterval);
+  document.getElementById('flash-card').classList.add('revealed');
+  document.getElementById('btn-reveal').style.display='none';
+  document.getElementById('btn-ok').style.display='inline-block';
+  document.getElementById('btn-ng').style.display='inline-block';
+}
+
+function markOk(){
+  const p=queue[qIdx];sessionOk++;wrongSet.delete(p.id);
+  if(currentMode==='loop'){
+    loopCounts[p.id]=(loopCounts[p.id]||0)+1;
+    if(loopCounts[p.id]>=LOOP_TARGET){masteredSet.add(p.id);saveState();qIdx++;}
+    else{const ins=qIdx+1+Math.floor(Math.random()*Math.min(5,queue.length-qIdx-1));queue.splice(ins,0,p);qIdx++;}
+  }else{masteredSet.add(p.id);saveState();qIdx++;}
+  updateHeader();showCard();
+}
+function markNg(){
+  const p=queue[qIdx];sessionNg++;wrongSet.add(p.id);
+  if(currentMode==='loop'){loopCounts[p.id]=0;const ins=qIdx+1+Math.floor(Math.random()*Math.min(4,queue.length-qIdx-1));queue.splice(Math.min(ins,queue.length),0,p);}
+  saveState();qIdx++;showCard();
+}
+function skipCard(){qIdx++;showCard();}
+function quitTraining(){clearInterval(timerInterval);backToSetup();}
+
+function endTraining(){
+  clearInterval(timerInterval);
+  document.getElementById('train-area').style.display='none';
+  document.getElementById('train-result').style.display='block';
+  const total=sessionOk+sessionNg;
+  const pct=total>0?Math.round(sessionOk/total*100):0;
+  document.getElementById('res-ok').textContent=sessionOk;
+  document.getElementById('res-ng').textContent=sessionNg;
+  document.getElementById('res-total').textContent=total;
+  document.getElementById('res-emoji').textContent=pct>=80?'🎉':pct>=50?'💪':'🔥';
+  document.getElementById('res-title').textContent=pct>=80?'素晴らしい！':pct>=50?'いい調子！':'もう一息！';
+  document.getElementById('res-sub').textContent=`正解率 ${pct}%（${sessionOk}/${total}）`;
+  document.getElementById('res-loop-btn').style.display=sessionNg>0&&currentMode!=='loop'?'block':'none';
+  updateHeader();
+}
+
+function startLoopFromResult(){
+  currentMode='loop';
+  const ng=[...wrongSet];
+  if(ng.length===0){alert('間違えたフレーズがありません！');return;}
+  queue=PHRASES.filter(p=>ng.includes(p.id));
+  for(let i=queue.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[queue[i],queue[j]]=[queue[j],queue[i]];}
+  qIdx=0;sessionOk=0;sessionNg=0;loopCounts={};
+  document.getElementById('train-result').style.display='none';
+  document.getElementById('train-area').style.display='block';
+  document.getElementById('loop-banner').style.display='block';
+  document.getElementById('timer-wrap').style.display='none';
+  showCard();
+}
+function backToSetup(){
+  document.getElementById('train-area').style.display='none';
+  document.getElementById('train-result').style.display='none';
+  document.getElementById('train-setup').style.display='block';
+}
+
+function renderList(){
+  const lcc=document.getElementById('list-cat-chips');
+  lcc.innerHTML=`<button class="cat-chip active" onclick="filterList('all',this)">すべて</button>`;
+  CATS.forEach(c=>{lcc.innerHTML+=`<button class="cat-chip" onclick="filterList('${c}',this)">${c}</button>`;});
+  filterList('all',lcc.firstElementChild);
+}
+function filterList(cat,btn){
+  document.querySelectorAll('#list-cat-chips .cat-chip').forEach(c=>c.classList.remove('active'));
+  btn.classList.add('active');
+  const pool=cat==='all'?PHRASES:PHRASES.filter(p=>p.cat===cat);
+  document.getElementById('list-items').innerHTML=pool.map(p=>`
+    <div class="list-item">
+      <div class="li-dot" style="background:${CAT_COLORS[p.cat]||'#888'}"></div>
+      <div class="li-body">
+        <div class="li-cat">${p.cat} — ${p.situation}</div>
+        <div class="li-jp">${p.jp}</div>
+        <div class="li-en">${p.en}</div>
+      </div>
+      <div class="li-done ${masteredSet.has(p.id)?'show':''}">✓ 習得</div>
+    </div>`).join('');
+}
+
+function renderStats(){
+  document.getElementById('st-mastered').textContent=masteredSet.size;
+  document.getElementById('st-total').textContent=PHRASES.length;
+  document.getElementById('cat-stats').innerHTML=CATS.map(c=>{
+    const total=PHRASES.filter(p=>p.cat===c).length;
+    const done=PHRASES.filter(p=>p.cat===c&&masteredSet.has(p.id)).length;
+    const pct=Math.round(done/total*100);
+    return `<div class="cat-stat">
+      <div class="cs-top"><span class="cs-name">${c}</span><span class="cs-pct">${done}/${total} (${pct}%)</span></div>
+      <div class="cs-bar"><div class="cs-fill" style="width:${pct}%;background:${CAT_COLORS[c]||'var(--moss)'}"></div></div>
+    </div>`;
+  }).join('');
+}
+
+function resetAllData(){
+  if(!confirm('全データをリセットしますか？'))return;
+  masteredSet.clear();wrongSet.clear();saveState();updateHeader();renderStats();
+}
+
+initSetup();updateHeader();
+</script>
+</body>
+</html>
