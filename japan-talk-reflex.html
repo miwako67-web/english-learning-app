@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Japan Talk — 日本紹介チャンク反射</title>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1a1410;--paper:#f5f0e8;--gold:#c8962a;--moss:#4a7c59;
+  --indigo:#3d5a8a;--crimson:#a03030;--panel:#fffdf8;--border:rgba(26,20,16,0.12);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);min-height:100vh;}
+header{background:var(--ink);padding:16px 20px 0;position:sticky;top:0;z-index:100;}
+.h-top{display:flex;align-items:center;gap:10px;padding-bottom:14px;}
+.h-titles{flex:1;}
+.h-titles h1{font-family:'Shippori Mincho',serif;color:var(--gold);font-size:16px;font-weight:700;}
+.h-titles p{color:rgba(245,240,232,0.42);font-size:10px;margin-top:1px;}
+.h-score .num{font-size:20px;font-weight:500;color:var(--gold);}
+.h-score .lbl{font-family:'Shippori Mincho',serif;font-size:9px;color:rgba(245,240,232,0.4);}
+nav{display:flex;}
+.tab{flex:1;padding:8px 4px;background:none;border:none;border-bottom:2px solid transparent;
+  color:rgba(245,240,232,0.38);font-family:'DM Sans',sans-serif;font-size:10px;cursor:pointer;
+  transition:all .2s;display:flex;flex-direction:column;align-items:center;gap:2px;}
+.tab span:first-child{font-size:13px;}
+.tab.active{color:var(--gold);border-bottom-color:var(--gold);}
+main{padding:14px;max-width:600px;margin:0 auto;}
+.page{display:none;}.page.active{display:block;}
+.sec{font-family:'Shippori Mincho',serif;font-size:10px;font-weight:600;
+  color:rgba(26,20,16,0.35);letter-spacing:.12em;text-transform:uppercase;margin:16px 0 10px;}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;}
+.chip{padding:5px 12px;border-radius:20px;border:1.5px solid var(--border);
+  background:var(--panel);font-size:11px;cursor:pointer;transition:all .2s;color:var(--ink);}
+.chip.active{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+.mode-cards{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px;}
+.mode-card{background:var(--panel);border:1.5px solid var(--border);border-radius:14px;
+  padding:14px 12px;cursor:pointer;transition:all .2s;text-align:center;}
+.mode-card:hover{border-color:var(--gold);}
+.mode-card.selected{border-color:var(--gold);background:rgba(200,150,42,0.07);}
+.mode-emoji{font-size:24px;margin-bottom:6px;}
+.mode-name{font-size:13px;font-weight:500;margin-bottom:3px;}
+.mode-desc{font-family:'Shippori Mincho',serif;font-size:10px;color:rgba(26,20,16,0.45);line-height:1.5;}
+.start-btn{width:100%;padding:14px;border-radius:12px;border:none;background:var(--ink);
+  color:var(--gold);font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;cursor:pointer;}
+.start-btn:hover{opacity:.88;}
+.train-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.train-prog-wrap{flex:1;height:5px;background:var(--border);border-radius:3px;margin:0 12px;overflow:hidden;}
+.train-prog-fill{height:100%;background:var(--gold);border-radius:3px;transition:width .4s;}
+.train-ctr{font-size:11px;color:rgba(26,20,16,0.4);}
+.quit-btn{font-size:11px;color:rgba(26,20,16,0.35);background:none;border:none;cursor:pointer;text-decoration:underline;}
+.timer-wrap{display:flex;justify-content:center;margin-bottom:14px;}
+.timer-ring{position:relative;width:64px;height:64px;}
+.timer-ring svg{transform:rotate(-90deg);}
+.timer-ring circle{fill:none;stroke-width:5;}
+.timer-bg{stroke:var(--border);}
+.timer-fg{stroke:var(--gold);stroke-linecap:round;transition:stroke-dashoffset .1s linear,stroke .3s;}
+.timer-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-size:18px;font-weight:500;color:var(--ink);}
+.loop-banner{background:rgba(200,150,42,0.1);border:1px solid rgba(200,150,42,0.3);
+  border-radius:10px;padding:8px 12px;margin-bottom:12px;
+  font-family:'Shippori Mincho',serif;font-size:12px;color:var(--gold);text-align:center;}
+.flash-card{background:var(--panel);border:1.5px solid var(--border);border-radius:18px;
+  padding:28px 22px;text-align:center;margin-bottom:14px;
+  box-shadow:0 4px 24px rgba(26,20,16,0.08);min-height:200px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  cursor:pointer;transition:border-color .2s;}
+.flash-card.revealed{border-color:var(--moss);}
+.card-cat{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+  color:rgba(26,20,16,0.3);margin-bottom:10px;}
+.card-jp{font-family:'Shippori Mincho',serif;font-size:21px;font-weight:700;
+  line-height:1.55;margin-bottom:6px;}
+.card-sub{font-family:'Shippori Mincho',serif;font-size:12px;color:rgba(26,20,16,0.4);
+  margin-bottom:12px;font-style:italic;}
+.card-hint{font-size:11px;color:rgba(26,20,16,0.3);font-style:italic;}
+.card-en{font-size:18px;font-weight:500;line-height:1.5;margin-bottom:8px;display:none;}
+.card-alt{font-size:12px;color:rgba(26,20,16,0.5);display:none;font-style:italic;margin-bottom:10px;}
+.card-tip{font-family:'Shippori Mincho',serif;font-size:11px;color:var(--indigo);
+  background:rgba(61,90,138,0.08);border-radius:7px;padding:8px 12px;
+  display:none;line-height:1.65;text-align:left;width:100%;}
+.card-chunks{display:none;width:100%;margin-top:10px;border-top:1px solid var(--border);padding-top:10px;}
+.cc-row{display:flex;align-items:center;gap:8px;padding:4px 0;}
+.cc-num{font-size:10px;font-weight:600;color:rgba(26,20,16,0.3);width:16px;flex-shrink:0;}
+.cc-en{font-size:12px;color:rgba(26,20,16,0.55);}
+.flash-card.revealed .card-en,.flash-card.revealed .card-alt,
+.flash-card.revealed .card-tip,.flash-card.revealed .card-chunks{display:block;}
+.flash-card.revealed .card-hint{display:none;}
+.action-row{display:flex;gap:8px;margin-bottom:10px;}
+.act-btn{flex:1;padding:13px;border-radius:12px;border:none;
+  font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:opacity .15s;}
+.act-btn:hover{opacity:.85;}
+.act-reveal{background:var(--indigo);color:#fff;flex:2;}
+.act-ok{background:var(--moss);color:#fff;}
+.act-ng{background:rgba(160,48,48,0.1);color:var(--crimson);}
+.act-skip{width:100%;padding:9px;border-radius:9px;border:1.5px solid var(--border);
+  background:var(--panel);font-family:'DM Sans',sans-serif;font-size:11px;cursor:pointer;color:rgba(26,20,16,0.45);}
+.result-wrap{text-align:center;padding:24px 0;}
+.res-emoji{font-size:52px;margin-bottom:12px;}
+.res-title{font-family:'Shippori Mincho',serif;font-size:20px;font-weight:700;margin-bottom:6px;}
+.res-sub{font-size:13px;color:rgba(26,20,16,0.5);margin-bottom:22px;font-family:'Shippori Mincho',serif;}
+.res-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:22px;}
+.rs{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:12px 8px;text-align:center;}
+.rs-n{font-size:24px;font-weight:500;line-height:1;margin-bottom:3px;}
+.rs-n.g{color:var(--moss);}.rs-n.r{color:var(--crimson);}.rs-n.b{color:var(--indigo);}
+.rs-l{font-family:'Shippori Mincho',serif;font-size:9px;color:rgba(26,20,16,0.4);}
+.result-btns{display:flex;flex-direction:column;gap:8px;}
+.res-btn{padding:13px;border-radius:12px;border:none;font-family:'DM Sans',sans-serif;
+  font-size:13px;font-weight:500;cursor:pointer;}
+.res-btn.p{background:var(--crimson);color:#fff;}
+.res-btn.s{background:var(--ink);color:var(--paper);}
+.res-btn.t{background:var(--panel);color:var(--ink);border:1.5px solid var(--border);}
+.list-item{background:var(--panel);border:1px solid var(--border);border-radius:11px;
+  padding:13px 14px;margin-bottom:8px;}
+.li-cat{font-size:9px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+  color:rgba(26,20,16,0.3);margin-bottom:3px;display:flex;justify-content:space-between;}
+.li-jp{font-family:'Shippori Mincho',serif;font-size:14px;font-weight:600;margin-bottom:8px;}
+.li-chunks{margin-bottom:6px;}
+.li-chunk-row{display:flex;align-items:center;gap:8px;padding:3px 0;}
+.li-cn{font-size:10px;font-weight:600;color:rgba(26,20,16,0.3);width:16px;flex-shrink:0;}
+.li-ce{font-size:12px;color:rgba(26,20,16,0.55);}
+.li-full{font-size:13px;font-weight:500;color:var(--ink);
+  border-top:1px solid var(--border);padding-top:7px;margin-top:4px;}
+.li-done{font-size:9px;background:var(--moss);color:#fff;padding:2px 7px;border-radius:20px;display:none;}
+.li-done.show{display:inline;}
+.overall{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px;}
+.os{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:13px 8px;text-align:center;}
+.osn{font-size:22px;font-weight:500;line-height:1;margin-bottom:3px;}
+.osn.g{color:var(--moss);}.osn.gold{color:var(--gold);}
+.osl{font-family:'Shippori Mincho',serif;font-size:9px;color:rgba(26,20,16,0.4);}
+.cat-stat{background:var(--panel);border:1px solid var(--border);border-radius:11px;padding:12px 14px;margin-bottom:8px;}
+.cst{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+.csn{font-size:13px;font-weight:500;}
+.csp{font-size:12px;color:var(--moss);font-weight:500;}
+.csb{height:4px;background:var(--border);border-radius:2px;overflow:hidden;}
+.csf{height:100%;background:var(--moss);border-radius:2px;transition:width .5s;}
+.reset-btn{width:100%;padding:10px;border-radius:9px;border:1.5px solid var(--border);
+  background:var(--panel);font-family:'DM Sans',sans-serif;font-size:11px;
+  color:rgba(26,20,16,0.4);cursor:pointer;margin-top:12px;}
+.reset-btn:hover{border-color:var(--crimson);color:var(--crimson);}
+</style>
+</head>
+<body>
+<header>
+  <div class="h-top">
+    <span style="font-size:22px">🗾</span>
+    <div class="h-titles">
+      <h1>Japan Talk</h1>
+      <p>日本紹介 チャンク反射トレーニング — 100フレーズ</p>
+    </div>
+    <div class="h-score">
+      <div class="num" id="h-mastered">0</div>
+      <div class="lbl">習得済み</div>
+    </div>
+  </div>
+  <nav>
+    <button class="tab active" onclick="switchTab('train',this)"><span>⚡</span><span>トレーニング</span></button>
+    <button class="tab" onclick="switchTab('list',this)"><span>📋</span><span>一覧</span></button>
+    <button class="tab" onclick="switchTab('stats',this)"><span>📊</span><span>記録</span></button>
+  </nav>
+</header>
+<main>
+<div id="page-train" class="page active">
+  <div id="train-setup">
+    <div class="sec" style="margin-top:14px">カテゴリを選ぶ</div>
+    <div class="chips" id="cat-chips"></div>
+    <div class="sec">モードを選ぶ</div>
+    <div class="mode-cards">
+      <div class="mode-card selected" id="mode-normal" onclick="selectMode('normal')">
+        <div class="mode-emoji">🃏</div><div class="mode-name">通常モード</div>
+        <div class="mode-desc">自分のペースで1枚ずつ。</div>
+      </div>
+      <div class="mode-card" id="mode-timer" onclick="selectMode('timer')">
+        <div class="mode-emoji">⏱️</div><div class="mode-name">タイマーモード</div>
+        <div class="mode-desc">3秒以内に口から出す。</div>
+      </div>
+      <div class="mode-card" id="mode-loop" onclick="selectMode('loop')">
+        <div class="mode-emoji">🔁</div><div class="mode-name">ループモード</div>
+        <div class="mode-desc">5回連続正解で身体化。</div>
+      </div>
+      <div class="mode-card" id="mode-review" onclick="selectMode('review')">
+        <div class="mode-emoji">🔄</div><div class="mode-name">復習モード</div>
+        <div class="mode-desc">未習得・間違えたものだけ。</div>
+      </div>
+    </div>
+    <button class="start-btn" onclick="startTraining()">トレーニング開始 →</button>
+  </div>
+  <div id="train-area" style="display:none">
+    <div class="train-hd">
+      <span class="train-ctr" id="train-ctr">1/10</span>
+      <div class="train-prog-wrap"><div class="train-prog-fill" id="train-prog" style="width:0%"></div></div>
+      <button class="quit-btn" onclick="quitTraining()">終了</button>
+    </div>
+    <div id="timer-wrap" class="timer-wrap" style="display:none">
+      <div class="timer-ring">
+        <svg width="64" height="64" viewBox="0 0 64 64">
+          <circle class="timer-bg" cx="32" cy="32" r="27"/>
+          <circle class="timer-fg" id="timer-circle" cx="32" cy="32" r="27"
+            stroke-dasharray="169.6" stroke-dashoffset="0"/>
+        </svg>
+        <div class="timer-num" id="timer-num">3</div>
+      </div>
+    </div>
+    <div id="loop-banner" class="loop-banner" style="display:none">
+      🔁 ループモード — あと<span id="loop-remain"></span>回連続正解で習得！
+    </div>
+    <div class="flash-card" id="flash-card" onclick="revealCard()">
+      <div class="card-cat"  id="card-cat"></div>
+      <div class="card-jp"   id="card-jp"></div>
+      <div class="card-sub"  id="card-sub"></div>
+      <div class="card-hint">タップして英語を確認</div>
+      <div class="card-en"   id="card-en"></div>
+      <div class="card-alt"  id="card-alt"></div>
+      <div class="card-tip"  id="card-tip"></div>
+      <div class="card-chunks" id="card-chunks"></div>
+    </div>
+    <div class="action-row">
+      <button class="act-btn act-reveal" id="btn-reveal" onclick="revealCard()">英語を見る</button>
+      <button class="act-btn act-ok" id="btn-ok" onclick="markOk()" style="display:none">✓ 言えた！</button>
+      <button class="act-btn act-ng" id="btn-ng" onclick="markNg()" style="display:none">✕ 言えなかった</button>
+    </div>
+    <button class="act-skip" onclick="skipCard()">スキップ →</button>
+  </div>
+  <div id="train-result" style="display:none">
+    <div class="result-wrap">
+      <div class="res-emoji" id="res-emoji">🎉</div>
+      <div class="res-title" id="res-title">完了！</div>
+      <div class="res-sub"   id="res-sub"></div>
+      <div class="res-stats">
+        <div class="rs"><div class="rs-n g" id="res-ok">0</div><div class="rs-l">言えた！</div></div>
+        <div class="rs"><div class="rs-n r" id="res-ng">0</div><div class="rs-l">言えなかった</div></div>
+        <div class="rs"><div class="rs-n b" id="res-total">0</div><div class="rs-l">総問数</div></div>
+      </div>
+      <div class="result-btns">
+        <button class="res-btn p" id="res-loop-btn" style="display:none" onclick="startLoopFromResult()">🔁 言えなかった分をループ練習</button>
+        <button class="res-btn s" onclick="backToSetup()">もう一度設定から</button>
+        <button class="res-btn t" onclick="switchTab('stats',document.querySelectorAll('.tab')[2])">記録を見る</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="page-list" class="page">
+  <div class="sec" style="margin-top:14px">カテゴリで絞り込む</div>
+  <div class="chips" id="list-chips"></div>
+  <div id="list-items"></div>
+</div>
+<div id="page-stats" class="page">
+  <div class="sec" style="margin-top:14px">全体の進捗</div>
+  <div class="overall">
+    <div class="os"><div class="osn gold" id="st-total">100</div><div class="osl">総フレーズ</div></div>
+    <div class="os"><div class="osn g"    id="st-master">0</div><div class="osl">習得済み</div></div>
+    <div class="os"><div class="osn"      id="st-learn">100</div><div class="osl">学習中</div></div>
+  </div>
+  <div class="sec">カテゴリ別</div>
+  <div id="cat-stats"></div>
+  <button class="reset-btn" onclick="resetAll()">↺ 全データをリセット</button>
+</div>
+</main>
+<script>
+const PHRASES=[
+// 🗼 観光地・名所 (10)
+{id:1,cat:'観光地・名所',jp:'京都は古い都です',sub:'',en:'It\'s the old capital of Japan.',alt:'Kyoto was Japan\'s capital for over 1,000 years.',tip:'old capital（古い都）。シンプルな一言で伝わる。',chunks:['the old capital','the old capital of Japan','It\'s the old capital of Japan.']},
+{id:2,cat:'観光地・名所',jp:'寺と神社がたくさんあります',sub:'',en:'It\'s full of temples and shrines.',alt:'There are thousands of temples and shrines.',tip:'be full of（〜でいっぱい）。short and punchy。',chunks:['full of temples','full of temples and shrines','It\'s full of temples and shrines.']},
+{id:3,cat:'観光地・名所',jp:'絶対行くべき場所です',sub:'',en:'It\'s a must-visit.',alt:'You can\'t miss it.',tip:'must-visit（絶対行くべき）。a must-see も同義。',chunks:['a must','a must-visit','It\'s a must-visit.']},
+{id:4,cat:'観光地・名所',jp:'富士山は日本のシンボルです',sub:'',en:'Mt. Fuji is the symbol of Japan.',alt:'It\'s Japan\'s most iconic landmark.',tip:'symbol（シンボル）。iconic landmark（象徴的な名所）も使える。',chunks:['the symbol','the symbol of Japan','Mt. Fuji is the symbol of Japan.']},
+{id:5,cat:'観光地・名所',jp:'浅草は東京の下町エリアです',sub:'',en:'Asakusa is Tokyo\'s old downtown area.',alt:'It\'s Tokyo\'s most traditional neighbourhood.',tip:'old downtown（下町）。traditional neighbourhood（昔ながらの街）。',chunks:['old downtown','Tokyo\'s old downtown','Asakusa is Tokyo\'s old downtown area.']},
+{id:6,cat:'観光地・名所',jp:'大阪城は有名な歴史的建造物です',sub:'',en:'Osaka Castle is a famous historic landmark.',alt:'It\'s one of Japan\'s most visited castles.',tip:'historic landmark（歴史的建造物）。most visited（最も多く訪れられる）。',chunks:['a historic landmark','a famous historic landmark','Osaka Castle is a famous historic landmark.']},
+{id:7,cat:'観光地・名所',jp:'広島は平和の象徴の都市です',sub:'',en:'Hiroshima is a symbol of peace.',alt:'It\'s a city with a powerful and moving history.',tip:'symbol of peace（平和の象徴）。moving（心を動かす）。',chunks:['a symbol','a symbol of peace','Hiroshima is a symbol of peace.']},
+{id:8,cat:'観光地・名所',jp:'奈良では鹿と触れ合えます',sub:'',en:'In Nara, you can interact with wild deer.',alt:'The deer just roam freely — they\'re not afraid of people.',tip:'interact with（触れ合う）。roam freely（自由に歩き回る）。',chunks:['interact with deer','interact with wild deer','In Nara, you can interact with wild deer.']},
+{id:9,cat:'観光地・名所',jp:'日光は東照宮で有名です',sub:'',en:'Nikko is famous for its ornate shrine.',alt:'The Toshogu shrine there is incredibly elaborate.',tip:'ornate（豪華な・装飾的な）。elaborate（精巧な）。',chunks:['famous for','famous for its ornate shrine','Nikko is famous for its ornate shrine.']},
+{id:10,cat:'観光地・名所',jp:'沖縄はビーチが美しい南の島です',sub:'',en:'Okinawa has stunning beaches.',alt:'It\'s Japan\'s tropical paradise.',tip:'stunning（息をのむほど美しい）。tropical paradise（南国の楽園）。',chunks:['stunning beaches','has stunning beaches','Okinawa has stunning beaches.']},
+
+// 🍣 食文化 (10)
+{id:11,cat:'食文化',jp:'寿司は新鮮な魚と酢飯で作ります',sub:'',en:'Sushi is fresh fish on seasoned rice.',alt:'It\'s not just raw fish — the rice matters too.',tip:'seasoned rice（酢飯）。not just raw fish は誤解を解く表現。',chunks:['fresh fish','fresh fish on seasoned rice','Sushi is fresh fish on seasoned rice.']},
+{id:12,cat:'食文化',jp:'ラーメンは地域ごとに味が違います',sub:'',en:'Ramen varies by region.',alt:'Every city has its own style of ramen.',tip:'varies by region（地域によって異なる）。its own style（独自のスタイル）。',chunks:['varies','varies by region','Ramen varies by region.']},
+{id:13,cat:'食文化',jp:'居酒屋は日本のカジュアルな飲み屋です',sub:'',en:'An izakaya is a casual Japanese pub.',alt:'It\'s like a pub where you order food and drinks together.',tip:'casual Japanese pub（カジュアルな日本の居酒屋）。',chunks:['a casual pub','a casual Japanese pub','An izakaya is a casual Japanese pub.']},
+{id:14,cat:'食文化',jp:'抹茶は日本の伝統的なお茶です',sub:'',en:'Matcha is powdered green tea.',alt:'It\'s used in tea ceremonies and desserts.',tip:'powdered green tea（抹茶の説明）。used in ...（〜に使われる）。',chunks:['powdered green tea','powdered green tea from Japan','Matcha is powdered green tea.']},
+{id:15,cat:'食文化',jp:'コンビニのご飯はレベルが高いです',sub:'',en:'Japanese convenience store food is surprisingly good.',alt:'The food at konbini is seriously high quality.',tip:'surprisingly good（驚くほど美味しい）。konbini はそのまま通じる。',chunks:['surprisingly good','convenience store food is good','Japanese convenience store food is surprisingly good.']},
+{id:16,cat:'食文化',jp:'天ぷらは衣をつけて揚げた料理です',sub:'',en:'Tempura is battered and deep-fried seafood or vegetables.',alt:'It\'s light and crispy — not greasy at all.',tip:'battered and deep-fried（衣をつけて揚げた）。light and crispy（軽くサクサク）。',chunks:['battered and fried','battered and deep-fried seafood','Tempura is battered and deep-fried seafood or vegetables.']},
+{id:17,cat:'食文化',jp:'うどんは太くてモチモチの麺です',sub:'',en:'Udon are thick, chewy noodles.',alt:'They\'re served in a mild broth — very comforting.',tip:'thick and chewy（太くてモチモチ）。comforting（ほっこりする）。',chunks:['thick chewy noodles','thick chewy Japanese noodles','Udon are thick, chewy noodles.']},
+{id:18,cat:'食文化',jp:'焼き鳥は炭火で焼いた鶏の串です',sub:'',en:'Yakitori is grilled chicken skewers.',alt:'Great with cold beer — it\'s a classic combo.',tip:'grilled chicken skewers（炭火焼き鶏串）。classic combo（定番の組み合わせ）。',chunks:['grilled chicken','grilled chicken skewers','Yakitori is grilled chicken skewers.']},
+{id:19,cat:'食文化',jp:'日本の食事はとてもヘルシーです',sub:'',en:'Japanese food is generally very healthy.',alt:'It\'s low in fat and high in nutrients.',tip:'generally（一般的に）。low in fat（脂肪が少ない）。',chunks:['very healthy','generally very healthy','Japanese food is generally very healthy.']},
+{id:20,cat:'食文化',jp:'「いただきます」は食前の挨拶です',sub:'',en:'"Itadakimasu" is said before eating.',alt:'It\'s like giving thanks before a meal.',tip:'said before eating（食べる前に言う）。giving thanks（感謝を表す）。',chunks:['"Itadakimasu"','"Itadakimasu" before eating','"Itadakimasu" is said before eating.']},
+
+// 🎌 伝統文化 (10)
+{id:21,cat:'伝統文化',jp:'茶道はお茶を通じた精神修行です',sub:'',en:'The tea ceremony is a meditative practice.',alt:'It\'s about mindfulness, not just tea.',tip:'meditative practice（瞑想的な実践）。mindfulness（マインドフルネス）。',chunks:['a meditative practice','a meditative practice using tea','The tea ceremony is a meditative practice.']},
+{id:22,cat:'伝統文化',jp:'着物は日本の伝統的な衣装です',sub:'',en:'Kimono is Japan\'s traditional garment.',alt:'It\'s worn for special occasions and festivals.',tip:'traditional garment（伝統的な衣装）。worn for（〜のときに着る）。',chunks:['traditional garment','Japan\'s traditional garment','Kimono is Japan\'s traditional garment.']},
+{id:23,cat:'伝統文化',jp:'相撲は日本の国技です',sub:'',en:'Sumo is Japan\'s national sport.',alt:'It\'s deeply rooted in Shinto tradition.',tip:'national sport（国技）。rooted in（〜に根ざした）。',chunks:['national sport','Japan\'s national sport','Sumo is Japan\'s national sport.']},
+{id:24,cat:'伝統文化',jp:'歌舞伎は伝統的な演劇です',sub:'',en:'Kabuki is a form of classical theatre.',alt:'The costumes and makeup are incredibly dramatic.',tip:'classical theatre（古典的な演劇）。dramatic（迫力のある）。',chunks:['classical theatre','a form of classical theatre','Kabuki is a form of classical theatre.']},
+{id:25,cat:'伝統文化',jp:'生け花は花を使ったアートです',sub:'',en:'Ikebana is the art of flower arranging.',alt:'It\'s about balance, space, and simplicity.',tip:'flower arranging（生け花）。balance and simplicity（バランスとシンプルさ）。',chunks:['flower arranging','the art of flower arranging','Ikebana is the art of flower arranging.']},
+{id:26,cat:'伝統文化',jp:'書道は筆で文字を書く芸術です',sub:'',en:'Shodo is the art of Japanese calligraphy.',alt:'It requires focus and discipline — like meditation.',tip:'calligraphy（書道）。discipline（精神修養）。',chunks:['calligraphy','Japanese calligraphy','Shodo is the art of Japanese calligraphy.']},
+{id:27,cat:'伝統文化',jp:'折り紙は紙を折って形を作ります',sub:'',en:'Origami is the art of paper folding.',alt:'You can make anything from cranes to animals.',tip:'paper folding（紙を折る）。cranes（折り鶴）。',chunks:['paper folding','the art of paper folding','Origami is the art of paper folding.']},
+{id:28,cat:'伝統文化',jp:'神道は日本固有の宗教です',sub:'',en:'Shinto is Japan\'s indigenous religion.',alt:'It\'s about living in harmony with nature and spirits.',tip:'indigenous religion（固有の宗教）。harmony with nature（自然との調和）。',chunks:['indigenous religion','Japan\'s indigenous religion','Shinto is Japan\'s indigenous religion.']},
+{id:29,cat:'伝統文化',jp:'花火大会は夏の風物詩です',sub:'',en:'Fireworks festivals are a summer tradition.',alt:'Everyone wears yukata and watches together — it\'s magical.',tip:'summer tradition（夏の伝統）。yukata（浴衣）はそのまま使える。',chunks:['a summer tradition','fireworks are a summer tradition','Fireworks festivals are a summer tradition.']},
+{id:30,cat:'伝統文化',jp:'侍は日本の武士階級のことです',sub:'',en:'Samurai were Japan\'s warrior class.',alt:'They followed a strict code of honor called Bushido.',tip:'warrior class（武士階級）。Bushido（武士道）はそのまま使える。',chunks:['warrior class','Japan\'s warrior class','Samurai were Japan\'s warrior class.']},
+
+// 🚄 交通・移動 (10)
+{id:31,cat:'交通・移動',jp:'新幹線はとても速くて時間通りです',sub:'',en:'The bullet train is fast and always on time.',alt:'It\'s incredibly punctual — delays are very rare.',tip:'bullet train（新幹線）。punctual（時間に正確な）。',chunks:['fast and on time','fast and always on time','The bullet train is fast and always on time.']},
+{id:32,cat:'交通・移動',jp:'東京の電車は本当に便利です',sub:'',en:'Tokyo\'s train system is incredibly convenient.',alt:'You can get anywhere by train in Tokyo.',tip:'train system（電車網）。incredibly convenient（とても便利）。',chunks:['incredibly convenient','the train system is convenient','Tokyo\'s train system is incredibly convenient.']},
+{id:33,cat:'交通・移動',jp:'ICカードで電車に乗れます',sub:'',en:'You can ride trains with an IC card.',alt:'Just tap and go — no need to buy tickets.',tip:'IC card（交通系ICカード）。tap and go（タッチして乗る）。',chunks:['with an IC card','ride trains with an IC card','You can ride trains with an IC card.']},
+{id:34,cat:'交通・移動',jp:'タクシーは少し高いですが快適です',sub:'',en:'Taxis are a bit pricey but very comfortable.',alt:'The drivers are super polite and the cars are spotless.',tip:'pricey（少し高い）。spotless（ぴかぴかの）。',chunks:['a bit pricey','pricey but comfortable','Taxis are a bit pricey but very comfortable.']},
+{id:35,cat:'交通・移動',jp:'東京から京都は新幹線で約2時間です',sub:'',en:'It\'s about two hours from Tokyo to Kyoto by shinkansen.',alt:'Much faster than flying when you factor in check-in.',tip:'about two hours（約2時間）。factor in（考慮する）。',chunks:['about two hours','two hours by shinkansen','It\'s about two hours from Tokyo to Kyoto by shinkansen.']},
+{id:36,cat:'交通・移動',jp:'電車は混雑していることがあります',sub:'',en:'Trains can get very crowded.',alt:'Rush hour in Tokyo is intense — good luck!',tip:'crowded（混雑した）。rush hour（ラッシュアワー）。',chunks:['get crowded','can get very crowded','Trains can get very crowded.']},
+{id:37,cat:'交通・移動',jp:'バスも便利な移動手段です',sub:'',en:'Buses are also a convenient way to get around.',alt:'In some areas, buses are easier than trains.',tip:'get around（移動する）。convenient way（便利な手段）。',chunks:['get around','convenient way to get around','Buses are also a convenient way to get around.']},
+{id:38,cat:'交通・移動',jp:'自転車でまわる観光もおすすめです',sub:'',en:'Cycling is a great way to explore.',alt:'Kyoto especially is perfect for cycling.',tip:'cycling（サイクリング）。explore（探索する）。',chunks:['great way','great way to explore','Cycling is a great way to explore.']},
+{id:39,cat:'交通・移動',jp:'電車の中では静かにするのがマナーです',sub:'',en:'It\'s polite to be quiet on trains.',alt:'Keep your voice down and avoid phone calls.',tip:'polite to be quiet（静かにするのが礼儀）。keep your voice down（声を小さく）。',chunks:['be quiet','polite to be quiet','It\'s polite to be quiet on trains.']},
+{id:40,cat:'交通・移動',jp:'空港から都市へのアクセスも便利です',sub:'',en:'Getting from the airport to the city is easy.',alt:'There are direct trains from most major airports.',tip:'getting from ... to ...（〜から〜へ移動する）。direct trains（直通列車）。',chunks:['is easy','getting to the city is easy','Getting from the airport to the city is easy.']},
+
+// 🏨 宿泊・温泉 (10)
+{id:41,cat:'宿泊・温泉',jp:'旅館は日本の伝統的な宿です',sub:'',en:'A ryokan is a traditional Japanese inn.',alt:'You sleep on futons and wear yukata.',tip:'traditional Japanese inn（日本の伝統的な宿）。futon（布団）はそのまま使える。',chunks:['a traditional inn','a traditional Japanese inn','A ryokan is a traditional Japanese inn.']},
+{id:42,cat:'宿泊・温泉',jp:'温泉は天然の温かいお風呂です',sub:'',en:'Onsen are natural hot spring baths.',alt:'Soaking in an onsen is the ultimate relaxation.',tip:'natural hot spring baths（天然温泉）。soaking（浸かる）。',chunks:['hot spring baths','natural hot spring baths','Onsen are natural hot spring baths.']},
+{id:43,cat:'宿泊・温泉',jp:'旅館では夕食が部屋で出ます',sub:'',en:'At a ryokan, dinner is served in your room.',alt:'It\'s a multi-course kaiseki meal — incredible.',tip:'served in your room（部屋で提供される）。kaiseki（懐石料理）はそのまま使える。',chunks:['served in your room','dinner served in your room','At a ryokan, dinner is served in your room.']},
+{id:44,cat:'宿泊・温泉',jp:'混浴の温泉もあります',sub:'',en:'Some onsen are mixed bathing.',alt:'Though most have separate sections for men and women.',tip:'mixed bathing（混浴）。separate sections（男女別）。',chunks:['mixed bathing','some onsen are mixed bathing','Some onsen are mixed bathing.']},
+{id:45,cat:'宿泊・温泉',jp:'タトゥーがあると入浴できない場合があります',sub:'',en:'Tattoos may not be allowed at some onsen.',alt:'It\'s worth checking before you go.',tip:'may not be allowed（許可されない場合がある）。worth checking（確認する価値がある）。',chunks:['may not be allowed','tattoos may not be allowed','Tattoos may not be allowed at some onsen.']},
+{id:46,cat:'宿泊・温泉',jp:'カプセルホテルはユニークな体験です',sub:'',en:'A capsule hotel is a unique experience.',alt:'It\'s compact but surprisingly comfortable.',tip:'unique experience（ユニークな体験）。compact（コンパクトな）。',chunks:['a unique experience','a unique Japanese experience','A capsule hotel is a unique experience.']},
+{id:47,cat:'宿泊・温泉',jp:'銭湯は地域の共同浴場です',sub:'',en:'A sento is a local public bathhouse.',alt:'It\'s cheaper than onsen and very local.',tip:'public bathhouse（公共浴場）。local（地域の）。',chunks:['a public bathhouse','a local public bathhouse','A sento is a local public bathhouse.']},
+{id:48,cat:'宿泊・温泉',jp:'お風呂に入る前に体を洗います',sub:'',en:'You wash before getting into the bath.',alt:'Soap up first — it\'s a strict rule.',tip:'wash before（入る前に洗う）。strict rule（厳しいルール）。',chunks:['wash before','wash before getting in','You wash before getting into the bath.']},
+{id:49,cat:'宿泊・温泉',jp:'ホテルのアメニティが充実しています',sub:'',en:'Japanese hotels have excellent amenities.',alt:'Toothbrushes, pyjamas, slippers — all provided.',tip:'excellent amenities（充実したアメニティ）。all provided（全て揃っている）。',chunks:['excellent amenities','have excellent amenities','Japanese hotels have excellent amenities.']},
+{id:50,cat:'宿泊・温泉',jp:'チェックインは通常午後3時です',sub:'',en:'Check-in is usually at 3 p.m.',alt:'But luggage storage is available.',tip:'check-in time（チェックイン時間）。luggage storage（荷物預かり）。',chunks:['at 3 p.m.','usually at 3 p.m.','Check-in is usually at 3 p.m.']},
+
+// 🛍️ 買い物 (10)
+{id:51,cat:'買い物',jp:'免税でお買い物できる店があります',sub:'',en:'Many stores offer tax-free shopping.',alt:'Show your passport and save 10%.',tip:'tax-free shopping（免税ショッピング）。show your passport（パスポートを見せる）。',chunks:['tax-free shopping','offer tax-free shopping','Many stores offer tax-free shopping.']},
+{id:52,cat:'買い物',jp:'コンビニは24時間開いています',sub:'',en:'Convenience stores are open 24 hours.',alt:'They\'re everywhere and have everything you need.',tip:'open 24 hours（24時間営業）。everywhere（どこにでもある）。',chunks:['open 24 hours','open 24 hours a day','Convenience stores are open 24 hours.']},
+{id:53,cat:'買い物',jp:'自動販売機が至る所にあります',sub:'',en:'Vending machines are everywhere.',alt:'Hot drinks, cold drinks, snacks — you name it.',tip:'everywhere（どこにでもある）。you name it（何でもある）。',chunks:['are everywhere','vending machines are everywhere','Vending machines are everywhere.']},
+{id:54,cat:'買い物',jp:'ドンキホーテは何でも売っています',sub:'',en:'Don Quijote sells almost everything.',alt:'It\'s open late and always busy.',tip:'almost everything（ほぼ何でも）。open late（遅くまで営業）。',chunks:['sells everything','sells almost everything','Don Quijote sells almost everything.']},
+{id:55,cat:'買い物',jp:'秋葉原は電気製品の聖地です',sub:'',en:'Akihabara is famous for electronics.',alt:'It\'s also the hub of anime and gaming culture.',tip:'famous for（〜で有名）。hub（中心地）。',chunks:['famous for electronics','famous for electronics and anime','Akihabara is famous for electronics.']},
+{id:56,cat:'買い物',jp:'百貨店の地下は食品が充実しています',sub:'',en:'Department store basements have amazing food sections.',alt:'It\'s called "depachika" and it\'s a foodie\'s paradise.',tip:'depachika（デパ地下）はそのまま英語でも通じる。foodie\'s paradise（グルメの楽園）。',chunks:['amazing food sections','have amazing food sections','Department store basements have amazing food sections.']},
+{id:57,cat:'買い物',jp:'値切り交渉はあまりしません',sub:'',en:'Bargaining is not common in Japan.',alt:'The price on the tag is the price you pay.',tip:'bargaining（値切り交渉）。price on the tag（表示価格）。',chunks:['not common','bargaining is not common','Bargaining is not common in Japan.']},
+{id:58,cat:'買い物',jp:'おみやげは日本の贈り物文化の一つです',sub:'',en:'Omiyage is Japan\'s gift-giving culture.',alt:'You bring back souvenirs for friends and colleagues.',tip:'gift-giving culture（贈り物文化）。souvenirs（お土産）。',chunks:['gift-giving','Japan\'s gift-giving culture','Omiyage is Japan\'s gift-giving culture.']},
+{id:59,cat:'買い物',jp:'包装がとても丁寧です',sub:'',en:'Packaging is beautifully done.',alt:'Even convenience store food is wrapped carefully.',tip:'beautifully done（丁寧に施された）。wrapped carefully（丁寧に包まれた）。',chunks:['beautifully done','packaging is beautifully done','Packaging is beautifully done.']},
+{id:60,cat:'買い物',jp:'キャッシュレス決済も使えます',sub:'',en:'Cashless payment is widely accepted now.',alt:'But it\'s still good to carry some cash just in case.',tip:'widely accepted（広く使われている）。carry some cash（現金を持ち歩く）。',chunks:['widely accepted','cashless is widely accepted','Cashless payment is widely accepted now.']},
+
+// 🎋 季節・自然 (10)
+{id:61,cat:'季節・自然',jp:'桜は春の日本のシンボルです',sub:'',en:'Cherry blossoms are a symbol of spring.',alt:'People have picnics under the trees — it\'s called hanami.',tip:'cherry blossoms（桜）。hanami（花見）はそのまま使える。',chunks:['symbol of spring','a symbol of spring','Cherry blossoms are a symbol of spring.']},
+{id:62,cat:'季節・自然',jp:'花見はお花見のパーティーです',sub:'',en:'Hanami is a cherry blossom viewing party.',alt:'It\'s one of Japan\'s most beloved traditions.',tip:'cherry blossom viewing party（花見）。beloved tradition（愛される伝統）。',chunks:['a viewing party','a cherry blossom viewing party','Hanami is a cherry blossom viewing party.']},
+{id:63,cat:'季節・自然',jp:'紅葉は秋に美しく色づきます',sub:'',en:'Autumn leaves are stunning in Japan.',alt:'The reds and oranges are absolutely breathtaking.',tip:'autumn leaves（紅葉）。breathtaking（息をのむほど美しい）。',chunks:['are stunning','autumn leaves are stunning','Autumn leaves are stunning in Japan.']},
+{id:64,cat:'季節・自然',jp:'夏は蒸し暑いですが祭りが多いです',sub:'',en:'Summers are hot and humid, but full of festivals.',alt:'The heat is intense, but the matsuri make it worth it.',tip:'hot and humid（蒸し暑い）。matsuri（祭り）はそのまま使える。',chunks:['hot and humid','hot and humid but full of festivals','Summers are hot and humid, but full of festivals.']},
+{id:65,cat:'季節・自然',jp:'冬は雪が多く、スキーが楽しめます',sub:'',en:'Winters bring heavy snow — great for skiing.',alt:'Hokkaido has some of the best powder snow in the world.',tip:'heavy snow（大雪）。powder snow（パウダースノー）。',chunks:['heavy snow','winters bring heavy snow','Winters bring heavy snow — great for skiing.']},
+{id:66,cat:'季節・自然',jp:'春と秋が旅行に一番いい季節です',sub:'',en:'Spring and autumn are the best seasons to visit.',alt:'The weather is mild and the scenery is beautiful.',tip:'best seasons to visit（旅行に最適な季節）。mild（穏やか）。',chunks:['best seasons','best seasons to visit','Spring and autumn are the best seasons to visit.']},
+{id:67,cat:'季節・自然',jp:'日本は地震が多い国です',sub:'',en:'Japan has frequent earthquakes.',alt:'Most are minor, but it\'s good to know the safety rules.',tip:'frequent earthquakes（頻繁な地震）。minor（軽微な）。',chunks:['frequent earthquakes','has frequent earthquakes','Japan has frequent earthquakes.']},
+{id:68,cat:'季節・自然',jp:'台風は夏から秋にかけて来ます',sub:'',en:'Typhoons hit from summer through autumn.',alt:'They can be intense — it\'s best to stay indoors.',tip:'hit（直撃する）。stay indoors（屋内にとどまる）。',chunks:['hit in summer','typhoons hit in summer','Typhoons hit from summer through autumn.']},
+{id:69,cat:'季節・自然',jp:'日本は自然がとても豊かです',sub:'',en:'Japan has incredibly diverse nature.',alt:'Mountains, oceans, forests — it has everything.',tip:'diverse nature（多様な自然）。has everything（全てがある）。',chunks:['diverse nature','incredibly diverse nature','Japan has incredibly diverse nature.']},
+{id:70,cat:'季節・自然',jp:'北海道は自然と食で有名です',sub:'',en:'Hokkaido is known for nature and food.',alt:'Fresh dairy, seafood, and wide open spaces.',tip:'known for（〜で知られている）。dairy（乳製品）。',chunks:['known for','known for nature and food','Hokkaido is known for nature and food.']},
+
+// 🙏 マナー・習慣 (10)
+{id:71,cat:'マナー・習慣',jp:'家に入るときは靴を脱ぎます',sub:'',en:'You remove your shoes before entering a home.',alt:'Slippers are usually provided inside.',tip:'remove your shoes（靴を脱ぐ）。slippers provided（スリッパが用意されている）。',chunks:['remove your shoes','remove shoes before entering','You remove your shoes before entering a home.']},
+{id:72,cat:'マナー・習慣',jp:'チップの文化はありません',sub:'',en:'Tipping is not customary in Japan.',alt:'It can actually be considered rude.',tip:'not customary（習慣がない）。considered rude（失礼とみなされる）。',chunks:['not customary','tipping is not customary','Tipping is not customary in Japan.']},
+{id:73,cat:'マナー・習慣',jp:'お辞儀は挨拶や感謝の表現です',sub:'',en:'Bowing is a way to greet and show respect.',alt:'The deeper the bow, the more formal it is.',tip:'bowing（お辞儀）。show respect（敬意を示す）。',chunks:['show respect','a way to show respect','Bowing is a way to greet and show respect.']},
+{id:74,cat:'マナー・習慣',jp:'食べながら歩くのはマナー違反です',sub:'',en:'Eating while walking is considered rude.',alt:'Find a bench or eat where you bought the food.',tip:'considered rude（失礼とみなされる）。find a bench（ベンチを探す）。',chunks:['considered rude','eating while walking is rude','Eating while walking is considered rude.']},
+{id:75,cat:'マナー・習慣',jp:'電車内では電話を控えます',sub:'',en:'Phone calls are avoided on trains.',alt:'Put your phone on silent mode.',tip:'avoided（避けられる）。silent mode（マナーモード）。',chunks:['avoided on trains','phone calls avoided on trains','Phone calls are avoided on trains.']},
+{id:76,cat:'マナー・習慣',jp:'ゴミは持ち帰るのがマナーです',sub:'',en:'You\'re expected to take your rubbish with you.',alt:'Public bins are rare — always carry a bag.',tip:'take your rubbish（ゴミを持ち帰る）。public bins are rare（公共のゴミ箱が少ない）。',chunks:['take your rubbish','expected to take your rubbish','You\'re expected to take your rubbish with you.']},
+{id:77,cat:'マナー・習慣',jp:'行列は整然と並びます',sub:'',en:'Queuing is very orderly in Japan.',alt:'Everyone waits patiently — cutting in line is a big no.',tip:'orderly（整然とした）。cutting in line（割り込み）。',chunks:['very orderly','queuing is very orderly','Queuing is very orderly in Japan.']},
+{id:78,cat:'マナー・習慣',jp:'大声で話すのは控えます',sub:'',en:'Speaking loudly in public is frowned upon.',alt:'Japanese people tend to be soft-spoken in public.',tip:'frowned upon（眉をひそめられる）。soft-spoken（穏やかに話す）。',chunks:['frowned upon','speaking loudly is frowned upon','Speaking loudly in public is frowned upon.']},
+{id:79,cat:'マナー・習慣',jp:'ドアを開けて待ってくれることが多いです',sub:'',en:'People often hold the door for others.',alt:'Small acts of kindness are very common.',tip:'hold the door（ドアを開けて待つ）。acts of kindness（親切な行為）。',chunks:['hold the door','often hold the door','People often hold the door for others.']},
+{id:80,cat:'マナー・習慣',jp:'時間を守ることをとても大切にします',sub:'',en:'Punctuality is highly valued in Japan.',alt:'Being late is seen as disrespectful.',tip:'punctuality（時間厳守）。highly valued（非常に重視される）。',chunks:['highly valued','punctuality is highly valued','Punctuality is highly valued in Japan.']},
+
+// 🌆 都市・地域 (10)
+{id:81,cat:'都市・地域',jp:'東京は世界最大級の都市の一つです',sub:'',en:'Tokyo is one of the world\'s largest cities.',alt:'With over 13 million people in the city alone.',tip:'one of the largest（最大級の一つ）。13 million（1300万人）。',chunks:['one of the largest','one of the world\'s largest cities','Tokyo is one of the world\'s largest cities.']},
+{id:82,cat:'都市・地域',jp:'大阪は食の都として有名です',sub:'',en:'Osaka is famous for its food culture.',alt:'They say "kuidaore" — eat until you drop.',tip:'food culture（食文化）。kuidaore（食い倒れ）はそのまま使える。',chunks:['famous for food','famous for its food culture','Osaka is famous for its food culture.']},
+{id:83,cat:'都市・地域',jp:'京都は古都で寺社が多いです',sub:'',en:'Kyoto is an ancient city full of shrines and temples.',alt:'It feels like stepping back in time.',tip:'ancient city（古都）。stepping back in time（時代を遡る）。',chunks:['full of shrines','full of shrines and temples','Kyoto is an ancient city full of shrines and temples.']},
+{id:84,cat:'都市・地域',jp:'北海道は広大な自然が広がります',sub:'',en:'Hokkaido is known for its vast open spaces.',alt:'It feels completely different from the rest of Japan.',tip:'vast open spaces（広大な自然）。feels different（異なる雰囲気）。',chunks:['vast open spaces','known for vast open spaces','Hokkaido is known for its vast open spaces.']},
+{id:85,cat:'都市・地域',jp:'沖縄は南国のリゾート地です',sub:'',en:'Okinawa is a tropical resort destination.',alt:'It has its own distinct culture and language.',tip:'tropical resort（南国リゾート）。distinct culture（独自の文化）。',chunks:['a tropical resort','a tropical resort destination','Okinawa is a tropical resort destination.']},
+{id:86,cat:'都市・地域',jp:'広島は平和公園で訪れる価値があります',sub:'',en:'Hiroshima\'s Peace Park is worth visiting.',alt:'It\'s a powerful and emotional experience.',tip:'worth visiting（訪れる価値がある）。emotional experience（心に響く体験）。',chunks:['worth visiting','Peace Park is worth visiting','Hiroshima\'s Peace Park is worth visiting.']},
+{id:87,cat:'都市・地域',jp:'奈良は鹿と大仏で有名です',sub:'',en:'Nara is famous for deer and the Great Buddha.',alt:'The deer roam freely and will eat right from your hand.',tip:'the Great Buddha（大仏）。roam freely（自由に歩き回る）。',chunks:['famous for deer','famous for deer and the Buddha','Nara is famous for deer and the Great Buddha.']},
+{id:88,cat:'都市・地域',jp:'神戸はおしゃれな港町です',sub:'',en:'Kobe is a stylish port city.',alt:'It has a cosmopolitan feel with Western influence.',tip:'stylish port city（おしゃれな港町）。cosmopolitan（国際的な）。',chunks:['a stylish city','a stylish port city','Kobe is a stylish port city.']},
+{id:89,cat:'都市・地域',jp:'富士山は静岡と山梨の間にあります',sub:'',en:'Mt. Fuji sits between Shizuoka and Yamanashi.',alt:'You can climb it — but it\'s tougher than it looks.',tip:'sits between（〜の間にある）。tougher than it looks（見た目より大変）。',chunks:['sits between','sits between Shizuoka and Yamanashi','Mt. Fuji sits between Shizuoka and Yamanashi.']},
+{id:90,cat:'都市・地域',jp:'日本には47都道府県があります',sub:'',en:'Japan has 47 prefectures.',alt:'Each one has its own unique culture and food.',tip:'47 prefectures（47都道府県）。unique culture（独自の文化）。',chunks:['47 prefectures','has 47 prefectures','Japan has 47 prefectures.']},
+
+// 💬 日本語・文化の違い (10)
+{id:91,cat:'文化の違い',jp:'日本語はひらがな・カタカナ・漢字を使います',sub:'',en:'Japanese uses three writing systems.',alt:'Hiragana, katakana, and kanji — all in one sentence!',tip:'three writing systems（3つの文字体系）。',chunks:['three writing systems','uses three writing systems','Japanese uses three writing systems.']},
+{id:92,cat:'文化の違い',jp:'敬語は日本語の丁寧な話し方です',sub:'',en:'Keigo is Japan\'s formal way of speaking.',alt:'It changes completely depending on who you\'re talking to.',tip:'formal way of speaking（丁寧な話し方）。depending on who（相手によって）。',chunks:['formal speaking','Japan\'s formal way of speaking','Keigo is Japan\'s formal way of speaking.']},
+{id:93,cat:'文化の違い',jp:'「空気を読む」は場の雰囲気を読む意味です',sub:'',en:'"Reading the air" means sensing the mood.',alt:'It\'s about understanding what\'s unsaid.',tip:'sensing the mood（雰囲気を感じ取る）。what\'s unsaid（言葉にされていないこと）。',chunks:['sensing the mood','"reading the air" means sensing the mood','"Reading the air" means sensing the mood.']},
+{id:94,cat:'文化の違い',jp:'日本人はNOと言わないことが多いです',sub:'',en:'Japanese people rarely say "no" directly.',alt:'A hesitant "yes" often means no.',tip:'rarely say no directly（直接ノーと言わない）。hesitant（ためらいがちな）。',chunks:['rarely say no','rarely say "no" directly','Japanese people rarely say "no" directly.']},
+{id:95,cat:'文化の違い',jp:'グループの調和を大切にします',sub:'',en:'Group harmony is highly valued.',alt:'Standing out or causing conflict is avoided.',tip:'group harmony（集団の調和）。causing conflict（争いを起こす）。',chunks:['highly valued','group harmony is valued','Group harmony is highly valued.']},
+{id:96,cat:'文化の違い',jp:'「もったいない」は物を大切にする概念です',sub:'',en:'"Mottainai" means don\'t waste.',alt:'It\'s about respecting things and not throwing them away.',tip:'mottainai（もったいない）はそのまま英語でも通じる。',chunks:['don\'t waste','"mottainai" means don\'t waste','"Mottainai" means don\'t waste.']},
+{id:97,cat:'文化の違い',jp:'「おもてなし」は心からのもてなしです',sub:'',en:'"Omotenashi" means wholehearted hospitality.',alt:'It\'s about anticipating needs before they\'re even expressed.',tip:'wholehearted hospitality（心からのもてなし）。anticipating needs（ニーズを先読みする）。',chunks:['wholehearted hospitality','"omotenashi" means wholehearted hospitality','"Omotenashi" means wholehearted hospitality.']},
+{id:98,cat:'文化の違い',jp:'仕事に非常に真剣に取り組みます',sub:'',en:'Work ethic is very strong in Japan.',alt:'Dedication and effort are highly respected.',tip:'work ethic（勤労倫理）。dedication（献身・熱意）。',chunks:['very strong','work ethic is very strong','Work ethic is very strong in Japan.']},
+{id:99,cat:'文化の違い',jp:'温かく穏やかな人が多いです',sub:'',en:'People are generally warm and polite.',alt:'Random acts of kindness are common.',tip:'generally warm and polite（一般的に温かく礼儀正しい）。',chunks:['warm and polite','generally warm and polite','People are generally warm and polite.']},
+{id:100,cat:'文化の違い',jp:'日本は安全な国として知られています',sub:'',en:'Japan is known as one of the safest countries.',alt:'You can walk around at night without worry.',tip:'known as one of the safest（最も安全な国の一つ）。',chunks:['one of the safest','known as one of the safest','Japan is known as one of the safest countries.']},
+];
+
+const CATS=[...new Set(PHRASES.map(p=>p.cat))];
+const CAT_COLORS={'観光地・名所':'#c8962a','食文化':'#a03030','伝統文化':'#4a7c59',
+  '交通・移動':'#3d5a8a','宿泊・温泉':'#5a2a7a','買い物':'#c86a2a',
+  '季節・自然':'#2a7a5a','マナー・習慣':'#2a5a7a','都市・地域':'#7a5a2a','文化の違い':'#5a4a8a'};
+
+let mastered=new Set(JSON.parse(localStorage.getItem('jt_m')||'[]'));
+let wrong=new Set(JSON.parse(localStorage.getItem('jt_w')||'[]'));
+let queue=[],qIdx=0,isRevealed=false;
+let currentMode='normal',selectedCat='all';
+let sessionOk=0,sessionNg=0;
+let timerInterval=null,timerLeft=3;
+let loopCounts={};
+const LOOP_TARGET=5;
+
+function save(){localStorage.setItem('jt_m',JSON.stringify([...mastered]));localStorage.setItem('jt_w',JSON.stringify([...wrong]));}
+function updateHeader(){document.getElementById('h-mastered').textContent=mastered.size;}
+
+function switchTab(p,btn){
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+  document.getElementById('page-'+p).classList.add('active'); btn.classList.add('active');
+  if(p==='list') renderList(); if(p==='stats') renderStats();
+}
+
+function initSetup(){
+  const cc=document.getElementById('cat-chips');
+  cc.innerHTML=`<button class="chip active" onclick="selCat('all',this)">すべて (${PHRASES.length})</button>`;
+  CATS.forEach(c=>{const n=PHRASES.filter(p=>p.cat===c).length;cc.innerHTML+=`<button class="chip" onclick="selCat('${c}',this)">${c} (${n})</button>`;});
+}
+function selCat(cat,btn){selectedCat=cat;document.querySelectorAll('#cat-chips .chip').forEach(c=>c.classList.remove('active'));btn.classList.add('active');}
+function selectMode(mode){currentMode=mode;document.querySelectorAll('.mode-card').forEach(c=>c.classList.remove('selected'));document.getElementById('mode-'+mode).classList.add('selected');}
+
+function startTraining(){
+  let pool=selectedCat==='all'?[...PHRASES]:PHRASES.filter(p=>p.cat===selectedCat);
+  if(currentMode==='review') pool=pool.filter(p=>!mastered.has(p.id)||wrong.has(p.id));
+  if(pool.length===0){alert('該当するフレーズがありません！');return;}
+  for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]];}
+  queue=pool;qIdx=0;sessionOk=0;sessionNg=0;loopCounts={};
+  document.getElementById('train-setup').style.display='none';
+  document.getElementById('train-result').style.display='none';
+  document.getElementById('train-area').style.display='block';
+  document.getElementById('timer-wrap').style.display=currentMode==='timer'?'flex':'none';
+  document.getElementById('loop-banner').style.display=currentMode==='loop'?'block':'none';
+  showCard();
+}
+
+function showCard(){
+  if(qIdx>=queue.length){endTraining();return;}
+  const p=queue[qIdx];isRevealed=false;
+  document.getElementById('flash-card').className='flash-card';
+  document.getElementById('card-cat').textContent=p.cat;
+  document.getElementById('card-jp').textContent=p.jp;
+  document.getElementById('card-sub').textContent=p.sub||'';
+  document.getElementById('card-en').textContent=p.en;
+  document.getElementById('card-alt').textContent=p.alt?'💡 '+p.alt:'';
+  document.getElementById('card-tip').textContent=p.tip?'🔑 '+p.tip:'';
+  document.getElementById('card-chunks').innerHTML=p.chunks.map((c,i)=>
+    `<div class="cc-row"><span class="cc-num">${i+1}</span><span class="cc-en">${c}</span></div>`).join('');
+  document.getElementById('btn-reveal').style.display='inline-block';
+  document.getElementById('btn-ok').style.display='none';
+  document.getElementById('btn-ng').style.display='none';
+  document.getElementById('train-ctr').textContent=`${qIdx+1} / ${queue.length}`;
+  document.getElementById('train-prog').style.width=(qIdx/queue.length*100)+'%';
+  if(currentMode==='loop'){const cnt=loopCounts[p.id]||0;document.getElementById('loop-remain').textContent=LOOP_TARGET-cnt;}
+  if(currentMode==='timer') startTimer();
+}
+
+function startTimer(){
+  clearInterval(timerInterval);timerLeft=3;updateTimerUI(3,3);
+  timerInterval=setInterval(()=>{timerLeft-=0.1;if(timerLeft<=0){clearInterval(timerInterval);timerLeft=0;revealCard();}updateTimerUI(timerLeft,3);},100);
+}
+function updateTimerUI(val,max){
+  const offset=169.6*(1-val/max);
+  document.getElementById('timer-circle').style.strokeDashoffset=offset;
+  document.getElementById('timer-num').textContent=Math.ceil(val);
+  document.getElementById('timer-circle').style.stroke=val>2?'#c8962a':val>1?'#c86a2a':'#a03030';
+}
+
+function revealCard(){
+  if(isRevealed)return;isRevealed=true;clearInterval(timerInterval);
+  document.getElementById('flash-card').classList.add('revealed');
+  document.getElementById('btn-reveal').style.display='none';
+  document.getElementById('btn-ok').style.display='inline-block';
+  document.getElementById('btn-ng').style.display='inline-block';
+}
+
+function markOk(){
+  const p=queue[qIdx];sessionOk++;wrong.delete(p.id);
+  if(currentMode==='loop'){
+    loopCounts[p.id]=(loopCounts[p.id]||0)+1;
+    if(loopCounts[p.id]>=LOOP_TARGET){mastered.add(p.id);save();qIdx++;}
+    else{const ins=qIdx+1+Math.floor(Math.random()*Math.min(5,queue.length-qIdx-1));queue.splice(ins,0,p);qIdx++;}
+  }else{mastered.add(p.id);save();qIdx++;}
+  updateHeader();showCard();
+}
+function markNg(){
+  const p=queue[qIdx];sessionNg++;wrong.add(p.id);
+  if(currentMode==='loop'){loopCounts[p.id]=0;const ins=qIdx+1+Math.floor(Math.random()*Math.min(4,queue.length-qIdx-1));queue.splice(Math.min(ins,queue.length),0,p);}
+  save();qIdx++;showCard();
+}
+function skipCard(){qIdx++;showCard();}
+function quitTraining(){clearInterval(timerInterval);backToSetup();}
+
+function endTraining(){
+  clearInterval(timerInterval);
+  document.getElementById('train-area').style.display='none';
+  document.getElementById('train-result').style.display='block';
+  const total=sessionOk+sessionNg;const pct=total>0?Math.round(sessionOk/total*100):0;
+  document.getElementById('res-ok').textContent=sessionOk;
+  document.getElementById('res-ng').textContent=sessionNg;
+  document.getElementById('res-total').textContent=total;
+  document.getElementById('res-emoji').textContent=pct>=80?'🎉':pct>=50?'💪':'🔥';
+  document.getElementById('res-title').textContent=pct>=80?'素晴らしい！':pct>=50?'いい調子！':'もう一息！';
+  document.getElementById('res-sub').textContent=`正解率 ${pct}%（${sessionOk}/${total}）`;
+  document.getElementById('res-loop-btn').style.display=sessionNg>0&&currentMode!=='loop'?'block':'none';
+  updateHeader();
+}
+
+function startLoopFromResult(){
+  currentMode='loop';const ng=[...wrong];
+  if(ng.length===0){alert('間違えたフレーズがありません！');return;}
+  queue=PHRASES.filter(p=>ng.includes(p.id));
+  for(let i=queue.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[queue[i],queue[j]]=[queue[j],queue[i]];}
+  qIdx=0;sessionOk=0;sessionNg=0;loopCounts={};
+  document.getElementById('train-result').style.display='none';
+  document.getElementById('train-area').style.display='block';
+  document.getElementById('loop-banner').style.display='block';
+  document.getElementById('timer-wrap').style.display='none';
+  showCard();
+}
+function backToSetup(){
+  document.getElementById('train-area').style.display='none';
+  document.getElementById('train-result').style.display='none';
+  document.getElementById('train-setup').style.display='block';
+}
+
+function renderList(){
+  const lc=document.getElementById('list-chips');
+  lc.innerHTML=`<button class="chip active" onclick="filterList('all',this)">すべて</button>`;
+  CATS.forEach(c=>{lc.innerHTML+=`<button class="chip" onclick="filterList('${c}',this)">${c}</button>`;});
+  filterList('all',lc.firstElementChild);
+}
+function filterList(cat,btn){
+  document.querySelectorAll('#list-chips .chip').forEach(c=>c.classList.remove('active'));btn.classList.add('active');
+  const pool=cat==='all'?PHRASES:PHRASES.filter(p=>p.cat===cat);
+  document.getElementById('list-items').innerHTML=pool.map(p=>`
+    <div class="list-item">
+      <div class="li-cat"><span>${p.cat}</span><span class="li-done ${mastered.has(p.id)?'show':''}">✓ 習得</span></div>
+      <div class="li-jp">${p.jp}</div>
+      <div class="li-chunks">${p.chunks.map((c,i)=>`<div class="li-chunk-row"><span class="li-cn">${i+1}</span><span class="li-ce">${c}</span></div>`).join('')}</div>
+      <div class="li-full">${p.en}</div>
+    </div>`).join('');
+}
+
+function renderStats(){
+  document.getElementById('st-total').textContent=PHRASES.length;
+  document.getElementById('st-master').textContent=mastered.size;
+  document.getElementById('st-learn').textContent=PHRASES.length-mastered.size;
+  document.getElementById('cat-stats').innerHTML=CATS.map(c=>{
+    const total=PHRASES.filter(p=>p.cat===c).length;
+    const done=PHRASES.filter(p=>p.cat===c&&mastered.has(p.id)).length;
+    const pct=Math.round(done/total*100);
+    return `<div class="cat-stat"><div class="cst"><span class="csn">${c}</span><span class="csp">${done}/${total} (${pct}%)</span></div>
+    <div class="csb"><div class="csf" style="width:${pct}%;background:${CAT_COLORS[c]||'var(--moss)'}"></div></div></div>`;
+  }).join('');
+}
+function resetAll(){if(!confirm('全データをリセットしますか？'))return;mastered.clear();wrong.clear();save();updateHeader();renderStats();}
+
+initSetup();updateHeader();
+</script>
+</body>
+</html>
