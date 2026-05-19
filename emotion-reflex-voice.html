@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>感情・気持ちの表現 — 瞬間反射トレーニング</title>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1a1410;--paper:#f5f0e8;--gold:#c8962a;--moss:#4a7c59;
+  --indigo:#3d5a8a;--crimson:#a03030;--panel:#fffdf8;--border:rgba(26,20,16,0.12);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);min-height:100vh;}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(26,20,16,0.72);z-index:999;display:flex;align-items:center;justify-content:center;padding:20px;}
+.modal-box{background:var(--panel);border-radius:18px;padding:28px 24px;max-width:400px;width:100%;border:1.5px solid var(--border);}
+.modal-logo{font-size:32px;text-align:center;margin-bottom:12px;}
+.modal-title{font-family:'Shippori Mincho',serif;font-size:18px;font-weight:700;text-align:center;margin-bottom:6px;}
+.modal-sub{font-size:12px;color:rgba(26,20,16,0.5);text-align:center;margin-bottom:20px;line-height:1.6;}
+.modal-sec{font-family:'Shippori Mincho',serif;font-size:10px;font-weight:600;color:rgba(26,20,16,0.35);letter-spacing:.12em;text-transform:uppercase;margin:14px 0 8px;}
+.voice-select-row{display:flex;gap:8px;margin-bottom:16px;}
+.voice-opt{flex:1;padding:10px 6px;border-radius:10px;border:1.5px solid var(--border);background:var(--paper);text-align:center;cursor:pointer;transition:all .2s;}
+.voice-opt.sel{border-color:var(--gold);background:rgba(200,150,42,0.08);}
+.voice-opt .vo-name{font-size:13px;font-weight:500;margin-bottom:2px;}
+.voice-opt .vo-desc{font-size:10px;color:rgba(26,20,16,0.45);}
+.modal-label{font-size:12px;font-weight:500;margin-bottom:6px;display:block;}
+.modal-input{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;background:var(--paper);color:var(--ink);margin-bottom:8px;}
+.modal-input:focus{outline:none;border-color:var(--gold);}
+.modal-help{font-size:11px;color:rgba(26,20,16,0.4);margin-bottom:18px;line-height:1.5;}
+.modal-help a{color:var(--indigo);}
+.modal-btn{width:100%;padding:13px;border-radius:10px;border:none;background:var(--ink);color:var(--gold);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;margin-bottom:8px;}
+.modal-btn:hover{opacity:.88;}
+.modal-skip{width:100%;padding:10px;border-radius:10px;border:1.5px solid var(--border);background:transparent;color:rgba(26,20,16,0.45);font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;}
+.modal-skip:hover{border-color:var(--gold);}
+
+header{background:var(--ink);padding:16px 20px 0;position:sticky;top:0;z-index:100;}
+.h-top{display:flex;align-items:center;gap:10px;padding-bottom:14px;}
+.h-logo{font-size:22px;}
+.h-titles{flex:1;}
+.h-titles h1{font-family:'Shippori Mincho',serif;color:var(--gold);font-size:16px;font-weight:700;}
+.h-titles p{color:rgba(245,240,232,0.42);font-size:10px;margin-top:1px;}
+.h-right{display:flex;align-items:center;gap:10px;}
+.h-score .num{font-size:20px;font-weight:500;color:var(--gold);}
+.h-score .lbl{font-family:'Shippori Mincho',serif;font-size:9px;color:rgba(245,240,232,0.4);}
+.h-key-btn{padding:5px 10px;border-radius:7px;border:1px solid rgba(200,150,42,0.4);background:transparent;color:rgba(200,150,42,0.7);font-size:10px;cursor:pointer;}
+.h-key-btn:hover{border-color:var(--gold);color:var(--gold);}
+nav{display:flex;}
+.tab{flex:1;padding:8px 4px;background:none;border:none;border-bottom:2px solid transparent;color:rgba(245,240,232,0.38);font-family:'DM Sans',sans-serif;font-size:10px;cursor:pointer;transition:all .2s;display:flex;flex-direction:column;align-items:center;gap:2px;}
+.tab span:first-child{font-size:13px;}
+.tab.active{color:var(--gold);border-bottom-color:var(--gold);}
+
+main{padding:14px;max-width:600px;margin:0 auto;}
+.page{display:none;}.page.active{display:block;}
+.sec{font-family:'Shippori Mincho',serif;font-size:10px;font-weight:600;color:rgba(26,20,16,0.35);letter-spacing:.12em;text-transform:uppercase;margin:16px 0 10px;}
+
+.cat-chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;}
+.cat-chip{padding:5px 12px;border-radius:20px;border:1.5px solid var(--border);background:var(--panel);font-size:11px;cursor:pointer;transition:all .2s;color:var(--ink);}
+.cat-chip.active{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+
+.mode-cards{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px;}
+.mode-card{background:var(--panel);border:1.5px solid var(--border);border-radius:14px;padding:14px 12px;cursor:pointer;transition:all .2s;text-align:center;}
+.mode-card:hover{border-color:var(--gold);}
+.mode-card.selected{border-color:var(--gold);background:rgba(200,150,42,0.07);}
+.mode-emoji{font-size:24px;margin-bottom:6px;}
+.mode-name{font-size:13px;font-weight:500;margin-bottom:3px;}
+.mode-desc{font-family:'Shippori Mincho',serif;font-size:10px;color:rgba(26,20,16,0.45);line-height:1.5;}
+.start-btn{width:100%;padding:14px;border-radius:12px;border:none;background:var(--ink);color:var(--gold);font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;cursor:pointer;}
+.start-btn:hover{opacity:.88;}
+
+.train-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.train-prog-wrap{flex:1;height:5px;background:var(--border);border-radius:3px;margin:0 12px;overflow:hidden;}
+.train-prog-fill{height:100%;background:var(--gold);border-radius:3px;transition:width .4s;}
+.train-ctr{font-size:11px;color:rgba(26,20,16,0.4);}
+.quit-btn{font-size:11px;color:rgba(26,20,16,0.35);background:none;border:none;cursor:pointer;text-decoration:underline;}
+
+.timer-wrap{display:flex;justify-content:center;margin-bottom:14px;}
+.timer-ring{position:relative;width:64px;height:64px;}
+.timer-ring svg{transform:rotate(-90deg);}
+.timer-ring circle{fill:none;stroke-width:5;}
+.timer-bg{stroke:var(--border);}
+.timer-fg{stroke:var(--gold);stroke-linecap:round;transition:stroke-dashoffset .1s linear,stroke .3s;}
+.timer-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:500;color:var(--ink);}
+
+.loop-banner{background:rgba(200,150,42,0.1);border:1px solid rgba(200,150,42,0.3);border-radius:10px;padding:8px 12px;margin-bottom:12px;font-family:'Shippori Mincho',serif;font-size:12px;color:var(--gold);text-align:center;}
+
+.flash-card{background:var(--panel);border:1.5px solid var(--border);border-radius:18px;padding:28px 22px;text-align:center;margin-bottom:14px;box-shadow:0 4px 24px rgba(26,20,16,0.08);min-height:190px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:border-color .2s;}
+.flash-card.revealed{border-color:var(--moss);}
+.card-cat{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(26,20,16,0.3);margin-bottom:10px;}
+.card-jp{font-family:'Shippori Mincho',serif;font-size:22px;font-weight:700;line-height:1.5;margin-bottom:6px;}
+.card-sub{font-family:'Shippori Mincho',serif;font-size:12px;color:rgba(26,20,16,0.4);margin-bottom:14px;font-style:italic;}
+.card-hint{font-size:11px;color:rgba(26,20,16,0.3);font-style:italic;}
+.card-en{font-size:18px;font-weight:500;line-height:1.5;margin-bottom:6px;display:none;}
+.card-alt{font-size:12px;color:rgba(26,20,16,0.5);display:none;font-style:italic;margin-bottom:10px;}
+.card-tip{font-family:'Shippori Mincho',serif;font-size:11px;color:var(--indigo);background:rgba(61,90,138,0.08);border-radius:6px;padding:6px 10px;display:none;line-height:1.6;}
+.flash-card.revealed .card-en,.flash-card.revealed .card-alt,.flash-card.revealed .card-tip{display:block;}
+.flash-card.revealed .card-hint{display:none;}
+
+/* VOICE */
+.voice-btn-wrap{display:flex;justify-content:center;margin-bottom:10px;}
+.voice-btn{display:flex;align-items:center;gap:8px;padding:10px 20px;border-radius:30px;border:1.5px solid var(--gold);background:rgba(200,150,42,0.08);color:var(--gold);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;}
+.voice-btn:hover{background:rgba(200,150,42,0.18);}
+.voice-btn.playing{background:rgba(200,150,42,0.25);}
+.voice-icon{font-size:16px;}
+.voice-btn.playing .voice-icon{animation:pulse 0.6s ease-in-out infinite alternate;}
+@keyframes pulse{from{transform:scale(1);}to{transform:scale(1.2);}}
+.voice-status{font-size:10px;color:rgba(26,20,16,0.4);text-align:center;margin-bottom:8px;min-height:14px;}
+
+.action-row{display:flex;gap:8px;margin-bottom:10px;}
+.act-btn{flex:1;padding:13px;border-radius:12px;border:none;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:opacity .15s;}
+.act-btn:hover{opacity:.85;}
+.act-reveal{background:var(--indigo);color:#fff;flex:2;}
+.act-ok{background:var(--moss);color:#fff;}
+.act-ng{background:rgba(160,48,48,0.12);color:var(--crimson);}
+.act-skip{width:100%;padding:9px;border-radius:9px;border:1.5px solid var(--border);background:var(--panel);font-family:'DM Sans',sans-serif;font-size:11px;cursor:pointer;color:rgba(26,20,16,0.45);}
+
+.result-wrap{text-align:center;padding:24px 0;}
+.result-emoji{font-size:52px;margin-bottom:12px;}
+.result-title{font-family:'Shippori Mincho',serif;font-size:20px;font-weight:700;margin-bottom:6px;}
+.result-sub{font-size:13px;color:rgba(26,20,16,0.5);margin-bottom:24px;font-family:'Shippori Mincho',serif;}
+.result-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:24px;}
+.rs{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:12px 8px;text-align:center;}
+.rs-num{font-size:24px;font-weight:500;line-height:1;margin-bottom:3px;}
+.rs-num.g{color:var(--moss);}.rs-num.r{color:var(--crimson);}.rs-num.b{color:var(--indigo);}
+.rs-lbl{font-family:'Shippori Mincho',serif;font-size:9px;color:rgba(26,20,16,0.4);}
+.result-btns{display:flex;flex-direction:column;gap:8px;}
+.res-btn{padding:13px;border-radius:12px;border:none;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;}
+.res-btn.primary{background:var(--crimson);color:#fff;}
+.res-btn.secondary{background:var(--ink);color:var(--paper);}
+.res-btn.tertiary{background:var(--panel);color:var(--ink);border:1.5px solid var(--border);}
+
+.list-item{background:var(--panel);border:1px solid var(--border);border-radius:11px;padding:12px 14px;margin-bottom:7px;display:flex;align-items:center;gap:12px;}
+.li-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.li-body{flex:1;}
+.li-cat{font-size:9px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:rgba(26,20,16,0.3);margin-bottom:2px;}
+.li-jp{font-family:'Shippori Mincho',serif;font-size:14px;font-weight:600;margin-bottom:2px;}
+.li-en{font-size:13px;color:rgba(26,20,16,0.6);}
+.li-right{display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;}
+.li-done{font-size:10px;background:var(--moss);color:#fff;padding:2px 7px;border-radius:20px;display:none;}
+.li-done.show{display:inline;}
+.li-voice-btn{padding:3px 8px;border-radius:20px;border:1px solid var(--gold);background:transparent;color:var(--gold);font-size:10px;cursor:pointer;}
+
+.overall-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;}
+.os{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px 12px;text-align:center;}
+.os-num{font-size:26px;font-weight:500;line-height:1;margin-bottom:4px;}
+.os-num.g{color:var(--moss);}.os-num.gold{color:var(--gold);}
+.os-lbl{font-family:'Shippori Mincho',serif;font-size:10px;color:rgba(26,20,16,0.4);}
+.cat-stat{background:var(--panel);border:1px solid var(--border);border-radius:11px;padding:12px 14px;margin-bottom:8px;}
+.cs-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+.cs-name{font-size:13px;font-weight:500;}
+.cs-pct{font-size:12px;color:var(--moss);font-weight:500;}
+.cs-bar{height:4px;background:var(--border);border-radius:2px;overflow:hidden;}
+.cs-fill{height:100%;background:var(--moss);border-radius:2px;transition:width .5s;}
+.reset-all-btn{width:100%;padding:11px;border-radius:10px;border:1.5px solid var(--border);background:var(--panel);font-family:'DM Sans',sans-serif;font-size:12px;color:rgba(26,20,16,0.4);cursor:pointer;margin-top:12px;}
+.reset-all-btn:hover{border-color:var(--crimson);color:var(--crimson);}
+
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:10px 20px;border-radius:30px;font-size:12px;z-index:1000;opacity:0;transition:opacity .3s;pointer-events:none;}
+.toast.show{opacity:1;}
+</style>
+</head>
+<body>
+
+<!-- API KEY MODAL -->
+<div class="modal-overlay" id="api-modal">
+<div class="modal-box">
+  <div class="modal-logo">💬</div>
+  <div class="modal-title">ElevenLabs 音声設定</div>
+  <div class="modal-sub">ネイティブ英語音声を使うために<br>ElevenLabs APIキーを設定してください。<br>一度入力するとブラウザに保存されます。</div>
+  <div class="modal-sec">声を選ぶ</div>
+  <div class="voice-select-row">
+    <div class="voice-opt sel" id="voice-rachel" onclick="selectVoice('21m00Tcm4TlvDq8ikWAM','Rachel',this)">
+      <div class="vo-name">Rachel</div><div class="vo-desc">女性・落ち着き<br>聞き取りやすい</div>
+    </div>
+    <div class="voice-opt" id="voice-adam" onclick="selectVoice('pNInz6obpgDQGcFmaJgB','Adam',this)">
+      <div class="vo-name">Adam</div><div class="vo-desc">男性・明瞭<br>ネイティブ感</div>
+    </div>
+    <div class="voice-opt" id="voice-bella" onclick="selectVoice('EXAVITQu4vr4xnSDxMaL','Bella',this)">
+      <div class="vo-name">Bella</div><div class="vo-desc">女性・明るい<br>フレンドリー</div>
+    </div>
+  </div>
+  <label class="modal-label">ElevenLabs APIキー</label>
+  <input class="modal-input" type="password" id="api-key-input" placeholder="sk-..." autocomplete="off">
+  <div class="modal-help">
+    <a href="https://elevenlabs.io" target="_blank">elevenlabs.io</a> →
+    右上アイコン → Profile + API key から取得。<br>
+    キーはこのブラウザにのみ保存されます。
+  </div>
+  <button class="modal-btn" onclick="saveApiKey()">保存してスタート ✓</button>
+  <button class="modal-skip" onclick="skipApiKey()">音声なしで使う</button>
+</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<header>
+  <div class="h-top">
+    <div class="h-logo">💬</div>
+    <div class="h-titles">
+      <h1>感情・気持ちの表現</h1>
+      <p>瞬間反射トレーニング — 100フレーズ</p>
+    </div>
+    <div class="h-right">
+      <button class="h-key-btn" onclick="showApiModal()">🔑 音声設定</button>
+      <div class="h-score">
+        <div class="num" id="h-mastered">0</div>
+        <div class="lbl">習得済み</div>
+      </div>
+    </div>
+  </div>
+  <nav>
+    <button class="tab active" onclick="switchTab('train',this)"><span>⚡</span><span>トレーニング</span></button>
+    <button class="tab" onclick="switchTab('list',this)"><span>📋</span><span>一覧</span></button>
+    <button class="tab" onclick="switchTab('stats',this)"><span>📊</span><span>記録</span></button>
+  </nav>
+</header>
+
+<main>
+<div id="page-train" class="page active">
+  <div id="train-setup">
+    <div class="sec" style="margin-top:14px">カテゴリを選ぶ</div>
+    <div class="cat-chips" id="cat-chips"></div>
+    <div class="sec">モードを選ぶ</div>
+    <div class="mode-cards">
+      <div class="mode-card selected" id="mode-normal" onclick="selectMode('normal')">
+        <div class="mode-emoji">🃏</div><div class="mode-name">通常モード</div>
+        <div class="mode-desc">自分のペースで1枚ずつ。</div>
+      </div>
+      <div class="mode-card" id="mode-timer" onclick="selectMode('timer')">
+        <div class="mode-emoji">⏱️</div><div class="mode-name">タイマーモード</div>
+        <div class="mode-desc">3秒以内に口から出す。</div>
+      </div>
+      <div class="mode-card" id="mode-loop" onclick="selectMode('loop')">
+        <div class="mode-emoji">🔁</div><div class="mode-name">ループモード</div>
+        <div class="mode-desc">5回連続正解で身体化。</div>
+      </div>
+      <div class="mode-card" id="mode-review" onclick="selectMode('review')">
+        <div class="mode-emoji">🔄</div><div class="mode-name">復習モード</div>
+        <div class="mode-desc">未習得・間違えたものだけ。</div>
+      </div>
+    </div>
+    <button class="start-btn" onclick="startTraining()">トレーニング開始 →</button>
+  </div>
+
+  <div id="train-area" style="display:none">
+    <div class="train-hd">
+      <span class="train-ctr" id="train-ctr">1 / 10</span>
+      <div class="train-prog-wrap"><div class="train-prog-fill" id="train-prog" style="width:0%"></div></div>
+      <button class="quit-btn" onclick="quitTraining()">終了</button>
+    </div>
+    <div id="loop-banner" class="loop-banner" style="display:none">🔁 ループモード — あと<span id="loop-remain"></span>回正解で卒業！</div>
+    <div id="timer-wrap" class="timer-wrap" style="display:none">
+      <div class="timer-ring">
+        <svg width="64" height="64" viewBox="0 0 64 64">
+          <circle class="timer-bg" cx="32" cy="32" r="27"/>
+          <circle class="timer-fg" id="timer-circle" cx="32" cy="32" r="27" stroke-dasharray="169.6" stroke-dashoffset="0"/>
+        </svg>
+        <div class="timer-num" id="timer-num">3</div>
+      </div>
+    </div>
+    <div class="flash-card" id="flash-card" onclick="revealCard()">
+      <div class="card-cat" id="card-cat"></div>
+      <div class="card-jp"  id="card-jp"></div>
+      <div class="card-sub" id="card-sub"></div>
+      <div class="card-hint">タップして英語を確認</div>
+      <div class="card-en"  id="card-en"></div>
+      <div class="card-alt" id="card-alt"></div>
+      <div class="card-tip" id="card-tip"></div>
+    </div>
+    <div class="voice-btn-wrap" id="voice-btn-wrap" style="display:none">
+      <button class="voice-btn" id="voice-play-btn" onclick="playCurrentPhrase()">
+        <span class="voice-icon">🔊</span>
+        <span id="voice-btn-label">ネイティブ音声を聴く</span>
+      </button>
+    </div>
+    <div class="voice-status" id="voice-status"></div>
+    <div class="action-row">
+      <button class="act-btn act-reveal" id="btn-reveal" onclick="revealCard()">英語を見る</button>
+      <button class="act-btn act-ok" id="btn-ok" onclick="markOk()" style="display:none">✓ 言えた！</button>
+      <button class="act-btn act-ng" id="btn-ng" onclick="markNg()" style="display:none">✕ 言えなかった</button>
+    </div>
+    <button class="act-skip" onclick="skipCard()">スキップ →</button>
+  </div>
+
+  <div id="train-result" style="display:none">
+    <div class="result-wrap">
+      <div class="result-emoji" id="res-emoji">🎉</div>
+      <div class="result-title" id="res-title">完了！</div>
+      <div class="result-sub" id="res-sub"></div>
+      <div class="result-stats">
+        <div class="rs"><div class="rs-num g" id="res-ok">0</div><div class="rs-lbl">言えた！</div></div>
+        <div class="rs"><div class="rs-num r" id="res-ng">0</div><div class="rs-lbl">言えなかった</div></div>
+        <div class="rs"><div class="rs-num b" id="res-total">0</div><div class="rs-lbl">総問数</div></div>
+      </div>
+      <div class="result-btns">
+        <button class="res-btn primary" id="res-loop-btn" onclick="startLoopFromResult()" style="display:none">🔁 言えなかった分をループ練習</button>
+        <button class="res-btn secondary" onclick="backToSetup()">もう一度設定から</button>
+        <button class="res-btn tertiary" onclick="switchTab('stats',document.querySelectorAll('.tab')[2])">記録を見る</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="page-list" class="page">
+  <div class="sec" style="margin-top:14px">カテゴリで絞り込む</div>
+  <div class="cat-chips" id="list-cat-chips"></div>
+  <div id="list-items"></div>
+</div>
+
+<div id="page-stats" class="page">
+  <div class="sec" style="margin-top:14px">全体の進捗</div>
+  <div class="overall-stats">
+    <div class="os"><div class="os-num g" id="st-mastered">0</div><div class="os-lbl">習得済み</div></div>
+    <div class="os"><div class="os-num gold" id="st-total">100</div><div class="os-lbl">総フレーズ数</div></div>
+  </div>
+  <div class="sec">カテゴリ別</div>
+  <div id="cat-stats"></div>
+  <button class="reset-all-btn" onclick="resetAllData()">↺ 全データをリセット</button>
+</div>
+</main>
+
+<script>
+const PHRASES = [
+// 😊 嬉しい・幸せ (10)
+{id:1,cat:'😊 嬉しい・幸せ',jp:'最高の気分！',sub:'',en:"I'm on top of the world!",alt:"I'm so happy right now!",tip:'on top of the world は「最高の気分」の定番表現。'},
+{id:2,cat:'😊 嬉しい・幸せ',jp:'今日は最高の日だ',sub:'',en:'This made my day.',alt:'Today is the best day.',tip:"made my day は「今日を最高にしてくれた」。短くて使いやすい。"},
+{id:3,cat:'😊 嬉しい・幸せ',jp:'すごく嬉しい',sub:'',en:"I'm so happy.",alt:"I couldn't be happier.",tip:"I couldn't be happier は「これ以上幸せはない」という最上級の喜び。"},
+{id:4,cat:'😊 嬉しい・幸せ',jp:'うれしくて飛び跳ねたい',sub:'',en:"I'm thrilled!",alt:"I'm over the moon!",tip:"over the moon は「天にも昇る気持ち」。thrilled は興奮と喜びが混じった感覚。"},
+{id:5,cat:'😊 嬉しい・幸せ',jp:'幸せを感じる',sub:'',en:'I feel so content.',alt:"I feel really good about this.",tip:'content は静かで満ち足りた幸福感。happy より落ち着いたニュアンス。'},
+{id:6,cat:'😊 嬉しい・幸せ',jp:'最高の知らせだ！',sub:'',en:'That\'s the best news!',alt:'I love hearing that!',tip:"That's the best news! はとても自然な喜びの反応。"},
+{id:7,cat:'😊 嬉しい・幸せ',jp:'楽しくてたまらない',sub:'',en:"I'm having so much fun.",alt:"I'm loving every moment.",tip:"I'm loving every moment は「一瞬一瞬を楽しんでいる」。"},
+{id:8,cat:'😊 嬉しい・幸せ',jp:'心が温かくなる',sub:'',en:'It warms my heart.',alt:'That really touched me.',tip:'warms my heart は感動的な出来事に使う温かい表現。'},
+{id:9,cat:'😊 嬉しい・幸せ',jp:'顔がにやけてしまう',sub:'',en:"I can't stop smiling.",alt:'I keep grinning.',tip:"can't stop smiling は思わず笑顔になる状態を表す自然な口語。"},
+{id:10,cat:'😊 嬉しい・幸せ',jp:'これ以上幸せはない',sub:'',en:'Life is good.',alt:"I have everything I need.",tip:'Life is good. はシンプルだが深い満足感を表す。'},
+
+// 😢 悲しい・落ち込む (10)
+{id:11,cat:'😢 悲しい・落ち込む',jp:'なんか落ち込んでる',sub:'',en:"I'm feeling down.",alt:"I'm not feeling great.",tip:'feeling down は「気分が沈んでいる」。sad より口語的で自然。'},
+{id:12,cat:'😢 悲しい・落ち込む',jp:'胸が痛い',sub:'',en:'It breaks my heart.',alt:'That really hurts.',tip:'breaks my heart は深い悲しみや切なさを表す定番フレーズ。'},
+{id:13,cat:'😢 悲しい・落ち込む',jp:'泣きそう',sub:'',en:"I'm about to cry.",alt:'I feel like crying.',tip:'about to は「今にも〜しそう」。I feel like crying. はより一般的。'},
+{id:14,cat:'😢 悲しい・落ち込む',jp:'やる気が出ない',sub:'',en:"I just can't get motivated.",alt:"I have no energy today.",tip:"can't get motivated は「やる気になれない」という自然な表現。"},
+{id:15,cat:'😢 悲しい・落ち込む',jp:'どうもうまくいかない',sub:'',en:'Nothing seems to be going right.',alt:"Everything is going wrong today.",tip:'Nothing seems to be going right. は「何もうまくいかない」という嘆き。'},
+{id:16,cat:'😢 悲しい・落ち込む',jp:'気分が沈んでいる',sub:'',en:"I feel a bit blue.",alt:"I'm in a low mood.",tip:'feel blue は「憂鬱な気分」の慣用表現。'},
+{id:17,cat:'😢 悲しい・落ち込む',jp:'がっかりした',sub:'',en:"I'm so disappointed.",alt:'That let me down.',tip:'let someone down は「期待を裏切る・がっかりさせる」。'},
+{id:18,cat:'😢 悲しい・落ち込む',jp:'もうどうにでもなれ',sub:'',en:"I give up.",alt:"I don't even care anymore.",tip:"I give up. は投げやりな気持ち。I don't care anymore. は無気力感。"},
+{id:19,cat:'😢 悲しい・落ち込む',jp:'心がぽっかり空いた',sub:'',en:'I feel empty inside.',alt:'There\'s a hole in my heart.',tip:'feel empty inside は喪失感や虚無感を表す。'},
+{id:20,cat:'😢 悲しい・落ち込む',jp:'元気が出ない',sub:'',en:"I just don't feel like myself.",alt:"I'm not at my best today.",tip:"don't feel like myself は「いつもの自分じゃない」。体調不良にも使える。"},
+
+// 😤 怒り・イライラ (10)
+{id:21,cat:'😤 怒り・イライラ',jp:'イライラする',sub:'',en:"I'm so frustrated.",alt:'This is driving me crazy.',tip:'frustrated は怒りより「うまくいかなくてイライラ」のニュアンス。'},
+{id:22,cat:'😤 怒り・イライラ',jp:'頭にくる',sub:'',en:'That really gets to me.',alt:'That ticks me off.',tip:'gets to me は「イラっとさせる」。ticks me off はカジュアルで強め。'},
+{id:23,cat:'😤 怒り・イライラ',jp:'もう我慢の限界',sub:'',en:"I've had enough.",alt:"I can't take it anymore.",tip:"I've had enough. は我慢の限界を表す強い表現。"},
+{id:24,cat:'😤 怒り・イライラ',jp:'なんでそんなことするの',sub:'',en:'Why would you do that?',alt:'What were you thinking?',tip:'What were you thinking? は「何を考えていたの？」と責める表現。'},
+{id:25,cat:'😤 怒り・イライラ',jp:'信じられない',sub:'',en:'I can\'t believe this.',alt:'This is unbelievable.',tip:'I can\'t believe this. は怒りや呆れに幅広く使える。'},
+{id:26,cat:'😤 怒り・イライラ',jp:'ちょっと落ち着いて',sub:'他の人に言う',en:'Calm down.',alt:'Take it easy.',tip:'Take it easy. はより優しいニュアンス。Calm down は少し命令的。'},
+{id:27,cat:'😤 怒り・イライラ',jp:'それは違うと思う',sub:'',en:'That\'s not okay.',alt:'I disagree with that.',tip:"That's not okay. は相手の言動を否定する時に使う。"},
+{id:28,cat:'😤 怒り・イライラ',jp:'本当に腹が立つ',sub:'',en:"I'm really angry.",alt:'I\'m furious.',tip:'furious は angry より強い怒り。I\'m really angry. がより日常的。'},
+{id:29,cat:'😤 怒り・イライラ',jp:'もうほっといて',sub:'',en:'Just leave me alone.',alt:'I need some space.',tip:'I need some space. はより穏やかな言い方。'},
+{id:30,cat:'😤 怒り・イライラ',jp:'それは公平じゃない',sub:'',en:"That\'s not fair.",alt:'This is so unfair.',tip:"That's not fair. は子供から大人まで使う普遍的な表現。"},
+
+// 😰 不安・心配 (10)
+{id:31,cat:'😰 不安・心配',jp:'ちょっと緊張してる',sub:'',en:"I'm a bit nervous.",alt:'I have butterflies in my stomach.',tip:'butterflies in my stomach は緊張で胃がドキドキする感覚。'},
+{id:32,cat:'😰 不安・心配',jp:'心配が止まらない',sub:'',en:"I can't stop worrying.",alt:'I keep thinking about it.',tip:"can't stop -ing は「〜が止まらない」。よく使う口語パターン。"},
+{id:33,cat:'😰 不安・心配',jp:'うまくいくかな',sub:'',en:"I hope it goes well.",alt:"I'm keeping my fingers crossed.",tip:'fingers crossed は「うまくいくよう祈っている」のジェスチャーから来た表現。'},
+{id:34,cat:'😰 不安・心配',jp:'最悪の事態を考えてしまう',sub:'',en:"I keep thinking of the worst.",alt:"I'm catastrophizing.",tip:'catastrophizing は「最悪の事態を想像して過度に心配する」という心理用語。'},
+{id:35,cat:'😰 不安・心配',jp:'なんか嫌な予感がする',sub:'',en:"I have a bad feeling about this.",alt:'Something feels off.',tip:'Something feels off. は「何かがおかしい」という直感的な違和感。'},
+{id:36,cat:'😰 不安・心配',jp:'どうしよう',sub:'',en:'What am I going to do?',alt:'I have no idea what to do.',tip:'What am I going to do? はパニックや困惑を表す定番フレーズ。'},
+{id:37,cat:'😰 不安・心配',jp:'大丈夫かな',sub:'',en:'I hope everything is okay.',alt:'I hope it works out.',tip:'works out は「うまくいく」。I hope it works out. は幅広く使える。'},
+{id:38,cat:'😰 不安・心配',jp:'ドキドキが止まらない',sub:'',en:'My heart is racing.',alt:"My heart won't stop pounding.",tip:'My heart is racing. は緊張・興奮・恐怖いずれにも使える。'},
+{id:39,cat:'😰 不安・心配',jp:'考えすぎてしまう',sub:'',en:'I overthink everything.',alt:'I can\'t stop overthinking.',tip:'overthink は「考えすぎる」。I overthink everything. はとても自然な口語。'},
+{id:40,cat:'😰 不安・心配',jp:'先のことが心配',sub:'',en:"I'm worried about the future.",alt:"I'm anxious about what's ahead.",tip:'anxious は nervous より少し強い不安感。'},
+
+// 😌 安心・ほっとする (10)
+{id:41,cat:'😌 安心・ほっとする',jp:'よかった〜',sub:'',en:'What a relief!',alt:'Thank goodness.',tip:'What a relief! は安堵の気持ちを表す最も自然な表現。'},
+{id:42,cat:'😌 安心・ほっとする',jp:'ほっとした',sub:'',en:"I'm so relieved.",alt:'I feel a lot better now.',tip:"I'm so relieved. はシンプルで自然な安心の表現。"},
+{id:43,cat:'😌 安心・ほっとする',jp:'肩の荷が下りた',sub:'',en:'A weight has been lifted off my shoulders.',alt:'I feel so much lighter now.',tip:'weight off my shoulders は「責任や心配が消えた」という慣用句。'},
+{id:44,cat:'😌 安心・ほっとする',jp:'心が落ち着いた',sub:'',en:'I feel calm now.',alt:'I feel at peace.',tip:'at peace は「心が平和な状態」。feel calm より少し深い安らぎ。'},
+{id:45,cat:'😌 安心・ほっとする',jp:'最悪の事態を免れた',sub:'',en:'That was a close call.',alt:'We dodged a bullet.',tip:'close call は「間一髪だった」。dodged a bullet は「大きな問題を回避した」。'},
+{id:46,cat:'😌 安心・ほっとする',jp:'もう大丈夫',sub:'',en:"Everything is okay now.",alt:"It's all good.",tip:"It's all good. はカジュアルで安心させる表現。"},
+{id:47,cat:'😌 安心・ほっとする',jp:'安心して眠れそう',sub:'',en:"I can sleep easy now.",alt:'I can finally relax.',tip:"sleep easy は「安心して眠れる」。I can finally relax. も自然。"},
+{id:48,cat:'😌 安心・ほっとする',jp:'気が楽になった',sub:'',en:"I feel so much better.",alt:'That takes a load off my mind.',tip:"takes a load off my mind は「心の重荷が取れた」という慣用表現。"},
+{id:49,cat:'😌 安心・ほっとする',jp:'最高の結果だった',sub:'',en:'It worked out perfectly.',alt:'Better than I expected.',tip:'worked out は「うまくいった」。perfectly をつけると「完璧に」。'},
+{id:50,cat:'😌 安心・ほっとする',jp:'杞憂だったみたい',sub:'',en:'I was worried for nothing.',alt:'Turned out to be nothing.',tip:'worried for nothing は「無駄な心配だった」という表現。'},
+
+// 😑 疲れ・ストレス (10)
+{id:51,cat:'😑 疲れ・ストレス',jp:'へとへとだ',sub:'',en:"I'm exhausted.",alt:"I'm wiped out.",tip:'wiped out はとてもカジュアルで「完全に疲れ果てた」。'},
+{id:52,cat:'😑 疲れ・ストレス',jp:'休みが必要',sub:'',en:'I really need a break.',alt:'I need some time off.',tip:"I really need a break. は仕事・日常どちらにも使える定番フレーズ。"},
+{id:53,cat:'😑 疲れ・ストレス',jp:'限界を感じる',sub:'',en:"I'm at my limit.",alt:"I'm burning out.",tip:'burning out は「燃え尽きている」。職場・勉強での疲弊に使う。'},
+{id:54,cat:'😑 疲れ・ストレス',jp:'今日は本当に疲れた',sub:'',en:'It\'s been such a long day.',alt:"I'm drained.",tip:"It's been such a long day. は長くてつらい一日の終わりの定番。"},
+{id:55,cat:'😑 疲れ・ストレス',jp:'ストレスが溜まっている',sub:'',en:'I\'m so stressed out.',alt:'I\'m under a lot of pressure.',tip:'stressed out は口語的。under pressure はより状況の説明に使う。'},
+{id:56,cat:'😑 疲れ・ストレス',jp:'何もする気がしない',sub:'',en:"I don't feel like doing anything.",alt:"I have no motivation.",tip:"don't feel like doing anything は無気力感を表す自然な表現。"},
+{id:57,cat:'😑 疲れ・ストレス',jp:'頭が働かない',sub:'',en:"My brain isn't working.",alt:"I can't think straight.",tip:"can't think straight は「まともに考えられない」。疲れや混乱に使う。"},
+{id:58,cat:'😑 疲れ・ストレス',jp:'ぐったり',sub:'',en:'I feel drained.',alt:"I've got nothing left.",tip:"feel drained はエネルギーが全て吸い取られた感じ。I've got nothing left. も自然。"},
+{id:59,cat:'😑 疲れ・ストレス',jp:'今すぐ眠りたい',sub:'',en:"I could fall asleep right now.",alt:'I need a nap.',tip:"I could fall asleep right now. は今にも眠れそうという疲労感。"},
+{id:60,cat:'😑 疲れ・ストレス',jp:'もうクタクタ',sub:'',en:"I'm running on empty.",alt:"I'm done for the day.",tip:'running on empty はガス欠の車のように「もう限界」という比喩。'},
+
+// 🥺 切ない・寂しい (10)
+{id:61,cat:'🥺 切ない・寂しい',jp:'会いたい',sub:'',en:'I miss you.',alt:"I can't stop thinking about you.",tip:"I miss you. は最もシンプルで強い「会いたい」の表現。"},
+{id:62,cat:'🥺 切ない・寂しい',jp:'寂しい',sub:'',en:"I feel lonely.",alt:'I feel a bit lost without you.',tip:"feel lonely は寂しさの定番表現。lost without you は「あなたがいないと迷子のよう」。"},
+{id:63,cat:'🥺 切ない・寂しい',jp:'いなくて寂しい',sub:'',en:'It\'s not the same without you.',alt:'I wish you were here.',tip:"It's not the same without you. はあなたの不在を強調する表現。"},
+{id:64,cat:'🥺 切ない・寂しい',jp:'胸がきゅっとする',sub:'',en:'I feel a pang in my heart.',alt:'It tugs at my heartstrings.',tip:'pang は突き刺すような痛み。tugs at my heartstrings は「心の琴線に触れる」。'},
+{id:65,cat:'🥺 切ない・寂しい',jp:'忘れられない',sub:'',en:"I can't get you out of my head.",alt:"You're always on my mind.",tip:"can't get out of my head は頭から離れない状態。"},
+{id:66,cat:'🥺 切ない・寂しい',jp:'あの頃が懐かしい',sub:'',en:'I miss those days.',alt:'I wish we could go back.',tip:'I miss those days. はシンプルで自然な懐かしさの表現。'},
+{id:67,cat:'🥺 切ない・寂しい',jp:'なんか物悲しい',sub:'',en:"I feel a little melancholy.",alt:"There's a sadness I can't shake.",tip:'melancholy は詩的で深い物悲しさ。can\'t shake は「振り払えない」。'},
+{id:68,cat:'🥺 切ない・寂しい',jp:'誰かに話を聞いてほしい',sub:'',en:'I just need someone to talk to.',alt:"I need to vent.",tip:"need to vent は「感情を吐き出したい」という口語表現。"},
+{id:69,cat:'🥺 切ない・寂しい',jp:'もっと一緒にいたかった',sub:'',en:'I wish we had more time together.',alt:"I didn't want it to end.",tip:"didn't want it to end は「終わってほしくなかった」という名残惜しさ。"},
+{id:70,cat:'🥺 切ない・寂しい',jp:'心にぽっかり穴が開いた',sub:'',en:'I feel like something\'s missing.',alt:"There's a void I can't fill.",tip:"something's missing は何かが欠けている感覚。void は「空虚・穴」。"},
+
+// 😲 驚き・感動 (10)
+{id:71,cat:'😲 驚き・感動',jp:'信じられない！',sub:'',en:"I can't believe it!",alt:'No way!',tip:"No way! はとてもカジュアルな驚きの表現。"},
+{id:72,cat:'😲 驚き・感動',jp:'すごい！',sub:'',en:"That's incredible!",alt:'That\'s amazing!',tip:"incredible と amazing はどちらも「すごい」。incredible の方が少し強い驚き。"},
+{id:73,cat:'😲 驚き・感動',jp:'言葉が出ない',sub:'',en:"I'm speechless.",alt:"I don't know what to say.",tip:"I'm speechless. は感動や驚きで言葉が出ないとき。"},
+{id:74,cat:'😲 驚き・感動',jp:'度肝を抜かれた',sub:'',en:'My jaw dropped.',alt:'I was blown away.',tip:'jaw dropped は「あごが落ちた」という慣用表現。blown away も定番。'},
+{id:75,cat:'😲 驚き・感動',jp:'鳥肌が立った',sub:'',en:'I got goosebumps.',alt:'It gave me chills.',tip:'goosebumps も chills も「鳥肌・ぞくっとする」感覚。'},
+{id:76,cat:'😲 驚き・感動',jp:'本当に感動した',sub:'',en:'I was really moved.',alt:'It touched me deeply.',tip:'moved は感動で心が動いた状態。touched me deeply は深く心に触れた感覚。'},
+{id:77,cat:'😲 驚き・感動',jp:'そんなことがあるの？',sub:'',en:'Is that even possible?',alt:'How is that possible?',tip:"Is that even possible? の even は「そんなこと本当に〜？」という驚きを強調。"},
+{id:78,cat:'😲 驚き・感動',jp:'びっくりした',sub:'',en:'You startled me!',alt:'That scared me!',tip:'startle は「びっくりさせる」。You scared me! より軽いニュアンス。'},
+{id:79,cat:'😲 驚き・感動',jp:'予想外だった',sub:'',en:'I didn\'t see that coming.',alt:'That was unexpected.',tip:"didn't see that coming は「予想していなかった」という口語表現。"},
+{id:80,cat:'😲 驚き・感動',jp:'目を疑った',sub:'',en:'I had to do a double take.',alt:"I couldn't believe my eyes.",tip:"double take は驚いて二度見すること。couldn't believe my eyes も定番。"},
+
+// 💪 やる気・前向き (10)
+{id:81,cat:'💪 やる気・前向き',jp:'やる気満々！',sub:'',en:"I'm pumped!",alt:"I'm fired up!",tip:'pumped と fired up はどちらもやる気・興奮を表すカジュアルな表現。'},
+{id:82,cat:'💪 やる気・前向き',jp:'さあやろう！',sub:'',en:"Let's do this!",alt:"Let's go!",tip:"Let's do this! は行動開始の掛け声として最も自然。"},
+{id:83,cat:'💪 やる気・前向き',jp:'絶対できる',sub:'',en:'I can do this.',alt:'I\'ve got this.',tip:"I've got this. はとても口語的で「任せて・大丈夫」の自信を表す。"},
+{id:84,cat:'💪 やる気・前向き',jp:'前向きに考えよう',sub:'',en:'Look on the bright side.',alt:'Stay positive.',tip:"Look on the bright side. は「良い面を見よう」という励ましの定番。"},
+{id:85,cat:'💪 やる気・前向き',jp:'諦めない',sub:'',en:"I'm not giving up.",alt:"I won't quit.",tip:"I'm not giving up. は強い意志を表す。won't quit もシンプルで力強い。"},
+{id:86,cat:'💪 やる気・前向き',jp:'今日は頑張る日',sub:'',en:'Today is my day.',alt:"I'm going to crush it today.",tip:"I'm going to crush it. は「今日は完璧にやってやる」という強い自信。"},
+{id:87,cat:'💪 やる気・前向き',jp:'モチベーションが高い',sub:'',en:"I'm feeling motivated.",alt:"I'm in the zone.",tip:"in the zone は「ゾーンに入っている」。集中力が最高潮の状態。"},
+{id:88,cat:'💪 やる気・前向き',jp:'きっとうまくいく',sub:'',en:"It'll work out.",alt:'Everything will be fine.',tip:"It'll work out. は楽観的な励まし。Everything will be fine. も同様。"},
+{id:89,cat:'💪 やる気・前向き',jp:'失敗しても大丈夫',sub:'',en:'It\'s okay to fail.',alt:'Failure is part of the process.',tip:"It's okay to fail. は自分や他人を励ます大切なフレーズ。"},
+{id:90,cat:'💪 やる気・前向き',jp:'一歩一歩進もう',sub:'',en:'One step at a time.',alt:'Little by little.',tip:'One step at a time. は焦らず着実に進むことを表す定番フレーズ。'},
+
+// 🤷 迷い・もやもや (10)
+{id:91,cat:'🤷 迷い・もやもや',jp:'どうすればいいか分からない',sub:'',en:"I don't know what to do.",alt:'I have no idea.',tip:"I have no idea. はとてもよく使われる「分からない」の口語表現。"},
+{id:92,cat:'🤷 迷い・もやもや',jp:'どうも気持ちがすっきりしない',sub:'',en:"Something doesn't feel right.",alt:"I can't shake this feeling.",tip:"Something doesn't feel right. は何かが引っかかる違和感。"},
+{id:93,cat:'🤷 迷い・もやもや',jp:'複雑な気持ち',sub:'',en:'It\'s complicated.',alt:'I have mixed feelings.',tip:"mixed feelings は「複雑な感情が混在している」状態。"},
+{id:94,cat:'🤷 迷い・もやもや',jp:'自分でもよく分からない',sub:'',en:"I'm not sure how I feel.",alt:"I can't figure out my feelings.",tip:"I'm not sure how I feel. は感情が定まらないときの正直な表現。"},
+{id:95,cat:'🤷 迷い・もやもや',jp:'どっちか決められない',sub:'',en:'I can\'t make up my mind.',alt:'I keep going back and forth.',tip:"make up my mind は「決心する」。go back and forth は「行ったり来たりして決められない」。"},
+{id:96,cat:'🤷 迷い・もやもや',jp:'なんかモヤモヤする',sub:'',en:"I feel unsettled.",alt:"Something's bothering me.",tip:"unsettled は「落ち着かない・もやもやした」状態。Something's bothering me. は「何かが気になっている」。"},
+{id:97,cat:'🤷 迷い・もやもや',jp:'どこか物足りない',sub:'',en:"Something is missing.",alt:"I feel like I want more.",tip:"Something is missing. は現状への漠然とした不満足感。"},
+{id:98,cat:'🤷 迷い・もやもや',jp:'正直どう言っていいか分からない',sub:'',en:"Honestly, I'm at a loss for words.",alt:"I'm not sure what to say.",tip:"at a loss for words は言葉が出てこない状態。"},
+{id:99,cat:'🤷 迷い・もやもや',jp:'白黒つけられない',sub:'',en:"It's not black and white.",alt:"There's no easy answer.",tip:"not black and white は「単純に割り切れない」。グレーゾーンがある状況。"},
+{id:100,cat:'🤷 迷い・もやもや',jp:'なんか引っかかる',sub:'',en:"Something is nagging at me.",alt:"I can't put my finger on it.",tip:"nagging at me は何かがずっと頭に引っかかっている感覚。can't put my finger on it は「うまく言えないけど何かある」。"},
+];
+
+const CATS = [...new Set(PHRASES.map(p => p.cat))];
+const CAT_COLORS = {
+  '😊 嬉しい・幸せ':'#c8962a','😢 悲しい・落ち込む':'#3d5a8a',
+  '😤 怒り・イライラ':'#a03030','😰 不安・心配':'#7a5a2a',
+  '😌 安心・ほっとする':'#4a7c59','😑 疲れ・ストレス':'#5a5a5a',
+  '🥺 切ない・寂しい':'#5a2a7a','😲 驚き・感動':'#2a7a7a',
+  '💪 やる気・前向き':'#2a5a2a','🤷 迷い・もやもや':'#7a2a5a'
+};
+
+// ===================== ELEVENLABS =====================
+let elevenApiKey = localStorage.getItem('el_api_key') || '';
+let elevenVoiceId = localStorage.getItem('el_voice_id') || '21m00Tcm4TlvDq8ikWAM';
+let elevenVoiceName = localStorage.getItem('el_voice_name') || 'Rachel';
+let currentAudio = null;
+let isPlaying = false;
+
+function selectVoice(id, name, el) {
+  elevenVoiceId = id; elevenVoiceName = name;
+  document.querySelectorAll('.voice-opt').forEach(e => e.classList.remove('sel'));
+  el.classList.add('sel');
+}
+function saveApiKey() {
+  const key = document.getElementById('api-key-input').value.trim();
+  if (!key) { showToast('APIキーを入力してください'); return; }
+  elevenApiKey = key;
+  localStorage.setItem('el_api_key', key);
+  localStorage.setItem('el_voice_id', elevenVoiceId);
+  localStorage.setItem('el_voice_name', elevenVoiceName);
+  document.getElementById('api-modal').style.display = 'none';
+  showToast(`✓ 保存しました（${elevenVoiceName}の声）`);
+}
+function skipApiKey() { document.getElementById('api-modal').style.display = 'none'; }
+function showApiModal() {
+  document.getElementById('api-key-input').value = elevenApiKey;
+  document.getElementById('api-modal').style.display = 'flex';
+  const map = {'21m00Tcm4TlvDq8ikWAM':'voice-rachel','pNInz6obpgDQGcFmaJgB':'voice-adam','EXAVITQu4vr4xnSDxMaL':'voice-bella'};
+  document.querySelectorAll('.voice-opt').forEach(e => e.classList.remove('sel'));
+  if (map[elevenVoiceId]) document.getElementById(map[elevenVoiceId]).classList.add('sel');
+}
+function showToast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2500); }
+
+async function speakText(text) {
+  if (!elevenApiKey) { showToast('🔑 右上の「音声設定」からAPIキーを入力してください'); return; }
+  if (isPlaying && currentAudio) { currentAudio.pause(); currentAudio = null; isPlaying = false; setVoiceBtnState(false); return; }
+  setVoiceBtnState(true, '生成中...');
+  setVoiceStatus('ElevenLabsに接続中...');
+  try {
+    const res = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${elevenVoiceId}`, {
+      method: 'POST',
+      headers: { 'xi-api-key': elevenApiKey, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text, model_id: 'eleven_monolingual_v1', voice_settings: { stability: 0.5, similarity_boost: 0.75 } })
+    });
+    if (!res.ok) { const e = await res.json().catch(() => ({})); throw new Error(e.detail?.message || `エラー ${res.status}`); }
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    currentAudio = new Audio(url);
+    currentAudio.onended = () => { isPlaying = false; setVoiceBtnState(false); setVoiceStatus(''); URL.revokeObjectURL(url); };
+    currentAudio.play(); isPlaying = true;
+    setVoiceBtnState(true, '再生中（タップで停止）');
+    setVoiceStatus(`${elevenVoiceName}の声で再生中`);
+  } catch(e) { isPlaying = false; setVoiceBtnState(false); setVoiceStatus(''); showToast('⚠️ ' + e.message); }
+}
+function setVoiceBtnState(playing, label) {
+  const btn = document.getElementById('voice-play-btn');
+  if (!btn) return;
+  btn.classList.toggle('playing', playing);
+  document.getElementById('voice-btn-label').textContent = playing ? (label || '再生中（タップで停止）') : 'ネイティブ音声を聴く';
+}
+function setVoiceStatus(msg) { const el = document.getElementById('voice-status'); if (el) el.textContent = msg; }
+function playCurrentPhrase() { const p = queue[qIdx % queue.length]; if (p) speakText(p.en); }
+
+// ===================== STATE =====================
+let masteredSet = new Set(JSON.parse(localStorage.getItem('em_mastered') || '[]'));
+let wrongSet = new Set(JSON.parse(localStorage.getItem('em_wrong') || '[]'));
+let sessionOk = 0, sessionNg = 0;
+let currentMode = 'normal', selectedCat = 'all';
+let queue = [], qIdx = 0, isRevealed = false;
+let timerInterval = null, timerLeft = 3;
+let loopCounts = {};
+const LOOP_TARGET = 5;
+
+function saveState() {
+  localStorage.setItem('em_mastered', JSON.stringify([...masteredSet]));
+  localStorage.setItem('em_wrong', JSON.stringify([...wrongSet]));
+}
+function updateHeader() { document.getElementById('h-mastered').textContent = masteredSet.size; }
+
+function switchTab(p, btn) {
+  document.querySelectorAll('.page').forEach(x => x.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+  document.getElementById('page-' + p).classList.add('active');
+  btn.classList.add('active');
+  if (p === 'list') renderList();
+  if (p === 'stats') renderStats();
+  updateHeader();
+}
+
+function initSetup() {
+  const cc = document.getElementById('cat-chips');
+  cc.innerHTML = `<button class="cat-chip active" onclick="selectCat('all',this)">すべて (${PHRASES.length})</button>`;
+  CATS.forEach(c => {
+    const n = PHRASES.filter(p => p.cat === c).length;
+    cc.innerHTML += `<button class="cat-chip" onclick="selectCat('${c}',this)">${c} (${n})</button>`;
+  });
+}
+
+function selectCat(cat, btn) {
+  selectedCat = cat;
+  document.querySelectorAll('#cat-chips .cat-chip').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function selectMode(mode) {
+  currentMode = mode;
+  document.querySelectorAll('.mode-card').forEach(c => c.classList.remove('selected'));
+  document.getElementById('mode-' + mode).classList.add('selected');
+}
+
+function startTraining() {
+  let pool = selectedCat === 'all' ? [...PHRASES] : PHRASES.filter(p => p.cat === selectedCat);
+  if (currentMode === 'review') {
+    pool = pool.filter(p => !masteredSet.has(p.id) || wrongSet.has(p.id));
+    if (pool.length === 0) { alert('復習するフレーズがありません！'); return; }
+  }
+  for (let i = pool.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [pool[i], pool[j]] = [pool[j], pool[i]]; }
+  queue = pool; qIdx = 0; sessionOk = 0; sessionNg = 0; loopCounts = {};
+  document.getElementById('train-setup').style.display = 'none';
+  document.getElementById('train-result').style.display = 'none';
+  document.getElementById('train-area').style.display = 'block';
+  document.getElementById('loop-banner').style.display = currentMode === 'loop' ? 'block' : 'none';
+  document.getElementById('timer-wrap').style.display = currentMode === 'timer' ? 'flex' : 'none';
+  showCard();
+}
+
+function showCard() {
+  if (qIdx >= queue.length) { endTraining(); return; }
+  const p = queue[qIdx]; isRevealed = false;
+  if (currentAudio) { currentAudio.pause(); currentAudio = null; isPlaying = false; }
+  document.getElementById('flash-card').className = 'flash-card';
+  document.getElementById('card-cat').textContent = p.cat;
+  document.getElementById('card-jp').textContent = p.jp;
+  document.getElementById('card-sub').textContent = p.sub || '';
+  document.getElementById('card-en').textContent = p.en;
+  document.getElementById('card-alt').textContent = p.alt ? '💡 ' + p.alt : '';
+  document.getElementById('card-tip').textContent = p.tip ? '🔑 ' + p.tip : '';
+  document.getElementById('btn-reveal').style.display = 'inline-block';
+  document.getElementById('btn-ok').style.display = 'none';
+  document.getElementById('btn-ng').style.display = 'none';
+  document.getElementById('voice-btn-wrap').style.display = 'none';
+  setVoiceBtnState(false); setVoiceStatus('');
+  document.getElementById('train-ctr').textContent = `${qIdx + 1} / ${queue.length}`;
+  document.getElementById('train-prog').style.width = ((qIdx / queue.length) * 100) + '%';
+  if (currentMode === 'loop') { const cnt = loopCounts[p.id] || 0; document.getElementById('loop-remain').textContent = LOOP_TARGET - cnt; }
+  if (currentMode === 'timer') startTimer();
+}
+
+function startTimer() {
+  clearInterval(timerInterval); timerLeft = 3; updateTimerUI(3, 3);
+  timerInterval = setInterval(() => { timerLeft -= 0.1; if (timerLeft <= 0) { clearInterval(timerInterval); timerLeft = 0; revealCard(); } updateTimerUI(timerLeft, 3); }, 100);
+}
+function updateTimerUI(val, max) {
+  document.getElementById('timer-circle').style.strokeDashoffset = 169.6 * (1 - val / max);
+  document.getElementById('timer-num').textContent = Math.ceil(val);
+  document.getElementById('timer-circle').style.stroke = val / max > 0.5 ? '#c8962a' : val / max > 0.25 ? '#c86a2a' : '#a03030';
+}
+
+function revealCard() {
+  if (isRevealed) return; isRevealed = true;
+  clearInterval(timerInterval);
+  document.getElementById('flash-card').classList.add('revealed');
+  document.getElementById('btn-reveal').style.display = 'none';
+  document.getElementById('btn-ok').style.display = 'inline-block';
+  document.getElementById('btn-ng').style.display = 'inline-block';
+  document.getElementById('voice-btn-wrap').style.display = 'flex';
+}
+
+function markOk() {
+  const p = queue[qIdx]; sessionOk++; wrongSet.delete(p.id);
+  if (currentMode === 'loop') {
+    loopCounts[p.id] = (loopCounts[p.id] || 0) + 1;
+    if (loopCounts[p.id] >= LOOP_TARGET) { masteredSet.add(p.id); saveState(); qIdx++; }
+    else { const ins = qIdx + 1 + Math.floor(Math.random() * Math.min(5, queue.length - qIdx - 1)); queue.splice(ins, 0, p); qIdx++; }
+  } else { masteredSet.add(p.id); saveState(); qIdx++; }
+  updateHeader(); showCard();
+}
+function markNg() {
+  const p = queue[qIdx]; sessionNg++; wrongSet.add(p.id);
+  if (currentMode === 'loop') { loopCounts[p.id] = 0; const ins = qIdx + 1 + Math.floor(Math.random() * Math.min(4, queue.length - qIdx - 1)); queue.splice(Math.min(ins, queue.length), 0, p); }
+  saveState(); qIdx++; showCard();
+}
+function skipCard() { qIdx++; showCard(); }
+function quitTraining() { clearInterval(timerInterval); backToSetup(); }
+
+function endTraining() {
+  clearInterval(timerInterval);
+  document.getElementById('train-area').style.display = 'none';
+  document.getElementById('train-result').style.display = 'block';
+  const total = sessionOk + sessionNg;
+  const pct = total > 0 ? Math.round(sessionOk / total * 100) : 0;
+  document.getElementById('res-ok').textContent = sessionOk;
+  document.getElementById('res-ng').textContent = sessionNg;
+  document.getElementById('res-total').textContent = total;
+  document.getElementById('res-emoji').textContent = pct >= 80 ? '🎉' : pct >= 50 ? '💪' : '🔥';
+  document.getElementById('res-title').textContent = pct >= 80 ? '素晴らしい！' : pct >= 50 ? 'いい調子！' : 'もう一息！';
+  document.getElementById('res-sub').textContent = `正解率 ${pct}%（${sessionOk}/${total}）`;
+  document.getElementById('res-loop-btn').style.display = sessionNg > 0 && currentMode !== 'loop' ? 'block' : 'none';
+  updateHeader();
+}
+
+function startLoopFromResult() {
+  currentMode = 'loop';
+  const ng = [...wrongSet];
+  if (ng.length === 0) { alert('間違えたフレーズがありません！'); return; }
+  queue = PHRASES.filter(p => ng.includes(p.id));
+  for (let i = queue.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [queue[i], queue[j]] = [queue[j], queue[i]]; }
+  qIdx = 0; sessionOk = 0; sessionNg = 0; loopCounts = {};
+  document.getElementById('train-result').style.display = 'none';
+  document.getElementById('train-area').style.display = 'block';
+  document.getElementById('loop-banner').style.display = 'block';
+  document.getElementById('timer-wrap').style.display = 'none';
+  showCard();
+}
+function backToSetup() {
+  document.getElementById('train-area').style.display = 'none';
+  document.getElementById('train-result').style.display = 'none';
+  document.getElementById('train-setup').style.display = 'block';
+}
+
+function renderList() {
+  const lcc = document.getElementById('list-cat-chips');
+  lcc.innerHTML = `<button class="cat-chip active" onclick="filterList('all',this)">すべて</button>`;
+  CATS.forEach(c => { lcc.innerHTML += `<button class="cat-chip" onclick="filterList('${c}',this)">${c}</button>`; });
+  filterList('all', lcc.firstElementChild);
+}
+function filterList(cat, btn) {
+  document.querySelectorAll('#list-cat-chips .cat-chip').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  const pool = cat === 'all' ? PHRASES : PHRASES.filter(p => p.cat === cat);
+  document.getElementById('list-items').innerHTML = pool.map(p => `
+    <div class="list-item">
+      <div class="li-dot" style="background:${CAT_COLORS[p.cat] || '#888'}"></div>
+      <div class="li-body">
+        <div class="li-cat">${p.cat}</div>
+        <div class="li-jp">${p.jp}</div>
+        <div class="li-en">${p.en}</div>
+      </div>
+      <div class="li-right">
+        <button class="li-voice-btn" onclick="speakText('${p.en.replace(/'/g,"\\'")}')">🔊</button>
+        <div class="li-done ${masteredSet.has(p.id) ? 'show' : ''}">✓ 習得</div>
+      </div>
+    </div>`).join('');
+}
+
+function renderStats() {
+  document.getElementById('st-mastered').textContent = masteredSet.size;
+  document.getElementById('st-total').textContent = PHRASES.length;
+  document.getElementById('cat-stats').innerHTML = CATS.map(c => {
+    const total = PHRASES.filter(p => p.cat === c).length;
+    const done = PHRASES.filter(p => p.cat === c && masteredSet.has(p.id)).length;
+    const pct = Math.round(done / total * 100);
+    return `<div class="cat-stat">
+      <div class="cs-top"><span class="cs-name">${c}</span><span class="cs-pct">${done}/${total} (${pct}%)</span></div>
+      <div class="cs-bar"><div class="cs-fill" style="width:${pct}%;background:${CAT_COLORS[c] || 'var(--moss)'}"></div></div>
+    </div>`;
+  }).join('');
+}
+function resetAllData() {
+  if (!confirm('全データをリセットしますか？')) return;
+  masteredSet.clear(); wrongSet.clear(); saveState(); updateHeader(); renderStats();
+}
+
+initSetup();
+updateHeader();
+if (!elevenApiKey) { document.getElementById('api-modal').style.display = 'flex'; }
+else { document.getElementById('api-modal').style.display = 'none'; }
+</script>
+</body>
+</html>
