@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>トラブル英語 — 瞬間反射トレーニング</title>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#1a1410;--paper:#f5f0e8;--gold:#c8962a;--moss:#4a7c59;--indigo:#3d5a8a;--crimson:#a03030;--panel:#fffdf8;--border:rgba(26,20,16,0.12);}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);min-height:100vh;}
+.modal-overlay{position:fixed;inset:0;background:rgba(26,20,16,0.72);z-index:999;display:flex;align-items:center;justify-content:center;padding:20px;}
+.modal-box{background:var(--panel);border-radius:18px;padding:28px 24px;max-width:400px;width:100%;border:1.5px solid var(--border);}
+.modal-logo{font-size:32px;text-align:center;margin-bottom:12px;}
+.modal-title{font-family:'Shippori Mincho',serif;font-size:18px;font-weight:700;text-align:center;margin-bottom:6px;}
+.modal-sub{font-size:12px;color:rgba(26,20,16,0.5);text-align:center;margin-bottom:20px;line-height:1.6;}
+.modal-sec{font-family:'Shippori Mincho',serif;font-size:10px;font-weight:600;color:rgba(26,20,16,0.35);letter-spacing:.12em;text-transform:uppercase;margin:14px 0 8px;}
+.voice-select-row{display:flex;gap:8px;margin-bottom:16px;}
+.voice-opt{flex:1;padding:10px 6px;border-radius:10px;border:1.5px solid var(--border);background:var(--paper);text-align:center;cursor:pointer;transition:all .2s;}
+.voice-opt.sel{border-color:var(--gold);background:rgba(200,150,42,0.08);}
+.voice-opt .vo-name{font-size:13px;font-weight:500;margin-bottom:2px;}
+.voice-opt .vo-desc{font-size:10px;color:rgba(26,20,16,0.45);}
+.modal-label{font-size:12px;font-weight:500;margin-bottom:6px;display:block;}
+.modal-input{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;background:var(--paper);color:var(--ink);margin-bottom:8px;}
+.modal-input:focus{outline:none;border-color:var(--gold);}
+.modal-help{font-size:11px;color:rgba(26,20,16,0.4);margin-bottom:18px;line-height:1.5;}
+.modal-help a{color:var(--indigo);}
+.modal-btn{width:100%;padding:13px;border-radius:10px;border:none;background:var(--ink);color:var(--gold);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;margin-bottom:8px;}
+.modal-btn:hover{opacity:.88;}
+.modal-skip{width:100%;padding:10px;border-radius:10px;border:1.5px solid var(--border);background:transparent;color:rgba(26,20,16,0.45);font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;}
+.modal-skip:hover{border-color:var(--gold);}
+header{background:var(--ink);padding:16px 20px 0;position:sticky;top:0;z-index:100;}
+.h-top{display:flex;align-items:center;gap:10px;padding-bottom:14px;}
+.h-logo{font-size:22px;}
+.h-titles{flex:1;}
+.h-titles h1{font-family:'Shippori Mincho',serif;color:var(--gold);font-size:16px;font-weight:700;}
+.h-titles p{color:rgba(245,240,232,0.42);font-size:10px;margin-top:1px;}
+.h-right{display:flex;align-items:center;gap:10px;}
+.h-score .num{font-size:20px;font-weight:500;color:var(--gold);}
+.h-score .lbl{font-family:'Shippori Mincho',serif;font-size:9px;color:rgba(245,240,232,0.4);}
+.h-key-btn{padding:5px 10px;border-radius:7px;border:1px solid rgba(200,150,42,0.4);background:transparent;color:rgba(200,150,42,0.7);font-size:10px;cursor:pointer;}
+.h-key-btn:hover{border-color:var(--gold);color:var(--gold);}
+nav{display:flex;}
+.tab{flex:1;padding:8px 4px;background:none;border:none;border-bottom:2px solid transparent;color:rgba(245,240,232,0.38);font-family:'DM Sans',sans-serif;font-size:10px;cursor:pointer;transition:all .2s;display:flex;flex-direction:column;align-items:center;gap:2px;}
+.tab span:first-child{font-size:13px;}
+.tab.active{color:var(--gold);border-bottom-color:var(--gold);}
+main{padding:14px;max-width:600px;margin:0 auto;}
+.page{display:none;}.page.active{display:block;}
+.sec{font-family:'Shippori Mincho',serif;font-size:10px;font-weight:600;color:rgba(26,20,16,0.35);letter-spacing:.12em;text-transform:uppercase;margin:16px 0 10px;}
+.cat-chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;}
+.cat-chip{padding:5px 12px;border-radius:20px;border:1.5px solid var(--border);background:var(--panel);font-size:11px;cursor:pointer;transition:all .2s;color:var(--ink);}
+.cat-chip.active{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+.mode-cards{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px;}
+.mode-card{background:var(--panel);border:1.5px solid var(--border);border-radius:14px;padding:14px 12px;cursor:pointer;transition:all .2s;text-align:center;}
+.mode-card:hover{border-color:var(--gold);}
+.mode-card.selected{border-color:var(--gold);background:rgba(200,150,42,0.07);}
+.mode-emoji{font-size:24px;margin-bottom:6px;}
+.mode-name{font-size:13px;font-weight:500;margin-bottom:3px;}
+.mode-desc{font-family:'Shippori Mincho',serif;font-size:10px;color:rgba(26,20,16,0.45);line-height:1.5;}
+.start-btn{width:100%;padding:14px;border-radius:12px;border:none;background:var(--ink);color:var(--gold);font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;cursor:pointer;}
+.start-btn:hover{opacity:.88;}
+.train-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.train-prog-wrap{flex:1;height:5px;background:var(--border);border-radius:3px;margin:0 12px;overflow:hidden;}
+.train-prog-fill{height:100%;background:var(--gold);border-radius:3px;transition:width .4s;}
+.train-ctr{font-size:11px;color:rgba(26,20,16,0.4);}
+.quit-btn{font-size:11px;color:rgba(26,20,16,0.35);background:none;border:none;cursor:pointer;text-decoration:underline;}
+.timer-wrap{display:flex;justify-content:center;margin-bottom:14px;}
+.timer-ring{position:relative;width:64px;height:64px;}
+.timer-ring svg{transform:rotate(-90deg);}
+.timer-ring circle{fill:none;stroke-width:5;}
+.timer-bg{stroke:var(--border);}
+.timer-fg{stroke:var(--gold);stroke-linecap:round;transition:stroke-dashoffset .1s linear,stroke .3s;}
+.timer-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:500;color:var(--ink);}
+.loop-banner{background:rgba(200,150,42,0.1);border:1px solid rgba(200,150,42,0.3);border-radius:10px;padding:8px 12px;margin-bottom:12px;font-family:'Shippori Mincho',serif;font-size:12px;color:var(--gold);text-align:center;}
+.flash-card{background:var(--panel);border:1.5px solid var(--border);border-radius:18px;padding:28px 22px;text-align:center;margin-bottom:14px;box-shadow:0 4px 24px rgba(26,20,16,0.08);min-height:190px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:border-color .2s;}
+.flash-card.revealed{border-color:var(--moss);}
+.card-cat{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(26,20,16,0.3);margin-bottom:10px;}
+.card-jp{font-family:'Shippori Mincho',serif;font-size:22px;font-weight:700;line-height:1.5;margin-bottom:6px;}
+.card-sub{font-family:'Shippori Mincho',serif;font-size:12px;color:rgba(26,20,16,0.4);margin-bottom:14px;font-style:italic;}
+.card-hint{font-size:11px;color:rgba(26,20,16,0.3);font-style:italic;}
+.card-en{font-size:18px;font-weight:500;line-height:1.5;margin-bottom:6px;display:none;}
+.card-alt{font-size:12px;color:rgba(26,20,16,0.5);display:none;font-style:italic;margin-bottom:10px;}
+.card-tip{font-family:'Shippori Mincho',serif;font-size:11px;color:var(--indigo);background:rgba(61,90,138,0.08);border-radius:6px;padding:6px 10px;display:none;line-height:1.6;}
+.flash-card.revealed .card-en,.flash-card.revealed .card-alt,.flash-card.revealed .card-tip{display:block;}
+.flash-card.revealed .card-hint{display:none;}
+.voice-btn-wrap{display:flex;justify-content:center;margin-bottom:10px;}
+.voice-btn{display:flex;align-items:center;gap:8px;padding:10px 20px;border-radius:30px;border:1.5px solid var(--gold);background:rgba(200,150,42,0.08);color:var(--gold);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;}
+.voice-btn:hover{background:rgba(200,150,42,0.18);}
+.voice-btn.playing{background:rgba(200,150,42,0.25);}
+.voice-icon{font-size:16px;}
+.voice-btn.playing .voice-icon{animation:pulse 0.6s ease-in-out infinite alternate;}
+@keyframes pulse{from{transform:scale(1);}to{transform:scale(1.2);}}
+.voice-status{font-size:10px;color:rgba(26,20,16,0.4);text-align:center;margin-bottom:8px;min-height:14px;}
+.action-row{display:flex;gap:8px;margin-bottom:10px;}
+.act-btn{flex:1;padding:13px;border-radius:12px;border:none;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:opacity .15s;}
+.act-btn:hover{opacity:.85;}
+.act-reveal{background:var(--indigo);color:#fff;flex:2;}
+.act-ok{background:var(--moss);color:#fff;}
+.act-ng{background:rgba(160,48,48,0.12);color:var(--crimson);}
+.act-skip{width:100%;padding:9px;border-radius:9px;border:1.5px solid var(--border);background:var(--panel);font-family:'DM Sans',sans-serif;font-size:11px;cursor:pointer;color:rgba(26,20,16,0.45);}
+.result-wrap{text-align:center;padding:24px 0;}
+.result-emoji{font-size:52px;margin-bottom:12px;}
+.result-title{font-family:'Shippori Mincho',serif;font-size:20px;font-weight:700;margin-bottom:6px;}
+.result-sub{font-size:13px;color:rgba(26,20,16,0.5);margin-bottom:24px;font-family:'Shippori Mincho',serif;}
+.result-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:24px;}
+.rs{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:12px 8px;text-align:center;}
+.rs-num{font-size:24px;font-weight:500;line-height:1;margin-bottom:3px;}
+.rs-num.g{color:var(--moss);}.rs-num.r{color:var(--crimson);}.rs-num.b{color:var(--indigo);}
+.rs-lbl{font-family:'Shippori Mincho',serif;font-size:9px;color:rgba(26,20,16,0.4);}
+.result-btns{display:flex;flex-direction:column;gap:8px;}
+.res-btn{padding:13px;border-radius:12px;border:none;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;}
+.res-btn.primary{background:var(--crimson);color:#fff;}
+.res-btn.secondary{background:var(--ink);color:var(--paper);}
+.res-btn.tertiary{background:var(--panel);color:var(--ink);border:1.5px solid var(--border);}
+.list-item{background:var(--panel);border:1px solid var(--border);border-radius:11px;padding:12px 14px;margin-bottom:7px;display:flex;align-items:center;gap:12px;}
+.li-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.li-body{flex:1;}
+.li-cat{font-size:9px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:rgba(26,20,16,0.3);margin-bottom:2px;}
+.li-jp{font-family:'Shippori Mincho',serif;font-size:14px;font-weight:600;margin-bottom:2px;}
+.li-en{font-size:13px;color:rgba(26,20,16,0.6);}
+.li-right{display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;}
+.li-done{font-size:10px;background:var(--moss);color:#fff;padding:2px 7px;border-radius:20px;display:none;}
+.li-done.show{display:inline;}
+.li-voice-btn{padding:3px 8px;border-radius:20px;border:1px solid var(--gold);background:transparent;color:var(--gold);font-size:10px;cursor:pointer;}
+.overall-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;}
+.os{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px 12px;text-align:center;}
+.os-num{font-size:26px;font-weight:500;line-height:1;margin-bottom:4px;}
+.os-num.g{color:var(--moss);}.os-num.gold{color:var(--gold);}
+.os-lbl{font-family:'Shippori Mincho',serif;font-size:10px;color:rgba(26,20,16,0.4);}
+.cat-stat{background:var(--panel);border:1px solid var(--border);border-radius:11px;padding:12px 14px;margin-bottom:8px;}
+.cs-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+.cs-name{font-size:13px;font-weight:500;}
+.cs-pct{font-size:12px;color:var(--moss);font-weight:500;}
+.cs-bar{height:4px;background:var(--border);border-radius:2px;overflow:hidden;}
+.cs-fill{height:100%;background:var(--moss);border-radius:2px;transition:width .5s;}
+.reset-all-btn{width:100%;padding:11px;border-radius:10px;border:1.5px solid var(--border);background:var(--panel);font-family:'DM Sans',sans-serif;font-size:12px;color:rgba(26,20,16,0.4);cursor:pointer;margin-top:12px;}
+.reset-all-btn:hover{border-color:var(--crimson);color:var(--crimson);}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:10px 20px;border-radius:30px;font-size:12px;z-index:1000;opacity:0;transition:opacity .3s;pointer-events:none;}
+.toast.show{opacity:1;}
+</style>
+</head>
+<body>
+<div class="modal-overlay" id="api-modal">
+<div class="modal-box">
+  <div class="modal-logo">🚨</div>
+  <div class="modal-title">ElevenLabs 音声設定</div>
+  <div class="modal-sub">ネイティブ英語音声を使うために<br>ElevenLabs APIキーを設定してください。<br>一度入力するとブラウザに保存されます。</div>
+  <div class="modal-sec">声を選ぶ</div>
+  <div class="voice-select-row">
+    <div class="voice-opt sel" id="voice-rachel" onclick="selectVoice('21m00Tcm4TlvDq8ikWAM','Rachel',this)">
+      <div class="vo-name">Rachel</div><div class="vo-desc">女性・落ち着き<br>聞き取りやすい</div>
+    </div>
+    <div class="voice-opt" id="voice-adam" onclick="selectVoice('pNInz6obpgDQGcFmaJgB','Adam',this)">
+      <div class="vo-name">Adam</div><div class="vo-desc">男性・明瞭<br>ネイティブ感</div>
+    </div>
+    <div class="voice-opt" id="voice-bella" onclick="selectVoice('EXAVITQu4vr4xnSDxMaL','Bella',this)">
+      <div class="vo-name">Bella</div><div class="vo-desc">女性・明るい<br>フレンドリー</div>
+    </div>
+  </div>
+  <label class="modal-label">ElevenLabs APIキー</label>
+  <input class="modal-input" type="password" id="api-key-input" placeholder="sk-..." autocomplete="off">
+  <div class="modal-help">
+    <a href="https://elevenlabs.io" target="_blank">elevenlabs.io</a> → 右上アイコン → Profile + API key から取得。<br>キーはこのブラウザにのみ保存されます。
+  </div>
+  <button class="modal-btn" onclick="saveApiKey()">保存してスタート ✓</button>
+  <button class="modal-skip" onclick="skipApiKey()">音声なしで使う</button>
+</div>
+</div>
+<div class="toast" id="toast"></div>
+<header>
+  <div class="h-top">
+    <div class="h-logo">🚨</div>
+    <div class="h-titles">
+      <h1>トラブル英語</h1>
+      <p>瞬間反射トレーニング — 100フレーズ</p>
+    </div>
+    <div class="h-right">
+      <button class="h-key-btn" onclick="showApiModal()">🔑 音声設定</button>
+      <div class="h-score"><div class="num" id="h-mastered">0</div><div class="lbl">習得済み</div></div>
+    </div>
+  </div>
+  <nav>
+    <button class="tab active" onclick="switchTab('train',this)"><span>⚡</span><span>トレーニング</span></button>
+    <button class="tab" onclick="switchTab('list',this)"><span>📋</span><span>一覧</span></button>
+    <button class="tab" onclick="switchTab('stats',this)"><span>📊</span><span>記録</span></button>
+  </nav>
+</header>
+<main>
+<div id="page-train" class="page active">
+  <div id="train-setup">
+    <div class="sec" style="margin-top:14px">カテゴリを選ぶ</div>
+    <div class="cat-chips" id="cat-chips"></div>
+    <div class="sec">モードを選ぶ</div>
+    <div class="mode-cards">
+      <div class="mode-card selected" id="mode-normal" onclick="selectMode('normal')"><div class="mode-emoji">🃏</div><div class="mode-name">通常モード</div><div class="mode-desc">自分のペースで1枚ずつ。</div></div>
+      <div class="mode-card" id="mode-timer" onclick="selectMode('timer')"><div class="mode-emoji">⏱️</div><div class="mode-name">タイマーモード</div><div class="mode-desc">3秒以内に口から出す。</div></div>
+      <div class="mode-card" id="mode-loop" onclick="selectMode('loop')"><div class="mode-emoji">🔁</div><div class="mode-name">ループモード</div><div class="mode-desc">5回連続正解で身体化。</div></div>
+      <div class="mode-card" id="mode-review" onclick="selectMode('review')"><div class="mode-emoji">🔄</div><div class="mode-name">復習モード</div><div class="mode-desc">未習得・間違えたものだけ。</div></div>
+    </div>
+    <button class="start-btn" onclick="startTraining()">トレーニング開始 →</button>
+  </div>
+  <div id="train-area" style="display:none">
+    <div class="train-hd">
+      <span class="train-ctr" id="train-ctr">1 / 10</span>
+      <div class="train-prog-wrap"><div class="train-prog-fill" id="train-prog" style="width:0%"></div></div>
+      <button class="quit-btn" onclick="quitTraining()">終了</button>
+    </div>
+    <div id="loop-banner" class="loop-banner" style="display:none">🔁 ループモード — あと<span id="loop-remain"></span>回正解で卒業！</div>
+    <div id="timer-wrap" class="timer-wrap" style="display:none">
+      <div class="timer-ring">
+        <svg width="64" height="64" viewBox="0 0 64 64">
+          <circle class="timer-bg" cx="32" cy="32" r="27"/>
+          <circle class="timer-fg" id="timer-circle" cx="32" cy="32" r="27" stroke-dasharray="169.6" stroke-dashoffset="0"/>
+        </svg>
+        <div class="timer-num" id="timer-num">3</div>
+      </div>
+    </div>
+    <div class="flash-card" id="flash-card" onclick="revealCard()">
+      <div class="card-cat" id="card-cat"></div>
+      <div class="card-jp" id="card-jp"></div>
+      <div class="card-sub" id="card-sub"></div>
+      <div class="card-hint">タップして英語を確認</div>
+      <div class="card-en" id="card-en"></div>
+      <div class="card-alt" id="card-alt"></div>
+      <div class="card-tip" id="card-tip"></div>
+    </div>
+    <div class="voice-btn-wrap" id="voice-btn-wrap" style="display:none">
+      <button class="voice-btn" id="voice-play-btn" onclick="playCurrentPhrase()">
+        <span class="voice-icon">🔊</span><span id="voice-btn-label">ネイティブ音声を聴く</span>
+      </button>
+    </div>
+    <div class="voice-status" id="voice-status"></div>
+    <div class="action-row">
+      <button class="act-btn act-reveal" id="btn-reveal" onclick="revealCard()">英語を見る</button>
+      <button class="act-btn act-ok" id="btn-ok" onclick="markOk()" style="display:none">✓ 言えた！</button>
+      <button class="act-btn act-ng" id="btn-ng" onclick="markNg()" style="display:none">✕ 言えなかった</button>
+    </div>
+    <button class="act-skip" onclick="skipCard()">スキップ →</button>
+  </div>
+  <div id="train-result" style="display:none">
+    <div class="result-wrap">
+      <div class="result-emoji" id="res-emoji">🎉</div>
+      <div class="result-title" id="res-title">完了！</div>
+      <div class="result-sub" id="res-sub"></div>
+      <div class="result-stats">
+        <div class="rs"><div class="rs-num g" id="res-ok">0</div><div class="rs-lbl">言えた！</div></div>
+        <div class="rs"><div class="rs-num r" id="res-ng">0</div><div class="rs-lbl">言えなかった</div></div>
+        <div class="rs"><div class="rs-num b" id="res-total">0</div><div class="rs-lbl">総問数</div></div>
+      </div>
+      <div class="result-btns">
+        <button class="res-btn primary" id="res-loop-btn" onclick="startLoopFromResult()" style="display:none">🔁 言えなかった分をループ練習</button>
+        <button class="res-btn secondary" onclick="backToSetup()">もう一度設定から</button>
+        <button class="res-btn tertiary" onclick="switchTab('stats',document.querySelectorAll('.tab')[2])">記録を見る</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="page-list" class="page">
+  <div class="sec" style="margin-top:14px">カテゴリで絞り込む</div>
+  <div class="cat-chips" id="list-cat-chips"></div>
+  <div id="list-items"></div>
+</div>
+<div id="page-stats" class="page">
+  <div class="sec" style="margin-top:14px">全体の進捗</div>
+  <div class="overall-stats">
+    <div class="os"><div class="os-num g" id="st-mastered">0</div><div class="os-lbl">習得済み</div></div>
+    <div class="os"><div class="os-num gold" id="st-total">100</div><div class="os-lbl">総フレーズ数</div></div>
+  </div>
+  <div class="sec">カテゴリ別</div>
+  <div id="cat-stats"></div>
+  <button class="reset-all-btn" onclick="resetAllData()">↺ 全データをリセット</button>
+</div>
+</main>
+<script>
+const PHRASES = [
+// 🚗 交通・車のトラブル (10)
+{id:1,cat:'🚗 交通・車のトラブル',jp:'タイヤがパンクした',sub:'',en:"I've got a flat tyre.",alt:"My tyre is completely flat.",tip:"flat tyre（パンクしたタイヤ）はオーストラリア英語。米英語はflat tire。got a flat. だけでも通じる。"},
+{id:2,cat:'🚗 交通・車のトラブル',jp:'タイヤを替えないといけない',sub:'',en:"I need to change the tyre.",alt:"I'm going to have to put the spare on.",tip:"spare（スペアタイヤ）put the spare on は「スペアに交換する」という実践的な表現。"},
+{id:3,cat:'🚗 交通・車のトラブル',jp:'ロードサービスを呼ばないといけない',sub:'',en:"I need to call roadside assistance.",alt:"I'm going to have to call the NRMA.",tip:"roadside assistance（ロードサービス）NRMA はオーストラリアの代表的なロードサービス。"},
+{id:4,cat:'🚗 交通・車のトラブル',jp:'車が動かない',sub:'',en:"My car won't start.",alt:"The car has broken down.",tip:"won't start（かからない）broken down（故障した）は微妙に違う。won't start はエンジンがかからない状態。"},
+{id:5,cat:'🚗 交通・車のトラブル',jp:'事故に遭った',sub:'',en:"I've been in a car accident.",alt:"I've had a prang.",tip:"prang はオーストラリア口語で「ちょっとした衝突事故」。car accident が正式。"},
+{id:6,cat:'🚗 交通・車のトラブル',jp:'バッテリーが上がった',sub:'',en:"The battery is dead.",alt:"My car battery has gone flat.",tip:"battery is dead（バッテリーが切れた）gone flat（上がった）どちらも使える。ジャンプスタートが必要。"},
+{id:7,cat:'🚗 交通・車のトラブル',jp:'エンジンから煙が出ている',sub:'',en:"There's smoke coming from the engine.",alt:"The engine is overheating.",tip:"overheating（オーバーヒート）はそのまま英語。smoke coming from...（〜から煙が出ている）は状況説明の定番。"},
+{id:8,cat:'🚗 交通・車のトラブル',jp:'車が路肩に止まっている',sub:'',en:"I'm pulled over on the side of the road.",alt:"I'm stuck on the shoulder.",tip:"pulled over（路肩に寄せた）shoulder（路肩）はドライバーとして必須の語彙。"},
+{id:9,cat:'🚗 交通・車のトラブル',jp:'警察を呼んだほうがいいですか？',sub:'',en:"Should I call the police?",alt:"Do I need to report this to the police?",tip:"report to the police（警察に届ける）は事故後の対応として重要な表現。"},
+{id:10,cat:'🚗 交通・車のトラブル',jp:'保険会社に連絡しないといけない',sub:'',en:"I need to contact my insurance company.",alt:"I'll have to make an insurance claim.",tip:"insurance claim（保険請求）はトラブル後に必須の語彙。make a claim（請求する）もセットで覚える。"},
+
+// 🏠 家のトラブル (10)
+{id:11,cat:'🏠 家のトラブル',jp:'水道が漏れている',sub:'',en:"The tap is leaking.",alt:"There's a water leak.",tip:"tap（蛇口・水道）はオーストラリア英語。米語はfaucet。leaking（漏れている）はシンプルで正確。"},
+{id:12,cat:'🏠 家のトラブル',jp:'お湯が出ない',sub:'',en:"There's no hot water.",alt:"The hot water system isn't working.",tip:"hot water system（給湯器）はオーストラリアで一般的な表現。no hot water が最もシンプル。"},
+{id:13,cat:'🏠 家のトラブル',jp:'電気がつかない',sub:'',en:"The power is out.",alt:"We've lost power.",tip:"power is out / lost power（停電）はどちらも自然。the electricity is off でも通じる。"},
+{id:14,cat:'🏠 家のトラブル',jp:'排水が詰まっている',sub:'',en:"The drain is blocked.",alt:"The sink is clogged.",tip:"blocked（詰まった）clogged（詰まった）はどちらも使える。blocked が一般的。"},
+{id:15,cat:'🏠 家のトラブル',jp:'鍵を中に置いたまま鍵をかけてしまった',sub:'',en:"I've locked myself out.",alt:"I left my keys inside.",tip:"locked myself out（閉め出された）はとても使われる表現。I'm locked out. だけでも通じる。"},
+{id:16,cat:'🏠 家のトラブル',jp:'ガスの臭いがする',sub:'',en:"I can smell gas.",alt:"There might be a gas leak.",tip:"gas leak（ガス漏れ）は緊急性が高い。I can smell gas. は即座に伝わる重要なフレーズ。"},
+{id:17,cat:'🏠 家のトラブル',jp:'天井から水が漏れている',sub:'',en:"Water is leaking through the ceiling.",alt:"The ceiling is leaking.",tip:"through the ceiling（天井を通って）は雨漏りや上階からの漏水の表現として正確。"},
+{id:18,cat:'🏠 家のトラブル',jp:'エアコンが壊れた',sub:'',en:"The air conditioning has broken down.",alt:"The AC has stopped working.",tip:"broken down（壊れた）stopped working（動かなくなった）はどちらも自然。AC はオーストラリアでも使われる。"},
+{id:19,cat:'🏠 家のトラブル',jp:'業者を呼ばないといけない',sub:'',en:"I need to call a tradie.",alt:"I need to get a plumber / electrician in.",tip:"tradie（職人・業者）はオーストラリア英語の定番口語。plumber（配管工）electrician（電気工）も覚える。"},
+{id:20,cat:'🏠 家のトラブル',jp:'大家さんに連絡しないといけない',sub:'',en:"I need to contact my landlord.",alt:"I'll have to let the property manager know.",tip:"landlord（大家）property manager（不動産管理者）はオーストラリアの賃貸で使う重要語彙。"},
+
+// 💻 デジタル・機器のトラブル (10)
+{id:21,cat:'💻 デジタル・機器',jp:'スマホの電源が入らない',sub:'',en:"My phone won't turn on.",alt:"My phone is completely dead.",tip:"won't turn on（電源が入らない）completely dead（完全に電池切れ）はどちらも自然。"},
+{id:22,cat:'💻 デジタル・機器',jp:'Wi-Fiがつながらない',sub:'',en:"The Wi-Fi is down.",alt:"I can't connect to the Wi-Fi.",tip:"Wi-Fi is down（Wi-Fiが落ちている）can't connect（接続できない）はどちらも使いやすい表現。"},
+{id:23,cat:'💻 デジタル・機器',jp:'画面が割れた',sub:'',en:"I cracked my screen.",alt:"The screen is smashed.",tip:"cracked（ひびが入った）smashed（粉砕した）は損傷の程度による使い分け。cracked が最も一般的。"},
+{id:24,cat:'💻 デジタル・機器',jp:'パソコンがフリーズした',sub:'',en:"My computer has frozen.",alt:"My laptop is not responding.",tip:"frozen（フリーズした）not responding（応答しない）はどちも定番。Force quit が必要。"},
+{id:25,cat:'💻 デジタル・機器',jp:'データが消えてしまった',sub:'',en:"I've lost all my data.",alt:"My files have been deleted.",tip:"lost my data（データを失った）deleted（削除された）は状況によって使い分ける。"},
+{id:26,cat:'💻 デジタル・機器',jp:'パスワードを忘れた',sub:'',en:"I've forgotten my password.",alt:"I'm locked out of my account.",tip:"locked out of my account（アカウントから閉め出された）はデジタルでも使える表現。"},
+{id:27,cat:'💻 デジタル・機器',jp:'充電できない',sub:'',en:"It won't charge.",alt:"The charging port isn't working.",tip:"won't charge（充電されない）charging port（充電ポート）はスマホトラブルでよく使う表現。"},
+{id:28,cat:'💻 デジタル・機器',jp:'ウイルスに感染したかもしれない',sub:'',en:"I think I might have a virus.",alt:"My computer might be infected.",tip:"virus（ウイルス）infected（感染した）はそのまま英語として使える。"},
+{id:29,cat:'💻 デジタル・機器',jp:'メールが届かない',sub:'',en:"I'm not receiving any emails.",alt:"My emails aren't coming through.",tip:"not receiving（受信できない）coming through（届いている）は通信トラブルの定番表現。"},
+{id:30,cat:'💻 デジタル・機器',jp:'アプリがクラッシュする',sub:'',en:"The app keeps crashing.",alt:"The app won't stop freezing.",tip:"keeps crashing（何度もクラッシュする）keeps -ing（〜し続ける）は繰り返しのトラブルに使う定番パターン。"},
+
+// 🏥 体調急変 (10)
+{id:31,cat:'🏥 体調急変',jp:'気分が悪い',sub:'',en:"I'm not feeling well at all.",alt:"I feel really sick.",tip:"not feeling well at all（全く気分が良くない）at all で深刻さを強調。really sick は率直な表現。"},
+{id:32,cat:'🏥 体調急変',jp:'救急車を呼んで',sub:'',en:"Call an ambulance!",alt:"We need an ambulance right now!",tip:"Call an ambulance! は緊急時の最重要フレーズ。right now で緊急性を強調できる。"},
+{id:33,cat:'🏥 体調急変',jp:'胸が痛い',sub:'',en:"I have chest pain.",alt:"My chest is really tight.",tip:"chest pain（胸の痛み）chest is tight（胸が締め付けられる）は心臓系の緊急症状の表現。"},
+{id:34,cat:'🏥 体調急変',jp:'アレルギー反応が出ている',sub:'',en:"I'm having an allergic reaction.",alt:"I think I'm going into anaphylaxis.",tip:"allergic reaction（アレルギー反応）anaphylaxis（アナフィラキシー）は重篤なアレルギーの医療用語。"},
+{id:35,cat:'🏥 体調急変',jp:'意識を失いそう',sub:'',en:"I feel like I'm going to faint.",alt:"I'm about to pass out.",tip:"faint（失神する）pass out（気を失う）はどちらも同義。pass out の方がよりカジュアルで緊急感が出る。"},
+{id:36,cat:'🏥 体調急変',jp:'骨折したかもしれない',sub:'',en:"I think I might have broken something.",alt:"I think I've fractured my arm.",tip:"broken something（何か折れた）fractured（骨折した）はどちらも使える。fractured がより医療的。"},
+{id:37,cat:'🏥 体調急変',jp:'熱が38度以上ある',sub:'',en:"I have a fever over 38 degrees.",alt:"My temperature is really high.",tip:"オーストラリアは摂氏（Celsius）を使うのでそのまま使える。temperature is high で簡潔に伝わる。"},
+{id:38,cat:'🏥 体調急変',jp:'薬を飲み過ぎた',sub:'',en:"I've taken too much medication.",alt:"I may have overdosed.",tip:"overdosed（過剰摂取した）は医療用語として正確。too much medication がよりわかりやすい表現。"},
+{id:39,cat:'🏥 体調急変',jp:'子供が怪我をした',sub:'',en:"My child has been hurt.",alt:"My kid has had an accident.",tip:"has been hurt（怪我をした）had an accident（事故に遭った）は子供の怪我の定番表現。"},
+{id:40,cat:'🏥 体調急変',jp:'病院に連れて行ってください',sub:'',en:"Can you take me to the hospital?",alt:"I need to get to the emergency room.",tip:"take me to the hospital（病院に連れて行く）emergency room / emergency department はオーストラリアではED。"},
+
+// 💳 お金・カードのトラブル (10)
+{id:41,cat:'💳 お金・カードのトラブル',jp:'カードを無くした',sub:'',en:"I've lost my card.",alt:"My card is missing.",tip:"lost my card（カードを無くした）missing（見当たらない）はどちらも自然。すぐにカードを止める必要がある。"},
+{id:42,cat:'💳 お金・カードのトラブル',jp:'カードを止めたい',sub:'',en:"I need to cancel my card.",alt:"I need to block my card immediately.",tip:"cancel my card（カードを解約する）block my card（カードを止める）blockの方が一時停止のニュアンス。"},
+{id:43,cat:'💳 お金・カードのトラブル',jp:'身に覚えのない請求がある',sub:'',en:"There's an unauthorized charge on my account.",alt:"Someone has made a transaction I don't recognise.",tip:"unauthorized charge（不正請求）don't recognise（心当たりがない）はカード会社への連絡に使う表現。"},
+{id:44,cat:'💳 お金・カードのトラブル',jp:'カードが使えない',sub:'',en:"My card isn't working.",alt:"My card was declined.",tip:"isn't working（使えない）declined（断られた）declined はカードが拒否された状態を正確に表す。"},
+{id:45,cat:'💳 お金・カードのトラブル',jp:'ATMにカードが飲み込まれた',sub:'',en:"The ATM swallowed my card.",alt:"My card got stuck in the ATM.",tip:"swallowed my card（飲み込まれた）got stuck（詰まった）はATMトラブルの定番表現。"},
+{id:46,cat:'💳 お金・カードのトラブル',jp:'財布を盗まれた',sub:'',en:"My wallet has been stolen.",alt:"Someone stole my purse.",tip:"has been stolen（盗まれた）はpast participle で被害を表す。police report が必要。"},
+{id:47,cat:'💳 お金・カードのトラブル',jp:'二重請求されている',sub:'',en:"I've been charged twice.",alt:"I was billed twice for the same thing.",tip:"charged twice（二重請求）billed twice（二回請求）はどちらも自然。領収書を見せながら使う。"},
+{id:48,cat:'💳 お金・カードのトラブル',jp:'返金してもらいたい',sub:'',en:"I'd like a refund.",alt:"Can I get my money back?",tip:"refund（返金）get my money back（お金を返してもらう）はどちらも使いやすい。I'd like が丁寧。"},
+{id:49,cat:'💳 お金・カードのトラブル',jp:'銀行に連絡しないといけない',sub:'',en:"I need to contact my bank.",alt:"I have to call my bank straight away.",tip:"straight away（すぐに）はオーストラリア英語の定番表現。right away と同義。"},
+{id:50,cat:'💳 お金・カードのトラブル',jp:'パスワードが間違っている',sub:'',en:"I keep entering the wrong PIN.",alt:"My PIN isn't working.",tip:"PIN（暗証番号）keep entering（入れ続ける）keep -ing は繰り返しを表す定番パターン。"},
+
+// 🚨 緊急・警察 (10)
+{id:51,cat:'🚨 緊急・警察',jp:'警察を呼んで',sub:'',en:"Call the police!",alt:"We need the police right now!",tip:"Call the police! は緊急時の最重要フレーズのひとつ。オーストラリアの警察番号は000。"},
+{id:52,cat:'🚨 緊急・警察',jp:'泥棒が入った',sub:'',en:"Someone broke into my house.",alt:"My place has been burgled.",tip:"broke into（不法侵入した）burgled（空き巣に入られた）burglary はオーストラリアでもよく使われる。"},
+{id:53,cat:'🚨 緊急・警察',jp:'火事だ！',sub:'',en:"Fire! Call 000!",alt:"There's a fire — call the fire brigade!",tip:"000 はオーストラリアの緊急番号（警察・救急・消防）。fire brigade（消防隊）はオーストラリア英語。"},
+{id:54,cat:'🚨 緊急・警察',jp:'助けてください！',sub:'',en:"Help! Someone help me!",alt:"Help! I need assistance!",tip:"Help! はどんな言語話者にも通じる普遍的な緊急フレーズ。大きな声で叫ぶことが重要。"},
+{id:55,cat:'🚨 緊急・警察',jp:'被害届を出したい',sub:'',en:"I'd like to report an incident.",alt:"I need to file a police report.",tip:"file a police report（被害届を出す）はオーストラリアでも使われる正確な表現。"},
+{id:56,cat:'🚨 緊急・警察',jp:'ストーカーに付きまとわれている',sub:'',en:"Someone is following me.",alt:"I think I'm being stalked.",tip:"following me（尾行されている）being stalked（ストーキングされている）は状況を正確に伝える表現。"},
+{id:57,cat:'🚨 緊急・警察',jp:'車上荒らしにあった',sub:'',en:"Someone broke into my car.",alt:"My car has been broken into.",tip:"broke into my car（車上荒らし）has been broken into（受身形）どちらも自然。"},
+{id:58,cat:'🚨 緊急・警察',jp:'暴力を振るわれた',sub:'',en:"I've been assaulted.",alt:"Someone attacked me.",tip:"assaulted（暴行された）attacked（攻撃された）はどちらも使える。assaulted が法的に正確。"},
+{id:59,cat:'🚨 緊急・警察',jp:'目撃者です',sub:'',en:"I witnessed what happened.",alt:"I saw the whole thing.",tip:"witnessed（目撃した）saw the whole thing（全部見た）は警察への証言の際に使う表現。"},
+{id:60,cat:'🚨 緊急・警察',jp:'保護命令を取りたい',sub:'',en:"I need a restraining order.",alt:"I want to apply for an AVO.",tip:"restraining order（接近禁止命令）AVO（Apprehended Violence Order）はオーストラリア特有の表現。"},
+
+// ✈️ 旅行中のトラブル (10)
+{id:61,cat:'✈️ 旅行中のトラブル',jp:'飛行機に乗り遅れた',sub:'',en:"I've missed my flight.",alt:"I missed my connection.",tip:"missed my flight（飛行機に乗り遅れた）missed my connection（乗り継ぎを逃した）はどちも旅行の定番トラブル。"},
+{id:62,cat:'✈️ 旅行中のトラブル',jp:'荷物が届かない',sub:'',en:"My luggage hasn't arrived.",alt:"My bags are missing.",tip:"luggage hasn't arrived（荷物が届かない）bags are missing（バッグがない）はどちらも空港で使える。"},
+{id:63,cat:'✈️ 旅行中のトラブル',jp:'パスポートを無くした',sub:'',en:"I've lost my passport.",alt:"My passport has gone missing.",tip:"lost my passport（パスポートを無くした）gone missing（行方不明になった）在外公館への連絡が必要。"},
+{id:64,cat:'✈️ 旅行中のトラブル',jp:'フライトがキャンセルになった',sub:'',en:"My flight has been cancelled.",alt:"Our flight got cancelled.",tip:"has been cancelled（キャンセルになった）got cancelled（キャンセルされた）はどちらも自然。"},
+{id:65,cat:'✈️ 旅行中のトラブル',jp:'ホテルの予約が見つからない',sub:'',en:"My booking isn't showing up.",alt:"There's no record of my reservation.",tip:"booking isn't showing up（予約が見つからない）no record of（記録がない）はホテルでのトラブル表現。"},
+{id:66,cat:'✈️ 旅行中のトラブル',jp:'迷子になった',sub:'',en:"I'm completely lost.",alt:"I have no idea where I am.",tip:"completely lost（完全に迷子）no idea where I am（自分がどこにいるか全くわからない）はどちも自然。"},
+{id:67,cat:'✈️ 旅行中のトラブル',jp:'スリに遭った',sub:'',en:"I've been pickpocketed.",alt:"Someone stole my wallet from my pocket.",tip:"pickpocketed（スリに遭った）はそのまま英語として使える動詞。stole from my pocket が直接的。"},
+{id:68,cat:'✈️ 旅行中のトラブル',jp:'乗り継ぎ便の情報を教えてください',sub:'',en:"Can you help me find my connecting flight?",alt:"Where do I go for my connection?",tip:"connecting flight（乗り継ぎ便）connection（乗り継ぎ）はどちらも空港で使える必須表現。"},
+{id:69,cat:'✈️ 旅行中のトラブル',jp:'旅行保険に入っています',sub:'',en:"I have travel insurance.",alt:"I'm covered by my travel insurance.",tip:"travel insurance（旅行保険）covered by（〜でカバーされている）は保険請求の際の重要表現。"},
+{id:70,cat:'✈️ 旅行中のトラブル',jp:'大使館に連絡したい',sub:'',en:"I need to contact the Japanese embassy.",alt:"Can you help me get in touch with my embassy?",tip:"embassy（大使館）consulate（領事館）はパスポート紛失時に必須の語彙。"},
+
+// 🤝 人間関係のトラブル (10)
+{id:71,cat:'🤝 人間関係のトラブル',jp:'誤解があったと思う',sub:'',en:"I think there's been a misunderstanding.",alt:"I feel like we're not on the same page.",tip:"misunderstanding（誤解）not on the same page（認識が合っていない）はどちらも自然なトラブル解決の入口。"},
+{id:72,cat:'🤝 人間関係のトラブル',jp:'傷つけてしまったかもしれない',sub:'',en:"I think I may have upset them.",alt:"I'm worried I offended them.",tip:"upset them（傷つけた）offended them（不快にさせた）はどちも思いやりある表現。"},
+{id:73,cat:'🤝 人間関係のトラブル',jp:'話し合いが必要だと思う',sub:'',en:"I think we need to talk.",alt:"We should sit down and sort this out.",tip:"we need to talk（話し合いが必要）sort this out（解決する）はどちも問題解決への前向きな表現。"},
+{id:74,cat:'🤝 人間関係のトラブル',jp:'気まずい状況になってしまった',sub:'',en:"Things have gotten a bit awkward between us.",alt:"It's been a bit tense lately.",tip:"awkward（気まずい）tense（緊張した）はどちも人間関係のひずみを表す自然な表現。"},
+{id:75,cat:'🤝 人間関係のトラブル',jp:'謝らないといけない',sub:'',en:"I owe them an apology.",alt:"I need to say sorry.",tip:"owe them an apology（謝罪する必要がある）は責任を認める成熟した表現。I owe you one. の応用。"},
+{id:76,cat:'🤝 人間関係のトラブル',jp:'境界線を引いた方がいいと思う',sub:'',en:"I think I need to set some boundaries.",alt:"I need to be clearer about what I'm comfortable with.",tip:"set boundaries（境界線を引く）はメンタルヘルスとの関連でも使われる現代的に重要な表現。"},
+{id:77,cat:'🤝 人間関係のトラブル',jp:'少し距離を置く必要がある',sub:'',en:"I need to take a step back.",alt:"I think some space would help.",tip:"take a step back（一歩引く）some space（距離を置く）はどちも関係性の冷却期間を示す表現。"},
+{id:78,cat:'🤝 人間関係のトラブル',jp:'話を聞いてほしい',sub:'',en:"I just need someone to listen.",alt:"Can I talk to you about something?",tip:"just need someone to listen（ただ聞いてほしい）はシンプルで感情的に正直な表現。"},
+{id:79,cat:'🤝 人間関係のトラブル',jp:'状況が複雑で説明しにくい',sub:'',en:"It's a bit complicated to explain.",alt:"It's hard to put into words.",tip:"complicated to explain（説明しにくい）hard to put into words（言葉にしにくい）はどちも自然。"},
+{id:80,cat:'🤝 人間関係のトラブル',jp:'もう一度やり直したい',sub:'',en:"I'd like to start fresh.",alt:"Can we put this behind us?",tip:"start fresh（やり直す）put this behind us（これを過去にする）はどちも前向きな和解の表現。"},
+
+// 🏢 仕事上のトラブル (10)
+{id:81,cat:'🏢 仕事上のトラブル',jp:'注文に間違いがあった',sub:'',en:"There's been a mistake with the order.",alt:"We received the wrong items.",tip:"mistake with the order（注文の間違い）received the wrong items（違うものが届いた）はビジネスで使う定番表現。"},
+{id:82,cat:'🏢 仕事上のトラブル',jp:'締め切りに間に合わなかった',sub:'',en:"We missed the deadline.",alt:"The deadline wasn't met.",tip:"missed the deadline（締め切りを逃した）wasn't met（達成されなかった）は責任の所在が異なるニュアンス。"},
+{id:83,cat:'🏢 仕事上のトラブル',jp:'クライアントからクレームが来た',sub:'',en:"We've received a complaint from a client.",alt:"A client has raised an issue.",tip:"complaint（クレーム）raised an issue（問題を提起した）はどちも自然。raised an issue は穏やかな表現。"},
+{id:84,cat:'🏢 仕事上のトラブル',jp:'請求書の金額が違う',sub:'',en:"The invoice amount is incorrect.",alt:"There's an error on the invoice.",tip:"invoice（請求書）incorrect（誤っている）error on the invoice（請求書の誤り）はビジネス必須語彙。"},
+{id:85,cat:'🏢 仕事上のトラブル',jp:'コミュニケーションが取れていなかった',sub:'',en:"There was a breakdown in communication.",alt:"We weren't communicating well enough.",tip:"breakdown in communication（コミュニケーションの崩壊）はビジネス上のトラブル説明の定番表現。"},
+{id:86,cat:'🏢 仕事上のトラブル',jp:'すぐに対応します',sub:'',en:"I'll get right on it.",alt:"We'll address this straight away.",tip:"get right on it（すぐ取り掛かる）address this straight away（すぐ対処する）はどちも頼もしい表現。"},
+{id:87,cat:'🏢 仕事上のトラブル',jp:'謝罪文を送ります',sub:'',en:"I'll send a formal apology.",alt:"I'll follow up with an apology email.",tip:"formal apology（正式な謝罪）follow up with（〜でフォローする）はプロとして重要な表現。"},
+{id:88,cat:'🏢 仕事上のトラブル',jp:'再発防止策を取ります',sub:'',en:"We'll make sure this doesn't happen again.",alt:"We're putting measures in place to prevent this.",tip:"putting measures in place（対策を講じる）prevent this（これを防ぐ）はビジネスのトラブル対応で重要。"},
+{id:89,cat:'🏢 仕事上のトラブル',jp:'上司に相談します',sub:'',en:"I'll check with my manager.",alt:"Let me escalate this to my supervisor.",tip:"check with my manager（上司に確認する）escalate（上位に上申する）はビジネス英語の必須語彙。"},
+{id:90,cat:'🏢 仕事上のトラブル',jp:'書面で確認を取りたい',sub:'',en:"I'd like to get this in writing.",alt:"Can we confirm this via email?",tip:"get this in writing（書面で確認する）confirm via email（メールで確認する）は証拠を残す重要な表現。"},
+
+// 😰 助けを求める (10)
+{id:91,cat:'😰 助けを求める',jp:'助けてもらえますか？',sub:'',en:"Could you help me?",alt:"Is there any chance you could help me out?",tip:"Could you help me?（丁寧）help me out はより口語的。Is there any chance...は最も丁寧な依頼の形。"},
+{id:92,cat:'😰 助けを求める',jp:'全く分かりません',sub:'',en:"I'm completely lost.",alt:"I have no idea what to do.",tip:"completely lost（完全に途方に暮れている）no idea what to do（何をすればいいか全くわからない）はどちも自然。"},
+{id:93,cat:'😰 助けを求める',jp:'通訳が必要です',sub:'',en:"I need an interpreter.",alt:"Is there anyone here who speaks Japanese?",tip:"interpreter（通訳）はtranslatorと違い口頭通訳。Is there anyone who speaks...はシンプルな助けの求め方。"},
+{id:94,cat:'😰 助けを求める',jp:'英語が得意ではありません',sub:'',en:"My English isn't very good.",alt:"I'm not very confident in my English.",tip:"not very good（あまり得意ではない）not very confident（自信がない）は正直で理解を得やすい表現。"},
+{id:95,cat:'😰 助けを求める',jp:'もう一度言ってもらえますか？',sub:'',en:"Could you say that again?",alt:"Sorry, could you repeat that?",tip:"say that again / repeat that はどちも聞き直す定番表現。Sorry をつけると丁寧さが増す。"},
+{id:96,cat:'😰 助けを求める',jp:'もっとゆっくり話してもらえますか？',sub:'',en:"Could you speak more slowly, please?",alt:"Could you slow down a little?",tip:"speak more slowly（もっとゆっくり話す）slow down（ゆっくりにする）はどちも自然。please で丁寧さが増す。"},
+{id:97,cat:'😰 助けを求める',jp:'書いてもらえますか？',sub:'',en:"Could you write that down for me?",alt:"Can you write it down?",tip:"write that down（書き留める）は口頭だけでは理解できない時の有効な依頼表現。"},
+{id:98,cat:'😰 助けを求める',jp:'どこに連絡すればいいですか？',sub:'',en:"Who should I contact about this?",alt:"Where do I go to report this?",tip:"who should I contact（誰に連絡すべきか）where do I go（どこに行けばいいか）はトラブル解決の入口。"},
+{id:99,cat:'😰 助けを求める',jp:'これは緊急事態です',sub:'',en:"This is an emergency.",alt:"This is urgent — I need help right now.",tip:"This is an emergency.（緊急事態です）はシンプルで強く状況を伝える最重要表現のひとつ。"},
+{id:100,cat:'😰 助けを求める',jp:'大丈夫です、ありがとう',sub:'トラブルが解決したとき',en:"I'm all sorted, thank you.",alt:"It's all good now, thanks for your help.",tip:"all sorted（全て解決した）はオーストラリアで非常によく使われる表現。cheers! と添えても自然。"},
+];
+const CATS=[...new Set(PHRASES.map(p=>p.cat))];
+const CAT_COLORS={'🚗 交通・車のトラブル':'#a03030','🏠 家のトラブル':'#c8962a','💻 デジタル・機器':'#3d5a8a','🏥 体調急変':'#a03050','💳 お金・カードのトラブル':'#7a5a2a','🚨 緊急・警察':'#c83030','✈️ 旅行中のトラブル':'#2a5a7a','🤝 人間関係のトラブル':'#4a7c59','🏢 仕事上のトラブル':'#5a2a7a','😰 助けを求める':'#2a7a5a'};
+let elevenApiKey=localStorage.getItem('el_api_key')||'';
+let elevenVoiceId=localStorage.getItem('el_voice_id')||'21m00Tcm4TlvDq8ikWAM';
+let elevenVoiceName=localStorage.getItem('el_voice_name')||'Rachel';
+let currentAudio=null,isPlaying=false;
+function selectVoice(id,name,el){elevenVoiceId=id;elevenVoiceName=name;document.querySelectorAll('.voice-opt').forEach(e=>e.classList.remove('sel'));el.classList.add('sel');}
+function saveApiKey(){const key=document.getElementById('api-key-input').value.trim();if(!key){showToast('APIキーを入力してください');return;}elevenApiKey=key;localStorage.setItem('el_api_key',key);localStorage.setItem('el_voice_id',elevenVoiceId);localStorage.setItem('el_voice_name',elevenVoiceName);document.getElementById('api-modal').style.display='none';showToast(`✓ 保存しました（${elevenVoiceName}の声）`);}
+function skipApiKey(){document.getElementById('api-modal').style.display='none';}
+function showApiModal(){document.getElementById('api-key-input').value=elevenApiKey;document.getElementById('api-modal').style.display='flex';const map={'21m00Tcm4TlvDq8ikWAM':'voice-rachel','pNInz6obpgDQGcFmaJgB':'voice-adam','EXAVITQu4vr4xnSDxMaL':'voice-bella'};document.querySelectorAll('.voice-opt').forEach(e=>e.classList.remove('sel'));if(map[elevenVoiceId])document.getElementById(map[elevenVoiceId]).classList.add('sel');}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
+async function speakText(text){if(!elevenApiKey){showToast('🔑 右上の「音声設定」からAPIキーを入力してください');return;}if(isPlaying&&currentAudio){currentAudio.pause();currentAudio=null;isPlaying=false;setVoiceBtnState(false);return;}setVoiceBtnState(true,'生成中...');setVoiceStatus('ElevenLabsに接続中...');try{const res=await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${elevenVoiceId}`,{method:'POST',headers:{'xi-api-key':elevenApiKey,'Content-Type':'application/json'},body:JSON.stringify({text,model_id:'eleven_monolingual_v1',voice_settings:{stability:0.5,similarity_boost:0.75}})});if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e.detail?.message||`エラー ${res.status}`);}const blob=await res.blob();const url=URL.createObjectURL(blob);currentAudio=new Audio(url);currentAudio.onended=()=>{isPlaying=false;setVoiceBtnState(false);setVoiceStatus('');URL.revokeObjectURL(url);};currentAudio.play();isPlaying=true;setVoiceBtnState(true,'再生中（タップで停止）');setVoiceStatus(`${elevenVoiceName}の声で再生中`);}catch(e){isPlaying=false;setVoiceBtnState(false);setVoiceStatus('');showToast('⚠️ '+e.message);}}
+function setVoiceBtnState(playing,label){const btn=document.getElementById('voice-play-btn');if(!btn)return;btn.classList.toggle('playing',playing);document.getElementById('voice-btn-label').textContent=playing?(label||'再生中（タップで停止）'):'ネイティブ音声を聴く';}
+function setVoiceStatus(msg){const el=document.getElementById('voice-status');if(el)el.textContent=msg;}
+function playCurrentPhrase(){const p=queue[qIdx%queue.length];if(p)speakText(p.en);}
+let masteredSet=new Set(JSON.parse(localStorage.getItem('trbl_mastered')||'[]'));
+let wrongSet=new Set(JSON.parse(localStorage.getItem('trbl_wrong')||'[]'));
+let sessionOk=0,sessionNg=0,currentMode='normal',selectedCat='all';
+let queue=[],qIdx=0,isRevealed=false,timerInterval=null,timerLeft=3,loopCounts={};
+const LOOP_TARGET=5;
+function saveState(){localStorage.setItem('trbl_mastered',JSON.stringify([...masteredSet]));localStorage.setItem('trbl_wrong',JSON.stringify([...wrongSet]));}
+function updateHeader(){document.getElementById('h-mastered').textContent=masteredSet.size;}
+function switchTab(p,btn){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));document.getElementById('page-'+p).classList.add('active');btn.classList.add('active');if(p==='list')renderList();if(p==='stats')renderStats();updateHeader();}
+function initSetup(){const cc=document.getElementById('cat-chips');cc.innerHTML=`<button class="cat-chip active" onclick="selectCat('all',this)">すべて (${PHRASES.length})</button>`;CATS.forEach(c=>{const n=PHRASES.filter(p=>p.cat===c).length;cc.innerHTML+=`<button class="cat-chip" onclick="selectCat('${c}',this)">${c} (${n})</button>`;});}
+function selectCat(cat,btn){selectedCat=cat;document.querySelectorAll('#cat-chips .cat-chip').forEach(c=>c.classList.remove('active'));btn.classList.add('active');}
+function selectMode(mode){currentMode=mode;document.querySelectorAll('.mode-card').forEach(c=>c.classList.remove('selected'));document.getElementById('mode-'+mode).classList.add('selected');}
+function startTraining(){let pool=selectedCat==='all'?[...PHRASES]:PHRASES.filter(p=>p.cat===selectedCat);if(currentMode==='review'){pool=pool.filter(p=>!masteredSet.has(p.id)||wrongSet.has(p.id));if(pool.length===0){alert('復習するフレーズがありません！');return;}}for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]];}queue=pool;qIdx=0;sessionOk=0;sessionNg=0;loopCounts={};document.getElementById('train-setup').style.display='none';document.getElementById('train-result').style.display='none';document.getElementById('train-area').style.display='block';document.getElementById('loop-banner').style.display=currentMode==='loop'?'block':'none';document.getElementById('timer-wrap').style.display=currentMode==='timer'?'flex':'none';showCard();}
+function showCard(){if(qIdx>=queue.length){endTraining();return;}const p=queue[qIdx];isRevealed=false;if(currentAudio){currentAudio.pause();currentAudio=null;isPlaying=false;}document.getElementById('flash-card').className='flash-card';document.getElementById('card-cat').textContent=p.cat;document.getElementById('card-jp').textContent=p.jp;document.getElementById('card-sub').textContent=p.sub||'';document.getElementById('card-en').textContent=p.en;document.getElementById('card-alt').textContent=p.alt?'💡 '+p.alt:'';document.getElementById('card-tip').textContent=p.tip?'🔑 '+p.tip:'';document.getElementById('btn-reveal').style.display='inline-block';document.getElementById('btn-ok').style.display='none';document.getElementById('btn-ng').style.display='none';document.getElementById('voice-btn-wrap').style.display='none';setVoiceBtnState(false);setVoiceStatus('');document.getElementById('train-ctr').textContent=`${qIdx+1} / ${queue.length}`;document.getElementById('train-prog').style.width=((qIdx/queue.length)*100)+'%';if(currentMode==='loop'){const cnt=loopCounts[p.id]||0;document.getElementById('loop-remain').textContent=LOOP_TARGET-cnt;}if(currentMode==='timer')startTimer();}
+function startTimer(){clearInterval(timerInterval);timerLeft=3;updateTimerUI(3,3);timerInterval=setInterval(()=>{timerLeft-=0.1;if(timerLeft<=0){clearInterval(timerInterval);timerLeft=0;revealCard();}updateTimerUI(timerLeft,3);},100);}
+function updateTimerUI(val,max){document.getElementById('timer-circle').style.strokeDashoffset=169.6*(1-val/max);document.getElementById('timer-num').textContent=Math.ceil(val);document.getElementById('timer-circle').style.stroke=val/max>0.5?'#c8962a':val/max>0.25?'#c86a2a':'#a03030';}
+function revealCard(){if(isRevealed)return;isRevealed=true;clearInterval(timerInterval);document.getElementById('flash-card').classList.add('revealed');document.getElementById('btn-reveal').style.display='none';document.getElementById('btn-ok').style.display='inline-block';document.getElementById('btn-ng').style.display='inline-block';document.getElementById('voice-btn-wrap').style.display='flex';}
+function markOk(){const p=queue[qIdx];sessionOk++;wrongSet.delete(p.id);if(currentMode==='loop'){loopCounts[p.id]=(loopCounts[p.id]||0)+1;if(loopCounts[p.id]>=LOOP_TARGET){masteredSet.add(p.id);saveState();qIdx++;}else{const ins=qIdx+1+Math.floor(Math.random()*Math.min(5,queue.length-qIdx-1));queue.splice(ins,0,p);qIdx++;}}else{masteredSet.add(p.id);saveState();qIdx++;}updateHeader();showCard();}
+function markNg(){const p=queue[qIdx];sessionNg++;wrongSet.add(p.id);if(currentMode==='loop'){loopCounts[p.id]=0;const ins=qIdx+1+Math.floor(Math.random()*Math.min(4,queue.length-qIdx-1));queue.splice(Math.min(ins,queue.length),0,p);}saveState();qIdx++;showCard();}
+function skipCard(){qIdx++;showCard();}
+function quitTraining(){clearInterval(timerInterval);backToSetup();}
+function endTraining(){clearInterval(timerInterval);document.getElementById('train-area').style.display='none';document.getElementById('train-result').style.display='block';const total=sessionOk+sessionNg,pct=total>0?Math.round(sessionOk/total*100):0;document.getElementById('res-ok').textContent=sessionOk;document.getElementById('res-ng').textContent=sessionNg;document.getElementById('res-total').textContent=total;document.getElementById('res-emoji').textContent=pct>=80?'🎉':pct>=50?'💪':'🔥';document.getElementById('res-title').textContent=pct>=80?'素晴らしい！':pct>=50?'いい調子！':'もう一息！';document.getElementById('res-sub').textContent=`正解率 ${pct}%（${sessionOk}/${total}）`;document.getElementById('res-loop-btn').style.display=sessionNg>0&&currentMode!=='loop'?'block':'none';updateHeader();}
+function startLoopFromResult(){currentMode='loop';const ng=[...wrongSet];if(ng.length===0){alert('間違えたフレーズがありません！');return;}queue=PHRASES.filter(p=>ng.includes(p.id));for(let i=queue.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[queue[i],queue[j]]=[queue[j],queue[i]];}qIdx=0;sessionOk=0;sessionNg=0;loopCounts={};document.getElementById('train-result').style.display='none';document.getElementById('train-area').style.display='block';document.getElementById('loop-banner').style.display='block';document.getElementById('timer-wrap').style.display='none';showCard();}
+function backToSetup(){document.getElementById('train-area').style.display='none';document.getElementById('train-result').style.display='none';document.getElementById('train-setup').style.display='block';}
+function renderList(){const lcc=document.getElementById('list-cat-chips');lcc.innerHTML=`<button class="cat-chip active" onclick="filterList('all',this)">すべて</button>`;CATS.forEach(c=>{lcc.innerHTML+=`<button class="cat-chip" onclick="filterList('${c}',this)">${c}</button>`;});filterList('all',lcc.firstElementChild);}
+function filterList(cat,btn){document.querySelectorAll('#list-cat-chips .cat-chip').forEach(c=>c.classList.remove('active'));btn.classList.add('active');const pool=cat==='all'?PHRASES:PHRASES.filter(p=>p.cat===cat);document.getElementById('list-items').innerHTML=pool.map(p=>`<div class="list-item"><div class="li-dot" style="background:${CAT_COLORS[p.cat]||'#888'}"></div><div class="li-body"><div class="li-cat">${p.cat}</div><div class="li-jp">${p.jp}</div><div class="li-en">${p.en}</div></div><div class="li-right"><button class="li-voice-btn" onclick="speakText('${p.en.replace(/'/g,"\\'")}')">🔊</button><div class="li-done ${masteredSet.has(p.id)?'show':''}">✓ 習得</div></div></div>`).join('');}
+function renderStats(){document.getElementById('st-mastered').textContent=masteredSet.size;document.getElementById('st-total').textContent=PHRASES.length;document.getElementById('cat-stats').innerHTML=CATS.map(c=>{const total=PHRASES.filter(p=>p.cat===c).length;const done=PHRASES.filter(p=>p.cat===c&&masteredSet.has(p.id)).length;const pct=Math.round(done/total*100);return `<div class="cat-stat"><div class="cs-top"><span class="cs-name">${c}</span><span class="cs-pct">${done}/${total} (${pct}%)</span></div><div class="cs-bar"><div class="cs-fill" style="width:${pct}%;background:${CAT_COLORS[c]||'var(--moss)'}"></div></div></div>`;}).join('');}
+function resetAllData(){if(!confirm('全データをリセットしますか？'))return;masteredSet.clear();wrongSet.clear();saveState();updateHeader();renderStats();}
+initSetup();updateHeader();
+if(!elevenApiKey){document.getElementById('api-modal').style.display='flex';}else{document.getElementById('api-modal').style.display='none';}
+</script>
+</body>
+</html>
