@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coco 瞬間英作文 フリップ</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Noto+Sans+JP:wght@400;500;700&display=swap');
+
+:root {
+  --bg: #f5f2ed;
+  --card: #ffffff;
+  --text: #2c2a26;
+  --text-sub: #6b6860;
+  --text-hint: #9c9a94;
+  --green: #3a7d5a;
+  --green-light: #e8f5ee;
+  --green-mid: #5aab7e;
+  --green-dark: #2a5e42;
+  --blue: #2c5f8a;
+  --blue-light: #e6f0f9;
+  --amber: #8a6020;
+  --amber-light: #fdf3e0;
+  --red: #933030;
+  --red-light: #fdeaea;
+  --red-mid: #c0504d;
+  --border: #e0ddd6;
+  --radius: 20px;
+  --radius-sm: 10px;
+  --shadow: 0 4px 20px rgba(0,0,0,0.09);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.13);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 20px 10px;
+  position: sticky; top: 0; z-index: 100;
+}
+.header-top {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 10px;
+}
+.app-title {
+  font-family: 'Nunito', sans-serif;
+  font-size: 19px; font-weight: 800;
+  color: var(--green);
+  display: flex; align-items: center; gap: 6px;
+}
+.stats-row { display: flex; gap: 14px; align-items: center; }
+.stat-item { text-align: center; }
+.stat-n { font-size: 17px; font-weight: 700; font-family: 'Nunito', sans-serif; line-height: 1; }
+.stat-l { font-size: 10px; color: var(--text-hint); margin-top: 1px; }
+
+.nav-tabs { display: flex; gap: 3px; }
+.nav-tab {
+  flex: 1; padding: 7px 4px;
+  border: none; border-radius: 8px;
+  background: transparent;
+  font-size: 12px; font-weight: 500;
+  color: var(--text-sub); cursor: pointer;
+  font-family: 'Noto Sans JP', sans-serif;
+  transition: all 0.15s;
+  display: flex; align-items: center; justify-content: center; gap: 3px;
+}
+.nav-tab.active { background: var(--green-light); color: var(--green); font-weight: 700; }
+.nav-tab .rbadge {
+  background: var(--red-mid); color: #fff;
+  border-radius: 10px; padding: 1px 6px;
+  font-size: 10px; font-weight: 700;
+}
+
+.progress-wrap {
+  height: 5px; background: var(--border);
+  margin: 0 20px 0;
+  border-radius: 3px; overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--green-mid), var(--green));
+  border-radius: 3px;
+  transition: width 0.5s cubic-bezier(.4,0,.2,1);
+}
+
+.content { flex: 1; padding: 20px 16px 100px; max-width: 600px; margin: 0 auto; width: 100%; }
+
+.cat-scroll {
+  display: flex; gap: 6px; overflow-x: auto;
+  padding-bottom: 4px; margin-bottom: 18px;
+  scrollbar-width: none;
+}
+.cat-scroll::-webkit-scrollbar { display: none; }
+.cat-btn {
+  white-space: nowrap; padding: 5px 13px;
+  border-radius: 20px; border: 1.5px solid var(--border);
+  background: var(--card); font-size: 12px; font-weight: 500;
+  color: var(--text-sub); cursor: pointer;
+  font-family: 'Noto Sans JP', sans-serif;
+  transition: all 0.12s;
+}
+.cat-btn.active { background: var(--green); color: #fff; border-color: var(--green); }
+
+/* ── AUTO-PLAY BAR ── */
+.autoplay-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--card);
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  padding: 10px 16px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow);
+}
+.autoplay-bar .ap-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-sub);
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.btn-autoplay {
+  padding: 8px 18px;
+  border-radius: 20px;
+  border: none;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'Noto Sans JP', sans-serif;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.btn-autoplay.start {
+  background: var(--green);
+  color: #fff;
+}
+.btn-autoplay.start:hover { background: var(--green-dark); }
+.btn-autoplay.stop {
+  background: var(--red-light);
+  color: var(--red);
+  border: 1.5px solid #f7c1c1;
+}
+.btn-autoplay.stop:hover { background: var(--red); color: #fff; }
+
+.ap-status {
+  font-size: 11px;
+  color: var(--text-hint);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.ap-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--green);
+  animation: blink 1s ease-in-out infinite;
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.2; }
+}
+
+/* ── FLIP CARD ── */
+.flip-scene {
+  width: 100%;
+  perspective: 1200px;
+  margin-bottom: 20px;
+}
+.flip-card {
+  width: 100%; min-height: 280px;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.55s cubic-bezier(.4,0,.2,1);
+  cursor: pointer;
+}
+.flip-card.flipped { transform: rotateY(180deg); }
+.flip-card.auto-mode { cursor: default; }
+
+.card-face {
+  position: absolute; inset: 0;
+  border-radius: var(--radius);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 28px 24px;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border);
+}
+.card-front { background: var(--card); }
+.card-front .face-label {
+  font-size: 11px; font-weight: 700; letter-spacing: 1px;
+  color: var(--text-hint); text-transform: uppercase;
+  margin-bottom: 18px;
+  background: var(--bg); padding: 4px 12px; border-radius: 20px;
+}
+.card-front .ja-text {
+  font-size: 22px; font-weight: 700;
+  line-height: 1.65; text-align: center;
+  color: var(--text);
+  margin-bottom: 20px;
+}
+.card-front .hint-row {
+  display: flex; flex-wrap: wrap; gap: 6px; justify-content: center;
+}
+.hint-chip {
+  background: var(--blue-light);
+  color: var(--blue);
+  font-size: 12px; font-weight: 600;
+  padding: 4px 12px; border-radius: 6px;
+  font-family: 'Nunito', sans-serif;
+}
+.card-front .tap-hint {
+  margin-top: 24px;
+  font-size: 12px; color: var(--text-hint);
+  display: flex; align-items: center; gap: 5px;
+}
+.tap-hint .tap-icon { font-size: 16px; animation: pulse 2s ease-in-out infinite; }
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.9); }
+}
+
+.card-back {
+  background: var(--green);
+  transform: rotateY(180deg);
+}
+.card-back .face-label {
+  font-size: 11px; font-weight: 700; letter-spacing: 1px;
+  color: rgba(255,255,255,0.6); text-transform: uppercase;
+  margin-bottom: 18px;
+  background: rgba(255,255,255,0.15); padding: 4px 12px; border-radius: 20px;
+}
+.card-back .en-text {
+  font-family: 'Nunito', sans-serif;
+  font-size: 22px; font-weight: 700;
+  line-height: 1.6; text-align: center;
+  color: #ffffff;
+  margin-bottom: 12px;
+}
+.card-back .alt-text {
+  font-size: 13px; color: rgba(255,255,255,0.7);
+  text-align: center; line-height: 1.6;
+  margin-bottom: 12px;
+}
+.card-back .key-tag {
+  background: rgba(255,255,255,0.2);
+  color: #fff;
+  font-size: 12px; font-weight: 600;
+  padding: 5px 14px; border-radius: 20px;
+  font-family: 'Nunito', sans-serif;
+  margin-bottom: 8px;
+}
+.card-back .info-text {
+  font-size: 12px; color: rgba(255,255,255,0.65);
+  text-align: center; line-height: 1.6;
+  padding: 0 8px;
+}
+
+/* speaking indicator */
+.speaking-indicator {
+  display: none;
+  align-items: center;
+  gap: 3px;
+  margin-top: 16px;
+}
+.speaking-indicator.active { display: flex; }
+.sp-bar {
+  width: 4px; border-radius: 2px;
+  background: rgba(255,255,255,0.7);
+  animation: soundwave 0.8s ease-in-out infinite;
+}
+.sp-bar:nth-child(1) { height: 8px; animation-delay: 0s; }
+.sp-bar:nth-child(2) { height: 16px; animation-delay: 0.1s; }
+.sp-bar:nth-child(3) { height: 12px; animation-delay: 0.2s; }
+.sp-bar:nth-child(4) { height: 20px; animation-delay: 0.15s; }
+.sp-bar:nth-child(5) { height: 10px; animation-delay: 0.05s; }
+@keyframes soundwave {
+  0%, 100% { transform: scaleY(1); opacity: 0.7; }
+  50% { transform: scaleY(0.4); opacity: 0.3; }
+}
+
+/* front speaking indicator */
+.front-speaking {
+  display: none;
+  align-items: center;
+  gap: 3px;
+  margin-top: 16px;
+}
+.front-speaking.active { display: flex; }
+.fs-bar {
+  width: 4px; border-radius: 2px;
+  background: var(--green-mid);
+  animation: soundwave 0.8s ease-in-out infinite;
+}
+.fs-bar:nth-child(1) { height: 8px; animation-delay: 0s; }
+.fs-bar:nth-child(2) { height: 16px; animation-delay: 0.1s; }
+.fs-bar:nth-child(3) { height: 12px; animation-delay: 0.2s; }
+.fs-bar:nth-child(4) { height: 20px; animation-delay: 0.15s; }
+.fs-bar:nth-child(5) { height: 10px; animation-delay: 0.05s; }
+
+/* countdown ring */
+.countdown-wrap {
+  display: none;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+.countdown-wrap.active { display: flex; }
+.countdown-ring {
+  position: relative;
+  width: 44px; height: 44px;
+}
+.countdown-ring svg {
+  transform: rotate(-90deg);
+}
+.countdown-ring .ring-bg {
+  fill: none; stroke: var(--border); stroke-width: 4;
+}
+.countdown-ring .ring-fill {
+  fill: none; stroke: var(--green); stroke-width: 4;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.1s linear;
+}
+.countdown-num {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 800;
+  font-family: 'Nunito', sans-serif;
+  color: var(--green);
+}
+
+/* judge buttons */
+.judge-buttons {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 12px; margin-top: 4px;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.3s 0.3s;
+}
+.judge-buttons.visible { opacity: 1; pointer-events: all; }
+.judge-buttons.hidden-auto { display: none; }
+
+.btn-judge {
+  padding: 16px 12px;
+  border-radius: var(--radius-sm);
+  border: none;
+  font-size: 15px; font-weight: 700;
+  cursor: pointer; font-family: 'Noto Sans JP', sans-serif;
+  transition: all 0.15s;
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+}
+.btn-judge:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,0.15); }
+.btn-judge:active { transform: scale(0.97); }
+.btn-ng { background: var(--red-light); color: var(--red); border: 2px solid #f7c1c1; }
+.btn-ng:hover { background: var(--red); color: #fff; border-color: var(--red); }
+.btn-ok { background: var(--green-light); color: var(--green); border: 2px solid #c0dd97; }
+.btn-ok:hover { background: var(--green); color: #fff; border-color: var(--green); }
+.btn-judge .btn-icon { font-size: 24px; }
+.btn-judge .btn-lbl { font-size: 13px; }
+.btn-judge .btn-sub { font-size: 10px; opacity: 0.7; }
+
+.card-counter {
+  text-align: center; margin-bottom: 14px;
+  font-size: 13px; color: var(--text-hint);
+  font-family: 'Nunito', sans-serif; font-weight: 600;
+}
+
+/* result */
+.result-screen {
+  background: var(--card); border-radius: var(--radius);
+  padding: 36px 24px; text-align: center;
+  box-shadow: var(--shadow-lg); border: 1px solid var(--border);
+}
+.result-emoji { font-size: 52px; margin-bottom: 10px; }
+.result-pct {
+  font-size: 68px; font-weight: 800;
+  font-family: 'Nunito', sans-serif;
+  color: var(--green); line-height: 1; margin-bottom: 8px;
+}
+.result-msg { font-size: 16px; color: var(--text-sub); margin-bottom: 28px; }
+.result-nums { display: flex; justify-content: center; gap: 40px; margin-bottom: 28px; }
+.r-num { font-size: 32px; font-weight: 800; font-family: 'Nunito', sans-serif; }
+.r-num.ok { color: var(--green); }
+.r-num.ng { color: var(--red); }
+.r-lbl { font-size: 12px; color: var(--text-hint); margin-top: 2px; }
+.result-btns { display: flex; flex-direction: column; gap: 10px; }
+.btn-result {
+  width: 100%; padding: 14px; border-radius: var(--radius-sm);
+  border: 2px solid var(--border); font-size: 15px; font-weight: 700;
+  cursor: pointer; font-family: 'Noto Sans JP', sans-serif;
+  background: var(--card); color: var(--text); transition: all 0.13s;
+}
+.btn-result:hover { transform: translateY(-1px); box-shadow: var(--shadow); }
+.btn-result.primary { background: var(--green); color: #fff; border-color: var(--green); }
+.btn-result.amber { border-color: var(--amber); color: var(--amber); }
+
+/* vocab */
+.vocab-card {
+  background: var(--card); border-radius: var(--radius);
+  padding: 18px; margin-bottom: 10px;
+  box-shadow: var(--shadow); border: 1px solid var(--border);
+}
+.vocab-phrase { font-size: 17px; font-weight: 700; color: var(--green); font-family: 'Nunito', sans-serif; margin-bottom: 4px; }
+.vocab-cat { font-size: 11px; color: var(--text-hint); margin-bottom: 6px; }
+.vocab-meaning { font-size: 14px; font-weight: 500; margin-bottom: 12px; }
+.vocab-examples { display: flex; flex-direction: column; gap: 6px; }
+.ex-item { background: var(--green-light); border-radius: 8px; padding: 10px 12px; }
+.ex-en { font-size: 14px; font-weight: 600; color: var(--green); font-family: 'Nunito', sans-serif; line-height: 1.5; }
+.ex-ja { font-size: 12px; color: var(--text-sub); margin-top: 3px; line-height: 1.5; }
+
+/* review */
+.review-item {
+  background: var(--card); border-radius: var(--radius);
+  padding: 16px 18px; margin-bottom: 10px;
+  border-left: 4px solid var(--red-mid); box-shadow: var(--shadow);
+  border-top: 1px solid var(--border); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border);
+}
+.ri-ja { font-size: 15px; font-weight: 700; margin-bottom: 5px; }
+.ri-en { font-size: 14px; font-weight: 600; color: var(--text-sub); font-family: 'Nunito', sans-serif; line-height: 1.5; margin-bottom: 6px; }
+.ri-key { font-size: 12px; background: var(--amber-light); color: var(--amber); padding: 3px 8px; border-radius: 6px; display: inline-block; font-weight: 600; font-family: 'Nunito', sans-serif; }
+.ri-actions { display: flex; gap: 6px; margin-top: 10px; }
+.btn-sm { padding: 6px 14px; border-radius: 8px; border: 1.5px solid; font-size: 12px; font-weight: 700; cursor: pointer; font-family: 'Noto Sans JP', sans-serif; transition: all 0.12s; }
+.btn-sm.green { border-color: var(--green); background: var(--green-light); color: var(--green); }
+.btn-sm.green:hover { background: var(--green); color: #fff; }
+.btn-sm.gray { border-color: var(--border); background: var(--bg); color: var(--text-sub); }
+
+.empty-state { text-align: center; padding: 56px 20px; color: var(--text-hint); }
+.empty-state .ee { font-size: 44px; margin-bottom: 12px; }
+.empty-state p { font-size: 15px; line-height: 1.8; }
+
+@media (max-width: 400px) {
+  .card-front .ja-text { font-size: 19px; }
+  .card-back .en-text { font-size: 19px; }
+  .result-pct { font-size: 56px; }
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-top">
+    <div class="app-title">🐾 Coco スピーキング</div>
+    <div class="stats-row">
+      <div class="stat-item">
+        <div class="stat-n" id="s-total" style="color:var(--text)">0</div>
+        <div class="stat-l">合計</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-n" id="s-ok" style="color:var(--green)">0</div>
+        <div class="stat-l">できた</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-n" id="s-ng" style="color:var(--red)">0</div>
+        <div class="stat-l">復習</div>
+      </div>
+    </div>
+  </div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" id="tab-practice" onclick="switchMode('practice')">🗣️ 練習</button>
+    <button class="nav-tab" id="tab-vocab" onclick="switchMode('vocab')">📖 単語帳</button>
+    <button class="nav-tab" id="tab-review" onclick="switchMode('review')">🔁 要復習<span class="rbadge" id="rbadge" style="display:none">0</span></button>
+  </div>
+</header>
+
+<div style="padding: 10px 20px 0; max-width: 600px; margin: 0 auto; width: 100%">
+  <div class="progress-wrap">
+    <div class="progress-fill" id="prog" style="width:0%"></div>
+  </div>
+</div>
+
+<div class="content">
+
+  <!-- PRACTICE -->
+  <div id="mode-practice">
+    <div class="cat-scroll" id="cat-row"></div>
+
+    <!-- AUTO-PLAY BAR -->
+    <div class="autoplay-bar">
+      <div class="ap-label">
+        🎧 自動再生モード
+        <span class="ap-status" id="ap-status" style="display:none">
+          <span class="ap-dot"></span> 再生中
+        </span>
+      </div>
+      <button class="btn-autoplay start" id="btn-autoplay" onclick="toggleAutoPlay()">
+        ▶ スタート
+      </button>
+    </div>
+
+    <div class="card-counter" id="card-counter">1 / 20</div>
+
+    <!-- countdown ring -->
+    <div class="countdown-wrap" id="countdown-wrap">
+      <div class="countdown-ring">
+        <svg width="44" height="44" viewBox="0 0 44 44">
+          <circle class="ring-bg" cx="22" cy="22" r="18"/>
+          <circle class="ring-fill" id="ring-fill" cx="22" cy="22" r="18"
+            stroke-dasharray="113" stroke-dashoffset="0"/>
+        </svg>
+        <div class="countdown-num" id="countdown-num">3</div>
+      </div>
+    </div>
+
+    <div class="flip-scene">
+      <div class="flip-card" id="flip-card" onclick="handleCardClick()">
+        <div class="card-face card-front" id="card-front">
+          <div class="face-label">日本語を見て英語で言おう</div>
+          <div class="ja-text" id="ja-text">Loading...</div>
+          <div class="hint-row" id="hint-row"></div>
+          <div class="front-speaking" id="front-speaking">
+            <div class="fs-bar"></div>
+            <div class="fs-bar"></div>
+            <div class="fs-bar"></div>
+            <div class="fs-bar"></div>
+            <div class="fs-bar"></div>
+          </div>
+          <div class="tap-hint" id="tap-hint"><span class="tap-icon">👆</span> タップで英語を確認</div>
+        </div>
+        <div class="card-face card-back" id="card-back">
+          <div class="face-label">Answer</div>
+          <div class="en-text" id="en-text"></div>
+          <div class="alt-text" id="alt-text"></div>
+          <div class="key-tag" id="key-tag"></div>
+          <div class="info-text" id="info-text"></div>
+          <div class="speaking-indicator" id="speaking-indicator">
+            <div class="sp-bar"></div>
+            <div class="sp-bar"></div>
+            <div class="sp-bar"></div>
+            <div class="sp-bar"></div>
+            <div class="sp-bar"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="judge-buttons" id="judge-buttons">
+      <button class="btn-judge btn-ng" onclick="judge(false)">
+        <span class="btn-icon">😅</span>
+        <span class="btn-lbl">できなかった</span>
+        <span class="btn-sub">要復習に追加</span>
+      </button>
+      <button class="btn-judge btn-ok" onclick="judge(true)">
+        <span class="btn-icon">✅</span>
+        <span class="btn-lbl">できた！</span>
+        <span class="btn-sub">次へ進む</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- VOCAB -->
+  <div id="mode-vocab" style="display:none">
+    <div id="vocab-list"></div>
+  </div>
+
+  <!-- REVIEW -->
+  <div id="mode-review" style="display:none">
+    <div id="review-list"></div>
+  </div>
+
+</div>
+
+<script>
+const VOCAB = [
+  { phrase:"despite the name", meaning:"名前とは裏腹に / 〜という名前にもかかわらず", category:"逆接・対比", examples:[
+    {en:"Despite the name, he's actually very gentle.",ja:"名前とは裏腹に、彼は実はとても穏やかです。"},
+    {en:"Despite the name, this café serves amazing food.",ja:"名前に反して、このカフェの料理は絶品です。"},
+    {en:"Despite the name 'beginner course', it was quite challenging.",ja:"「初心者コース」という名前に反して、かなり難しかった。"}
+  ]},
+  { phrase:"timid", meaning:"臆病な / 内気な / おとなしい", category:"性格・感情", examples:[
+    {en:"She was too timid to speak up at the meeting.",ja:"彼女は内気すぎて会議で発言できなかった。"},
+    {en:"Don't be timid — just go and introduce yourself.",ja:"臆病にならないで、行って自己紹介してきなよ。"},
+    {en:"Even timid people can become great leaders.",ja:"内気な人でも、すばらしいリーダーになれる。"}
+  ]},
+  { phrase:"clingy", meaning:"べったりくっつく / 甘えん坊な / 離れたがらない", category:"性格・感情", examples:[
+    {en:"My little sister is really clingy when she's tired.",ja:"妹は疲れているとき、本当にべったりくっついてくる。"},
+    {en:"Some cats are clingy and follow you everywhere.",ja:"べったり甘える猫は、どこへでもついてくる。"}
+  ]},
+  { phrase:"can't stand -ing", meaning:"〜に耐えられない / 〜が我慢できない", category:"感情・好み", examples:[
+    {en:"I can't stand waiting in long lines.",ja:"長い行列で待つのが我慢できません。"},
+    {en:"She can't stand people who are always late.",ja:"彼女はいつも遅刻する人が我慢できない。"}
+  ]},
+  { phrase:"check in on ~", meaning:"〜の様子を確認する / 気にかけて連絡する", category:"日常動作", examples:[
+    {en:"I check in on my elderly neighbor every week.",ja:"毎週、高齢の隣人の様子を確認しに行きます。"},
+    {en:"Don't forget to check in on your friends sometimes.",ja:"たまには友人の様子を気にかけて連絡してみて。"}
+  ]},
+  { phrase:"sound asleep", meaning:"ぐっすり眠っている / 熟睡している", category:"状態描写", examples:[
+    {en:"The baby was sound asleep when we got home.",ja:"帰宅したとき、赤ちゃんはぐっすり眠っていた。"},
+    {en:"Don't wake her — she's sound asleep.",ja:"起こさないで、彼女はぐっすり眠っているから。"}
+  ]},
+  { phrase:"the moment ~", meaning:"〜した瞬間に / 〜するやいなや", category:"時・タイミング", examples:[
+    {en:"The moment I walked in, everyone stopped talking.",ja:"私が入った瞬間、みんな話すのをやめた。"},
+    {en:"She burst into tears the moment she heard the news.",ja:"ニュースを聞いた瞬間、彼女は泣き崩れた。"}
+  ]},
+  { phrase:"go absolutely berserk", meaning:"完全に興奮する / 大騒ぎする", category:"感情・行動", examples:[
+    {en:"The crowd went berserk when the band came on stage.",ja:"バンドがステージに上がった瞬間、観客は大興奮した。"},
+    {en:"My dog goes berserk every time the doorbell rings.",ja:"チャイムが鳴るたびに、うちの犬は大騒ぎする。"}
+  ]},
+  { phrase:"disappear from the frame", meaning:"カメラのフレームから消える / 画面から消える", category:"状態描写", examples:[
+    {en:"The cat completely disappeared from the frame.",ja:"猫がカメラのフレームから完全に消えた。"},
+    {en:"He walked off and disappeared from the frame.",ja:"彼は歩き去り、画面から消えた。"}
+  ]},
+  { phrase:"My heart nearly stopped.", meaning:"心臓が止まるかと思った / 本当に驚いた", category:"感情表現", examples:[
+    {en:"When I heard the bang, my heart nearly stopped.",ja:"大きな音がして、心臓が止まるかと思った。"},
+    {en:"My heart nearly stopped when I saw the bill.",ja:"請求書を見て、心臓が止まるかと思った。"}
+  ]},
+  { phrase:"that's just what it means to ~", meaning:"それが〜するということだ", category:"表現・まとめ", examples:[
+    {en:"That's just what it means to be a parent.",ja:"それが親であるということだ。"},
+    {en:"That's just what it means to grow up.",ja:"それが大人になるということだ。"}
+  ]}
+];
+
+const QUESTIONS = [
+  {ja:"名前とは裏腹に、彼は実はとても穏やかな性格です。",en:"Despite the name, he's actually very gentle.",alt:"Despite the name, he is actually very easygoing.",key:"despite the name",hint:["despite the name"],cat:"逆接・対比",info:"despite = 〜にもかかわらず（前置詞）"},
+  {ja:"この映画はタイトルとは裏腹に、子どもにも楽しめます。",en:"Despite the name, this movie is enjoyable for children too.",alt:"Despite the title, this film is fun for kids as well.",key:"despite the name",hint:["despite the name / title"],cat:"逆接・対比",info:"name / title どちらも使えます"},
+  {ja:"名前に反して、そのカフェの料理は本当においしい。",en:"Despite the name, that café serves really delicious food.",alt:"Despite the name, the food at that café is amazing.",key:"despite the name",hint:["despite the name"],cat:"逆接・対比",info:"serves = 提供する（レストランでよく使う）"},
+  {ja:"「楽々コース」という名前に反して、そのトレイルはとてもきつかった。",en:"Despite the name, the 'Easy Trail' was exhausting.",alt:"Despite the name 'Easy Trail', it was incredibly tough.",key:"despite the name",hint:["despite the name"],cat:"逆接・対比",info:"exhausting = とても疲れる"},
+  {ja:"名前とは裏腹に、そのカフェはいつも混んでいる。",en:"Despite the name, the 'Quiet Corner' café is always packed.",alt:"Despite being called 'Quiet Corner', that café is always crowded.",key:"despite the name",hint:["despite the name","packed / crowded"],cat:"逆接・対比",info:"packed = 満員・混雑している"},
+  {ja:"彼は臆病すぎて、知らない人に話しかけられない。",en:"He is too timid to talk to strangers.",alt:"He's too timid to speak to people he doesn't know.",key:"timid",hint:["timid","too ~ to ..."],cat:"性格・感情",info:"too ~ to ... = 〜すぎて…できない"},
+  {ja:"新しい子猫は最初、とても内気に見えた。",en:"The new kitten looked very timid at first.",alt:"The new kitten seemed really timid at first.",key:"timid",hint:["timid","at first"],cat:"性格・感情",info:"looked / seemed + 形容詞 = 〜に見えた"},
+  {ja:"臆病にならないで、行って自己紹介してきなよ。",en:"Don't be timid — just go and introduce yourself.",alt:"Stop being so timid and just introduce yourself.",key:"timid",hint:["timid","introduce yourself"],cat:"性格・感情",info:"introduce yourself = 自己紹介する"},
+  {ja:"彼は以前は臆病だったが、今はとても自信がある。",en:"He used to be timid, but he's very confident now.",alt:"He was timid before, but now he's full of confidence.",key:"timid",hint:["timid","used to / confident"],cat:"性格・感情",info:"used to be = 以前は〜だった"},
+  {ja:"うちの犬はとても甘えん坊で、ひとりでいることに耐えられない。",en:"My dog is very clingy and can't stand being alone.",alt:"My dog is really clingy and hates being alone.",key:"clingy",hint:["clingy","can't stand being alone"],cat:"性格・感情",info:"clingy と can't stand を組み合わせよう"},
+  {ja:"私が一人で出かけようとすると、彼はいつもべったりしてくる。",en:"He gets clingy whenever I try to go out alone.",alt:"He becomes really clingy every time I try to leave by myself.",key:"clingy",hint:["clingy","whenever / every time"],cat:"性格・感情",info:"whenever = 〜するたびに（= every time）"},
+  {ja:"彼女はタバコの匂いが我慢できない。",en:"She can't stand the smell of cigarettes.",alt:"She can't stand cigarette smoke.",key:"can't stand",hint:["can't stand"],cat:"感情・好み",info:"can't stand + 名詞 / 動名詞"},
+  {ja:"私は長い行列で待つのが我慢できない。",en:"I can't stand waiting in long lines.",alt:"I can't stand standing in long queues.",key:"can't stand -ing",hint:["can't stand -ing"],cat:"感情・好み",info:"can't stand + -ing形"},
+  {ja:"彼は無視されることが我慢できない。",en:"He can't stand being ignored.",alt:"He hates being ignored — he just can't stand it.",key:"can't stand",hint:["can't stand","being ignored"],cat:"感情・好み",info:"being ignored = 無視されること（受動態の動名詞）"},
+  {ja:"私はペットカメラで、ときどき彼の様子を確認しています。",en:"I check in on him now and then with a pet camera.",alt:"I sometimes check in on him using a pet camera.",key:"check in on ~",hint:["check in on"],cat:"日常動作",info:"now and then = ときどき（= sometimes）"},
+  {ja:"手術後、友人が様子を確認するメッセージを送ってくれた。",en:"My friend texted to check in on me after the surgery.",alt:"A friend sent a message to check in on me after my surgery.",key:"check in on ~",hint:["check in on","texted / message"],cat:"日常動作",info:"text = メッセージを送る（動詞）"},
+  {ja:"帰宅したとき、赤ちゃんはぐっすり眠っていた。それで安心した。",en:"The baby was sound asleep when I got home, which was a relief.",alt:"When I got home, the baby was sound asleep — what a relief.",key:"sound asleep",hint:["sound asleep","which was a relief"],cat:"状態描写",info:"which was a relief = それは安心だった"},
+  {ja:"ぐっすり寝ていてアラームが聞こえなかった。",en:"I was sound asleep and didn't hear the alarm.",alt:"I was so sound asleep that I missed the alarm completely.",key:"sound asleep",hint:["sound asleep","didn't hear the alarm"],cat:"状態描写",info:"so ~ that ... = とても〜なので…（強調）"},
+  {ja:"私が出かける準備を始めた瞬間、彼は大騒ぎし始める。",en:"The moment I start getting ready to go out, he goes absolutely berserk.",alt:"The moment I begin getting ready to leave, he freaks out completely.",key:"the moment ~",hint:["the moment ~","go berserk"],cat:"時・タイミング",info:"the moment = 〜するやいなや（接続詞）"},
+  {ja:"外に出た瞬間、雨が降り始めた。",en:"The moment I stepped outside, it started to rain.",alt:"The moment I walked out, the rain began.",key:"the moment ~",hint:["the moment ~","it started to rain"],cat:"時・タイミング",info:"step outside = 外に出る"},
+  {ja:"チャイムが鳴るたびに、うちの犬は大騒ぎする。",en:"My dog goes absolutely berserk every time the doorbell rings.",alt:"Every time the doorbell rings, my dog goes berserk.",key:"go absolutely berserk",hint:["go berserk","every time"],cat:"感情・行動",info:"every time S V = 〜するたびに"},
+  {ja:"ゴールが決まった瞬間、ファンは完全に熱狂した。",en:"The fans went absolutely berserk when the goal was scored.",alt:"The moment the goal went in, the fans went completely berserk.",key:"go absolutely berserk",hint:["go berserk","goal was scored"],cat:"感情・行動",info:"the goal was scored = ゴールが決まった（受動態）"},
+  {ja:"猫がカメラのフレームから完全に消えた。",en:"The cat completely disappeared from the frame.",alt:"Suddenly, the cat vanished from the frame.",key:"disappeared from the frame",hint:["disappeared from the frame"],cat:"状態描写",info:"vanish = 突然消える（disappearより突然さが強い）"},
+  {ja:"彼がつまずいてフレームから消えた―とても面白かった。",en:"He tripped and disappeared from the frame — it was hilarious.",alt:"He stumbled and fell out of the frame — absolutely hilarious.",key:"disappeared from the frame",hint:["disappeared from the frame","tripped / hilarious"],cat:"状態描写",info:"hilarious = 爆笑もの / stumble = よろめく"},
+  {ja:"請求書を見て、心臓が止まるかと思った！",en:"My heart nearly stopped when I saw the bill!",alt:"When I saw the invoice, my heart nearly stopped!",key:"My heart nearly stopped.",hint:["my heart nearly stopped"],cat:"感情表現",info:"nearly = もう少しで（= almost）"},
+  {ja:"車がスリップした瞬間、心臓が止まるかと思った。",en:"My heart nearly stopped when the car skidded.",alt:"When the car skidded, my heart nearly stopped.",key:"My heart nearly stopped.",hint:["my heart nearly stopped","skidded"],cat:"感情表現",info:"skid = スリップする（車が滑る）"},
+  {ja:"それがこんなに犬を愛するということだ、ずっと心配してしまう。",en:"That's just what it means to love a dog this much — you worry all the time.",alt:"I guess that's just what it means to love a dog this much.",key:"that's just what it means to ~",hint:["that's just what it means to ~"],cat:"表現・まとめ",info:"what it means to ~ = 〜するとはどういうことか"},
+  {ja:"それが親であるということだ。",en:"That's just what it means to be a parent.",alt:"I suppose that's just what it means to be a parent.",key:"that's just what it means to ~",hint:["that's just what it means to ~"],cat:"表現・まとめ",info:"I suppose = 〜だと思う（= I guess）"}
+];
+
+const CATEGORIES = ["全て","逆接・対比","性格・感情","感情・好み","日常動作","状態描写","時・タイミング","感情・行動","感情表現","表現・まとめ"];
+
+const S = {
+  mode:"practice", cat:"全て", qs:[], idx:0, flipped:false,
+  wrong:[], correct:0, total:0,
+  autoPlay:false, autoTimer:null, autoAbort:false
+};
+
+// ── Speech Synthesis ──
+function speak(text, lang, onEnd) {
+  if(!window.speechSynthesis) { onEnd && onEnd(); return; }
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = lang;
+  u.rate = lang === 'en-US' ? 0.88 : 0.95;
+  u.pitch = 1.0;
+  u.onend = () => { onEnd && onEnd(); };
+  u.onerror = () => { onEnd && onEnd(); };
+
+  // pick a voice
+  const voices = window.speechSynthesis.getVoices();
+  if(lang === 'en-US') {
+    const v = voices.find(v => v.lang.startsWith('en') && v.name.toLowerCase().includes('female'))
+           || voices.find(v => v.lang.startsWith('en-US'))
+           || voices.find(v => v.lang.startsWith('en'));
+    if(v) u.voice = v;
+  } else {
+    const v = voices.find(v => v.lang.startsWith('ja'));
+    if(v) u.voice = v;
+  }
+  window.speechSynthesis.speak(u);
+  return u;
+}
+
+function stopSpeech() {
+  if(window.speechSynthesis) window.speechSynthesis.cancel();
+}
+
+// ── Countdown Ring ──
+let countdownInterval = null;
+function showCountdown(seconds, onDone) {
+  const wrap = document.getElementById('countdown-wrap');
+  const fill = document.getElementById('ring-fill');
+  const num  = document.getElementById('countdown-num');
+  const circ = 2 * Math.PI * 18; // 113.1
+
+  wrap.classList.add('active');
+  fill.style.strokeDashoffset = '0';
+  num.textContent = seconds;
+
+  let remaining = seconds * 10; // 100ms ticks
+  const total = seconds * 10;
+  clearInterval(countdownInterval);
+  countdownInterval = setInterval(() => {
+    if(S.autoAbort) { clearInterval(countdownInterval); wrap.classList.remove('active'); return; }
+    remaining--;
+    const pct = remaining / total;
+    fill.style.strokeDashoffset = circ * (1 - pct);
+    num.textContent = Math.ceil(remaining / 10);
+    if(remaining <= 0) {
+      clearInterval(countdownInterval);
+      wrap.classList.remove('active');
+      onDone && onDone();
+    }
+  }, 100);
+}
+
+function cancelCountdown() {
+  clearInterval(countdownInterval);
+  document.getElementById('countdown-wrap').classList.remove('active');
+}
+
+// ── Auto Play ──
+function toggleAutoPlay() {
+  if(S.autoPlay) {
+    stopAutoPlay();
+  } else {
+    startAutoPlay();
+  }
+}
+
+function startAutoPlay() {
+  S.autoPlay = true;
+  S.autoAbort = false;
+  const btn = document.getElementById('btn-autoplay');
+  btn.className = 'btn-autoplay stop';
+  btn.textContent = '⏹ 停止';
+  document.getElementById('ap-status').style.display = 'flex';
+  document.getElementById('judge-buttons').classList.add('hidden-auto');
+  document.getElementById('flip-card').classList.add('auto-mode');
+  document.getElementById('tap-hint').style.display = 'none';
+  runAutoStep();
+}
+
+function stopAutoPlay() {
+  S.autoPlay = false;
+  S.autoAbort = true;
+  stopSpeech();
+  cancelCountdown();
+  clearTimeout(S.autoTimer);
+  const btn = document.getElementById('btn-autoplay');
+  btn.className = 'btn-autoplay start';
+  btn.textContent = '▶ スタート';
+  document.getElementById('ap-status').style.display = 'none';
+  document.getElementById('judge-buttons').classList.remove('hidden-auto');
+  document.getElementById('flip-card').classList.remove('auto-mode');
+  document.getElementById('tap-hint').style.display = 'flex';
+
+  // reset to front face
+  const fc = document.getElementById('flip-card');
+  fc.classList.remove('flipped');
+  S.flipped = false;
+  document.getElementById('speaking-indicator').classList.remove('active');
+  document.getElementById('front-speaking').classList.remove('active');
+}
+
+function runAutoStep() {
+  if(!S.autoPlay || S.autoAbort) return;
+  if(S.idx >= S.qs.length) { stopAutoPlay(); showResult(); return; }
+
+  const q = S.qs[S.idx];
+
+  // ensure front face shown
+  const fc = document.getElementById('flip-card');
+  fc.classList.remove('flipped');
+  S.flipped = false;
+  document.getElementById('speaking-indicator').classList.remove('active');
+
+  // Step 1: read Japanese
+  const frontSp = document.getElementById('front-speaking');
+  frontSp.classList.add('active');
+  speak(q.ja, 'ja-JP', () => {
+    if(!S.autoPlay || S.autoAbort) return;
+    frontSp.classList.remove('active');
+
+    // Step 2: pause 2s (countdown)
+    showCountdown(2, () => {
+      if(!S.autoPlay || S.autoAbort) return;
+
+      // Step 3: flip to English
+      fc.classList.add('flipped');
+      S.flipped = true;
+
+      // Step 4: read English after flip animation
+      S.autoTimer = setTimeout(() => {
+        if(!S.autoPlay || S.autoAbort) return;
+        const spInd = document.getElementById('speaking-indicator');
+        spInd.classList.add('active');
+        speak(q.en, 'en-US', () => {
+          if(!S.autoPlay || S.autoAbort) return;
+          spInd.classList.remove('active');
+
+          // Step 5: pause 2.5s then next card
+          showCountdown(3, () => {
+            if(!S.autoPlay || S.autoAbort) return;
+            S.idx++;
+            updateCardDisplay();
+            runAutoStep();
+          });
+        });
+      }, 600);
+    });
+  });
+}
+
+// ── Core ──
+function shuffle(a) {
+  let arr=[...a];
+  for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}
+  return arr;
+}
+
+function updateStats() {
+  document.getElementById('s-total').textContent = S.total;
+  document.getElementById('s-ok').textContent = S.correct;
+  document.getElementById('s-ng').textContent = S.wrong.length;
+  const b = document.getElementById('rbadge');
+  if(S.wrong.length>0){b.style.display='';b.textContent=S.wrong.length;}
+  else b.style.display='none';
+}
+
+function switchMode(m) {
+  if(S.autoPlay) stopAutoPlay();
+  S.mode=m;
+  ['practice','vocab','review'].forEach(id=>{
+    document.getElementById('mode-'+id).style.display=m===id?'':'none';
+    document.getElementById('tab-'+id).classList.toggle('active',m===id);
+  });
+  if(m==='vocab') renderVocab();
+  if(m==='review') renderReview();
+}
+
+function getFilteredQ() {
+  return S.cat==='全て'?[...QUESTIONS]:QUESTIONS.filter(q=>q.cat===S.cat);
+}
+
+function initPractice() {
+  if(S.autoPlay) stopAutoPlay();
+  S.qs=shuffle(getFilteredQ());
+  S.idx=0; S.flipped=false;
+  showCard();
+}
+
+function renderCats() {
+  document.getElementById('cat-row').innerHTML = CATEGORIES.map(c=>
+    `<button class="cat-btn ${c===S.cat?'active':''}" onclick="selectCat('${c.replace(/'/g,"\\'")}')">${c}</button>`
+  ).join('');
+}
+
+function selectCat(c){ S.cat=c; renderCats(); initPractice(); }
+
+function updateCardDisplay() {
+  const qs=S.qs;
+  if(!qs.length||S.idx>=qs.length) return;
+  const q=qs[S.idx];
+  const pct=Math.round(S.idx/qs.length*100);
+  document.getElementById('prog').style.width=pct+'%';
+  document.getElementById('card-counter').textContent=(S.idx+1)+' / '+qs.length;
+  document.getElementById('ja-text').textContent=q.ja;
+  document.getElementById('hint-row').innerHTML=q.hint.map(h=>`<span class="hint-chip">🔑 ${h}</span>`).join('');
+  document.getElementById('en-text').textContent=q.en;
+  document.getElementById('alt-text').textContent=q.alt?'別解: '+q.alt:'';
+  document.getElementById('key-tag').textContent='📌 '+q.key;
+  document.getElementById('info-text').textContent=q.info||'';
+}
+
+function showCard() {
+  const qs=S.qs;
+  if(!qs.length){
+    document.getElementById('card-counter').textContent='';
+    document.getElementById('ja-text').textContent='この分類の問題がありません';
+    document.getElementById('hint-row').innerHTML='';
+    document.getElementById('judge-buttons').classList.remove('visible');
+    return;
+  }
+  if(S.idx>=qs.length){ showResult(); return; }
+
+  const fc=document.getElementById('flip-card');
+  fc.classList.remove('flipped');
+  S.flipped=false;
+  document.getElementById('judge-buttons').classList.remove('visible');
+  document.getElementById('speaking-indicator').classList.remove('active');
+  document.getElementById('front-speaking').classList.remove('active');
+
+  updateCardDisplay();
+}
+
+function handleCardClick() {
+  if(S.autoPlay) return; // disable manual tap in auto mode
+  flipCard();
+}
+
+function flipCard() {
+  if(S.idx>=S.qs.length) return;
+  const fc=document.getElementById('flip-card');
+  S.flipped=!S.flipped;
+  fc.classList.toggle('flipped',S.flipped);
+  if(S.flipped){
+    setTimeout(()=>{ document.getElementById('judge-buttons').classList.add('visible'); },200);
+  } else {
+    document.getElementById('judge-buttons').classList.remove('visible');
+  }
+}
+
+function judge(ok) {
+  if(!S.flipped) return;
+  const q=S.qs[S.idx];
+  S.total++;
+  if(ok){ S.correct++; S.wrong=S.wrong.filter(w=>w.ja!==q.ja); }
+  else { if(!S.wrong.find(w=>w.ja===q.ja)) S.wrong.push(q); }
+  updateStats();
+  S.idx++;
+  S.flipped=false;
+  const fc=document.getElementById('flip-card');
+  fc.style.transition='none';
+  fc.classList.remove('flipped');
+  document.getElementById('judge-buttons').classList.remove('visible');
+  setTimeout(()=>{ fc.style.transition=''; showCard(); },60);
+}
+
+function showResult() {
+  document.getElementById('prog').style.width='100%';
+  document.getElementById('card-counter').textContent='完了！';
+  document.getElementById('judge-buttons').classList.remove('visible');
+  const pct=S.total>0?Math.round(S.correct/S.total*100):0;
+  const emoji=pct>=80?'🎉':pct>=50?'💪':'📚';
+  const msg=pct>=80?'素晴らしい！Cocoも大喜び🐾':pct>=50?'いい調子！もう少し頑張ろう！':'繰り返しが力になる！続けよう！';
+  document.querySelector('.flip-scene').innerHTML=`
+    <div class="result-screen">
+      <div class="result-emoji">${emoji}</div>
+      <div class="result-pct">${pct}%</div>
+      <div class="result-msg">${msg}</div>
+      <div class="result-nums">
+        <div><div class="r-num ok">${S.correct}</div><div class="r-lbl">できた</div></div>
+        <div><div class="r-num ng">${S.wrong.length}</div><div class="r-lbl">要復習</div></div>
+      </div>
+      <div class="result-btns">
+        <button class="btn-result primary" onclick="location.reload()">もう一度最初から 🔄</button>
+        ${S.wrong.length>0?`<button class="btn-result amber" onclick="startWrongPractice()">間違いだけ集中練習 🔁</button>`:''}
+      </div>
+    </div>`;
+  // hide autoplay bar from result
+  document.querySelector('.autoplay-bar').style.display='none';
+}
+
+function startWrongPractice() {
+  document.querySelector('.autoplay-bar').style.display='';
+  document.querySelector('.flip-scene').innerHTML=`
+    <div class="flip-card" id="flip-card" onclick="handleCardClick()">
+      <div class="card-face card-front" id="card-front">
+        <div class="face-label">日本語を見て英語で言おう</div>
+        <div class="ja-text" id="ja-text"></div>
+        <div class="hint-row" id="hint-row"></div>
+        <div class="front-speaking" id="front-speaking">
+          <div class="fs-bar"></div><div class="fs-bar"></div>
+          <div class="fs-bar"></div><div class="fs-bar"></div><div class="fs-bar"></div>
+        </div>
+        <div class="tap-hint" id="tap-hint"><span class="tap-icon">👆</span> タップで英語を確認</div>
+      </div>
+      <div class="card-face card-back" id="card-back">
+        <div class="face-label">Answer</div>
+        <div class="en-text" id="en-text"></div>
+        <div class="alt-text" id="alt-text"></div>
+        <div class="key-tag" id="key-tag"></div>
+        <div class="info-text" id="info-text"></div>
+        <div class="speaking-indicator" id="speaking-indicator">
+          <div class="sp-bar"></div><div class="sp-bar"></div>
+          <div class="sp-bar"></div><div class="sp-bar"></div><div class="sp-bar"></div>
+        </div>
+      </div>
+    </div>`;
+  S.qs=shuffle([...S.wrong]);
+  S.idx=0; S.flipped=false;
+  showCard();
+}
+
+function renderVocab() {
+  document.getElementById('vocab-list').innerHTML=VOCAB.map(v=>`
+    <div class="vocab-card">
+      <div class="vocab-phrase">${v.phrase}</div>
+      <div class="vocab-cat">${v.category}</div>
+      <div class="vocab-meaning">🇯🇵 ${v.meaning}</div>
+      <div class="vocab-examples">
+        ${v.examples.map(e=>`
+          <div class="ex-item">
+            <div class="ex-en">${e.en}</div>
+            <div class="ex-ja">${e.ja}</div>
+          </div>`).join('')}
+      </div>
+    </div>`).join('');
+}
+
+function renderReview() {
+  const area=document.getElementById('review-list');
+  if(!S.wrong.length){
+    area.innerHTML=`<div class="empty-state"><div class="ee">🎊</div><p>要復習の問題はありません！<br>全問マスターしました！</p></div>`;
+    return;
+  }
+  area.innerHTML=`
+    <div style="font-size:13px;color:var(--text-hint);margin-bottom:12px">${S.wrong.length}問 要復習</div>
+    ${S.wrong.map((q,i)=>`
+      <div class="review-item">
+        <div class="ri-ja">${q.ja}</div>
+        <div class="ri-en">→ ${q.en}</div>
+        <span class="ri-key">📌 ${q.key}</span>
+        <div class="ri-actions">
+          <button class="btn-sm green" onclick="markMastered(${i})">✓ 覚えた</button>
+          <button class="btn-sm gray" onclick="practiceThis(${i})">練習する →</button>
+        </div>
+      </div>`).join('')}
+    <div style="margin-top:16px">
+      <button class="btn-result primary" style="width:100%;padding:14px;border-radius:10px;border:none;font-size:15px;font-weight:700;cursor:pointer;color:#fff;background:var(--green);font-family:'Noto Sans JP',sans-serif" onclick="startWrongAndSwitch()">全ての要復習をフリップ練習 🔁</button>
+    </div>`;
+}
+
+function markMastered(i){ S.wrong.splice(i,1); updateStats(); renderReview(); }
+function practiceThis(i){
+  S.qs=[S.wrong[i]]; S.idx=0; S.flipped=false;
+  switchMode('practice'); renderCats(); showCard();
+}
+function startWrongAndSwitch(){ switchMode('practice'); startWrongPractice(); }
+
+// voices load async on some browsers
+window.speechSynthesis && window.speechSynthesis.addEventListener('voiceschanged', ()=>{});
+
+renderCats();
+initPractice();
+updateStats();
+</script>
+</body>
+</html>
