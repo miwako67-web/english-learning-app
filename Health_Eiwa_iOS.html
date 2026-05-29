@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>iOS版 | 🏥 健康・病院・食事 — 瞬間反射トレーニング</title>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#1a1410;--paper:#f5f0e8;--gold:#c8962a;--moss:#4a7c59;--indigo:#3d5a8a;--crimson:#a03030;--panel:#fffdf8;--border:rgba(26,20,16,0.12);}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);min-height:100vh;}
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(26,20,16,0.72);z-index:999;display:flex;align-items:center;justify-content:center;padding:20px;}
+.modal-box{background:var(--panel);border-radius:18px;padding:28px 24px;max-width:400px;width:100%;border:1.5px solid var(--border);}
+.modal-logo{font-size:32px;text-align:center;margin-bottom:12px;}
+.modal-title{font-family:'Shippori Mincho',serif;font-size:18px;font-weight:700;text-align:center;margin-bottom:6px;}
+.modal-sub{font-size:12px;color:rgba(26,20,16,0.5);text-align:center;margin-bottom:20px;line-height:1.6;}
+.modal-label{font-size:12px;font-weight:500;margin-bottom:6px;display:block;}
+.modal-input{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;background:var(--paper);color:var(--ink);margin-bottom:8px;}
+.modal-input:focus{outline:none;border-color:var(--gold);}
+.modal-help{font-size:11px;color:rgba(26,20,16,0.4);margin-bottom:18px;line-height:1.5;}
+.modal-help a{color:var(--indigo);}
+.modal-btn{width:100%;padding:13px;border-radius:10px;border:none;background:var(--ink);color:var(--gold);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;margin-bottom:8px;}
+.modal-btn:hover{opacity:.88;}
+.modal-skip{width:100%;padding:10px;border-radius:10px;border:1.5px solid var(--border);background:transparent;color:rgba(26,20,16,0.45);font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;}
+.modal-skip:hover{border-color:var(--gold);}
+/* HEADER */
+header{background:var(--ink);padding:16px 20px 0;position:sticky;top:0;z-index:100;}
+.h-top{display:flex;align-items:center;gap:10px;padding-bottom:14px;}
+.h-logo{font-size:22px;}
+.h-titles{flex:1;}
+.h-titles h1{font-family:'Shippori Mincho',serif;color:var(--gold);font-size:16px;font-weight:700;}
+.h-titles p{color:rgba(245,240,232,0.42);font-size:10px;margin-top:1px;}
+.h-right{display:flex;align-items:center;gap:8px;}
+.h-score .num{font-size:20px;font-weight:500;color:var(--gold);}
+.h-score .lbl{font-family:'Shippori Mincho',serif;font-size:9px;color:rgba(245,240,232,0.4);}
+.h-key-btn{padding:5px 10px;border-radius:7px;border:1px solid rgba(200,150,42,0.4);background:transparent;color:rgba(200,150,42,0.7);font-size:10px;cursor:pointer;}
+.h-key-btn:hover{border-color:var(--gold);color:var(--gold);}
+.h-auto-btn{padding:5px 10px;border-radius:7px;border:1px solid rgba(200,150,42,0.4);background:transparent;color:rgba(200,150,42,0.7);font-size:10px;cursor:pointer;transition:all .25s;white-space:nowrap;}
+.h-auto-btn.on{background:rgba(200,150,42,0.2);border-color:var(--gold);color:var(--gold);}
+nav{display:flex;}
+.tab{flex:1;padding:8px 4px;background:none;border:none;border-bottom:2px solid transparent;color:rgba(245,240,232,0.38);font-family:'DM Sans',sans-serif;font-size:10px;cursor:pointer;transition:all .2s;display:flex;flex-direction:column;align-items:center;gap:2px;}
+.tab span:first-child{font-size:13px;}
+.tab.active{color:var(--gold);border-bottom-color:var(--gold);}
+main{padding:14px;max-width:600px;margin:0 auto;}
+.page{display:none;}.page.active{display:block;}
+.sec{font-family:'Shippori Mincho',serif;font-size:10px;font-weight:600;color:rgba(26,20,16,0.35);letter-spacing:.12em;text-transform:uppercase;margin:16px 0 10px;}
+.cat-chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;}
+.cat-chip{padding:5px 12px;border-radius:20px;border:1.5px solid var(--border);background:var(--panel);font-size:11px;cursor:pointer;transition:all .2s;color:var(--ink);}
+.cat-chip.active{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+.mode-cards{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px;}
+.mode-card{background:var(--panel);border:1.5px solid var(--border);border-radius:14px;padding:14px 12px;cursor:pointer;transition:all .2s;text-align:center;}
+.mode-card:hover{border-color:var(--gold);}
+.mode-card.selected{border-color:var(--gold);background:rgba(200,150,42,0.07);}
+.mode-emoji{font-size:24px;margin-bottom:6px;}
+.mode-name{font-size:13px;font-weight:500;margin-bottom:3px;}
+.mode-desc{font-family:'Shippori Mincho',serif;font-size:10px;color:rgba(26,20,16,0.45);line-height:1.5;}
+.start-btn{width:100%;padding:14px;border-radius:12px;border:none;background:var(--ink);color:var(--gold);font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;cursor:pointer;}
+.start-btn:hover{opacity:.88;}
+/* TRAINING */
+.train-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.train-prog-wrap{flex:1;height:5px;background:var(--border);border-radius:3px;margin:0 12px;overflow:hidden;}
+.train-prog-fill{height:100%;background:var(--gold);border-radius:3px;transition:width .4s;}
+.train-ctr{font-size:11px;color:rgba(26,20,16,0.4);}
+.quit-btn{font-size:11px;color:rgba(26,20,16,0.35);background:none;border:none;cursor:pointer;text-decoration:underline;}
+.timer-wrap{display:flex;justify-content:center;margin-bottom:14px;}
+.timer-ring{position:relative;width:64px;height:64px;}
+.timer-ring svg{transform:rotate(-90deg);}
+.timer-ring circle{fill:none;stroke-width:5;}
+.timer-bg{stroke:var(--border);}
+.timer-fg{stroke:var(--gold);stroke-linecap:round;transition:stroke-dashoffset .1s linear,stroke .3s;}
+.timer-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:500;color:var(--ink);}
+.loop-banner{background:rgba(200,150,42,0.1);border:1px solid rgba(200,150,42,0.3);border-radius:10px;padding:8px 12px;margin-bottom:12px;font-family:'Shippori Mincho',serif;font-size:12px;color:var(--gold);text-align:center;}
+/* AUTO-PLAY BAR */
+.autoplay-bar{display:none;align-items:center;justify-content:space-between;background:rgba(200,150,42,0.1);border:1px solid rgba(200,150,42,0.28);border-radius:10px;padding:8px 14px;margin-bottom:12px;}
+.autoplay-bar.visible{display:flex;}
+.ap-left{display:flex;align-items:center;gap:8px;}
+.ap-dot{width:8px;height:8px;border-radius:50%;background:var(--gold);}
+.ap-dot.jp{background:#4a7c59;}.ap-dot.en{background:#3d5a8a;}
+.ap-dot.wait{background:#c86a2a;animation:blink 0.8s ease-in-out infinite;}
+.ap-dot.idle{background:rgba(200,150,42,0.3);}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0.2;}}
+.ap-label{font-family:'Shippori Mincho',serif;font-size:11px;color:var(--gold);}
+.ap-skip-btn{font-size:10px;padding:3px 10px;border-radius:20px;border:1px solid rgba(200,150,42,0.4);background:transparent;color:var(--gold);cursor:pointer;}
+/* FLASH CARD */
+.flash-card{background:var(--panel);border:1.5px solid var(--border);border-radius:18px;padding:28px 22px;text-align:center;margin-bottom:14px;box-shadow:0 4px 24px rgba(26,20,16,0.08);min-height:190px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:border-color .2s;}
+.flash-card.revealed{border-color:var(--moss);}
+.flash-card.jp-speaking{border-color:#4a7c59;box-shadow:0 0 0 3px rgba(74,124,89,0.15);}
+.flash-card.en-speaking{border-color:#3d5a8a;box-shadow:0 0 0 3px rgba(61,90,138,0.15);}
+.card-cat{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(26,20,16,0.3);margin-bottom:10px;}
+.card-jp{font-family:'Shippori Mincho',serif;font-size:22px;font-weight:700;line-height:1.5;margin-bottom:6px;}
+.card-sub{font-family:'Shippori Mincho',serif;font-size:12px;color:rgba(26,20,16,0.4);margin-bottom:14px;font-style:italic;}
+.card-hint{font-size:11px;color:rgba(26,20,16,0.3);font-style:italic;}
+.card-en{font-size:18px;font-weight:500;line-height:1.5;margin-bottom:6px;display:none;}
+.card-alt{font-size:12px;color:rgba(26,20,16,0.5);display:none;font-style:italic;margin-bottom:10px;}
+.card-tip{font-family:'Shippori Mincho',serif;font-size:11px;color:var(--indigo);background:rgba(61,90,138,0.08);border-radius:6px;padding:6px 10px;display:none;line-height:1.6;}
+.flash-card.revealed .card-en,.flash-card.revealed .card-alt,.flash-card.revealed .card-tip{display:block;}
+.flash-card.revealed .card-hint{display:none;}
+/* VOICE */
+.voice-btn-wrap{display:flex;justify-content:center;margin-bottom:10px;}
+.voice-btn{display:flex;align-items:center;gap:8px;padding:10px 20px;border-radius:30px;border:1.5px solid var(--gold);background:rgba(200,150,42,0.08);color:var(--gold);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;}
+.voice-btn:hover{background:rgba(200,150,42,0.18);}
+.voice-btn.playing{background:rgba(200,150,42,0.25);}
+.voice-icon{font-size:16px;}
+.voice-btn.playing .voice-icon{animation:pulse 0.6s ease-in-out infinite alternate;}
+@keyframes pulse{from{transform:scale(1);}to{transform:scale(1.2);}}
+.voice-status{font-size:10px;color:rgba(26,20,16,0.4);text-align:center;margin-bottom:8px;min-height:14px;}
+.action-row{display:flex;gap:8px;margin-bottom:10px;}
+.act-btn{flex:1;padding:13px;border-radius:12px;border:none;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:opacity .15s;}
+.act-btn:hover{opacity:.85;}
+.act-reveal{background:var(--indigo);color:#fff;flex:2;}
+.act-ok{background:var(--moss);color:#fff;}
+.act-ng{background:rgba(160,48,48,0.12);color:var(--crimson);}
+.act-skip{width:100%;padding:9px;border-radius:9px;border:1.5px solid var(--border);background:var(--panel);font-family:'DM Sans',sans-serif;font-size:11px;cursor:pointer;color:rgba(26,20,16,0.45);}
+/* RESULT */
+.result-wrap{text-align:center;padding:24px 0;}
+.result-emoji{font-size:52px;margin-bottom:12px;}
+.result-title{font-family:'Shippori Mincho',serif;font-size:20px;font-weight:700;margin-bottom:6px;}
+.result-sub{font-size:13px;color:rgba(26,20,16,0.5);margin-bottom:24px;font-family:'Shippori Mincho',serif;}
+.result-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:24px;}
+.rs{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:12px 8px;text-align:center;}
+.rs-num{font-size:24px;font-weight:500;line-height:1;margin-bottom:3px;}
+.rs-num.g{color:var(--moss);}.rs-num.r{color:var(--crimson);}.rs-num.b{color:var(--indigo);}
+.rs-lbl{font-family:'Shippori Mincho',serif;font-size:9px;color:rgba(26,20,16,0.4);}
+.result-btns{display:flex;flex-direction:column;gap:8px;}
+.res-btn{padding:13px;border-radius:12px;border:none;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;}
+.res-btn.primary{background:var(--crimson);color:#fff;}
+.res-btn.secondary{background:var(--ink);color:var(--paper);}
+.res-btn.tertiary{background:var(--panel);color:var(--ink);border:1.5px solid var(--border);}
+/* LIST */
+.list-item{background:var(--panel);border:1px solid var(--border);border-radius:11px;padding:12px 14px;margin-bottom:7px;display:flex;align-items:center;gap:12px;}
+.li-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.li-body{flex:1;}
+.li-cat{font-size:9px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:rgba(26,20,16,0.3);margin-bottom:2px;}
+.li-jp{font-family:'Shippori Mincho',serif;font-size:14px;font-weight:600;margin-bottom:2px;}
+.li-en{font-size:13px;color:rgba(26,20,16,0.6);}
+.li-right{display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;}
+.li-done{font-size:10px;background:var(--moss);color:#fff;padding:2px 7px;border-radius:20px;display:none;}
+.li-done.show{display:inline;}
+.li-voice-btn{padding:3px 8px;border-radius:20px;border:1px solid var(--gold);background:transparent;color:var(--gold);font-size:10px;cursor:pointer;}
+/* STATS */
+.overall-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;}
+.os{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px 12px;text-align:center;}
+.os-num{font-size:26px;font-weight:500;line-height:1;margin-bottom:4px;}
+.os-num.g{color:var(--moss);}.os-num.gold{color:var(--gold);}
+.os-lbl{font-family:'Shippori Mincho',serif;font-size:10px;color:rgba(26,20,16,0.4);}
+.cat-stat{background:var(--panel);border:1px solid var(--border);border-radius:11px;padding:12px 14px;margin-bottom:8px;}
+.cs-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+.cs-name{font-size:13px;font-weight:500;}
+.cs-pct{font-size:12px;color:var(--moss);font-weight:500;}
+.cs-bar{height:4px;background:var(--border);border-radius:2px;overflow:hidden;}
+.cs-fill{height:100%;background:var(--moss);border-radius:2px;transition:width .5s;}
+.reset-all-btn{width:100%;padding:11px;border-radius:10px;border:1.5px solid var(--border);background:var(--panel);font-family:'DM Sans',sans-serif;font-size:12px;color:rgba(26,20,16,0.4);cursor:pointer;margin-top:12px;}
+.reset-all-btn:hover{border-color:var(--crimson);color:var(--crimson);}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:10px 20px;border-radius:30px;font-size:12px;z-index:1000;opacity:0;transition:opacity .3s;pointer-events:none;}
+.toast.show{opacity:1;}
+</style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+<header>
+<div class="h-top">
+<div class="h-logo">🏥</div>
+<div class="h-titles">
+<h1>健康・病院・食事</h1>
+<p>瞬間反射トレーニング — 100フレーズ</p>
+</div>
+<div class="h-right">
+  <button class="h-auto-btn" id="auto-play-btn" onclick="toggleAutoPlay()">▶ 自動OFF</button>
+    <div class="h-score"><div class="num" id="h-mastered">0</div><div class="lbl">習得済み</div></div>
+</div>
+</div>
+<nav>
+<button class="tab active" onclick="switchTab('train',this)"><span>⚡</span><span>トレーニング</span></button>
+<button class="tab" onclick="switchTab('list',this)"><span>📋</span><span>一覧</span></button>
+<button class="tab" onclick="switchTab('stats',this)"><span>📊</span><span>記録</span></button>
+</nav>
+</header>
+<main>
+<div id="page-train" class="page active">
+<div id="train-setup">
+<div class="sec" style="margin-top:14px">カテゴリを選ぶ</div>
+<div class="cat-chips" id="cat-chips"></div>
+<div class="sec">モードを選ぶ</div>
+<div class="mode-cards">
+<div class="mode-card selected" id="mode-normal" onclick="selectMode('normal')"><div class="mode-emoji">🃏</div><div class="mode-name">通常モード</div><div class="mode-desc">自分のペースで1枚ずつ。</div></div>
+<div class="mode-card" id="mode-timer" onclick="selectMode('timer')"><div class="mode-emoji">⏱️</div><div class="mode-name">タイマーモード</div><div class="mode-desc">3秒以内に口から出す。</div></div>
+<div class="mode-card" id="mode-loop" onclick="selectMode('loop')"><div class="mode-emoji">🔁</div><div class="mode-name">ループモード</div><div class="mode-desc">5回連続正解で身体化。</div></div>
+<div class="mode-card" id="mode-review" onclick="selectMode('review')"><div class="mode-emoji">🔄</div><div class="mode-name">復習モード</div><div class="mode-desc">未習得・間違えたものだけ。</div></div>
+</div>
+<button class="start-btn" onclick="startTraining()">トレーニング開始 →</button>
+</div>
+<div id="train-area" style="display:none">
+<div class="train-hd">
+<span class="train-ctr" id="train-ctr">1 / 10</span>
+<div class="train-prog-wrap"><div class="train-prog-fill" id="train-prog" style="width:0%"></div></div>
+<button class="quit-btn" onclick="quitTraining()">終了</button>
+</div>
+<div id="loop-banner" class="loop-banner" style="display:none">🔁 ループモード — あと<span id="loop-remain"></span>回正解で卒業！</div>
+<div id="timer-wrap" class="timer-wrap" style="display:none">
+<div class="timer-ring">
+<svg width="64" height="64" viewBox="0 0 64 64">
+<circle class="timer-bg" cx="32" cy="32" r="27"/>
+<circle class="timer-fg" id="timer-circle" cx="32" cy="32" r="27" stroke-dasharray="169.6" stroke-dashoffset="0"/>
+</svg>
+<div class="timer-num" id="timer-num">3</div>
+</div>
+</div>
+<div class="autoplay-bar" id="autoplay-bar">
+  <div class="ap-left"><div class="ap-dot idle" id="ap-dot"></div><span class="ap-label" id="ap-label">自動再生モード</span></div>
+  <button class="ap-skip-btn" onclick="autoSkipNow()">今すぐ次へ →</button>
+</div>
+<div class="flash-card" id="flash-card" onclick="onCardTap()">
+<div class="card-cat" id="card-cat"></div>
+<div class="card-jp" id="card-jp"></div>
+<div class="card-sub" id="card-sub"></div>
+<div class="card-hint" id="card-hint">タップして英語を確認</div>
+<div class="card-en" id="card-en"></div>
+<div class="card-alt" id="card-alt"></div>
+<div class="card-tip" id="card-tip"></div>
+</div>
+<div class="voice-btn-wrap" id="voice-btn-wrap" style="display:none">
+<button class="voice-btn" id="voice-play-btn" onclick="playEnglishManual()">
+<span class="voice-icon">🔊</span><span id="voice-btn-label">英語を聴く</span>
+</button>
+</div>
+<div class="voice-status" id="voice-status"></div>
+<div class="action-row">
+<button class="act-btn act-reveal" id="btn-reveal" onclick="revealCard()">英語を見る</button>
+<button class="act-btn act-ok" id="btn-ok" onclick="markOk()" style="display:none">✓ 言えた！</button>
+<button class="act-btn act-ng" id="btn-ng" onclick="markNg()" style="display:none">✕ 言えなかった</button>
+</div>
+<button class="act-skip" onclick="skipCard()">スキップ →</button>
+</div>
+<div id="train-result" style="display:none">
+<div class="result-wrap">
+<div class="result-emoji" id="res-emoji">🎉</div>
+<div class="result-title" id="res-title">完了！</div>
+<div class="result-sub" id="res-sub"></div>
+<div class="result-stats">
+<div class="rs"><div class="rs-num g" id="res-ok">0</div><div class="rs-lbl">言えた！</div></div>
+<div class="rs"><div class="rs-num r" id="res-ng">0</div><div class="rs-lbl">言えなかった</div></div>
+<div class="rs"><div class="rs-num b" id="res-total">0</div><div class="rs-lbl">総問数</div></div>
+</div>
+<div class="result-btns">
+<button class="res-btn primary" id="res-loop-btn" onclick="startLoopFromResult()" style="display:none">🔁 言えなかった分をループ練習</button>
+<button class="res-btn secondary" onclick="backToSetup()">もう一度設定から</button>
+<button class="res-btn tertiary" onclick="switchTab('stats',document.querySelectorAll('.tab')[2])">記録を見る</button>
+</div>
+</div>
+</div>
+</div>
+<div id="page-list" class="page">
+<div class="sec" style="margin-top:14px">カテゴリで絞り込む</div>
+<div class="cat-chips" id="list-cat-chips"></div>
+<div id="list-items"></div>
+</div>
+<div id="page-stats" class="page">
+<div class="sec" style="margin-top:14px">全体の進捗</div>
+<div class="overall-stats">
+<div class="os"><div class="os-num g" id="st-mastered">0</div><div class="os-lbl">習得済み</div></div>
+<div class="os"><div class="os-num gold" id="st-total">100</div><div class="os-lbl">総フレーズ数</div></div>
+</div>
+<div class="sec">カテゴリ別</div>
+<div id="cat-stats"></div>
+<button class="reset-all-btn" onclick="resetAllData()">↺ 全データをリセット</button>
+</div>
+</main>
+<script>
+const PHRASES = [
+{id:1,cat:'🏥 病院・受診',jp:'予約を取りたいのですが',sub:'',en:"I'd like to make an appointment.",alt:'Can I book in to see a doctor?',tip:"make an appointment が正式。book in はオーストラリアでよく使われる表現。"},
+{id:2,cat:'🏥 病院・受診',jp:'しばらく前から気になっています',sub:'',en:"It's been bothering me for a while.",alt:"It started a few weeks ago.",tip:"been bothering me は「ずっと気になっている」という継続のニュアンス。"},
+{id:3,cat:'🏥 病院・受診',jp:'紹介状が必要ですか？',sub:'',en:"Do I need a referral?",alt:"Should I see a GP first?",tip:"referral はオーストラリアの医療で必須の単語。GP（一般医）からもらう。"},
+{id:4,cat:'🏥 病院・受診',jp:'自己負担はいくらですか？',sub:'',en:"What's the out-of-pocket cost?",alt:"How much will I have to pay?",tip:"out-of-pocket cost は「自己負担額」。オーストラリアの医療でよく使われる。"},
+{id:5,cat:'🏥 病院・受診',jp:'Medicareは使えますか？',sub:'',en:"Is this covered by Medicare?",alt:"Do you bulk bill?",tip:"bulk bill はMedicareで全額カバーされること。オーストラリア特有の表現。"},
+{id:6,cat:'🏥 病院・受診',jp:'待ち時間はどのくらいですか？',sub:'',en:"How long is the wait?",alt:"How long will I be waiting?",tip:"How long is the wait? がシンプルで最も自然。"},
+{id:7,cat:'🏥 病院・受診',jp:'救急に行くべきですか？',sub:'',en:"Should I go to emergency?",alt:"Is this serious enough for the ER?",tip:"emergency はオーストラリアでは emergency department とも言う。"},
+{id:8,cat:'🏥 病院・受診',jp:'もう一度診てもらいたいのですが',sub:'',en:"I'd like to get a second opinion.",alt:"Can I see another doctor about this?",tip:"second opinion は「別の医師の意見を聞く」という権利。"},
+{id:9,cat:'🏥 病院・受診',jp:'検査結果はいつ出ますか？',sub:'',en:"When will my results be ready?",alt:"How long will the results take?",tip:"results be ready が最も自然。come back も使える。"},
+{id:10,cat:'🏥 病院・受診',jp:'処方箋を書いてもらえますか？',sub:'',en:"Could you write me a prescription?",alt:"Can I get a script for that?",tip:"script はオーストラリアで処方箋の口語表現。prescription がフォーマル。"},
+{id:11,cat:'💊 薬・処方箋',jp:'これは処方箋が必要ですか？',sub:'',en:"Do I need a prescription for this?",alt:"Is this over the counter?",tip:"over the counter（OTC）は処方箋なしで買える薬のこと。"},
+{id:12,cat:'💊 薬・処方箋',jp:'食事と一緒に飲んでください',sub:'',en:"Take it with food.",alt:"Take this with a meal.",tip:"Take it with food. は薬の服用方法の定番フレーズ。"},
+{id:13,cat:'💊 薬・処方箋',jp:'1日2回飲んでください',sub:'',en:"Take it twice a day.",alt:"Two tablets a day.",tip:"twice a day / three times a day は服用回数の基本表現。"},
+{id:14,cat:'💊 薬・処方箋',jp:'副作用はありますか？',sub:'',en:"Are there any side effects?",alt:"What should I watch out for?",tip:"side effects は副作用。What should I watch out for? は幅広く使える。"},
+{id:15,cat:'💊 薬・処方箋',jp:'この薬はいつまで飲みますか？',sub:'',en:"How long do I need to take this?",alt:"When can I stop taking it?",tip:"How long do I need to take this? が最も自然な質問。"},
+{id:16,cat:'💊 薬・処方箋',jp:'ジェネリックはありますか？',sub:'',en:"Is there a generic version?",alt:"Is there a cheaper alternative?",tip:"generic は「ジェネリック医薬品」。オーストラリアでも generic で通じる。"},
+{id:17,cat:'💊 薬・処方箋',jp:'他の薬との飲み合わせは大丈夫ですか？',sub:'',en:"Is this okay to take with other medications?",alt:"Are there any drug interactions?",tip:"drug interactions は「薬の相互作用」の医療用語。"},
+{id:18,cat:'💊 薬・処方箋',jp:'薬を補充したいのですが',sub:'',en:"I need to refill my prescription.",alt:"Can I get a repeat prescription?",tip:"refill は「補充する」。repeat prescription はオーストラリアでよく使われる。"},
+{id:19,cat:'💊 薬・処方箋',jp:'アレルギーがあります',sub:'',en:"I have an allergy to this.",alt:"I'm allergic to penicillin.",tip:"I'm allergic to ... が最も直接的。アレルゲンの名前を入れて使う。"},
+{id:20,cat:'💊 薬・処方箋',jp:'鎮痛剤をください',sub:'',en:"Can I get something for the pain?",alt:"Do you have any pain relief?",tip:"pain relief は「鎮痛剤」の口語表現。painkillers も使える。"},
+{id:21,cat:'🤒 症状を伝える',jp:'頭が痛い',sub:'',en:"I have a headache.",alt:"My head is pounding.",tip:"My head is pounding. は「頭がズキズキする」という強い痛みの表現。"},
+{id:22,cat:'🤒 症状を伝える',jp:'気持ち悪い',sub:'',en:"I feel nauseous.",alt:"I feel like I'm going to be sick.",tip:"nauseous は「吐き気がする」。I feel sick. もよく使われる。"},
+{id:23,cat:'🤒 症状を伝える',jp:'熱があります',sub:'',en:"I have a fever.",alt:"I'm running a temperature.",tip:"running a temperature はよりネイティブらしい表現。"},
+{id:24,cat:'🤒 症状を伝える',jp:'喉が痛い',sub:'',en:"I have a sore throat.",alt:"My throat is killing me.",tip:"My throat is killing me. は「とても痛い」というカジュアルな表現。"},
+{id:25,cat:'🤒 症状を伝える',jp:'めまいがします',sub:'',en:"I feel dizzy.",alt:"The room is spinning.",tip:"The room is spinning. は回転性めまいの表現。"},
+{id:26,cat:'🤒 症状を伝える',jp:'息切れがします',sub:'',en:"I'm short of breath.",alt:"I get winded easily.",tip:"short of breath が医療での正式表現。get winded はよりカジュアル。"},
+{id:27,cat:'🤒 症状を伝える',jp:'お腹が痛い',sub:'',en:"I have a stomach ache.",alt:"My stomach is really bothering me.",tip:"stomach ache がシンプル。abdominal pain はよりフォーマル。"},
+{id:28,cat:'🤒 症状を伝える',jp:'関節が痛い',sub:'',en:"My joints are aching.",alt:"I have pain in my joints.",tip:"aching は鈍い持続する痛み。sharp pain は鋭い痛み。"},
+{id:29,cat:'🤒 症状を伝える',jp:'咳が止まらない',sub:'',en:"I can't stop coughing.",alt:"I have a persistent cough.",tip:"persistent は「しつこい・続く」。I can't stop coughing. がより口語的。"},
+{id:30,cat:'🤒 症状を伝える',jp:'ずっと疲れています',sub:'',en:"I've been feeling exhausted.",alt:"I'm constantly tired.",tip:"exhausted は tired より強い疲労感。constantly は「ずっと・常に」。"},
+{id:31,cat:'🦷 歯医者',jp:'歯が痛い',sub:'',en:"I have a toothache.",alt:"My tooth is really hurting.",tip:"toothache は歯痛の定番表現。My tooth is killing me. も使える。"},
+{id:32,cat:'🦷 歯医者',jp:'歯茎から血が出ます',sub:'',en:"My gums are bleeding.",alt:"I have bleeding gums.",tip:"gums は「歯茎」。bleeding gums は歯周病のサインとして伝わる。"},
+{id:33,cat:'🦷 歯医者',jp:'詰め物が取れました',sub:'',en:"My filling fell out.",alt:"I've lost a filling.",tip:"filling は「詰め物」。fell out / lost どちらも自然。"},
+{id:34,cat:'🦷 歯医者',jp:'歯が欠けました',sub:'',en:"I chipped my tooth.",alt:"Part of my tooth broke off.",tip:"chipped は「欠けた」。broke off は「折れた・取れた」。"},
+{id:35,cat:'🦷 歯医者',jp:'歯がしみます',sub:'',en:"My teeth are sensitive.",alt:"I get sharp pain when I eat something cold.",tip:"sensitive は「知覚過敏」。sensitive teeth はそのまま通じる。"},
+{id:36,cat:'🦷 歯医者',jp:'麻酔をしてもらえますか？',sub:'',en:"Can I have a local anaesthetic?",alt:"Can you numb it first?",tip:"numb it は「麻痺させる・感覚をなくす」という口語表現。"},
+{id:37,cat:'🦷 歯医者',jp:'定期検診をしたいのですが',sub:'',en:"I'd like a routine check-up.",alt:"I'm due for a clean and check.",tip:"clean and check はオーストラリアの歯医者でよく使われる表現。"},
+{id:38,cat:'🦷 歯医者',jp:'親知らずが痛い',sub:'',en:"My wisdom teeth are hurting.",alt:"I think I need my wisdom teeth out.",tip:"wisdom teeth は「親知らず」。get them out は「抜く」。"},
+{id:39,cat:'🦷 歯医者',jp:'歯ぎしりをします',sub:'',en:"I grind my teeth at night.",alt:"I think I have bruxism.",tip:"bruxism は歯ぎしりの医療用語。grind my teeth がより口語的。"},
+{id:40,cat:'🦷 歯医者',jp:'歯のホワイトニングに興味があります',sub:'',en:"I'm interested in teeth whitening.",alt:"Can you tell me about whitening options?",tip:"teeth whitening はそのまま通じる。options を聞くと選択肢が広がる。"},
+{id:41,cat:'🧘 健康習慣',jp:'毎日動くようにしています',sub:'',en:"I try to stay active every day.",alt:"I make sure to move my body daily.",tip:"stay active は「活動的でいる」。move my body はよりカジュアル。"},
+{id:42,cat:'🧘 健康習慣',jp:'水をたくさん飲むようにしています',sub:'',en:"I drink plenty of water.",alt:"I try to stay hydrated.",tip:"stay hydrated は「水分を保つ」という健康的な表現。"},
+{id:43,cat:'🧘 健康習慣',jp:'定期的に運動しています',sub:'',en:"I exercise regularly.",alt:"I work out most days.",tip:"work out はカジュアルで「運動する」。most days は「ほとんど毎日」。"},
+{id:44,cat:'🧘 健康習慣',jp:'ストレスを管理しようとしています',sub:'',en:"I'm trying to manage my stress.",alt:"I'm working on reducing stress.",tip:"manage stress は健康に関する会話でよく出る表現。"},
+{id:45,cat:'🧘 健康習慣',jp:'瞑想をしています',sub:'',en:"I meditate regularly.",alt:"I do mindfulness practice.",tip:"mindfulness practice はより広い瞑想・マインドフルネスの概念。"},
+{id:46,cat:'🧘 健康習慣',jp:'毎日歩くようにしています',sub:'',en:"I try to walk every day.",alt:"I get my steps in daily.",tip:"get my steps in は「歩数を稼ぐ」というカジュアルな表現。"},
+{id:47,cat:'🧘 健康習慣',jp:'アルコールを控えています',sub:'',en:"I'm cutting back on alcohol.",alt:"I'm trying to drink less.",tip:"cutting back on は「〜を減らす」。cutting out は「完全にやめる」。"},
+{id:48,cat:'🧘 健康習慣',jp:'禁煙しました',sub:'',en:"I quit smoking.",alt:"I gave up cigarettes.",tip:"quit smoking が最も一般的。gave up はよりカジュアル。"},
+{id:49,cat:'🧘 健康習慣',jp:'定期的に健診を受けています',sub:'',en:"I get regular check-ups.",alt:"I see my doctor for routine checks.",tip:"regular check-ups は予防医療の観点から大切な習慣。"},
+{id:50,cat:'🧘 健康習慣',jp:'規則正しい睡眠リズムを心がけています',sub:'',en:"I keep a consistent sleep schedule.",alt:"I try to go to bed and wake up at the same time.",tip:"consistent sleep schedule は「規則正しい睡眠リズム」。"},
+{id:51,cat:'🥗 食事・栄養',jp:'食事に気をつけています',sub:'',en:"I eat pretty clean.",alt:"I try to eat well.",tip:"eat clean は「添加物・加工食品を避けてシンプルに食べる」という意味。"},
+{id:52,cat:'🥗 食事・栄養',jp:'砂糖を減らしています',sub:'',en:"I'm cutting back on sugar.",alt:"I try to avoid refined sugar.",tip:"refined sugar は「精製された砂糖」。cutting back on は「減らす」。"},
+{id:53,cat:'🥗 食事・栄養',jp:'野菜をたくさん食べています',sub:'',en:"I eat a lot of vegetables.",alt:"I load up on veggies.",tip:"load up on は「たっぷり食べる・取り込む」というカジュアルな表現。"},
+{id:54,cat:'🥗 食事・栄養',jp:'タンパク質を意識しています',sub:'',en:"I focus on getting enough protein.",alt:"I make sure I'm hitting my protein goals.",tip:"hitting my protein goals は「たんぱく質の目標量を達成する」というフィットネス表現。"},
+{id:55,cat:'🥗 食事・栄養',jp:'加工食品を避けています',sub:'',en:"I avoid processed food.",alt:"I try to eat whole foods.",tip:"whole foods は「加工されていない自然食品」。"},
+{id:56,cat:'🥗 食事・栄養',jp:'グルテンフリーにしています',sub:'',en:"I'm gluten-free.",alt:"I don't eat gluten.",tip:"I'm gluten-free. はシンプルで最も伝わりやすい表現。"},
+{id:57,cat:'🥗 食事・栄養',jp:'ビーガンです',sub:'',en:"I'm vegan.",alt:"I don't eat any animal products.",tip:"I'm vegan. だけで伝わる。詳しく聞かれたら I don't eat any animal products. と説明。"},
+{id:58,cat:'🥗 食事・栄養',jp:'食物アレルギーがあります',sub:'',en:"I have a food allergy.",alt:"I'm allergic to nuts.",tip:"I'm allergic to ... でアレルゲンを伝える。ナッツ・乳製品・卵など具体的に。"},
+{id:59,cat:'🥗 食事・栄養',jp:'腸活をしています',sub:'',en:"I'm working on my gut health.",alt:"I eat a lot of fermented foods.",tip:"gut health は「腸の健康」。fermented foods は「発酵食品」。"},
+{id:60,cat:'🥗 食事・栄養',jp:'食べ過ぎてしまった',sub:'',en:"I overdid it.",alt:"I ate way too much.",tip:"I overdid it. は食べ過ぎ以外にも「やりすぎた」全般に使える便利な表現。"},
+{id:61,cat:'⚡ ファスティング',jp:'間欠的断食をしています',sub:'',en:"I do intermittent fasting.",alt:"I practice IF.",tip:"IF は intermittent fasting の略。フィットネス界では IF だけで通じる。"},
+{id:62,cat:'⚡ ファスティング',jp:'ファスティング中です',sub:'',en:"I'm in a fasting window.",alt:"I'm currently fasting.",tip:"fasting window は「断食時間帯」。I'm fasting. がよりシンプル。"},
+{id:63,cat:'⚡ ファスティング',jp:'16時間断食をしています',sub:'',en:"I do a 16-hour fast.",alt:"I fast for 16 hours a day.",tip:"16:8（16時間断食・8時間食事）が最もポピュラーなIFプロトコル。"},
+{id:64,cat:'⚡ ファスティング',jp:'食事の時間帯を決めています',sub:'',en:"I have an eating window.",alt:"I only eat between noon and eight.",tip:"eating window は「食事できる時間帯」。時間を具体的に言うとより伝わる。"},
+{id:65,cat:'⚡ ファスティング',jp:'断食中は水だけ飲みます',sub:'',en:"I only drink water during my fast.",alt:"I stick to water and black coffee.",tip:"stick to は「〜だけにする」。black coffee（ブラックコーヒー）は断食を破らない。"},
+{id:66,cat:'⚡ ファスティング',jp:'ファスティングが体に合っています',sub:'',en:"Fasting works really well for me.",alt:"My body responds well to fasting.",tip:"works well for me は「自分に合っている」。responds well はより体の反応を表す。"},
+{id:67,cat:'⚡ ファスティング',jp:'最初は空腹感がありました',sub:'',en:"At first I felt really hungry.",alt:"The hunger pangs were tough at the start.",tip:"hunger pangs は「空腹の痛み・空腹感」。at the start は「最初は」。"},
+{id:68,cat:'⚡ ファスティング',jp:'今は空腹を感じにくくなりました',sub:'',en:"I don't feel as hungry anymore.",alt:"My hunger has regulated itself.",tip:"regulated itself は「自然に調整された」。ホルモンが整った状態。"},
+{id:69,cat:'⚡ ファスティング',jp:'断食を早まって終わらせないようにしています',sub:'',en:"I try not to break my fast early.",alt:"I stick to my fasting schedule.",tip:"break my fast は「断食を終える」。breakfast（朝食）の語源。"},
+{id:70,cat:'⚡ ファスティング',jp:'食事を再開するときは消化の良いものから',sub:'',en:"I break my fast with something easy to digest.",alt:"I start with something light.",tip:"easy to digest は「消化しやすい」。start with something light も自然。"},
+{id:71,cat:'😴 睡眠・回復',jp:'最近よく眠れていません',sub:'',en:"I've been sleeping poorly lately.",alt:"My sleep has been terrible.",tip:"sleeping poorly は「質の悪い睡眠」。My sleep is terrible. もよく使われる。"},
+{id:72,cat:'😴 睡眠・回復',jp:'なかなか寝付けません',sub:'',en:"I have trouble falling asleep.",alt:"It takes me ages to fall asleep.",tip:"it takes me ages は「時間がかかる」というカジュアルな表現。"},
+{id:73,cat:'😴 睡眠・回復',jp:'夜中に目が覚めます',sub:'',en:"I keep waking up in the middle of the night.",alt:"I wake up several times a night.",tip:"keep -ing は「繰り返し〜する」。不眠の定番表現。"},
+{id:74,cat:'😴 睡眠・回復',jp:'ぐっすり眠れました',sub:'',en:"I slept really well.",alt:"I had a great night's sleep.",tip:"a great night's sleep は「良い睡眠」の定番表現。"},
+{id:75,cat:'😴 睡眠・回復',jp:'もっと休む必要があります',sub:'',en:"I need to rest up.",alt:"I really need some downtime.",tip:"rest up は「しっかり休む」。downtime は「休息・オフの時間」。"},
+{id:76,cat:'😴 睡眠・回復',jp:'回復に時間がかかっています',sub:'',en:"I'm taking a while to recover.",alt:"My body is taking longer than usual to bounce back.",tip:"bounce back は「回復する」というカジュアルな表現。"},
+{id:77,cat:'😴 睡眠・回復',jp:'睡眠の質を上げたいです',sub:'',en:"I want to improve my sleep quality.",alt:"I'm working on getting better sleep.",tip:"sleep quality は「睡眠の質」。improve / get better どちらも自然。"},
+{id:78,cat:'😴 睡眠・回復',jp:'昼寝をするようにしています',sub:'',en:"I try to take a nap during the day.",alt:"I sneak in a nap when I can.",tip:"sneak in a nap は「隙を見て昼寝する」というカジュアルな表現。"},
+{id:79,cat:'😴 睡眠・回復',jp:'寝る前にスクリーンを見ないようにしています',sub:'',en:"I try to avoid screens before bed.",alt:"I put my phone away before sleeping.",tip:"avoid screens before bed は睡眠の質を上げる定番アドバイス。"},
+{id:80,cat:'😴 睡眠・回復',jp:'今日は早く寝ます',sub:'',en:"I'm going to have an early night.",alt:"I'm turning in early tonight.",tip:"early night は「早寝」。turning in は「就寝する」のカジュアル表現。"},
+{id:81,cat:'🧪 検査・結果',jp:'血液検査をしました',sub:'',en:"I had some blood work done.",alt:"I got my blood tested.",tip:"blood work は「血液検査」。had it done は「してもらった」という受身。"},
+{id:82,cat:'🧪 検査・結果',jp:'結果は正常でした',sub:'',en:"My results came back normal.",alt:"Everything came back clear.",tip:"came back normal / clear はどちらも「正常だった」という定番表現。"},
+{id:83,cat:'🧪 検査・結果',jp:'コレステロールが高めです',sub:'',en:"My cholesterol is a bit high.",alt:"My cholesterol levels are elevated.",tip:"elevated は「上昇している」というやや医療的な表現。"},
+{id:84,cat:'🧪 検査・結果',jp:'ビタミンDが不足しています',sub:'',en:"I'm low in vitamin D.",alt:"My vitamin D levels are deficient.",tip:"low in / deficient in どちらも「不足している」。low in がよりカジュアル。"},
+{id:85,cat:'🧪 検査・結果',jp:'貧血気味です',sub:'',en:"I'm a bit anaemic.",alt:"My iron levels are low.",tip:"anaemic はオーストラリア英語のスペル（米: anemic）。iron levels low も同義。"},
+{id:86,cat:'🧪 検査・結果',jp:'血圧が高いです',sub:'',en:"My blood pressure is high.",alt:"I've been diagnosed with hypertension.",tip:"hypertension は高血圧の医療用語。blood pressure is high がより口語的。"},
+{id:87,cat:'🧪 検査・結果',jp:'甲状腺の検査をしました',sub:'',en:"I had my thyroid checked.",alt:"I got a thyroid function test.",tip:"thyroid function test は甲状腺機能検査の正式名称。"},
+{id:88,cat:'🧪 検査・結果',jp:'もう一度検査が必要です',sub:'',en:"I need to get retested.",alt:"I have to go back for more tests.",tip:"retested は「再検査」。go back for more tests もよく使われる。"},
+{id:89,cat:'🧪 検査・結果',jp:'専門医に紹介されました',sub:'',en:"I've been referred to a specialist.",alt:"My GP sent me to see a specialist.",tip:"referred to a specialist は「専門医に紹介された」。GP からの紹介が必要。"},
+{id:90,cat:'🧪 検査・結果',jp:'経過観察になっています',sub:'',en:"I'm being monitored.",alt:"I have to go back for follow-up checks.",tip:"monitored は「経過観察されている」。follow-up checks は「経過確認の検査」。"},
+{id:91,cat:'💪 体調管理・メンタル',jp:'最近体調が優れません',sub:'',en:"I've been feeling run down.",alt:"I haven't been feeling my best.",tip:"run down は「疲れ果てた・体力が落ちた」。"},
+{id:92,cat:'💪 体調管理・メンタル',jp:'体が重い感じがします',sub:'',en:"My body feels heavy.",alt:"I feel sluggish.",tip:"sluggish は「だるい・重い・動きが鈍い」。体調不良の定番表現。"},
+{id:93,cat:'💪 体調管理・メンタル',jp:'メンタルヘルスを大切にしています',sub:'',en:"I prioritize my mental health.",alt:"I take my mental health seriously.",tip:"prioritize は「優先する」。mental health は現代の健康会話に欠かせない語彙。"},
+{id:94,cat:'💪 体調管理・メンタル',jp:'バーンアウト気味です',sub:'',en:"I'm feeling burnt out.",alt:"I think I'm burning out.",tip:"burnt out / burning out は「燃え尽きた・燃え尽きかけている」。"},
+{id:95,cat:'💪 体調管理・メンタル',jp:'自分を大切にしています',sub:'',en:"I make time for self-care.",alt:"I prioritize looking after myself.",tip:"self-care は「自己ケア」。make time for は「時間を作る」。"},
+{id:96,cat:'💪 体調管理・メンタル',jp:'カウンセリングを受けています',sub:'',en:"I'm seeing a therapist.",alt:"I'm getting some counselling.",tip:"seeing a therapist はカジュアルで自然。counselling もよく使われる。"},
+{id:97,cat:'💪 体調管理・メンタル',jp:'少し落ち込んでいます',sub:'',en:"I've been feeling a bit low.",alt:"I'm going through a rough patch.",tip:"a rough patch は「つらい時期・スランプ」。feeling low は軽い抑うつ感。"},
+{id:98,cat:'💪 体調管理・メンタル',jp:'ゆっくり休むことにしました',sub:'',en:"I've decided to take it easy.",alt:"I'm giving myself permission to rest.",tip:"take it easy は「ゆっくりする」。giving myself permission は「自分に許可する」という表現。"},
+{id:99,cat:'💪 体調管理・メンタル',jp:'体の声を聞くようにしています',sub:'',en:"I try to listen to my body.",alt:"I pay attention to what my body needs.",tip:"listen to my body は「体のシグナルに従う」という健康的な考え方。"},
+{id:100,cat:'💪 体調管理・メンタル',jp:'少しずつよくなっています',sub:'',en:"I'm slowly getting better.",alt:"I'm on the mend.",tip:"on the mend は「回復途中」のネイティブらしい慣用表現。"}
+];
+const CATS=[...new Set(PHRASES.map(p=>p.cat))];
+const CAT_COLORS={'🏥 病院・受診':'#a03030','💊 薬・処方箋':'#3d5a8a','🤒 症状を伝える':'#c86a2a','🦷 歯医者':'#5a5a7a','🧘 健康習慣':'#4a7c59','🥗 食事・栄養':'#2a7a5a','⚡ ファスティング':'#7a5a2a','😴 睡眠・回復':'#5a2a7a','🧪 検査・結果':'#2a5a7a','💪 体調管理・メンタル':'#7a2a5a'};
+
+let currentFlowToken = 0; // incremented each time a new flow starts
+
+function stopAudio() {
+  currentFlowToken++; // invalidate any pending promises
+  if (currentAudio) {
+    currentAudio.pause();
+    currentAudio = null;
+  }
+  isPlaying = false;
+  setVoiceBtnState(false);
+  setVoiceStatus('');
+}
+
+async function speakGoogle(text, lang) {
+  if (!gApiKey) {
+    showToast('🔑 右上の「音声設定」からAPIキーを設定してください');
+    return false;
+  }
+  const myToken = currentFlowToken;
+  const voiceConfig = lang === 'ja'
+    ? { languageCode: 'ja-JP', name: 'ja-JP-Neural2-B' }
+    : { languageCode: 'en-AU', name: 'en-AU-Neural2-A' };
+
+  try {
+    const res = await fetch(
+      `https://texttospeech.googleapis.com/v1/text:synthesize?key=${gApiKey}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          input: { text },
+          voice: voiceConfig,
+          audioConfig: { audioEncoding: 'MP3', speakingRate: 0.95 }
+        })
+      }
+    );
+    // Check if still valid after async fetch
+    if (myToken !== currentFlowToken) return false;
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error?.message || `エラー ${res.status}`);
+    }
+    const data = await res.json();
+    if (myToken !== currentFlowToken) return false;
+
+    const audio = new Audio('data:audio/mp3;base64,' + data.audioContent);
+    currentAudio = audio;
+    isPlaying = true;
+
+    return new Promise((resolve) => {
+      const cleanup = (val) => {
+        if (currentAudio === audio) { currentAudio = null; isPlaying = false; }
+        resolve(val);
+      };
+      audio.onended = () => cleanup(true);
+      audio.onerror = () => cleanup(false);
+      audio.play().catch(() => cleanup(false));
+
+      // Poll for token invalidation (stopAudio called externally)
+      const poll = setInterval(() => {
+        if (myToken !== currentFlowToken) {
+          clearInterval(poll);
+          audio.pause();
+          resolve(false);
+        }
+        if (!isPlaying && currentAudio !== audio) {
+          clearInterval(poll);
+        }
+      }, 100);
+    });
+  } catch(e) {
+    if (myToken !== currentFlowToken) return false;
+    showToast('⚠️ ' + e.message);
+    return false;
+  }
+}
+
+function setVoiceBtnState(playing) {
+  const btn = document.getElementById('voice-play-btn');
+  if (!btn) return;
+  btn.classList.toggle('playing', playing);
+  document.getElementById('voice-btn-label').textContent = playing ? '再生中（タップで停止）' : '英語を聴く';
+}
+function setVoiceStatus(msg) {
+  const el = document.getElementById('voice-status');
+  if (el) el.textContent = msg;
+}
+
+// ===================== AUTO-PLAY STATE =====================
+let autoPlay = false;
+let autoFlowAbort = false; // flag to cancel current auto flow
+
+function toggleAutoPlay() {
+  autoPlay = !autoPlay;
+  const btn = document.getElementById('auto-play-btn');
+  if (autoPlay) {
+    btn.textContent = '▶ 自動ON';
+    btn.classList.add('on');
+    showToast('自動再生ON：日本語→英語→次の問題と自動で進みます');
+  } else {
+    btn.textContent = '▶ 自動OFF';
+    btn.classList.remove('on');
+    autoFlowAbort = true;
+    stopAudio();
+    setApStatus('idle', '');
+    showToast('自動再生OFF');
+  }
+  const bar = document.getElementById('autoplay-bar');
+  if (bar) bar.classList.toggle('visible', autoPlay);
+}
+
+function setApStatus(state, label) {
+  const dot = document.getElementById('ap-dot');
+  const lbl = document.getElementById('ap-label');
+  if (!dot || !lbl) return;
+  dot.className = 'ap-dot ' + state;
+  lbl.textContent = label || '自動再生モード';
+  const card = document.getElementById('flash-card');
+  if (card) {
+    card.classList.remove('jp-speaking', 'en-speaking');
+    if (state === 'jp') card.classList.add('jp-speaking');
+    if (state === 'en') card.classList.add('en-speaking');
+  }
+}
+
+// The main auto-play coroutine
+async function runAutoFlow(phraseId) {
+  const p = PHRASES.find(x => x.id === phraseId);
+  if (!p) return;
+
+  // Step 1: speak Japanese
+  setApStatus('jp', '🇯🇵 日本語を読み上げ中...');
+  await speakWebSpeech(p.jp, 'ja');
+  if (autoFlowAbort) return;
+
+  // Step 2: wait 1.5s
+  setApStatus('wait', '少々お待ちください...');
+  await sleep(1500);
+  if (autoFlowAbort) return;
+
+  // Step 3: reveal card + speak English
+  revealCard(true);
+  await sleep(200);
+  if (autoFlowAbort) return;
+
+  setApStatus('en', '🇦🇺 英語を読み上げ中...');
+  await speakWebSpeech(p.en, 'en');
+  if (autoFlowAbort) return;
+
+  // Step 4: iOS cannot auto-advance without user gesture
+  // Show a prominent "Next" button and wait for tap
+  setApStatus('idle', '✅ 次の問題へタップ');
+  showNextBtn();
+}
+
+function showNextBtn() {
+  const bar = document.getElementById('autoplay-bar');
+  if (bar) {
+    bar.innerHTML = `
+      <div class="ap-left">
+        <div class="ap-dot" style="background:var(--moss)"></div>
+        <span class="ap-label">✅ 完了 — 次の問題へタップ</span>
+      </div>
+      <button class="ap-skip-btn" style="background:var(--moss);color:#fff;border-color:var(--moss);padding:6px 14px;font-size:12px;" onclick="iosNextCard()">次へ →</button>
+    `;
+  }
+}
+
+function iosNextCard() {
+  // This is called by user tap - so next speakWebSpeech will work on iOS
+  autoFlowAbort = true;
+  // Restore bar
+  restoreApBar();
+  autoAdvance();
+}
+
+function restoreApBar() {
+  const bar = document.getElementById('autoplay-bar');
+  if (bar) {
+    bar.innerHTML = `
+      <div class="ap-left">
+        <div class="ap-dot idle" id="ap-dot"></div>
+        <span class="ap-label" id="ap-label">自動再生モード</span>
+      </div>
+      <button class="ap-skip-btn" onclick="autoSkipNow()">今すぐ次へ →</button>
+    `;
+  }
+}
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function autoAdvance() {
+  // In auto mode, just move forward (counts as OK for stats)
+  const p = queue[qIdx];
+  if (!p) return;
+  sessionOk++;
+  wrong.delete(p.id);
+  if (currentMode === 'loop') {
+    loopCounts[p.id] = (loopCounts[p.id] || 0) + 1;
+    if (loopCounts[p.id] >= 5) { mastered.add(p.id); save(); qIdx++; }
+    else { const ins = qIdx + 1 + Math.floor(Math.random() * Math.min(5, queue.length - qIdx - 1)); queue.splice(ins, 0, p); qIdx++; }
+  } else {
+    mastered.add(p.id); save(); qIdx++;
+  }
+  updateHeader();
+  showCard();
+}
+
+
+function showNextBtn() {
+  const bar = document.getElementById('autoplay-bar');
+  if (bar) {
+    bar.innerHTML = `
+      <div class="ap-left">
+        <div class="ap-dot" style="background:var(--moss)"></div>
+        <span class="ap-label">✅ 完了 — 次の問題へタップ</span>
+      </div>
+      <button class="ap-skip-btn" style="background:var(--moss);color:#fff;border-color:var(--moss);padding:6px 14px;font-size:12px;" onclick="iosNextCard()">次へ →</button>
+    `;
+  }
+}
+
+function iosNextCard() {
+  // This is called by user tap - so next speakWebSpeech will work on iOS
+  autoFlowAbort = true;
+  // Restore bar
+  restoreApBar();
+  autoAdvance();
+}
+
+function restoreApBar() {
+  const bar = document.getElementById('autoplay-bar');
+  if (bar) {
+    bar.innerHTML = `
+      <div class="ap-left">
+        <div class="ap-dot idle" id="ap-dot"></div>
+        <span class="ap-label" id="ap-label">自動再生モード</span>
+      </div>
+      <button class="ap-skip-btn" onclick="autoSkipNow()">今すぐ次へ →</button>
+    `;
+  }
+}
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function autoAdvance() {
+  // In auto mode, just move forward (counts as OK for stats)
+  const p = queue[qIdx];
+  if (!p) return;
+  sessionOk++;
+  wrong.delete(p.id);
+  if (currentMode === 'loop') {
+    loopCounts[p.id] = (loopCounts[p.id] || 0) + 1;
+    if (loopCounts[p.id] >= 5) { mastered.add(p.id); save(); qIdx++; }
+    else { const ins = qIdx + 1 + Math.floor(Math.random() * Math.min(5, queue.length - qIdx - 1)); queue.splice(ins, 0, p); qIdx++; }
+  } else {
+    mastered.add(p.id); save(); qIdx++;
+  }
+  updateHeader();
+  showCard();
+}
+
+function autoSkipNow() {
+  autoFlowAbort = true;
+  stopAudio();
+  setApStatus('idle', '自動再生モード');
+  qIdx++;
+  showCard();
+}
+
+// Manual English play button
+async function playEnglishManual() {
+  if (isPlaying) { stopAudio(); return; }
+  const p = queue[qIdx];
+  if (!p) return;
+  setVoiceBtnState(true);
+  setVoiceStatus('英語を読み上げ中...');
+  await speakGoogle(p.en, 'en');
+  setVoiceBtnState(false);
+  setVoiceStatus('');
+}
+
+// List page play
+async function playPhrase(en) {
+  if (isPlaying) { stopAudio(); return; }
+  await speakGoogle(en, 'en');
+}
+
+// ===================== STATE =====================
+let mastered = new Set(JSON.parse(localStorage.getItem('hlth_mastered') || '[]'));
+let wrong = new Set(JSON.parse(localStorage.getItem('hlth_wrong') || '[]'));
+let queue = [], qIdx = 0, isRevealed = false;
+let currentMode = 'normal', selectedCat = 'all';
+let sessionOk = 0, sessionNg = 0;
+let timerInterval = null, timerLeft = 3;
+let loopCounts = {};
+
+function save() {
+  localStorage.setItem('hlth_mastered', JSON.stringify([...mastered]));
+  localStorage.setItem('hlth_wrong', JSON.stringify([...wrong]));
+}
+function updateHeader() { document.getElementById('h-mastered').textContent = mastered.size; }
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+function switchTab(p, btn) {
+  document.querySelectorAll('.page').forEach(x => x.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+  document.getElementById('page-' + p).classList.add('active');
+  btn.classList.add('active');
+  if (p === 'list') renderList();
+  if (p === 'stats') renderStats();
+}
+
+function initSetup() {
+  const cc = document.getElementById('cat-chips');
+  cc.innerHTML = `<button class="cat-chip active" onclick="selCat('all',this)">すべて (${PHRASES.length})</button>`;
+  CATS.forEach(c => {
+    const n = PHRASES.filter(p => p.cat === c).length;
+    cc.innerHTML += `<button class="cat-chip" onclick="selCat('${c}',this)">${c} (${n})</button>`;
+  });
+}
+function selCat(cat, btn) {
+  selectedCat = cat;
+  document.querySelectorAll('#cat-chips .cat-chip').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+}
+function selectMode(mode) {
+  currentMode = mode;
+  document.querySelectorAll('.mode-card').forEach(c => c.classList.remove('selected'));
+  document.getElementById('mode-' + mode).classList.add('selected');
+}
+
+function startTraining() {
+  let pool = selectedCat === 'all' ? [...PHRASES] : PHRASES.filter(p => p.cat === selectedCat);
+  if (currentMode === 'review') pool = pool.filter(p => !mastered.has(p.id) || wrong.has(p.id));
+  if (pool.length === 0) { alert('該当するフレーズがありません！'); return; }
+  for (let i = pool.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [pool[i], pool[j]] = [pool[j], pool[i]]; }
+  queue = pool; qIdx = 0; sessionOk = 0; sessionNg = 0; loopCounts = {};
+  document.getElementById('train-setup').style.display = 'none';
+  document.getElementById('train-result').style.display = 'none';
+  document.getElementById('train-area').style.display = 'block';
+  document.getElementById('timer-wrap').style.display = currentMode === 'timer' ? 'flex' : 'none';
+  document.getElementById('loop-banner').style.display = currentMode === 'loop' ? 'block' : 'none';
+  document.getElementById('autoplay-bar').classList.toggle('visible', autoPlay);
+  showCard();
+}
+
+function showCard() {
+  if (qIdx >= queue.length) { endTraining(); return; }
+  const p = queue[qIdx]; isRevealed = false;
+
+  // Abort any running auto flow and stop audio
+  autoFlowAbort = true;
+  stopAudio();
+  setApStatus('idle', '自動再生モード');
+
+  document.getElementById('flash-card').className = 'flash-card';
+  document.getElementById('card-cat').textContent = p.cat;
+  document.getElementById('card-jp').textContent = p.jp;
+  document.getElementById('card-sub').textContent = p.sub || '';
+  document.getElementById('card-en').textContent = p.en;
+  document.getElementById('card-alt').textContent = p.alt ? '💡 ' + p.alt : '';
+  document.getElementById('card-tip').textContent = p.tip ? '🔑 ' + p.tip : '';
+  document.getElementById('card-chunks').innerHTML = p.chunks.map((c, i) =>
+    `<div class="cc-row"><span class="cc-num">${i + 1}</span><span class="cc-en">${c}</span></div>`).join('');
+  document.getElementById('card-hint').style.display = '';
+  document.getElementById('btn-reveal').style.display = 'inline-block';
+  document.getElementById('btn-ok').style.display = 'none';
+  document.getElementById('btn-ng').style.display = 'none';
+  document.getElementById('voice-btn-wrap').style.display = 'none';
+  setVoiceBtnState(false);
+  setVoiceStatus('');
+  document.getElementById('train-ctr').textContent = `${qIdx + 1} / ${queue.length}`;
+  document.getElementById('train-prog').style.width = (qIdx / queue.length * 100) + '%';
+  if (currentMode === 'loop') {
+    const cnt = loopCounts[p.id] || 0;
+    document.getElementById('loop-remain').textContent = 5 - cnt;
+  }
+
+  // Auto-play flow: start after short delay so card renders first
+  if (autoPlay) {
+    const flowId = p.id;
+    const myToken = currentFlowToken; // capture token AFTER stopAudio incremented it
+    setTimeout(() => {
+      // Only start if no new stopAudio has been called since
+      if (myToken !== currentFlowToken) return;
+      autoFlowAbort = false;
+      runAutoFlow(flowId);
+    }, 400);
+  } else if (currentMode === 'timer') {
+    startTimer();
+  }
+}
+
+function onCardTap() {
+  if (autoPlay) {
+    // In auto mode, tapping the card cancels auto flow and manual reveal
+    autoFlowAbort = true;
+    stopAudio();
+    setApStatus('idle', '手動モード（一時停止中）');
+    revealCard(true);
+  } else {
+    revealCard(false);
+  }
+}
+
+// silent: true = don't trigger auto flow again from here
+function revealCard(silent) {
+  if (isRevealed) return; isRevealed = true;
+  clearInterval(timerInterval);
+  document.getElementById('flash-card').classList.add('revealed');
+  document.getElementById('flash-card').classList.remove('jp-speaking', 'en-speaking');
+  document.getElementById('card-hint').style.display = 'none';
+  document.getElementById('btn-reveal').style.display = 'none';
+  document.getElementById('btn-ok').style.display = 'inline-block';
+  document.getElementById('btn-ng').style.display = 'inline-block';
+  document.getElementById('voice-btn-wrap').style.display = 'flex';
+}
+
+function startTimer() {
+  clearInterval(timerInterval); timerLeft = 3; updateTimerUI(3, 3);
+  timerInterval = setInterval(() => {
+    timerLeft -= 0.1;
+    if (timerLeft <= 0) { clearInterval(timerInterval); timerLeft = 0; revealCard(false); }
+    updateTimerUI(timerLeft, 3);
+  }, 100);
+}
+function updateTimerUI(val, max) {
+  const offset = 169.6 * (1 - val / max);
+  document.getElementById('timer-circle').style.strokeDashoffset = offset;
+  document.getElementById('timer-num').textContent = Math.ceil(val);
+  document.getElementById('timer-circle').style.stroke = val > 2 ? '#c8962a' : val > 1 ? '#c86a2a' : '#a03030';
+}
+
+function markOk() {
+  autoFlowAbort = true; stopAudio();
+  const p = queue[qIdx]; sessionOk++; wrong.delete(p.id);
+  if (currentMode === 'loop') {
+    loopCounts[p.id] = (loopCounts[p.id] || 0) + 1;
+    if (loopCounts[p.id] >= 5) { mastered.add(p.id); save(); qIdx++; }
+    else { const ins = qIdx + 1 + Math.floor(Math.random() * Math.min(5, queue.length - qIdx - 1)); queue.splice(ins, 0, p); qIdx++; }
+  } else { mastered.add(p.id); save(); qIdx++; }
+  updateHeader(); showCard();
+}
+function markNg() {
+  autoFlowAbort = true; stopAudio();
+  const p = queue[qIdx]; sessionNg++; wrong.add(p.id);
+  if (currentMode === 'loop') {
+    loopCounts[p.id] = 0;
+    const ins = qIdx + 1 + Math.floor(Math.random() * Math.min(4, queue.length - qIdx - 1));
+    queue.splice(Math.min(ins, queue.length), 0, p);
+  }
+  save(); qIdx++; showCard();
+}
+function skipCard() { autoFlowAbort = true; stopAudio(); qIdx++; showCard(); }
+function quitTraining() { autoFlowAbort = true; stopAudio(); clearInterval(timerInterval); backToSetup(); }
+
+function endTraining() {
+  autoFlowAbort = true; stopAudio(); clearInterval(timerInterval);
+  document.getElementById('train-area').style.display = 'none';
+  document.getElementById('train-result').style.display = 'block';
+  const total = sessionOk + sessionNg;
+  const pct = total > 0 ? Math.round(sessionOk / total * 100) : 0;
+  document.getElementById('res-ok').textContent = sessionOk;
+  document.getElementById('res-ng').textContent = sessionNg;
+  document.getElementById('res-total').textContent = total;
+  document.getElementById('res-emoji').textContent = pct >= 80 ? '🎉' : pct >= 50 ? '💪' : '🔥';
+  document.getElementById('res-title').textContent = pct >= 80 ? '素晴らしい！' : pct >= 50 ? 'いい調子！' : 'もう一息！';
+  document.getElementById('res-sub').textContent = `正解率 ${pct}%（${sessionOk}/${total}）`;
+  document.getElementById('res-loop-btn').style.display = sessionNg > 0 && currentMode !== 'loop' ? 'block' : 'none';
+  updateHeader();
+}
+
+function startLoopFromResult() {
+  currentMode = 'loop';
+  const ng = [...wrong];
+  if (ng.length === 0) { alert('間違えたフレーズがありません！'); return; }
+  queue = PHRASES.filter(p => ng.includes(p.id));
+  for (let i = queue.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [queue[i], queue[j]] = [queue[j], queue[i]]; }
+  qIdx = 0; sessionOk = 0; sessionNg = 0; loopCounts = {};
+  document.getElementById('train-result').style.display = 'none';
+  document.getElementById('train-area').style.display = 'block';
+  document.getElementById('loop-banner').style.display = 'block';
+  document.getElementById('timer-wrap').style.display = 'none';
+  document.getElementById('autoplay-bar').classList.toggle('visible', autoPlay);
+  showCard();
+}
+function backToSetup() {
+  document.getElementById('train-area').style.display = 'none';
+  document.getElementById('train-result').style.display = 'none';
+  document.getElementById('train-setup').style.display = 'block';
+}
+
+function renderList() {
+  const lcc = document.getElementById('list-cat-chips');
+  lcc.innerHTML = `<button class="cat-chip active" onclick="filterList('all',this)">すべて</button>`;
+  CATS.forEach(c => { lcc.innerHTML += `<button class="cat-chip" onclick="filterList('${c}',this)">${c}</button>`; });
+  filterList('all', lcc.firstElementChild);
+}
+function filterList(cat, btn) {
+  document.querySelectorAll('#list-cat-chips .cat-chip').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  const pool = cat === 'all' ? PHRASES : PHRASES.filter(p => p.cat === cat);
+  document.getElementById('list-items').innerHTML = pool.map(p => `
+    <div class="list-item">
+      <div class="li-dot" style="background:${CAT_COLORS[p.cat] || '#888'}"></div>
+      <div class="li-body">
+        <div class="li-cat">${p.cat}</div>
+        <div class="li-jp">${p.jp}</div>
+        <div class="li-en">${p.en}</div>
+      </div>
+      <div class="li-right">
+        <button class="li-voice-btn" onclick="playPhrase(${JSON.stringify(p.en)})">🔊</button>
+        <div class="li-done ${mastered.has(p.id) ? 'show' : ''}">✓ 習得</div>
+      </div>
+    </div>`).join('');
+}
+function renderStats() {
+  document.getElementById('st-mastered').textContent = mastered.size;
+  document.getElementById('st-total').textContent = PHRASES.length;
+  document.getElementById('cat-stats').innerHTML = CATS.map(c => {
+    const total = PHRASES.filter(p => p.cat === c).length;
+    const done = PHRASES.filter(p => p.cat === c && mastered.has(p.id)).length;
+    const pct = Math.round(done / total * 100);
+    return `<div class="cat-stat">
+      <div class="cs-top"><span class="cs-name">${c}</span><span class="cs-pct">${done}/${total} (${pct}%)</span></div>
+      <div class="cs-bar"><div class="cs-fill" style="width:${pct}%;background:${CAT_COLORS[c] || 'var(--moss)'}"></div></div>
+    </div>`;
+  }).join('');
+}
+function resetAll() { if (!confirm('全データをリセットしますか？')) return; mastered.clear(); wrong.clear(); save(); updateHeader(); renderStats(); }
+function resetAllData() { resetAll(); }
+
+// INIT
+initSetup(); updateHeader();
+// iOS版: APIキー不要
+</script>
+</body>
+</html>
