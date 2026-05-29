@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🍱 日本の食材・調味料 — 瞬間反射トレーニング</title>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#1a1410;--paper:#f5f0e8;--gold:#c8962a;--moss:#4a7c59;--indigo:#3d5a8a;--crimson:#a03030;--panel:#fffdf8;--border:rgba(26,20,16,0.12);}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);min-height:100vh;}
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(26,20,16,0.72);z-index:999;display:flex;align-items:center;justify-content:center;padding:20px;}
+.modal-box{background:var(--panel);border-radius:18px;padding:28px 24px;max-width:400px;width:100%;border:1.5px solid var(--border);}
+.modal-logo{font-size:32px;text-align:center;margin-bottom:12px;}
+.modal-title{font-family:'Shippori Mincho',serif;font-size:18px;font-weight:700;text-align:center;margin-bottom:6px;}
+.modal-sub{font-size:12px;color:rgba(26,20,16,0.5);text-align:center;margin-bottom:20px;line-height:1.6;}
+.modal-label{font-size:12px;font-weight:500;margin-bottom:6px;display:block;}
+.modal-input{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;background:var(--paper);color:var(--ink);margin-bottom:8px;}
+.modal-input:focus{outline:none;border-color:var(--gold);}
+.modal-help{font-size:11px;color:rgba(26,20,16,0.4);margin-bottom:18px;line-height:1.5;}
+.modal-help a{color:var(--indigo);}
+.modal-btn{width:100%;padding:13px;border-radius:10px;border:none;background:var(--ink);color:var(--gold);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;margin-bottom:8px;}
+.modal-btn:hover{opacity:.88;}
+.modal-skip{width:100%;padding:10px;border-radius:10px;border:1.5px solid var(--border);background:transparent;color:rgba(26,20,16,0.45);font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;}
+.modal-skip:hover{border-color:var(--gold);}
+/* HEADER */
+header{background:var(--ink);padding:16px 20px 0;position:sticky;top:0;z-index:100;}
+.h-top{display:flex;align-items:center;gap:10px;padding-bottom:14px;}
+.h-logo{font-size:22px;}
+.h-titles{flex:1;}
+.h-titles h1{font-family:'Shippori Mincho',serif;color:var(--gold);font-size:16px;font-weight:700;}
+.h-titles p{color:rgba(245,240,232,0.42);font-size:10px;margin-top:1px;}
+.h-right{display:flex;align-items:center;gap:8px;}
+.h-score .num{font-size:20px;font-weight:500;color:var(--gold);}
+.h-score .lbl{font-family:'Shippori Mincho',serif;font-size:9px;color:rgba(245,240,232,0.4);}
+.h-key-btn{padding:5px 10px;border-radius:7px;border:1px solid rgba(200,150,42,0.4);background:transparent;color:rgba(200,150,42,0.7);font-size:10px;cursor:pointer;}
+.h-key-btn:hover{border-color:var(--gold);color:var(--gold);}
+.h-auto-btn{padding:5px 10px;border-radius:7px;border:1px solid rgba(200,150,42,0.4);background:transparent;color:rgba(200,150,42,0.7);font-size:10px;cursor:pointer;transition:all .25s;white-space:nowrap;}
+.h-auto-btn.on{background:rgba(200,150,42,0.2);border-color:var(--gold);color:var(--gold);}
+nav{display:flex;}
+.tab{flex:1;padding:8px 4px;background:none;border:none;border-bottom:2px solid transparent;color:rgba(245,240,232,0.38);font-family:'DM Sans',sans-serif;font-size:10px;cursor:pointer;transition:all .2s;display:flex;flex-direction:column;align-items:center;gap:2px;}
+.tab span:first-child{font-size:13px;}
+.tab.active{color:var(--gold);border-bottom-color:var(--gold);}
+main{padding:14px;max-width:600px;margin:0 auto;}
+.page{display:none;}.page.active{display:block;}
+.sec{font-family:'Shippori Mincho',serif;font-size:10px;font-weight:600;color:rgba(26,20,16,0.35);letter-spacing:.12em;text-transform:uppercase;margin:16px 0 10px;}
+.cat-chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;}
+.cat-chip{padding:5px 12px;border-radius:20px;border:1.5px solid var(--border);background:var(--panel);font-size:11px;cursor:pointer;transition:all .2s;color:var(--ink);}
+.cat-chip.active{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+.mode-cards{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px;}
+.mode-card{background:var(--panel);border:1.5px solid var(--border);border-radius:14px;padding:14px 12px;cursor:pointer;transition:all .2s;text-align:center;}
+.mode-card:hover{border-color:var(--gold);}
+.mode-card.selected{border-color:var(--gold);background:rgba(200,150,42,0.07);}
+.mode-emoji{font-size:24px;margin-bottom:6px;}
+.mode-name{font-size:13px;font-weight:500;margin-bottom:3px;}
+.mode-desc{font-family:'Shippori Mincho',serif;font-size:10px;color:rgba(26,20,16,0.45);line-height:1.5;}
+.start-btn{width:100%;padding:14px;border-radius:12px;border:none;background:var(--ink);color:var(--gold);font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;cursor:pointer;}
+.start-btn:hover{opacity:.88;}
+/* TRAINING */
+.train-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.train-prog-wrap{flex:1;height:5px;background:var(--border);border-radius:3px;margin:0 12px;overflow:hidden;}
+.train-prog-fill{height:100%;background:var(--gold);border-radius:3px;transition:width .4s;}
+.train-ctr{font-size:11px;color:rgba(26,20,16,0.4);}
+.quit-btn{font-size:11px;color:rgba(26,20,16,0.35);background:none;border:none;cursor:pointer;text-decoration:underline;}
+.timer-wrap{display:flex;justify-content:center;margin-bottom:14px;}
+.timer-ring{position:relative;width:64px;height:64px;}
+.timer-ring svg{transform:rotate(-90deg);}
+.timer-ring circle{fill:none;stroke-width:5;}
+.timer-bg{stroke:var(--border);}
+.timer-fg{stroke:var(--gold);stroke-linecap:round;transition:stroke-dashoffset .1s linear,stroke .3s;}
+.timer-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:500;color:var(--ink);}
+.loop-banner{background:rgba(200,150,42,0.1);border:1px solid rgba(200,150,42,0.3);border-radius:10px;padding:8px 12px;margin-bottom:12px;font-family:'Shippori Mincho',serif;font-size:12px;color:var(--gold);text-align:center;}
+/* AUTO-PLAY BAR */
+.autoplay-bar{display:none;align-items:center;justify-content:space-between;background:rgba(200,150,42,0.1);border:1px solid rgba(200,150,42,0.28);border-radius:10px;padding:8px 14px;margin-bottom:12px;}
+.autoplay-bar.visible{display:flex;}
+.ap-left{display:flex;align-items:center;gap:8px;}
+.ap-dot{width:8px;height:8px;border-radius:50%;background:var(--gold);}
+.ap-dot.jp{background:#4a7c59;}.ap-dot.en{background:#3d5a8a;}
+.ap-dot.wait{background:#c86a2a;animation:blink 0.8s ease-in-out infinite;}
+.ap-dot.idle{background:rgba(200,150,42,0.3);}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0.2;}}
+.ap-label{font-family:'Shippori Mincho',serif;font-size:11px;color:var(--gold);}
+.ap-skip-btn{font-size:10px;padding:3px 10px;border-radius:20px;border:1px solid rgba(200,150,42,0.4);background:transparent;color:var(--gold);cursor:pointer;}
+/* FLASH CARD */
+.flash-card{background:var(--panel);border:1.5px solid var(--border);border-radius:18px;padding:28px 22px;text-align:center;margin-bottom:14px;box-shadow:0 4px 24px rgba(26,20,16,0.08);min-height:190px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:border-color .2s;}
+.flash-card.revealed{border-color:var(--moss);}
+.flash-card.jp-speaking{border-color:#4a7c59;box-shadow:0 0 0 3px rgba(74,124,89,0.15);}
+.flash-card.en-speaking{border-color:#3d5a8a;box-shadow:0 0 0 3px rgba(61,90,138,0.15);}
+.card-cat{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(26,20,16,0.3);margin-bottom:10px;}
+.card-jp{font-family:'Shippori Mincho',serif;font-size:22px;font-weight:700;line-height:1.5;margin-bottom:6px;}
+.card-sub{font-family:'Shippori Mincho',serif;font-size:12px;color:rgba(26,20,16,0.4);margin-bottom:14px;font-style:italic;}
+.card-hint{font-size:11px;color:rgba(26,20,16,0.3);font-style:italic;}
+.card-en{font-size:18px;font-weight:500;line-height:1.5;margin-bottom:6px;display:none;}
+.card-alt{font-size:12px;color:rgba(26,20,16,0.5);display:none;font-style:italic;margin-bottom:10px;}
+.card-tip{font-family:'Shippori Mincho',serif;font-size:11px;color:var(--indigo);background:rgba(61,90,138,0.08);border-radius:6px;padding:6px 10px;display:none;line-height:1.6;}
+.flash-card.revealed .card-en,.flash-card.revealed .card-alt,.flash-card.revealed .card-tip{display:block;}
+.flash-card.revealed .card-hint{display:none;}
+/* VOICE */
+.voice-btn-wrap{display:flex;justify-content:center;margin-bottom:10px;}
+.voice-btn{display:flex;align-items:center;gap:8px;padding:10px 20px;border-radius:30px;border:1.5px solid var(--gold);background:rgba(200,150,42,0.08);color:var(--gold);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;}
+.voice-btn:hover{background:rgba(200,150,42,0.18);}
+.voice-btn.playing{background:rgba(200,150,42,0.25);}
+.voice-icon{font-size:16px;}
+.voice-btn.playing .voice-icon{animation:pulse 0.6s ease-in-out infinite alternate;}
+@keyframes pulse{from{transform:scale(1);}to{transform:scale(1.2);}}
+.voice-status{font-size:10px;color:rgba(26,20,16,0.4);text-align:center;margin-bottom:8px;min-height:14px;}
+.action-row{display:flex;gap:8px;margin-bottom:10px;}
+.act-btn{flex:1;padding:13px;border-radius:12px;border:none;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:opacity .15s;}
+.act-btn:hover{opacity:.85;}
+.act-reveal{background:var(--indigo);color:#fff;flex:2;}
+.act-ok{background:var(--moss);color:#fff;}
+.act-ng{background:rgba(160,48,48,0.12);color:var(--crimson);}
+.act-skip{width:100%;padding:9px;border-radius:9px;border:1.5px solid var(--border);background:var(--panel);font-family:'DM Sans',sans-serif;font-size:11px;cursor:pointer;color:rgba(26,20,16,0.45);}
+/* RESULT */
+.result-wrap{text-align:center;padding:24px 0;}
+.result-emoji{font-size:52px;margin-bottom:12px;}
+.result-title{font-family:'Shippori Mincho',serif;font-size:20px;font-weight:700;margin-bottom:6px;}
+.result-sub{font-size:13px;color:rgba(26,20,16,0.5);margin-bottom:24px;font-family:'Shippori Mincho',serif;}
+.result-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:24px;}
+.rs{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:12px 8px;text-align:center;}
+.rs-num{font-size:24px;font-weight:500;line-height:1;margin-bottom:3px;}
+.rs-num.g{color:var(--moss);}.rs-num.r{color:var(--crimson);}.rs-num.b{color:var(--indigo);}
+.rs-lbl{font-family:'Shippori Mincho',serif;font-size:9px;color:rgba(26,20,16,0.4);}
+.result-btns{display:flex;flex-direction:column;gap:8px;}
+.res-btn{padding:13px;border-radius:12px;border:none;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;}
+.res-btn.primary{background:var(--crimson);color:#fff;}
+.res-btn.secondary{background:var(--ink);color:var(--paper);}
+.res-btn.tertiary{background:var(--panel);color:var(--ink);border:1.5px solid var(--border);}
+/* LIST */
+.list-item{background:var(--panel);border:1px solid var(--border);border-radius:11px;padding:12px 14px;margin-bottom:7px;display:flex;align-items:center;gap:12px;}
+.li-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.li-body{flex:1;}
+.li-cat{font-size:9px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:rgba(26,20,16,0.3);margin-bottom:2px;}
+.li-jp{font-family:'Shippori Mincho',serif;font-size:14px;font-weight:600;margin-bottom:2px;}
+.li-en{font-size:13px;color:rgba(26,20,16,0.6);}
+.li-right{display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;}
+.li-done{font-size:10px;background:var(--moss);color:#fff;padding:2px 7px;border-radius:20px;display:none;}
+.li-done.show{display:inline;}
+.li-voice-btn{padding:3px 8px;border-radius:20px;border:1px solid var(--gold);background:transparent;color:var(--gold);font-size:10px;cursor:pointer;}
+/* STATS */
+.overall-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;}
+.os{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px 12px;text-align:center;}
+.os-num{font-size:26px;font-weight:500;line-height:1;margin-bottom:4px;}
+.os-num.g{color:var(--moss);}.os-num.gold{color:var(--gold);}
+.os-lbl{font-family:'Shippori Mincho',serif;font-size:10px;color:rgba(26,20,16,0.4);}
+.cat-stat{background:var(--panel);border:1px solid var(--border);border-radius:11px;padding:12px 14px;margin-bottom:8px;}
+.cs-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+.cs-name{font-size:13px;font-weight:500;}
+.cs-pct{font-size:12px;color:var(--moss);font-weight:500;}
+.cs-bar{height:4px;background:var(--border);border-radius:2px;overflow:hidden;}
+.cs-fill{height:100%;background:var(--moss);border-radius:2px;transition:width .5s;}
+.reset-all-btn{width:100%;padding:11px;border-radius:10px;border:1.5px solid var(--border);background:var(--panel);font-family:'DM Sans',sans-serif;font-size:12px;color:rgba(26,20,16,0.4);cursor:pointer;margin-top:12px;}
+.reset-all-btn:hover{border-color:var(--crimson);color:var(--crimson);}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:10px 20px;border-radius:30px;font-size:12px;z-index:1000;opacity:0;transition:opacity .3s;pointer-events:none;}
+.toast.show{opacity:1;}
+</style>
+</head>
+<body>
+<!-- MODAL -->
+<div class="modal-overlay" id="api-modal">
+<div class="modal-box">
+<div class="modal-logo">🍱</div>
+<div class="modal-title">Google Cloud 音声設定</div>
+<div class="modal-sub">ネイティブ音声を使うために<br>Google Cloud Text-to-Speech APIキーを設定してください。<br>一度入力するとブラウザに保存されます。</div>
+<label class="modal-label">Google Cloud APIキー</label>
+<input class="modal-input" type="password" id="api-key-input" placeholder="AIza..." autocomplete="off">
+<div class="modal-help"><a href="https://console.cloud.google.com" target="_blank">Google Cloud Console</a> → Text-to-Speech API → APIキーを作成。</div>
+<button class="modal-btn" onclick="saveApiKey()">保存してスタート ✓</button>
+<button class="modal-skip" onclick="skipApiKey()">音声なしで使う</button>
+</div>
+</div>
+<div class="toast" id="toast"></div>
+<header>
+<div class="h-top">
+<div class="h-logo">🍱</div>
+<div class="h-titles">
+<h1>日本の食材・調味料</h1>
+<p>シェフのための英語説明 — 100フレーズ</p>
+</div>
+<div class="h-right">
+  <button class="h-auto-btn" id="auto-play-btn" onclick="toggleAutoPlay()">▶ 自動OFF</button>
+  <button class="h-key-btn" onclick="showApiModal()">🔑 音声設定</button>
+  <div class="h-score"><div class="num" id="h-mastered">0</div><div class="lbl">習得済み</div></div>
+</div>
+</div>
+<nav>
+<button class="tab active" onclick="switchTab('train',this)"><span>⚡</span><span>トレーニング</span></button>
+<button class="tab" onclick="switchTab('list',this)"><span>📋</span><span>一覧</span></button>
+<button class="tab" onclick="switchTab('stats',this)"><span>📊</span><span>記録</span></button>
+</nav>
+</header>
+<main>
+<div id="page-train" class="page active">
+<div id="train-setup">
+<div class="sec" style="margin-top:14px">カテゴリを選ぶ</div>
+<div class="cat-chips" id="cat-chips"></div>
+<div class="sec">モードを選ぶ</div>
+<div class="mode-cards">
+<div class="mode-card selected" id="mode-normal" onclick="selectMode('normal')"><div class="mode-emoji">🃏</div><div class="mode-name">通常モード</div><div class="mode-desc">自分のペースで1枚ずつ。</div></div>
+<div class="mode-card" id="mode-timer" onclick="selectMode('timer')"><div class="mode-emoji">⏱️</div><div class="mode-name">タイマーモード</div><div class="mode-desc">3秒以内に口から出す。</div></div>
+<div class="mode-card" id="mode-loop" onclick="selectMode('loop')"><div class="mode-emoji">🔁</div><div class="mode-name">ループモード</div><div class="mode-desc">5回連続正解で身体化。</div></div>
+<div class="mode-card" id="mode-review" onclick="selectMode('review')"><div class="mode-emoji">🔄</div><div class="mode-name">復習モード</div><div class="mode-desc">未習得・間違えたものだけ。</div></div>
+</div>
+<button class="start-btn" onclick="startTraining()">トレーニング開始 →</button>
+</div>
+<div id="train-area" style="display:none">
+<div class="train-hd">
+<span class="train-ctr" id="train-ctr">1 / 10</span>
+<div class="train-prog-wrap"><div class="train-prog-fill" id="train-prog" style="width:0%"></div></div>
+<button class="quit-btn" onclick="quitTraining()">終了</button>
+</div>
+<div id="loop-banner" class="loop-banner" style="display:none">🔁 ループモード — あと<span id="loop-remain"></span>回正解で卒業！</div>
+<div id="timer-wrap" class="timer-wrap" style="display:none">
+<div class="timer-ring">
+<svg width="64" height="64" viewBox="0 0 64 64">
+<circle class="timer-bg" cx="32" cy="32" r="27"/>
+<circle class="timer-fg" id="timer-circle" cx="32" cy="32" r="27" stroke-dasharray="169.6" stroke-dashoffset="0"/>
+</svg>
+<div class="timer-num" id="timer-num">3</div>
+</div>
+</div>
+<div class="autoplay-bar" id="autoplay-bar">
+  <div class="ap-left"><div class="ap-dot idle" id="ap-dot"></div><span class="ap-label" id="ap-label">自動再生モード</span></div>
+  <button class="ap-skip-btn" onclick="autoSkipNow()">今すぐ次へ →</button>
+</div>
+<div class="flash-card" id="flash-card" onclick="onCardTap()">
+<div class="card-cat" id="card-cat"></div>
+<div class="card-jp" id="card-jp"></div>
+<div class="card-sub" id="card-sub"></div>
+<div class="card-hint" id="card-hint">タップして英語を確認</div>
+<div class="card-en" id="card-en"></div>
+<div class="card-alt" id="card-alt"></div>
+<div class="card-tip" id="card-tip"></div>
+</div>
+<div class="voice-btn-wrap" id="voice-btn-wrap" style="display:none">
+<button class="voice-btn" id="voice-play-btn" onclick="playEnglishManual()">
+<span class="voice-icon">🔊</span><span id="voice-btn-label">英語を聴く</span>
+</button>
+</div>
+<div class="voice-status" id="voice-status"></div>
+<div class="action-row">
+<button class="act-btn act-reveal" id="btn-reveal" onclick="revealCard()">英語を見る</button>
+<button class="act-btn act-ok" id="btn-ok" onclick="markOk()" style="display:none">✓ 言えた！</button>
+<button class="act-btn act-ng" id="btn-ng" onclick="markNg()" style="display:none">✕ 言えなかった</button>
+</div>
+<button class="act-skip" onclick="skipCard()">スキップ →</button>
+</div>
+<div id="train-result" style="display:none">
+<div class="result-wrap">
+<div class="result-emoji" id="res-emoji">🎉</div>
+<div class="result-title" id="res-title">完了！</div>
+<div class="result-sub" id="res-sub"></div>
+<div class="result-stats">
+<div class="rs"><div class="rs-num g" id="res-ok">0</div><div class="rs-lbl">言えた！</div></div>
+<div class="rs"><div class="rs-num r" id="res-ng">0</div><div class="rs-lbl">言えなかった</div></div>
+<div class="rs"><div class="rs-num b" id="res-total">0</div><div class="rs-lbl">総問数</div></div>
+</div>
+<div class="result-btns">
+<button class="res-btn primary" id="res-loop-btn" onclick="startLoopFromResult()" style="display:none">🔁 言えなかった分をループ練習</button>
+<button class="res-btn secondary" onclick="backToSetup()">もう一度設定から</button>
+<button class="res-btn tertiary" onclick="switchTab('stats',document.querySelectorAll('.tab')[2])">記録を見る</button>
+</div>
+</div>
+</div>
+</div>
+<div id="page-list" class="page">
+<div class="sec" style="margin-top:14px">カテゴリで絞り込む</div>
+<div class="cat-chips" id="list-cat-chips"></div>
+<div id="list-items"></div>
+</div>
+<div id="page-stats" class="page">
+<div class="sec" style="margin-top:14px">全体の進捗</div>
+<div class="overall-stats">
+<div class="os"><div class="os-num g" id="st-mastered">0</div><div class="os-lbl">習得済み</div></div>
+<div class="os"><div class="os-num gold" id="st-total">100</div><div class="os-lbl">総フレーズ数</div></div>
+</div>
+<div class="sec">カテゴリ別</div>
+<div id="cat-stats"></div>
+<button class="reset-all-btn" onclick="resetAllData()">↺ 全データをリセット</button>
+</div>
+</main>
+<script>
+const PHRASES = [
+{id:1,cat:'🍶 発酵・醸造',jp:'麹（こうじ）',sub:'Koji',en:"Koji is a mold — Aspergillus oryzae — that's used to ferment and transform ingredients. It breaks down proteins and starches, creating deep umami and natural sweetness.",alt:"Think of koji as the engine behind miso, soy sauce, and sake.",tip:"Aspergillus oryzae（学名）を覚えておくと専門性が伝わる。"},
+{id:2,cat:'🍶 発酵・醸造',jp:'味噌',sub:'Miso',en:"Miso is a fermented paste made from soybeans, salt, and koji. It ranges from sweet and mild to deep and funky depending on how long it's aged.",alt:"We use it for seasoning, marinades, glazes — it adds incredible depth.",tip:"funky は発酵食品特有の複雑な香りを表すポジティブな表現。"},
+{id:3,cat:'🍶 発酵・醸造',jp:'日本酒',sub:'Sake',en:"Sake is a Japanese rice wine brewed using koji, water, and rice. It has a clean, delicate flavour with subtle floral and umami notes.",alt:"We use it in cooking to add depth and remove any gaminess.",tip:"remove gaminess（臭みを消す）はシェフとして必須の表現。"},
+{id:4,cat:'🍶 発酵・醸造',jp:'みりん',sub:'Mirin',en:"Mirin is a sweet rice wine used in Japanese cooking. It adds a subtle sweetness and a beautiful glaze to dishes.",alt:"It also helps tenderise meat and fish when used as a marinade.",tip:"glaze（照り）はシェフとして重要なポイント。"},
+{id:5,cat:'🍶 発酵・醸造',jp:'醤油',sub:'Soy sauce',en:"Soy sauce is made from fermented soybeans, wheat, salt, and koji. It's the backbone of Japanese seasoning — salty, savoury, and rich in umami.",alt:"There are different types — light, dark, and tamari, which is gluten-free.",tip:"backbone（根幹）はその食材の重要性を表す比喩。"},
+{id:6,cat:'🍶 発酵・醸造',jp:'酢（米酢）',sub:'Rice vinegar',en:"Rice vinegar is milder and less acidic than Western vinegar. It has a delicate sweetness and clean acidity.",alt:"We use it for sushi rice, dressings, and pickling.",tip:"milder and less acidic（より穏やかで酸味が少ない）は西洋の食材との比較で伝わりやすい。"},
+{id:7,cat:'🍶 発酵・醸造',jp:'塩麹',sub:'Shio koji',en:"Shio koji is a mixture of koji, salt, and water. It's used as a marinade — the enzymes break down proteins, making meat incredibly tender and flavourful.",alt:"It adds a gentle umami and natural sweetness without overpowering.",tip:"enzymes break down proteins（酵素がタンパク質を分解する）は科学的な説明で信頼感が増す。"},
+{id:8,cat:'🍶 発酵・醸造',jp:'醤油麹',sub:'Shoyu koji',en:"Shoyu koji is soy sauce fermented with koji. It's richer and more complex than plain soy sauce, with a deeper umami and rounded flavour.",alt:"It works beautifully as a seasoning or dipping sauce.",tip:"rounded flavour（丸みのある味わい）はシェフらしい表現。"},
+{id:9,cat:'🍶 発酵・醸造',jp:'甘酒',sub:'Amazake',en:"Amazake is a sweet fermented rice drink made with koji. It's naturally sweet with no added sugar — the koji converts the starches into sugars.",alt:"We sometimes use it as a natural sweetener in marinades and desserts.",tip:"naturally sweet with no added sugar（砂糖不使用の自然な甘さ）は健康志向の客への訴求力がある。"},
+{id:10,cat:'🍶 発酵・醸造',jp:'酒粕',sub:'Sake lees',en:"Sake lees are the pressed solids left over after sake is filtered. They're rich in amino acids and have a complex, slightly alcoholic flavour.",alt:"We use them for marinades, pickling, and adding depth to sauces.",tip:"pressed solids left over（絞り後に残った固形物）は製造プロセスの説明として明快。"},
+{id:11,cat:'🫘 豆・大豆製品',jp:'納豆',sub:'Natto',en:"Natto is fermented soybeans with a sticky, stringy texture and a strong, pungent aroma. It's an acquired taste, but incredibly nutritious.",alt:"It has a deep, earthy umami flavour and pairs well with soy sauce and mustard.",tip:"acquired taste（慣れが必要な味）は正直な説明で信頼感が出る。"},
+{id:12,cat:'🫘 豆・大豆製品',jp:'豆腐',sub:'Tofu',en:"Tofu is made from coagulated soy milk pressed into blocks. It ranges from silken and custard-like to firm and chewy.",alt:"It absorbs flavours beautifully, which makes it incredibly versatile.",tip:"absorbs flavours（味を吸収する）はtofu最大の特徴。"},
+{id:13,cat:'🫘 豆・大豆製品',jp:'油揚げ',sub:'Aburaage',en:"Aburaage is thin slices of tofu that have been deep-fried. The outside is golden and slightly chewy, while the inside stays soft and spongy.",alt:"It soaks up broth beautifully — perfect for soups and simmered dishes.",tip:"spongy（スポンジ状）はaburaageの内部の食感の最もよい表現。"},
+{id:14,cat:'🫘 豆・大豆製品',jp:'厚揚げ',sub:'Atsuage',en:"Atsuage is thick deep-fried tofu. The outside is crispy and golden, but the inside is soft and silky like regular tofu.",alt:"It holds its shape well in braises and grilled dishes.",tip:"holds its shape（形が崩れない）はシェフとして重要な食感の特性。"},
+{id:15,cat:'🫘 豆・大豆製品',jp:'高野豆腐',sub:'Koya-dofu',en:"Koya-dofu is freeze-dried tofu with a spongy, porous texture. When rehydrated, it soaks up whatever liquid it's cooked in — perfect for simmered dishes.",alt:"It has a subtle, nutty flavour and a unique chewy texture.",tip:"porous（多孔質の）はその吸収力を説明する正確な言葉。"},
+{id:16,cat:'🫘 豆・大豆製品',jp:'枝豆',sub:'Edamame',en:"Edamame are young soybeans harvested before they fully mature. They're bright green, slightly sweet, and have a fresh, grassy flavour.",alt:"They're great as a snack or garnish — simple, healthy, and delicious.",tip:"harvested before they fully mature（完熟前に収穫）はedamameの定義として正確。"},
+{id:17,cat:'🫘 豆・大豆製品',jp:'豆乳',sub:'Soy milk',en:"Soy milk is made by soaking and blending soybeans, then straining out the solids. It has a creamy texture with a slightly beany flavour.",alt:"We use it in soups, sauces, and desserts as a dairy alternative.",tip:"beany（大豆らしい風味）はsoy milkの特徴を正直に伝える表現。"},
+{id:18,cat:'🫘 豆・大豆製品',jp:'おから',sub:'Okara',en:"Okara is the pulp left over after making soy milk or tofu. It's high in fibre, mild in flavour, and has a slightly crumbly texture.",alt:"We use it in salads, croquettes, and as a meat extender.",tip:"pulp left over（搾りかす）は製造工程の説明。crumbly（崩れやすい）は食感の正確な表現。"},
+{id:19,cat:'🫘 豆・大豆製品',jp:'あずき豆',sub:'Azuki beans',en:"Azuki beans are small red beans with a naturally sweet, earthy flavour. They're commonly used in Japanese sweets and desserts.",alt:"When cooked down with sugar, they become anko — red bean paste.",tip:"anko（あんこ）はそのまま英語でも通じるようになってきている。"},
+{id:20,cat:'🫘 豆・大豆製品',jp:'白味噌',sub:'Shiro miso',en:"Shiro miso, or white miso, is aged for a shorter time than red miso. It's sweeter, milder, and has a delicate, creamy flavour.",alt:"It works beautifully in dressings, light soups, and butter-based sauces.",tip:"aged for a shorter time（短期熟成）は赤味噌との違いを説明する鍵。"},
+{id:21,cat:'🌿 だし・うま味',jp:'昆布',sub:'Kombu',en:"Kombu is dried kelp — a type of seaweed — and the primary source of umami in Japanese cooking. It's packed with glutamates, which give a deep, savoury flavour.",alt:"We steep it in cold water to make kombu dashi — the base of almost everything.",tip:"glutamates（グルタミン酸塩）は科学的な表現でうま味の説明に使える。"},
+{id:22,cat:'🌿 だし・うま味',jp:'鰹節',sub:'Katsuobushi',en:"Katsuobushi is dried, fermented, and smoked skipjack tuna shaved into thin flakes. It's the other essential component of dashi, adding a rich, smoky umami.",alt:"The flakes dance in heat from the steam — it looks almost alive.",tip:"skipjack tuna（カツオ）の正式名称。dance in heat（熱で揺れる）は視覚的な表現。"},
+{id:23,cat:'🌿 だし・うま味',jp:'煮干し',sub:'Niboshi',en:"Niboshi are small dried sardines or anchovies used to make a bold, intensely flavoured dashi. It has a stronger, more rustic taste than kombu or katsuobushi dashi.",alt:"It's common in ramen broths and regional Japanese cooking.",tip:"rustic（素朴な・田舎風の）は煮干しだしのキャラクターをよく表している。"},
+{id:24,cat:'🌿 だし・うま味',jp:'干し椎茸',sub:'Dried shiitake',en:"Dried shiitake mushrooms are soaked in water to make a deeply earthy, umami-rich dashi. The soaking liquid itself is liquid gold for cooking.",alt:"The rehydrated mushrooms can then be used in the dish as well.",tip:"liquid gold（液体の金）はだし汁の価値を表す比喩的表現。"},
+{id:25,cat:'🌿 だし・うま味',jp:'うま味',sub:'Umami',en:"Umami is the fifth taste — alongside sweet, sour, salty, and bitter. It's a savoury, round, lingering quality that makes food satisfying and crave-worthy.",alt:"It's produced by glutamates, inosinates, and guanylates found in ingredients like kombu, katsuobushi, and shiitake.",tip:"crave-worthy（また食べたくなる）は現代英語でよく使われる表現。"},
+{id:26,cat:'🌿 だし・うま味',jp:'一番だし',sub:'Ichiban dashi',en:"Ichiban dashi — first dashi — is made by gently steeping kombu in cold water, then briefly simmering with katsuobushi. It's delicate, clean, and incredibly nuanced.",alt:"This is used for clear soups and dishes where the dashi itself is the star.",tip:"nuanced（繊細な）はichiban dashiの品質を表す正確な言葉。"},
+{id:27,cat:'🌿 だし・うま味',jp:'二番だし',sub:'Niban dashi',en:"Niban dashi — second dashi — is made by re-simmering the kombu and katsuobushi used for ichiban dashi. It's more robust and earthy.",alt:"We use it for miso soup, simmered dishes, and anywhere a stronger flavour is needed.",tip:"re-simmering（再度煮出す）はniban dashiの製法の説明として正確。"},
+{id:28,cat:'🌿 だし・うま味',jp:'あごだし',sub:'Ago dashi',en:"Ago dashi is made from dried flying fish. It has a lighter, sweeter, more refined flavour than niboshi dashi, with a subtle sweetness and elegant finish.",alt:"It's popular in the Kyushu region and becoming more widely known.",tip:"flying fish（飛び魚）はagoの英訳。elegant finish（エレガントな余韻）はプロらしい表現。"},
+{id:29,cat:'🌿 だし・うま味',jp:'桜エビ',sub:'Sakura ebi',en:"Sakura ebi are tiny dried pink shrimp with a delicate, sweet, slightly briny flavour. They add a beautiful colour and umami to dishes.",alt:"We use them in okonomiyaki, tempura, and as a garnish.",tip:"briny（潮気のある）は海産物の風味を表す定番表現。"},
+{id:30,cat:'🌿 だし・うま味',jp:'鮭節',sub:'Sake bushi',en:"Sake bushi is smoked and dried salmon shaved into flakes, similar to katsuobushi. It has a rich, oily, deeply smoky flavour.",alt:"It makes a beautiful dashi and works as a garnish on its own.",tip:"oily（油脂感のある）は鮭節の特徴。similar to katsuobushi は比較説明として有効。"},
+{id:31,cat:'🍱 調味料',jp:'白だし',sub:'Shiro dashi',en:"Shiro dashi is a concentrated liquid seasoning made from light soy sauce, mirin, sake, and dashi. It seasons without darkening the colour of a dish.",alt:"Perfect for dishes where you want flavour without colour — egg dishes, clear soups.",tip:"seasons without darkening（色をつけずに味付けする）はshiro dashiの最大の特徴。"},
+{id:32,cat:'🍱 調味料',jp:'めんつゆ',sub:'Mentsuyu',en:"Mentsuyu is a concentrated noodle sauce made from dashi, soy sauce, mirin, and sugar. It's used diluted as a dipping sauce for noodles or as a seasoning base.",alt:"It's one of those pantry essentials that makes everything taste better.",tip:"pantry essential（常備調味料）は共感を得やすい表現。"},
+{id:33,cat:'🍱 調味料',jp:'ポン酢',sub:'Ponzu',en:"Ponzu is a citrus-based sauce made with soy sauce and yuzu or sudachi juice. It's bright, tangy, and refreshing — balancing acidity with umami.",alt:"We use it as a dipping sauce, dressing, or to finish dishes with a light, acidic note.",tip:"tangy（酸っぱくて刺激的な）はponzuの風味を表す。"},
+{id:34,cat:'🍱 調味料',jp:'ごま油',sub:'Sesame oil',en:"Sesame oil has a rich, nutty, intensely aromatic flavour. Even a small amount adds enormous depth and aroma to a dish.",alt:"We use it primarily as a finishing oil — added at the end to preserve its fragrance.",tip:"finishing oil（仕上げオイル）はプロの調理技術を示す表現。"},
+{id:35,cat:'🍱 調味料',jp:'山椒',sub:'Sansho',en:"Sansho is a Japanese citrus pepper with a bright, floral aroma and a unique numbing sensation on the tongue — similar to Sichuan pepper.",alt:"It cuts through rich, fatty flavours beautifully — perfect with eel or duck.",tip:"numbing sensation（しびれる感覚）はsanshoを正確に伝えるために必須の表現。"},
+{id:36,cat:'🍱 調味料',jp:'七味唐辛子',sub:'Shichimi togarashi',en:"Shichimi togarashi is a Japanese seven-spice blend — typically containing chilli, sansho, sesame, nori, and other aromatics. It adds heat, fragrance, and complexity.",alt:"We use it as a finishing condiment — sprinkled over noodles, soups, and grilled dishes.",tip:"seven-spice blend（七種のスパイスブレンド）はそのまま英語として伝わる。"},
+{id:37,cat:'🍱 調味料',jp:'わさび',sub:'Wasabi',en:"Wasabi is a Japanese root with a sharp, pungent heat that hits the nose rather than the tongue. Fresh wasabi is quite different from the paste — more complex and fragrant.",alt:"Real wasabi fades quickly, so it's best grated and served immediately.",tip:"hits the nose rather than the tongue（舌よりも鼻に来る）はwasabiを正確に説明する表現。"},
+{id:38,cat:'🍱 調味料',jp:'生姜',sub:'Ginger',en:"Fresh ginger has a bright, spicy, slightly citrusy heat. In Japanese cooking, we use it to add warmth, cut through richness, and remove unwanted odours.",alt:"Pickled ginger — gari — is served with sushi to cleanse the palate.",tip:"cleanse the palate（口直しする）はgariの役割を正確に説明する表現。"},
+{id:39,cat:'🍱 調味料',jp:'料理酒',sub:'Cooking sake',en:"Cooking sake is used to add depth, remove any gaminess or fishiness, and tenderise proteins. The alcohol evaporates during cooking, leaving behind a subtle sweetness.",alt:"It also helps other flavours penetrate ingredients more deeply.",tip:"gaminess（獣臭）fishiness（魚臭）はシェフとして必須の語彙。"},
+{id:40,cat:'🍱 調味料',jp:'てんさい糖',sub:'Beet sugar',en:"Beet sugar has a slightly more complex, molasses-like flavour compared to refined white sugar. In Japanese cooking, sugar is used not just for sweetness but for balance and gloss.",alt:"It also caramelises beautifully and gives a rich colour to simmered dishes.",tip:"molasses-like（モラセスのような）はbeet sugarの特徴を伝える正確な表現。"},
+{id:41,cat:'🌾 米・穀物',jp:'うるち米',sub:'Japanese short-grain rice',en:"Japanese short-grain rice is stickier and more glutinous than long-grain varieties. When cooked, it becomes tender, slightly sweet, and holds together well.",alt:"The stickiness comes from its high amylopectin starch content.",tip:"amylopectin（アミロペクチン）は科学的な説明。holds together well（まとまりが良い）はシェフとして重要な特性。"},
+{id:42,cat:'🌾 米・穀物',jp:'もち米',sub:'Glutinous rice',en:"Glutinous rice — also called sticky rice — becomes extremely sticky and chewy when cooked. It has a higher amylopectin content than regular rice.",alt:"We use it for mochi, sekihan, and traditional sweets.",tip:"extremely sticky and chewy（非常に粘り気があって弾力がある）はmochigomeの食感の正確な表現。"},
+{id:43,cat:'🌾 米・穀物',jp:'玄米',sub:'Brown rice',en:"Brown rice retains its outer bran layer, giving it a nuttier flavour, chewier texture, and more nutrients than white rice. It takes longer to cook.",alt:"It has a pleasant earthiness and pairs well with bold flavours.",tip:"retains its outer bran layer（外側のぬか層を保持する）は玄米の定義として正確。"},
+{id:44,cat:'🌾 米・穀物',jp:'蕎麦粉',sub:'Buckwheat flour',en:"Buckwheat flour is made from ground buckwheat seeds — not actually a wheat at all, so it's gluten-free. It has an earthy, nutty, slightly bitter flavour.",alt:"We use it to make soba noodles, pancakes, and as a coating for some dishes.",tip:"not actually a wheat at all（実は小麦ではない）はゲストへの驚きの情報。"},
+{id:45,cat:'🌾 米・穀物',jp:'片栗粉',sub:'Katakuriko',en:"Katakuriko is a starch — traditionally made from dogtooth violet tubers, now mostly potato starch. It creates a glossy, clear, silky coating when used as a thickener.",alt:"It gives fried foods a lighter, crispier crust than regular flour.",tip:"glossy, clear, silky（光沢のある・透明な・シルキーな）はthickenerとしての特徴を正確に表す。"},
+{id:46,cat:'🌾 米・穀物',jp:'上新粉',sub:'Joshinko',en:"Joshinko is rice flour made from non-glutinous rice. It produces a firmer, less sticky texture than glutinous rice flour — used for traditional wagashi sweets.",alt:"It gives a clean, neutral flavour with a satisfying chew.",tip:"non-glutinous（非もち性の）はmochiko（もち粉）との違いを説明するのに重要。"},
+{id:47,cat:'🌾 米・穀物',jp:'もち粉',sub:'Mochiko',en:"Mochiko is flour made from glutinous rice. It creates that characteristic sticky, stretchy, chewy texture of mochi and many Japanese sweets.",alt:"Even a small amount can add body and chewiness to batters.",tip:"stretchy（伸びる）はmochiko特有の食感表現。add body（ボディを加える）はプロらしいテクスチャーの表現。"},
+{id:48,cat:'🌾 米・穀物',jp:'パン粉',sub:'Panko',en:"Panko are Japanese-style breadcrumbs made from crustless bread. They're lighter, airier, and crispier than regular breadcrumbs — and they stay crispy for longer.",alt:"They don't absorb as much oil, which gives a lighter, crunchy coating.",tip:"crustless bread（耳を除いたパン）はpankoの製法の説明。stay crispy for longer（より長くサクサクを保つ）は実用的な情報。"},
+{id:49,cat:'🌾 米・穀物',jp:'白玉粉',sub:'Shiratamako',en:"Shiratamako is a fine glutinous rice flour used for shiratama dumplings and wagashi. It produces an extremely smooth, silky, and elastic texture.",alt:"When made into dough, it becomes almost translucent and incredibly smooth.",tip:"translucent（半透明の）はshiratama dumplingsの見た目を正確に伝える。"},
+{id:50,cat:'🌾 米・穀物',jp:'米粉',sub:'Rice flour',en:"Rice flour is finely milled regular rice and is naturally gluten-free. It has a neutral flavour and creates a light, delicate texture in baked goods and coatings.",alt:"It's a great gluten-free alternative and is increasingly popular in modern cooking.",tip:"finely milled（細かく挽いた）はrice flourの製造方法。gluten-free alternative（グルテンフリーの代替品）は現代の食トレンドに合った表現。"},
+{id:51,cat:'🥬 野菜・山菜',jp:'ごぼう',sub:'Burdock root',en:"Burdock root has a distinctive earthy, slightly bitter, woodsy flavour. The texture is firm and fibrous — it stays pleasantly crunchy even after cooking.",alt:"We often julienne it and cook it in soy sauce and mirin for a classic side dish.",tip:"woodsy（森のような）はgobouの風味を表すユニークな表現。"},
+{id:52,cat:'🥬 野菜・山菜',jp:'蓮根',sub:'Lotus root',en:"Lotus root is the rhizome of the lotus plant. It has a mildly sweet, starchy flavour and a satisfying crunch. When sliced, it has beautiful holes throughout.",alt:"It absorbs flavours well and works beautifully in stir-fries, tempura, and simmered dishes.",tip:"rhizome（根茎）は植物学的に正確な表現。beautiful holes（美しい穴）は見た目の特徴でゲストの興味を引く。"},
+{id:53,cat:'🥬 野菜・山菜',jp:'大根',sub:'Daikon radish',en:"Daikon is a large white Japanese radish. Raw, it has a crisp texture and peppery bite. When cooked, it becomes soft and absorbs surrounding flavours beautifully.",alt:"It's incredibly versatile — we eat it raw, pickled, braised, and grated.",tip:"peppery bite（ピリッとした辛み）は大根の特徴を正確に表す。"},
+{id:54,cat:'🥬 野菜・山菜',jp:'山芋・長芋',sub:'Japanese mountain yam',en:"Japanese mountain yam has a unique, almost slimy texture when raw — called neba-neba. Grated, it becomes viscous and silky, used as a binder or topping.",alt:"It's also delicious grilled or roasted, where it becomes fluffy inside.",tip:"neba-neba（ねばねば）は説明として使えるユニークな言葉。"},
+{id:55,cat:'🥬 野菜・山菜',jp:'たけのこ',sub:'Bamboo shoots',en:"Bamboo shoots are the tender young sprouts of bamboo plants. They have a mild, slightly earthy flavour and a satisfying crisp, crunchy texture.",alt:"They need to be boiled to remove any bitterness before cooking.",tip:"tender young sprouts（柔らかい若芽）はたけのこの定義として正確。"},
+{id:56,cat:'🥬 野菜・山菜',jp:'わらび',sub:'Bracken fern',en:"Bracken fern is a wild mountain vegetable with a slightly slimy, tender texture and a subtly bitter, earthy flavour. It must be prepared with wood ash to remove toxins.",alt:"After preparation, it has a pleasant spring flavour — very seasonal.",tip:"wood ash（灰）はあく抜きの説明として正確。"},
+{id:57,cat:'🥬 野菜・山菜',jp:'ふき',sub:'Butterbur',en:"Butterbur is a wild plant with a distinctive bitter, vegetal flavour and a slightly slimy texture. It's blanched and peeled before use.",alt:"It has a very Japanese, seasonal quality — representing early spring.",tip:"vegetal（植物性の）はフレーバーを表す専門的な形容詞。"},
+{id:58,cat:'🥬 野菜・山菜',jp:'みょうが',sub:'Myoga ginger',en:"Myoga is a type of Japanese ginger bud with a mild, floral, slightly spicy flavour. It's more delicate than regular ginger and is mainly used as a garnish.",alt:"It adds a beautiful pop of colour and freshness to dishes.",tip:"ginger bud（生姜の花芽）はmyogaの正確な説明。"},
+{id:59,cat:'🥬 野菜・山菜',jp:'三つ葉',sub:'Mitsuba',en:"Mitsuba is a Japanese herb with three leaves — similar to parsley in appearance but with a more delicate, slightly bitter, celery-like flavour.",alt:"We use it as a garnish for soups, egg dishes, and anything that needs a fresh, herbal lift.",tip:"celery-like（セロリのような）は比較表現で外国人に伝わりやすい。"},
+{id:60,cat:'🥬 野菜・山菜',jp:'柚子',sub:'Yuzu',en:"Yuzu is a Japanese citrus fruit with a unique, intensely aromatic rind and tart juice. Its flavour is somewhere between lemon, grapefruit, and mandarin — floral and complex.",alt:"We use the zest and juice to brighten sauces, dressings, and desserts.",tip:"tart（酸っぱい）はyuzuの特徴を表す。somewhere between（〜の中間のような）は比較説明として効果的。"},
+{id:61,cat:'🐟 魚介・乾物',jp:'鰹節薄削り',sub:'Katsuobushi flakes',en:"Katsuobushi flakes are made from smoked, dried, and fermented skipjack tuna. They have a rich, smoky, intensely savoury flavour — one of the key sources of umami.",alt:"They dance beautifully in steam and add incredible depth to dashi and toppings.",tip:"dance in steam（蒸気の中で踊る）はビジュアルとして印象的な表現。"},
+{id:62,cat:'🐟 魚介・乾物',jp:'あご（飛魚）',sub:'Dried flying fish',en:"Dried flying fish — ago — is used to make a light, refined dashi with a subtle sweetness and clean finish. It's particularly popular in Kyushu cuisine.",alt:"The flavour is more elegant and less intense than niboshi dashi.",tip:"refined（洗練された）はago dashiのキャラクターを表す。"},
+{id:63,cat:'🐟 魚介・乾物',jp:'さくら海老（乾燥）',sub:'Dried sakura shrimp',en:"Dried sakura shrimp are tiny pink shrimp with a concentrated, sweet, briny flavour. They add colour, crunch, and umami to dishes.",alt:"We use them in okonomiyaki, chawanmushi, and as a garnish.",tip:"concentrated（凝縮した）は乾物特有の風味の強さを表す。"},
+{id:64,cat:'🐟 魚介・乾物',jp:'白子（たら）',sub:'Cod milt',en:"Cod milt — shirako — is the sperm sac of a cod. It has an incredibly rich, creamy, delicate flavour, almost like a savoury custard.",alt:"It's a delicacy in Japan — silky smooth with a clean, oceanic finish.",tip:"sperm sac（精巣）は正直な説明が必要。savoury custard（塩味のカスタード）はテクスチャーと風味の的確な比喩。"},
+{id:65,cat:'🐟 魚介・乾物',jp:'うに',sub:'Sea urchin',en:"Sea urchin — uni — has a rich, briny, oceanic flavour with a creamy, almost custardy texture. The best quality has a clean sweetness and no bitterness.",alt:"It melts on the tongue and has one of the most complex flavours in Japanese cuisine.",tip:"melts on the tongue（口の中で溶ける）は最高品質のuniの特徴。"},
+{id:66,cat:'🐟 魚介・乾物',jp:'いくら',sub:'Salmon roe',en:"Ikura — salmon roe — are large, glossy orange eggs that burst in the mouth, releasing a rich, briny, savoury flavour with a natural sweetness.",alt:"They're usually cured in soy sauce and sake to enhance the flavour.",tip:"burst in the mouth（口の中で弾ける）はikuraを正確に伝える表現。"},
+{id:67,cat:'🐟 魚介・乾物',jp:'数の子',sub:'Herring roe',en:"Kazunoko — herring roe — has a distinctive snappy crunch and a mild, slightly briny flavour. It's a traditional New Year food in Japan.",alt:"The texture is quite unique — firm clusters of tiny eggs that crunch satisfyingly.",tip:"snappy crunch（歯切れの良いクリスプ感）はkazunokoの食感の最も正確な表現。"},
+{id:68,cat:'🐟 魚介・乾物',jp:'ちりめんじゃこ',sub:'Dried baby sardines',en:"Chirimen jako are tiny dried baby sardines with a salty, intensely savoury flavour. They add a delicate crunch and umami to rice dishes, salads, and garnishes.",alt:"They're also incredibly nutritious — high in calcium and omega-3s.",tip:"omega-3s は健康志向の客への訴求表現。"},
+{id:69,cat:'🐟 魚介・乾物',jp:'焼き海苔',sub:'Toasted nori',en:"Toasted nori is dried seaweed sheets with a crispy texture and a deeply savoury, umami-rich, slightly smoky flavour. When fresh, it has a satisfying snap.",alt:"It softens quickly when exposed to moisture, so we serve it immediately.",tip:"satisfying snap（心地よいパリッとした音・食感）はtoasted noriの特徴。"},
+{id:70,cat:'🐟 魚介・乾物',jp:'とびこ',sub:'Flying fish roe',en:"Tobiko — flying fish roe — are small, crunchy, mildly briny eggs with a delicate flavour. They're often used to add colour, texture, and a pop of flavour to dishes.",alt:"They come in different colours depending on the flavouring — wasabi, yuzu, squid ink.",tip:"pop of flavour（風味のアクセント）はモダンなシェフらしい表現。"},
+{id:71,cat:'🫙 漬物・保存食',jp:'梅干し',sub:'Umeboshi',en:"Umeboshi are pickled Japanese plums with an intensely sour, salty, and slightly fruity flavour. They're incredibly sharp and puckering — not for the faint-hearted.",alt:"We use them in rice dishes, sauces, and as a palate cleanser.",tip:"puckering（口をすぼめるほど酸っぱい）はumeboshiの酸味を視覚的に伝える。"},
+{id:72,cat:'🫙 漬物・保存食',jp:'ぬか漬け',sub:'Nuka-zuke',en:"Nuka-zuke are vegetables fermented in a bran bed — nukadoko — made from rice bran, salt, and water. The longer they ferment, the more complex and funky the flavour becomes.",alt:"The bran bed is a living ecosystem — it needs to be tended daily.",tip:"living ecosystem（生きたエコシステム）はnukadokoの本質をうまく表す。"},
+{id:73,cat:'🫙 漬物・保存食',jp:'たくあん',sub:'Takuan',en:"Takuan is daikon radish pickled in rice bran and salt. It has a distinctive yellow colour, a satisfying crunch, and a slightly sweet, tangy, funky flavour.",alt:"It's one of the most iconic Japanese pickles — served alongside almost every meal.",tip:"iconic（象徴的な）はtakuanの日本食における地位を表す。"},
+{id:74,cat:'🫙 漬物・保存食',jp:'柴漬け',sub:'Shibazuke',en:"Shibazuke is a Kyoto-style pickle made from cucumber, eggplant, and myoga, fermented with red shiso. It has a vibrant purple colour and a tangy, herbal flavour.",alt:"The red shiso gives it that beautiful colour and a distinctive, slightly astringent taste.",tip:"astringent（渋みのある）はshisoの特性を表す正確な表現。"},
+{id:75,cat:'🫙 漬物・保存食',jp:'浅漬け',sub:'Asazuke',en:"Asazuke are quick pickles — lightly salted vegetables left to cure for just a few hours. They're fresh, crunchy, and retain their natural colour and flavour.",alt:"Unlike long-fermented pickles, asazuke are bright and clean-tasting.",tip:"cure（塩漬けにする）はpicklingの正確な動詞。"},
+{id:76,cat:'🫙 漬物・保存食',jp:'甘酢漬け',sub:'Amazu pickles',en:"Amazu pickles are vegetables pickled in a sweet vinegar solution. They have a balanced sweet-sour flavour and a refreshing crunch.",alt:"We use them as a condiment, garnish, or palate cleanser.",tip:"balanced sweet-sour（甘酸っぱいバランス）はamazu picklesの特徴を正確に表す。"},
+{id:77,cat:'🫙 漬物・保存食',jp:'実山椒（佃煮）',sub:'Sansho in tsukudani',en:"Sansho cooked in tsukudani style is simmered in soy sauce, mirin, and sugar until deeply flavoured. It has a numbing, tingly heat with a sweet-savoury glaze.",alt:"It's often served alongside rice — a tiny amount goes a long way.",tip:"tingly heat（しびれるような辛さ）はsanshoを正確に表す表現。"},
+{id:78,cat:'🫙 漬物・保存食',jp:'切り干し大根',sub:'Dried daikon',en:"Kiriboshi daikon is daikon radish that has been julienned and sun-dried. Drying intensifies the flavour and creates a pleasantly chewy texture.",alt:"When rehydrated and simmered, it has a concentrated, savoury-sweet flavour.",tip:"sun-dried（天日干し）はkiriboshi daikon製法の正確な表現。"},
+{id:79,cat:'🫙 漬物・保存食',jp:'かつお昆布佃煮',sub:'Kombu tsukudani',en:"Kombu tsukudani is kombu simmered until tender in soy sauce, mirin, and sugar. It has a deeply savoury, sweet, and sticky flavour — concentrated umami in every bite.",alt:"It's served in tiny amounts as a condiment with rice.",tip:"concentrated umami in every bite（ひと口ごとに凝縮されたうま味）は詩的でシェフらしい表現。"},
+{id:80,cat:'🫙 漬物・保存食',jp:'塩辛',sub:'Shiokara',en:"Shiokara is a paste made from seafood — usually squid — fermented in its own salt and viscera. It has an intensely pungent, briny, funky flavour — deeply savoury.",alt:"It's one of Japan's most acquired tastes, but pairs perfectly with sake.",tip:"viscera（内臓）はshiokara製法の正確な表現。"},
+{id:81,cat:'🍵 茶・香辛料',jp:'抹茶',sub:'Matcha',en:"Matcha is finely ground green tea with a rich, grassy, slightly bitter flavour and a beautiful vibrant green colour. Ceremonial grade has a sweeter, more refined flavour.",alt:"Culinary grade is more bitter and robust — perfect for cooking, baking, and ice cream.",tip:"ceremonial grade vs culinary grade（抹茶のグレード）の区別はシェフとして重要な知識。"},
+{id:82,cat:'🍵 茶・香辛料',jp:'煎茶',sub:'Sencha',en:"Sencha is the most common Japanese green tea. It has a fresh, grassy, slightly astringent flavour with a subtle sweetness. The flavour varies significantly with water temperature.",alt:"Lower temperature water produces a sweeter, more delicate cup.",tip:"astringent（渋みのある）はtea全般の重要な形容詞。"},
+{id:83,cat:'🍵 茶・香辛料',jp:'山椒（粉）',sub:'Ground sansho',en:"Ground sansho has a bright, citrusy, floral aroma with a distinctive numbing, tingling sensation. It's the Japanese equivalent of Sichuan pepper — clean and aromatic.",alt:"We use it as a finishing spice — just a pinch transforms a dish completely.",tip:"just a pinch transforms a dish（ひとつまみで料理が変わる）はシェフとして印象的な表現。"},
+{id:84,cat:'🍵 茶・香辛料',jp:'鷹の爪',sub:'Japanese dried chilli',en:"Takano-tsume — eagle's claw chilli — is a small, intensely hot Japanese dried chilli. The heat is clean and sharp rather than smoky.",alt:"We use it whole in oil infusions or sliced as a garnish.",tip:"eagle's claw（鷹の爪）の直訳は英語圏でも面白がられる。"},
+{id:85,cat:'🍵 茶・香辛料',jp:'木の芽',sub:'Kinome leaves',en:"Kinome are the young leaves of the sansho plant. They have a bright, citrusy, floral aroma that's slightly numbing on the tongue — used as a beautiful aromatic garnish.",alt:"Clapping them between your palms releases their fragrance before plating.",tip:"clapping between your palms（手のひらで叩く）は盛り付け前のテクニックとして具体的で実用的。"},
+{id:86,cat:'🍵 茶・香辛料',jp:'紫蘇（大葉）',sub:'Shiso',en:"Shiso — or perilla — is a Japanese herb with a complex, aromatic flavour. Green shiso has a fresh, minty, slightly anise-like taste. Red shiso is more astringent.",alt:"We use it raw as a garnish, in salads, wrapped around fish, or deep-fried as tempura.",tip:"anise-like（アニスのような）はshisoの香りの最もよい比較表現。"},
+{id:87,cat:'🍵 茶・香辛料',jp:'柚子こしょう',sub:'Yuzu kosho',en:"Yuzu kosho is a paste made from yuzu zest, green chilli, and salt. It's intensely aromatic, citrusy, and spicy — a tiny amount adds enormous flavour.",alt:"We use it as a condiment, in dressings, and to finish grilled fish or meat.",tip:"a tiny amount adds enormous flavour（少量で大きな風味）はシェフとして重要な情報。"},
+{id:88,cat:'🍵 茶・香辛料',jp:'辛子',sub:'Japanese mustard',en:"Japanese mustard — karashi — is much more pungent and sharp than Western mustard. It has a clean, sinus-clearing heat with no sweetness.",alt:"We use it with tonkatsu, natto, and as a condiment for many cold dishes.",tip:"sinus-clearing heat（鼻にくる辛さ）はkarashiの辛さの特徴を的確に表す面白い表現。"},
+{id:89,cat:'🍵 茶・香辛料',jp:'黒七味',sub:'Kuro shichimi',en:"Kuro shichimi is a darker, more complex version of regular shichimi togarashi. It contains sansho, black sesame, and charred ingredients that give it an earthy, smoky depth.",alt:"It's a Kyoto specialty and particularly good with grilled and braised dishes.",tip:"charred ingredients（焦がした食材）はkuro shichimi特有の要素。"},
+{id:90,cat:'🍵 茶・香辛料',jp:'白ごま・黒ごま',sub:'Sesame seeds',en:"White sesame seeds have a delicate, nutty, slightly sweet flavour. Black sesame has a deeper, more intense, slightly bitter, roasted flavour — more aromatic and complex.",alt:"Toasted sesame seeds are used as a garnish and seasoning across Japanese cuisine.",tip:"delicate vs intense（繊細 vs 強烈）は白ごまと黒ごまの違いを簡潔に表す対比。"},
+{id:91,cat:'🎌 説明・接客フレーズ',jp:'これが今夜の食材です',sub:'料理の説明をするとき',en:"Let me tell you about tonight's ingredients.",alt:"I'd like to walk you through what we're using tonight.",tip:"walk you through（案内する・説明する）はプロらしく丁寧な表現。"},
+{id:92,cat:'🎌 説明・接客フレーズ',jp:'日本から取り寄せたものです',sub:'',en:"This is sourced directly from Japan.",alt:"We import this specially from Japan.",tip:"sourced directly from（直接仕入れた）は食材の品質と本物感を伝える重要表現。"},
+{id:93,cat:'🎌 説明・接客フレーズ',jp:'食べたことがありますか？',sub:'',en:"Have you tried this before?",alt:"Are you familiar with this ingredient?",tip:"Are you familiar with...? はより丁寧で会話を広げやすい。"},
+{id:94,cat:'🎌 説明・接客フレーズ',jp:'説明しましょうか？',sub:'',en:"Would you like me to explain?",alt:"Shall I walk you through it?",tip:"Shall I...? はBritish English的で丁寧な申し出の表現。"},
+{id:95,cat:'🎌 説明・接客フレーズ',jp:'口の中でとろけます',sub:'',en:"It just melts in your mouth.",alt:"The texture is incredibly silky and smooth.",tip:"melts in your mouth（口の中でとろける）はテクスチャーの定番表現。"},
+{id:96,cat:'🎌 説明・接客フレーズ',jp:'独特の味と香りがあります',sub:'',en:"It has a very distinctive flavour and aroma.",alt:"The taste is quite unique — unlike anything else.",tip:"distinctive（独特の）はunusualより中立的で料理の説明に適切。"},
+{id:97,cat:'🎌 説明・接客フレーズ',jp:'旬の食材を使っています',sub:'',en:"We use seasonal ingredients.",alt:"This is at its peak right now.",tip:"at its peak（旬を迎えている）は食材の質を強調するシェフらしい表現。"},
+{id:98,cat:'🎌 説明・接客フレーズ',jp:'少量でも風味が出ます',sub:'',en:"A little goes a long way.",alt:"Even a small amount adds incredible depth.",tip:"a little goes a long way（少量でも十分）は調味料や薬味の説明として汎用性が高い定番表現。"},
+{id:99,cat:'🎌 説明・接客フレーズ',jp:'アレルギーはありますか？',sub:'',en:"Do you have any allergies or dietary requirements?",alt:"Is there anything you can't eat?",tip:"dietary requirements（食事制限）はallergiesより広い概念。"},
+{id:100,cat:'🎌 説明・接客フレーズ',jp:'何かご質問があればどうぞ',sub:'',en:"Please don't hesitate to ask if you have any questions.",alt:"Feel free to ask me anything about the ingredients.",tip:"don't hesitate to ask（遠慮なく聞いてください）はホスピタリティの定番表現。"}
+];
+const CATS=[...new Set(PHRASES.map(p=>p.cat))];
+const CAT_COLORS={'🍶 発酵・醸造':'#c8962a','🫘 豆・大豆製品':'#a03030','🌿 だし・うま味':'#4a7c59','🍱 調味料':'#3d5a8a','🌾 米・穀物':'#7a5a2a','🥬 野菜・山菜':'#2a7a5a','🐟 魚介・乾物':'#2a5a7a','🫙 漬物・保存食':'#5a2a7a','🍵 茶・香辛料':'#7a2a5a','🎌 説明・接客フレーズ':'#4a4a8a'};
+
+let gApiKey = localStorage.getItem('g_tts_key') || '';
+let currentAudio = null;
+let isPlaying = false;
+
+function saveApiKey() {
+  const key = document.getElementById('api-key-input').value.trim();
+  if (!key) { showToast('APIキーを入力してください'); return; }
+  gApiKey = key;
+  localStorage.setItem('g_tts_key', key);
+  document.getElementById('api-modal').style.display = 'none';
+  showToast('✓ APIキーを保存しました');
+}
+function skipApiKey() { document.getElementById('api-modal').style.display = 'none'; }
+function showApiModal() {
+  document.getElementById('api-key-input').value = gApiKey;
+  document.getElementById('api-modal').style.display = 'flex';
+}
+
+let currentFlowToken = 0; // incremented each time a new flow starts
+
+function stopAudio() {
+  currentFlowToken++; // invalidate any pending promises
+  if (currentAudio) {
+    currentAudio.pause();
+    currentAudio = null;
+  }
+  isPlaying = false;
+  setVoiceBtnState(false);
+  setVoiceStatus('');
+}
+
+async function speakGoogle(text, lang) {
+  if (!gApiKey) {
+    showToast('🔑 右上の「音声設定」からAPIキーを設定してください');
+    return false;
+  }
+  const myToken = currentFlowToken;
+  const voiceConfig = lang === 'ja'
+    ? { languageCode: 'ja-JP', name: 'ja-JP-Neural2-B' }
+    : { languageCode: 'en-AU', name: 'en-AU-Neural2-A' };
+
+  try {
+    const res = await fetch(
+      `https://texttospeech.googleapis.com/v1/text:synthesize?key=${gApiKey}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          input: { text },
+          voice: voiceConfig,
+          audioConfig: { audioEncoding: 'MP3', speakingRate: 0.95 }
+        })
+      }
+    );
+    // Check if still valid after async fetch
+    if (myToken !== currentFlowToken) return false;
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error?.message || `エラー ${res.status}`);
+    }
+    const data = await res.json();
+    if (myToken !== currentFlowToken) return false;
+
+    const audio = new Audio('data:audio/mp3;base64,' + data.audioContent);
+    currentAudio = audio;
+    isPlaying = true;
+
+    return new Promise((resolve) => {
+      const cleanup = (val) => {
+        if (currentAudio === audio) { currentAudio = null; isPlaying = false; }
+        resolve(val);
+      };
+      audio.onended = () => cleanup(true);
+      audio.onerror = () => cleanup(false);
+      audio.play().catch(() => cleanup(false));
+
+      // Poll for token invalidation (stopAudio called externally)
+      const poll = setInterval(() => {
+        if (myToken !== currentFlowToken) {
+          clearInterval(poll);
+          audio.pause();
+          resolve(false);
+        }
+        if (!isPlaying && currentAudio !== audio) {
+          clearInterval(poll);
+        }
+      }, 100);
+    });
+  } catch(e) {
+    if (myToken !== currentFlowToken) return false;
+    showToast('⚠️ ' + e.message);
+    return false;
+  }
+}
+
+function setVoiceBtnState(playing) {
+  const btn = document.getElementById('voice-play-btn');
+  if (!btn) return;
+  btn.classList.toggle('playing', playing);
+  document.getElementById('voice-btn-label').textContent = playing ? '再生中（タップで停止）' : '英語を聴く';
+}
+function setVoiceStatus(msg) {
+  const el = document.getElementById('voice-status');
+  if (el) el.textContent = msg;
+}
+
+// ===================== AUTO-PLAY STATE =====================
+let autoPlay = false;
+let autoFlowAbort = false; // flag to cancel current auto flow
+
+function toggleAutoPlay() {
+  autoPlay = !autoPlay;
+  const btn = document.getElementById('auto-play-btn');
+  if (autoPlay) {
+    btn.textContent = '▶ 自動ON';
+    btn.classList.add('on');
+    showToast('自動再生ON：日本語→英語→次の問題と自動で進みます');
+  } else {
+    btn.textContent = '▶ 自動OFF';
+    btn.classList.remove('on');
+    autoFlowAbort = true;
+    stopAudio();
+    setApStatus('idle', '');
+    showToast('自動再生OFF');
+  }
+  const bar = document.getElementById('autoplay-bar');
+  if (bar) bar.classList.toggle('visible', autoPlay);
+}
+
+function setApStatus(state, label) {
+  const dot = document.getElementById('ap-dot');
+  const lbl = document.getElementById('ap-label');
+  if (!dot || !lbl) return;
+  dot.className = 'ap-dot ' + state;
+  lbl.textContent = label || '自動再生モード';
+  const card = document.getElementById('flash-card');
+  if (card) {
+    card.classList.remove('jp-speaking', 'en-speaking');
+    if (state === 'jp') card.classList.add('jp-speaking');
+    if (state === 'en') card.classList.add('en-speaking');
+  }
+}
+
+// The main auto-play coroutine
+async function runAutoFlow(phraseId) {
+  const p = PHRASES.find(x => x.id === phraseId);
+  if (!p) return;
+
+  // Step 1: speak Japanese
+  setApStatus('jp', '🇯🇵 日本語を読み上げ中...');
+  setVoiceStatus('日本語を読み上げ中...');
+  await speakGoogle(p.jp, 'ja');
+  if (autoFlowAbort) return;
+
+  // Step 2: wait 1.5s
+  setApStatus('wait', '少々お待ちください...');
+  setVoiceStatus('');
+  await sleep(1500);
+  if (autoFlowAbort) return;
+
+  // Step 3: reveal card
+  revealCard(true); // silent reveal (no auto-trigger from revealCard)
+  await sleep(300);
+  if (autoFlowAbort) return;
+
+  // Step 4: speak English
+  setApStatus('en', '🇦🇺 英語を読み上げ中...');
+  setVoiceStatus('英語を読み上げ中...');
+  setVoiceBtnState(true);
+  await speakGoogle(p.en, 'en');
+  setVoiceBtnState(false);
+  if (autoFlowAbort) return;
+
+  // Step 5: wait 2s then advance
+  setApStatus('wait', '次の問題に移ります...');
+  setVoiceStatus('');
+  await sleep(2000);
+  if (autoFlowAbort) return;
+
+  // Step 6: auto advance (mark as OK for stats)
+  setApStatus('idle', '自動再生モード');
+  autoAdvance();
+}
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function autoAdvance() {
+  // In auto mode, just move forward (counts as OK for stats)
+  const p = queue[qIdx];
+  if (!p) return;
+  sessionOk++;
+  wrong.delete(p.id);
+  if (currentMode === 'loop') {
+    loopCounts[p.id] = (loopCounts[p.id] || 0) + 1;
+    if (loopCounts[p.id] >= 5) { mastered.add(p.id); save(); qIdx++; }
+    else { const ins = qIdx + 1 + Math.floor(Math.random() * Math.min(5, queue.length - qIdx - 1)); queue.splice(ins, 0, p); qIdx++; }
+  } else {
+    mastered.add(p.id); save(); qIdx++;
+  }
+  updateHeader();
+  showCard();
+}
+
+function autoSkipNow() {
+  autoFlowAbort = true;
+  stopAudio();
+  setApStatus('idle', '自動再生モード');
+  qIdx++;
+  showCard();
+}
+
+// Manual English play button
+async function playEnglishManual() {
+  if (isPlaying) { stopAudio(); return; }
+  const p = queue[qIdx];
+  if (!p) return;
+  setVoiceBtnState(true);
+  setVoiceStatus('英語を読み上げ中...');
+  await speakGoogle(p.en, 'en');
+  setVoiceBtnState(false);
+  setVoiceStatus('');
+}
+
+// List page play
+async function playPhrase(en) {
+  if (isPlaying) { stopAudio(); return; }
+  await speakGoogle(en, 'en');
+}
+
+// ===================== STATE =====================
+let mastered = new Set(JSON.parse(localStorage.getItem('jpfood_mastered') || '[]'));
+let wrong = new Set(JSON.parse(localStorage.getItem('jpfood_wrong') || '[]'));
+let queue = [], qIdx = 0, isRevealed = false;
+let currentMode = 'normal', selectedCat = 'all';
+let sessionOk = 0, sessionNg = 0;
+let timerInterval = null, timerLeft = 3;
+let loopCounts = {};
+
+function save() {
+  localStorage.setItem('jpfood_mastered', JSON.stringify([...mastered]));
+  localStorage.setItem('jpfood_wrong', JSON.stringify([...wrong]));
+}
+function updateHeader() { document.getElementById('h-mastered').textContent = mastered.size; }
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+function switchTab(p, btn) {
+  document.querySelectorAll('.page').forEach(x => x.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+  document.getElementById('page-' + p).classList.add('active');
+  btn.classList.add('active');
+  if (p === 'list') renderList();
+  if (p === 'stats') renderStats();
+}
+
+function initSetup() {
+  const cc = document.getElementById('cat-chips');
+  cc.innerHTML = `<button class="cat-chip active" onclick="selCat('all',this)">すべて (${PHRASES.length})</button>`;
+  CATS.forEach(c => {
+    const n = PHRASES.filter(p => p.cat === c).length;
+    cc.innerHTML += `<button class="cat-chip" onclick="selCat('${c}',this)">${c} (${n})</button>`;
+  });
+}
+function selCat(cat, btn) {
+  selectedCat = cat;
+  document.querySelectorAll('#cat-chips .cat-chip').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+}
+function selectMode(mode) {
+  currentMode = mode;
+  document.querySelectorAll('.mode-card').forEach(c => c.classList.remove('selected'));
+  document.getElementById('mode-' + mode).classList.add('selected');
+}
+
+function startTraining() {
+  let pool = selectedCat === 'all' ? [...PHRASES] : PHRASES.filter(p => p.cat === selectedCat);
+  if (currentMode === 'review') pool = pool.filter(p => !mastered.has(p.id) || wrong.has(p.id));
+  if (pool.length === 0) { alert('該当するフレーズがありません！'); return; }
+  for (let i = pool.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [pool[i], pool[j]] = [pool[j], pool[i]]; }
+  queue = pool; qIdx = 0; sessionOk = 0; sessionNg = 0; loopCounts = {};
+  document.getElementById('train-setup').style.display = 'none';
+  document.getElementById('train-result').style.display = 'none';
+  document.getElementById('train-area').style.display = 'block';
+  document.getElementById('timer-wrap').style.display = currentMode === 'timer' ? 'flex' : 'none';
+  document.getElementById('loop-banner').style.display = currentMode === 'loop' ? 'block' : 'none';
+  document.getElementById('autoplay-bar').classList.toggle('visible', autoPlay);
+  showCard();
+}
+
+function showCard() {
+  if (qIdx >= queue.length) { endTraining(); return; }
+  const p = queue[qIdx]; isRevealed = false;
+
+  // Abort any running auto flow and stop audio
+  autoFlowAbort = true;
+  stopAudio();
+  setApStatus('idle', '自動再生モード');
+
+  document.getElementById('flash-card').className = 'flash-card';
+  document.getElementById('card-cat').textContent = p.cat;
+  document.getElementById('card-jp').textContent = p.jp;
+  document.getElementById('card-sub').textContent = p.sub || '';
+  document.getElementById('card-en').textContent = p.en;
+  document.getElementById('card-alt').textContent = p.alt ? '💡 ' + p.alt : '';
+  document.getElementById('card-tip').textContent = p.tip ? '🔑 ' + p.tip : '';
+  document.getElementById('card-chunks').innerHTML = p.chunks.map((c, i) =>
+    `<div class="cc-row"><span class="cc-num">${i + 1}</span><span class="cc-en">${c}</span></div>`).join('');
+  document.getElementById('card-hint').style.display = '';
+  document.getElementById('btn-reveal').style.display = 'inline-block';
+  document.getElementById('btn-ok').style.display = 'none';
+  document.getElementById('btn-ng').style.display = 'none';
+  document.getElementById('voice-btn-wrap').style.display = 'none';
+  setVoiceBtnState(false);
+  setVoiceStatus('');
+  document.getElementById('train-ctr').textContent = `${qIdx + 1} / ${queue.length}`;
+  document.getElementById('train-prog').style.width = (qIdx / queue.length * 100) + '%';
+  if (currentMode === 'loop') {
+    const cnt = loopCounts[p.id] || 0;
+    document.getElementById('loop-remain').textContent = 5 - cnt;
+  }
+
+  // Auto-play flow: start after short delay so card renders first
+  if (autoPlay) {
+    const flowId = p.id;
+    const myToken = currentFlowToken; // capture token AFTER stopAudio incremented it
+    setTimeout(() => {
+      // Only start if no new stopAudio has been called since
+      if (myToken !== currentFlowToken) return;
+      autoFlowAbort = false;
+      runAutoFlow(flowId);
+    }, 400);
+  } else if (currentMode === 'timer') {
+    startTimer();
+  }
+}
+
+function onCardTap() {
+  if (autoPlay) {
+    // In auto mode, tapping the card cancels auto flow and manual reveal
+    autoFlowAbort = true;
+    stopAudio();
+    setApStatus('idle', '手動モード（一時停止中）');
+    revealCard(true);
+  } else {
+    revealCard(false);
+  }
+}
+
+// silent: true = don't trigger auto flow again from here
+function revealCard(silent) {
+  if (isRevealed) return; isRevealed = true;
+  clearInterval(timerInterval);
+  document.getElementById('flash-card').classList.add('revealed');
+  document.getElementById('flash-card').classList.remove('jp-speaking', 'en-speaking');
+  document.getElementById('card-hint').style.display = 'none';
+  document.getElementById('btn-reveal').style.display = 'none';
+  document.getElementById('btn-ok').style.display = 'inline-block';
+  document.getElementById('btn-ng').style.display = 'inline-block';
+  document.getElementById('voice-btn-wrap').style.display = 'flex';
+}
+
+function startTimer() {
+  clearInterval(timerInterval); timerLeft = 3; updateTimerUI(3, 3);
+  timerInterval = setInterval(() => {
+    timerLeft -= 0.1;
+    if (timerLeft <= 0) { clearInterval(timerInterval); timerLeft = 0; revealCard(false); }
+    updateTimerUI(timerLeft, 3);
+  }, 100);
+}
+function updateTimerUI(val, max) {
+  const offset = 169.6 * (1 - val / max);
+  document.getElementById('timer-circle').style.strokeDashoffset = offset;
+  document.getElementById('timer-num').textContent = Math.ceil(val);
+  document.getElementById('timer-circle').style.stroke = val > 2 ? '#c8962a' : val > 1 ? '#c86a2a' : '#a03030';
+}
+
+function markOk() {
+  autoFlowAbort = true; stopAudio();
+  const p = queue[qIdx]; sessionOk++; wrong.delete(p.id);
+  if (currentMode === 'loop') {
+    loopCounts[p.id] = (loopCounts[p.id] || 0) + 1;
+    if (loopCounts[p.id] >= 5) { mastered.add(p.id); save(); qIdx++; }
+    else { const ins = qIdx + 1 + Math.floor(Math.random() * Math.min(5, queue.length - qIdx - 1)); queue.splice(ins, 0, p); qIdx++; }
+  } else { mastered.add(p.id); save(); qIdx++; }
+  updateHeader(); showCard();
+}
+function markNg() {
+  autoFlowAbort = true; stopAudio();
+  const p = queue[qIdx]; sessionNg++; wrong.add(p.id);
+  if (currentMode === 'loop') {
+    loopCounts[p.id] = 0;
+    const ins = qIdx + 1 + Math.floor(Math.random() * Math.min(4, queue.length - qIdx - 1));
+    queue.splice(Math.min(ins, queue.length), 0, p);
+  }
+  save(); qIdx++; showCard();
+}
+function skipCard() { autoFlowAbort = true; stopAudio(); qIdx++; showCard(); }
+function quitTraining() { autoFlowAbort = true; stopAudio(); clearInterval(timerInterval); backToSetup(); }
+
+function endTraining() {
+  autoFlowAbort = true; stopAudio(); clearInterval(timerInterval);
+  document.getElementById('train-area').style.display = 'none';
+  document.getElementById('train-result').style.display = 'block';
+  const total = sessionOk + sessionNg;
+  const pct = total > 0 ? Math.round(sessionOk / total * 100) : 0;
+  document.getElementById('res-ok').textContent = sessionOk;
+  document.getElementById('res-ng').textContent = sessionNg;
+  document.getElementById('res-total').textContent = total;
+  document.getElementById('res-emoji').textContent = pct >= 80 ? '🎉' : pct >= 50 ? '💪' : '🔥';
+  document.getElementById('res-title').textContent = pct >= 80 ? '素晴らしい！' : pct >= 50 ? 'いい調子！' : 'もう一息！';
+  document.getElementById('res-sub').textContent = `正解率 ${pct}%（${sessionOk}/${total}）`;
+  document.getElementById('res-loop-btn').style.display = sessionNg > 0 && currentMode !== 'loop' ? 'block' : 'none';
+  updateHeader();
+}
+
+function startLoopFromResult() {
+  currentMode = 'loop';
+  const ng = [...wrong];
+  if (ng.length === 0) { alert('間違えたフレーズがありません！'); return; }
+  queue = PHRASES.filter(p => ng.includes(p.id));
+  for (let i = queue.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [queue[i], queue[j]] = [queue[j], queue[i]]; }
+  qIdx = 0; sessionOk = 0; sessionNg = 0; loopCounts = {};
+  document.getElementById('train-result').style.display = 'none';
+  document.getElementById('train-area').style.display = 'block';
+  document.getElementById('loop-banner').style.display = 'block';
+  document.getElementById('timer-wrap').style.display = 'none';
+  document.getElementById('autoplay-bar').classList.toggle('visible', autoPlay);
+  showCard();
+}
+function backToSetup() {
+  document.getElementById('train-area').style.display = 'none';
+  document.getElementById('train-result').style.display = 'none';
+  document.getElementById('train-setup').style.display = 'block';
+}
+
+function renderList() {
+  const lcc = document.getElementById('list-cat-chips');
+  lcc.innerHTML = `<button class="cat-chip active" onclick="filterList('all',this)">すべて</button>`;
+  CATS.forEach(c => { lcc.innerHTML += `<button class="cat-chip" onclick="filterList('${c}',this)">${c}</button>`; });
+  filterList('all', lcc.firstElementChild);
+}
+function filterList(cat, btn) {
+  document.querySelectorAll('#list-cat-chips .cat-chip').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  const pool = cat === 'all' ? PHRASES : PHRASES.filter(p => p.cat === cat);
+  document.getElementById('list-items').innerHTML = pool.map(p => `
+    <div class="list-item">
+      <div class="li-dot" style="background:${CAT_COLORS[p.cat] || '#888'}"></div>
+      <div class="li-body">
+        <div class="li-cat">${p.cat}</div>
+        <div class="li-jp">${p.jp}</div>
+        <div class="li-en">${p.en}</div>
+      </div>
+      <div class="li-right">
+        <button class="li-voice-btn" onclick="playPhrase(${JSON.stringify(p.en)})">🔊</button>
+        <div class="li-done ${mastered.has(p.id) ? 'show' : ''}">✓ 習得</div>
+      </div>
+    </div>`).join('');
+}
+function renderStats() {
+  document.getElementById('st-mastered').textContent = mastered.size;
+  document.getElementById('st-total').textContent = PHRASES.length;
+  document.getElementById('cat-stats').innerHTML = CATS.map(c => {
+    const total = PHRASES.filter(p => p.cat === c).length;
+    const done = PHRASES.filter(p => p.cat === c && mastered.has(p.id)).length;
+    const pct = Math.round(done / total * 100);
+    return `<div class="cat-stat">
+      <div class="cs-top"><span class="cs-name">${c}</span><span class="cs-pct">${done}/${total} (${pct}%)</span></div>
+      <div class="cs-bar"><div class="cs-fill" style="width:${pct}%;background:${CAT_COLORS[c] || 'var(--moss)'}"></div></div>
+    </div>`;
+  }).join('');
+}
+function resetAll() { if (!confirm('全データをリセットしますか？')) return; mastered.clear(); wrong.clear(); save(); updateHeader(); renderStats(); }
+function resetAllData() { resetAll(); }
+
+// INIT
+initSetup(); updateHeader();
+if (!gApiKey) {
+  document.getElementById('api-modal').style.display = 'flex';
+} else {
+  document.getElementById('api-modal').style.display = 'none';
+}
+</script>
+</body>
+</html>
