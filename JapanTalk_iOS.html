@@ -416,6 +416,7 @@ const PHRASES=[
 const CATS=[...new Set(PHRASES.map(p=>p.cat))];
 const CAT_COLORS={'観光地・名所':'#c8962a','食文化':'#a03030','伝統文化':'#4a7c59','交通・移動':'#3d5a8a','宿泊・温泉':'#5a2a7a','買い物':'#c86a2a','季節・自然':'#2a7a5a','マナー・習慣':'#2a5a7a','都市・地域':'#7a5a2a','文化の違い':'#5a4a8a'};
 const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+let gApiKey = localStorage.getItem('g_tts_key') || '';
 
 // Web Speech API speak (for iOS)
 function speakWebSpeech(text, lang) {
@@ -578,6 +579,8 @@ function setVoiceStatus(msg) {
 
 
 
+let currentAudio = null;
+let isPlaying = false;
 let currentFlowToken = 0; // incremented each time a new flow starts
 
 function stopAudio() {
@@ -950,7 +953,7 @@ function showCard() {
   document.getElementById('card-en').textContent = p.en;
   document.getElementById('card-alt').textContent = p.alt ? '💡 ' + p.alt : '';
   document.getElementById('card-tip').textContent = p.tip ? '🔑 ' + p.tip : '';
-  document.getElementById('card-chunks').innerHTML = p.chunks.map((c, i) =>
+  document.getElementById('card-chunks').innerHTML = (p.chunks || []).map((c, i) =>
     `<div class="cc-row"><span class="cc-num">${i + 1}</span><span class="cc-en">${c}</span></div>`).join('');
   document.getElementById('card-hint').style.display = '';
   document.getElementById('btn-reveal').style.display = 'inline-block';
@@ -1100,7 +1103,7 @@ function filterList(cat, btn) {
         </div>
       </div>
       <div class="li-jp">${p.jp}</div>
-      <div class="li-chunks">${p.chunks.map((c, i) =>
+      <div class="li-chunks">${(p.chunks || []).map((c, i) =>
         `<div class="li-chunk-row"><span class="li-cn">${i + 1}</span><span class="li-ce">${c}</span></div>`).join('')}</div>
       <div class="li-full">${p.en}</div>
     </div>`).join('');

@@ -219,6 +219,7 @@ main{padding:14px;max-width:600px;margin:0 auto;}
 <div class="card-en" id="card-en"></div>
 <div class="card-alt" id="card-alt"></div>
 <div class="card-tip" id="card-tip"></div>
+<div class="card-chunks" id="card-chunks"></div>
 </div>
 <div class="voice-btn-wrap" id="voice-btn-wrap" style="display:none">
 <button class="voice-btn" id="voice-play-btn" onclick="playEnglishManual()">
@@ -374,6 +375,7 @@ const CATS=[...new Set(PHRASES.map(p=>p.cat))];
 const CAT_COLORS={'💍 プロポーズ・婚約':'#c8962a','👰 結婚準備・式':'#a03050','🏡 新婚・夫婦生活':'#4a7c59','👶 妊娠・出産':'#3d5a8a','🍼 赤ちゃん・乳児期':'#7a5a2a','🧒 子育て・しつけ':'#2a7a5a','🏫 教育・学校':'#5a2a7a','💔 夫婦関係の問題':'#a03030','⚖️ 離婚・別居':'#5a5a7a','🌱 離婚後・新しい生活':'#2a5a2a'};
 
 const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+let gApiKey = localStorage.getItem('g_tts_key') || '';
 
 // Web Speech API speak (for iOS)
 function speakWebSpeech(text, lang) {
@@ -908,7 +910,7 @@ function showCard() {
   document.getElementById('card-en').textContent = p.en;
   document.getElementById('card-alt').textContent = p.alt ? '💡 ' + p.alt : '';
   document.getElementById('card-tip').textContent = p.tip ? '🔑 ' + p.tip : '';
-  document.getElementById('card-chunks').innerHTML = p.chunks.map((c, i) =>
+  document.getElementById('card-chunks').innerHTML = (p.chunks || []).map((c, i) =>
     `<div class="cc-row"><span class="cc-num">${i + 1}</span><span class="cc-en">${c}</span></div>`).join('');
   document.getElementById('card-hint').style.display = '';
   document.getElementById('btn-reveal').style.display = 'inline-block';

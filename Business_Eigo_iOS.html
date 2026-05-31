@@ -218,6 +218,7 @@ main{padding:14px;max-width:600px;margin:0 auto;}
 <div class="card-en" id="card-en"></div>
 <div class="card-alt" id="card-alt"></div>
 <div class="card-tip" id="card-tip"></div>
+<div class="card-chunks" id="card-chunks"></div>
 </div>
 <div class="voice-btn-wrap" id="voice-btn-wrap" style="display:none">
 <button class="voice-btn" id="voice-play-btn" onclick="playEnglishManual()">
@@ -372,6 +373,8 @@ const PHRASES = [
 const CATS=[...new Set(PHRASES.map(p=>p.cat))];
 const CAT_COLORS={'📅 会議・打ち合わせ':'#3d5a8a','📧 メール・報告':'#4a7c59','🤝 依頼・お願い':'#c8962a','⏰ 締め切り・スケジュール':'#a03030','💬 雑談・関係づくり':'#7a5a2a','🙏 謝罪・フォロー':'#5a2a7a','👍 賛成・反対・意見':'#2a7a7a','📊 進捗・状況報告':'#2a5a7a','🚀 提案・アイデア':'#7a2a5a','🏁 締め・確認':'#4a4a8a'};
 
+let currentAudio = null;
+let isPlaying = false;
 let currentFlowToken = 0; // incremented each time a new flow starts
 
 function stopAudio() {
@@ -742,7 +745,7 @@ function showCard() {
   document.getElementById('card-en').textContent = p.en;
   document.getElementById('card-alt').textContent = p.alt ? '💡 ' + p.alt : '';
   document.getElementById('card-tip').textContent = p.tip ? '🔑 ' + p.tip : '';
-  document.getElementById('card-chunks').innerHTML = p.chunks.map((c, i) =>
+  document.getElementById('card-chunks').innerHTML = (p.chunks || []).map((c, i) =>
     `<div class="cc-row"><span class="cc-num">${i + 1}</span><span class="cc-en">${c}</span></div>`).join('');
   document.getElementById('card-hint').style.display = '';
   document.getElementById('btn-reveal').style.display = 'inline-block';
