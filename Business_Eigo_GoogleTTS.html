@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>💼 仕事・職場・ビジネス英語 — 瞬間反射トレーニング</title>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#1a1410;--paper:#f5f0e8;--gold:#c8962a;--moss:#4a7c59;--indigo:#3d5a8a;--crimson:#a03030;--panel:#fffdf8;--border:rgba(26,20,16,0.12);}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);min-height:100vh;}
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(26,20,16,0.72);z-index:999;display:flex;align-items:center;justify-content:center;padding:20px;}
+.modal-box{background:var(--panel);border-radius:18px;padding:28px 24px;max-width:400px;width:100%;border:1.5px solid var(--border);}
+.modal-logo{font-size:32px;text-align:center;margin-bottom:12px;}
+.modal-title{font-family:'Shippori Mincho',serif;font-size:18px;font-weight:700;text-align:center;margin-bottom:6px;}
+.modal-sub{font-size:12px;color:rgba(26,20,16,0.5);text-align:center;margin-bottom:20px;line-height:1.6;}
+.modal-label{font-size:12px;font-weight:500;margin-bottom:6px;display:block;}
+.modal-input{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;background:var(--paper);color:var(--ink);margin-bottom:8px;}
+.modal-input:focus{outline:none;border-color:var(--gold);}
+.modal-help{font-size:11px;color:rgba(26,20,16,0.4);margin-bottom:18px;line-height:1.5;}
+.modal-help a{color:var(--indigo);}
+.modal-btn{width:100%;padding:13px;border-radius:10px;border:none;background:var(--ink);color:var(--gold);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;margin-bottom:8px;}
+.modal-btn:hover{opacity:.88;}
+.modal-skip{width:100%;padding:10px;border-radius:10px;border:1.5px solid var(--border);background:transparent;color:rgba(26,20,16,0.45);font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;}
+.modal-skip:hover{border-color:var(--gold);}
+/* HEADER */
+header{background:var(--ink);padding:16px 20px 0;position:sticky;top:0;z-index:100;}
+.h-top{display:flex;align-items:center;gap:10px;padding-bottom:14px;}
+.h-logo{font-size:22px;}
+.h-titles{flex:1;}
+.h-titles h1{font-family:'Shippori Mincho',serif;color:var(--gold);font-size:16px;font-weight:700;}
+.h-titles p{color:rgba(245,240,232,0.42);font-size:10px;margin-top:1px;}
+.h-right{display:flex;align-items:center;gap:8px;}
+.h-score .num{font-size:20px;font-weight:500;color:var(--gold);}
+.h-score .lbl{font-family:'Shippori Mincho',serif;font-size:9px;color:rgba(245,240,232,0.4);}
+.h-key-btn{padding:5px 10px;border-radius:7px;border:1px solid rgba(200,150,42,0.4);background:transparent;color:rgba(200,150,42,0.7);font-size:10px;cursor:pointer;}
+.h-key-btn:hover{border-color:var(--gold);color:var(--gold);}
+.h-auto-btn{padding:5px 10px;border-radius:7px;border:1px solid rgba(200,150,42,0.4);background:transparent;color:rgba(200,150,42,0.7);font-size:10px;cursor:pointer;transition:all .25s;white-space:nowrap;}
+.h-auto-btn.on{background:rgba(200,150,42,0.2);border-color:var(--gold);color:var(--gold);}
+nav{display:flex;}
+.tab{flex:1;padding:8px 4px;background:none;border:none;border-bottom:2px solid transparent;color:rgba(245,240,232,0.38);font-family:'DM Sans',sans-serif;font-size:10px;cursor:pointer;transition:all .2s;display:flex;flex-direction:column;align-items:center;gap:2px;}
+.tab span:first-child{font-size:13px;}
+.tab.active{color:var(--gold);border-bottom-color:var(--gold);}
+main{padding:14px;max-width:600px;margin:0 auto;}
+.page{display:none;}.page.active{display:block;}
+.sec{font-family:'Shippori Mincho',serif;font-size:10px;font-weight:600;color:rgba(26,20,16,0.35);letter-spacing:.12em;text-transform:uppercase;margin:16px 0 10px;}
+.cat-chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;}
+.cat-chip{padding:5px 12px;border-radius:20px;border:1.5px solid var(--border);background:var(--panel);font-size:11px;cursor:pointer;transition:all .2s;color:var(--ink);}
+.cat-chip.active{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+.mode-cards{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px;}
+.mode-card{background:var(--panel);border:1.5px solid var(--border);border-radius:14px;padding:14px 12px;cursor:pointer;transition:all .2s;text-align:center;}
+.mode-card:hover{border-color:var(--gold);}
+.mode-card.selected{border-color:var(--gold);background:rgba(200,150,42,0.07);}
+.mode-emoji{font-size:24px;margin-bottom:6px;}
+.mode-name{font-size:13px;font-weight:500;margin-bottom:3px;}
+.mode-desc{font-family:'Shippori Mincho',serif;font-size:10px;color:rgba(26,20,16,0.45);line-height:1.5;}
+.start-btn{width:100%;padding:14px;border-radius:12px;border:none;background:var(--ink);color:var(--gold);font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;cursor:pointer;}
+.start-btn:hover{opacity:.88;}
+/* TRAINING */
+.train-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.train-prog-wrap{flex:1;height:5px;background:var(--border);border-radius:3px;margin:0 12px;overflow:hidden;}
+.train-prog-fill{height:100%;background:var(--gold);border-radius:3px;transition:width .4s;}
+.train-ctr{font-size:11px;color:rgba(26,20,16,0.4);}
+.quit-btn{font-size:11px;color:rgba(26,20,16,0.35);background:none;border:none;cursor:pointer;text-decoration:underline;}
+.timer-wrap{display:flex;justify-content:center;margin-bottom:14px;}
+.timer-ring{position:relative;width:64px;height:64px;}
+.timer-ring svg{transform:rotate(-90deg);}
+.timer-ring circle{fill:none;stroke-width:5;}
+.timer-bg{stroke:var(--border);}
+.timer-fg{stroke:var(--gold);stroke-linecap:round;transition:stroke-dashoffset .1s linear,stroke .3s;}
+.timer-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:500;color:var(--ink);}
+.loop-banner{background:rgba(200,150,42,0.1);border:1px solid rgba(200,150,42,0.3);border-radius:10px;padding:8px 12px;margin-bottom:12px;font-family:'Shippori Mincho',serif;font-size:12px;color:var(--gold);text-align:center;}
+/* AUTO-PLAY BAR */
+.autoplay-bar{display:none;align-items:center;justify-content:space-between;background:rgba(200,150,42,0.1);border:1px solid rgba(200,150,42,0.28);border-radius:10px;padding:8px 14px;margin-bottom:12px;}
+.autoplay-bar.visible{display:flex;}
+.ap-left{display:flex;align-items:center;gap:8px;}
+.ap-dot{width:8px;height:8px;border-radius:50%;background:var(--gold);}
+.ap-dot.jp{background:#4a7c59;}.ap-dot.en{background:#3d5a8a;}
+.ap-dot.wait{background:#c86a2a;animation:blink 0.8s ease-in-out infinite;}
+.ap-dot.idle{background:rgba(200,150,42,0.3);}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0.2;}}
+.ap-label{font-family:'Shippori Mincho',serif;font-size:11px;color:var(--gold);}
+.ap-skip-btn{font-size:10px;padding:3px 10px;border-radius:20px;border:1px solid rgba(200,150,42,0.4);background:transparent;color:var(--gold);cursor:pointer;}
+/* FLASH CARD */
+.flash-card{background:var(--panel);border:1.5px solid var(--border);border-radius:18px;padding:28px 22px;text-align:center;margin-bottom:14px;box-shadow:0 4px 24px rgba(26,20,16,0.08);min-height:190px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:border-color .2s;}
+.flash-card.revealed{border-color:var(--moss);}
+.flash-card.jp-speaking{border-color:#4a7c59;box-shadow:0 0 0 3px rgba(74,124,89,0.15);}
+.flash-card.en-speaking{border-color:#3d5a8a;box-shadow:0 0 0 3px rgba(61,90,138,0.15);}
+.card-cat{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(26,20,16,0.3);margin-bottom:10px;}
+.card-jp{font-family:'Shippori Mincho',serif;font-size:22px;font-weight:700;line-height:1.5;margin-bottom:6px;}
+.card-sub{font-family:'Shippori Mincho',serif;font-size:12px;color:rgba(26,20,16,0.4);margin-bottom:14px;font-style:italic;}
+.card-hint{font-size:11px;color:rgba(26,20,16,0.3);font-style:italic;}
+.card-en{font-size:18px;font-weight:500;line-height:1.5;margin-bottom:6px;display:none;}
+.card-alt{font-size:12px;color:rgba(26,20,16,0.5);display:none;font-style:italic;margin-bottom:10px;}
+.card-tip{font-family:'Shippori Mincho',serif;font-size:11px;color:var(--indigo);background:rgba(61,90,138,0.08);border-radius:6px;padding:6px 10px;display:none;line-height:1.6;}
+.flash-card.revealed .card-en,.flash-card.revealed .card-alt,.flash-card.revealed .card-tip{display:block;}
+.flash-card.revealed .card-hint{display:none;}
+/* VOICE */
+.voice-btn-wrap{display:flex;justify-content:center;margin-bottom:10px;}
+.voice-btn{display:flex;align-items:center;gap:8px;padding:10px 20px;border-radius:30px;border:1.5px solid var(--gold);background:rgba(200,150,42,0.08);color:var(--gold);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;}
+.voice-btn:hover{background:rgba(200,150,42,0.18);}
+.voice-btn.playing{background:rgba(200,150,42,0.25);}
+.voice-icon{font-size:16px;}
+.voice-btn.playing .voice-icon{animation:pulse 0.6s ease-in-out infinite alternate;}
+@keyframes pulse{from{transform:scale(1);}to{transform:scale(1.2);}}
+.voice-status{font-size:10px;color:rgba(26,20,16,0.4);text-align:center;margin-bottom:8px;min-height:14px;}
+.action-row{display:flex;gap:8px;margin-bottom:10px;}
+.act-btn{flex:1;padding:13px;border-radius:12px;border:none;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:opacity .15s;}
+.act-btn:hover{opacity:.85;}
+.act-reveal{background:var(--indigo);color:#fff;flex:2;}
+.act-ok{background:var(--moss);color:#fff;}
+.act-ng{background:rgba(160,48,48,0.12);color:var(--crimson);}
+.act-skip{width:100%;padding:9px;border-radius:9px;border:1.5px solid var(--border);background:var(--panel);font-family:'DM Sans',sans-serif;font-size:11px;cursor:pointer;color:rgba(26,20,16,0.45);}
+/* RESULT */
+.result-wrap{text-align:center;padding:24px 0;}
+.result-emoji{font-size:52px;margin-bottom:12px;}
+.result-title{font-family:'Shippori Mincho',serif;font-size:20px;font-weight:700;margin-bottom:6px;}
+.result-sub{font-size:13px;color:rgba(26,20,16,0.5);margin-bottom:24px;font-family:'Shippori Mincho',serif;}
+.result-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:24px;}
+.rs{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:12px 8px;text-align:center;}
+.rs-num{font-size:24px;font-weight:500;line-height:1;margin-bottom:3px;}
+.rs-num.g{color:var(--moss);}.rs-num.r{color:var(--crimson);}.rs-num.b{color:var(--indigo);}
+.rs-lbl{font-family:'Shippori Mincho',serif;font-size:9px;color:rgba(26,20,16,0.4);}
+.result-btns{display:flex;flex-direction:column;gap:8px;}
+.res-btn{padding:13px;border-radius:12px;border:none;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;}
+.res-btn.primary{background:var(--crimson);color:#fff;}
+.res-btn.secondary{background:var(--ink);color:var(--paper);}
+.res-btn.tertiary{background:var(--panel);color:var(--ink);border:1.5px solid var(--border);}
+/* LIST */
+.list-item{background:var(--panel);border:1px solid var(--border);border-radius:11px;padding:12px 14px;margin-bottom:7px;display:flex;align-items:center;gap:12px;}
+.li-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.li-body{flex:1;}
+.li-cat{font-size:9px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:rgba(26,20,16,0.3);margin-bottom:2px;}
+.li-jp{font-family:'Shippori Mincho',serif;font-size:14px;font-weight:600;margin-bottom:2px;}
+.li-en{font-size:13px;color:rgba(26,20,16,0.6);}
+.li-right{display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;}
+.li-done{font-size:10px;background:var(--moss);color:#fff;padding:2px 7px;border-radius:20px;display:none;}
+.li-done.show{display:inline;}
+.li-voice-btn{padding:3px 8px;border-radius:20px;border:1px solid var(--gold);background:transparent;color:var(--gold);font-size:10px;cursor:pointer;}
+/* STATS */
+.overall-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;}
+.os{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px 12px;text-align:center;}
+.os-num{font-size:26px;font-weight:500;line-height:1;margin-bottom:4px;}
+.os-num.g{color:var(--moss);}.os-num.gold{color:var(--gold);}
+.os-lbl{font-family:'Shippori Mincho',serif;font-size:10px;color:rgba(26,20,16,0.4);}
+.cat-stat{background:var(--panel);border:1px solid var(--border);border-radius:11px;padding:12px 14px;margin-bottom:8px;}
+.cs-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+.cs-name{font-size:13px;font-weight:500;}
+.cs-pct{font-size:12px;color:var(--moss);font-weight:500;}
+.cs-bar{height:4px;background:var(--border);border-radius:2px;overflow:hidden;}
+.cs-fill{height:100%;background:var(--moss);border-radius:2px;transition:width .5s;}
+.reset-all-btn{width:100%;padding:11px;border-radius:10px;border:1.5px solid var(--border);background:var(--panel);font-family:'DM Sans',sans-serif;font-size:12px;color:rgba(26,20,16,0.4);cursor:pointer;margin-top:12px;}
+.reset-all-btn:hover{border-color:var(--crimson);color:var(--crimson);}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:10px 20px;border-radius:30px;font-size:12px;z-index:1000;opacity:0;transition:opacity .3s;pointer-events:none;}
+.toast.show{opacity:1;}
+</style>
+</head>
+<body>
+<!-- MODAL -->
+<div class="modal-overlay" id="api-modal">
+<div class="modal-box">
+<div class="modal-logo">💼</div>
+<div class="modal-title">Google Cloud 音声設定</div>
+<div class="modal-sub">ネイティブ音声を使うために<br>Google Cloud Text-to-Speech APIキーを設定してください。<br>一度入力するとブラウザに保存されます。</div>
+<label class="modal-label">Google Cloud APIキー</label>
+<input class="modal-input" type="password" id="api-key-input" placeholder="AIza..." autocomplete="off">
+<div class="modal-help"><a href="https://console.cloud.google.com" target="_blank">Google Cloud Console</a> → Text-to-Speech API → APIキーを作成。</div>
+<button class="modal-btn" onclick="saveApiKey()">保存してスタート ✓</button>
+<button class="modal-skip" onclick="skipApiKey()">音声なしで使う</button>
+</div>
+</div>
+<div class="toast" id="toast"></div>
+<header>
+<div class="h-top">
+<div class="h-logo">💼</div>
+<div class="h-titles">
+<h1>仕事・職場・ビジネス英語</h1>
+<p>瞬間反射トレーニング — 100フレーズ</p>
+</div>
+<div class="h-right">
+  <button class="h-auto-btn" id="auto-play-btn" onclick="toggleAutoPlay()">▶ 自動OFF</button>
+  <button class="h-key-btn" onclick="showApiModal()">🔑 音声設定</button>
+  <div class="h-score"><div class="num" id="h-mastered">0</div><div class="lbl">習得済み</div></div>
+</div>
+</div>
+<nav>
+<button class="tab active" onclick="switchTab('train',this)"><span>⚡</span><span>トレーニング</span></button>
+<button class="tab" onclick="switchTab('list',this)"><span>📋</span><span>一覧</span></button>
+<button class="tab" onclick="switchTab('stats',this)"><span>📊</span><span>記録</span></button>
+</nav>
+</header>
+<main>
+<div id="page-train" class="page active">
+<div id="train-setup">
+<div class="sec" style="margin-top:14px">カテゴリを選ぶ</div>
+<div class="cat-chips" id="cat-chips"></div>
+<div class="sec">モードを選ぶ</div>
+<div class="mode-cards">
+<div class="mode-card selected" id="mode-normal" onclick="selectMode('normal')"><div class="mode-emoji">🃏</div><div class="mode-name">通常モード</div><div class="mode-desc">自分のペースで1枚ずつ。</div></div>
+<div class="mode-card" id="mode-timer" onclick="selectMode('timer')"><div class="mode-emoji">⏱️</div><div class="mode-name">タイマーモード</div><div class="mode-desc">3秒以内に口から出す。</div></div>
+<div class="mode-card" id="mode-loop" onclick="selectMode('loop')"><div class="mode-emoji">🔁</div><div class="mode-name">ループモード</div><div class="mode-desc">5回連続正解で身体化。</div></div>
+<div class="mode-card" id="mode-review" onclick="selectMode('review')"><div class="mode-emoji">🔄</div><div class="mode-name">復習モード</div><div class="mode-desc">未習得・間違えたものだけ。</div></div>
+</div>
+<button class="start-btn" onclick="startTraining()">トレーニング開始 →</button>
+</div>
+<div id="train-area" style="display:none">
+<div class="train-hd">
+<span class="train-ctr" id="train-ctr">1 / 10</span>
+<div class="train-prog-wrap"><div class="train-prog-fill" id="train-prog" style="width:0%"></div></div>
+<button class="quit-btn" onclick="quitTraining()">終了</button>
+</div>
+<div id="loop-banner" class="loop-banner" style="display:none">🔁 ループモード — あと<span id="loop-remain"></span>回正解で卒業！</div>
+<div id="timer-wrap" class="timer-wrap" style="display:none">
+<div class="timer-ring">
+<svg width="64" height="64" viewBox="0 0 64 64">
+<circle class="timer-bg" cx="32" cy="32" r="27"/>
+<circle class="timer-fg" id="timer-circle" cx="32" cy="32" r="27" stroke-dasharray="169.6" stroke-dashoffset="0"/>
+</svg>
+<div class="timer-num" id="timer-num">3</div>
+</div>
+</div>
+<div class="autoplay-bar" id="autoplay-bar">
+  <div class="ap-left"><div class="ap-dot idle" id="ap-dot"></div><span class="ap-label" id="ap-label">自動再生モード</span></div>
+  <button class="ap-skip-btn" onclick="autoSkipNow()">今すぐ次へ →</button>
+</div>
+<div class="flash-card" id="flash-card" onclick="onCardTap()">
+<div class="card-cat" id="card-cat"></div>
+<div class="card-jp" id="card-jp"></div>
+<div class="card-sub" id="card-sub"></div>
+<div class="card-hint" id="card-hint">タップして英語を確認</div>
+<div class="card-en" id="card-en"></div>
+<div class="card-alt" id="card-alt"></div>
+<div class="card-tip" id="card-tip"></div>
+<div class="card-chunks" id="card-chunks"></div>
+</div>
+<div class="voice-btn-wrap" id="voice-btn-wrap" style="display:none">
+<button class="voice-btn" id="voice-play-btn" onclick="playEnglishManual()">
+<span class="voice-icon">🔊</span><span id="voice-btn-label">英語を聴く</span>
+</button>
+</div>
+<div class="voice-status" id="voice-status"></div>
+<div class="action-row">
+<button class="act-btn act-reveal" id="btn-reveal" onclick="revealCard()">英語を見る</button>
+<button class="act-btn act-ok" id="btn-ok" onclick="markOk()" style="display:none">✓ 言えた！</button>
+<button class="act-btn act-ng" id="btn-ng" onclick="markNg()" style="display:none">✕ 言えなかった</button>
+</div>
+<button class="act-skip" onclick="skipCard()">スキップ →</button>
+</div>
+<div id="train-result" style="display:none">
+<div class="result-wrap">
+<div class="result-emoji" id="res-emoji">🎉</div>
+<div class="result-title" id="res-title">完了！</div>
+<div class="result-sub" id="res-sub"></div>
+<div class="result-stats">
+<div class="rs"><div class="rs-num g" id="res-ok">0</div><div class="rs-lbl">言えた！</div></div>
+<div class="rs"><div class="rs-num r" id="res-ng">0</div><div class="rs-lbl">言えなかった</div></div>
+<div class="rs"><div class="rs-num b" id="res-total">0</div><div class="rs-lbl">総問数</div></div>
+</div>
+<div class="result-btns">
+<button class="res-btn primary" id="res-loop-btn" onclick="startLoopFromResult()" style="display:none">🔁 言えなかった分をループ練習</button>
+<button class="res-btn secondary" onclick="backToSetup()">もう一度設定から</button>
+<button class="res-btn tertiary" onclick="switchTab('stats',document.querySelectorAll('.tab')[2])">記録を見る</button>
+</div>
+</div>
+</div>
+</div>
+<div id="page-list" class="page">
+<div class="sec" style="margin-top:14px">カテゴリで絞り込む</div>
+<div class="cat-chips" id="list-cat-chips"></div>
+<div id="list-items"></div>
+</div>
+<div id="page-stats" class="page">
+<div class="sec" style="margin-top:14px">全体の進捗</div>
+<div class="overall-stats">
+<div class="os"><div class="os-num g" id="st-mastered">0</div><div class="os-lbl">習得済み</div></div>
+<div class="os"><div class="os-num gold" id="st-total">100</div><div class="os-lbl">総フレーズ数</div></div>
+</div>
+<div class="sec">カテゴリ別</div>
+<div id="cat-stats"></div>
+<button class="reset-all-btn" onclick="resetAllData()">↺ 全データをリセット</button>
+</div>
+</main>
+<script>
+const PHRASES = [
+{id:1,cat:'📅 会議・打ち合わせ',jp:'始めましょう',sub:'会議の開始',en:"Let's get started.",alt:"Let's kick things off.",tip:"kick things off はよりカジュアルで活気ある開始の表現。"},
+{id:2,cat:'📅 会議・打ち合わせ',jp:'後でもう一度議論しましょう',sub:'',en:"Let's circle back to that.",alt:"Let's revisit that later.",tip:"circle back はビジネス英語の定番。「後で戻ってくる」イメージ。"},
+{id:3,cat:'📅 会議・打ち合わせ',jp:'要点だけ教えてください',sub:'',en:"Can you give me the short version?",alt:"Can you summarize that?",tip:"the short version は「簡単に言うと」というニュアンス。"},
+{id:4,cat:'📅 会議・打ち合わせ',jp:'話題を変えましょう',sub:'',en:"Let's move on.",alt:"Let's shift gears.",tip:"shift gears は話題や方向を切り替えるときのカジュアルな表現。"},
+{id:5,cat:'📅 会議・打ち合わせ',jp:'議題に戻りましょう',sub:'',en:"Let's get back on track.",alt:"Let's stick to the agenda.",tip:"on track は「軌道に乗っている」。"},
+{id:6,cat:'📅 会議・打ち合わせ',jp:'今日の目的は何ですか？',sub:'',en:"What's the goal for today?",alt:"What are we trying to accomplish?",tip:"What are we trying to accomplish? は目的を明確にするときの表現。"},
+{id:7,cat:'📅 会議・打ち合わせ',jp:'少し時間をもらえますか？',sub:'',en:"Can I have a moment?",alt:"Give me a second.",tip:"Give me a second. はカジュアルで使いやすい。"},
+{id:8,cat:'📅 会議・打ち合わせ',jp:'聞こえていますか？（オンライン）',sub:'',en:"Can you hear me okay?",alt:"Am I coming through?",tip:"Am I coming through? はオンライン会議でよく使われる。"},
+{id:9,cat:'📅 会議・打ち合わせ',jp:'画面を共有します',sub:'',en:"I'll share my screen.",alt:"Let me pull that up.",tip:"Let me pull that up. は「今開きます」という自然な口語。"},
+{id:10,cat:'📅 会議・打ち合わせ',jp:'他に何かありますか？',sub:'会議の終わりに',en:"Is there anything else?",alt:"Any other business?",tip:"Any other business? は議題の最後に使うフォーマルな表現。"},
+{id:11,cat:'📧 メール・報告',jp:'ご連絡ありがとうございます',sub:'メールの書き出し',en:"Thank you for reaching out.",alt:"Thanks for getting in touch.",tip:"reaching out はビジネスメールの定番の書き出し。"},
+{id:12,cat:'📧 メール・報告',jp:'後でフォローアップします',sub:'',en:"I'll follow up on that.",alt:"I'll get back to you on this.",tip:"follow up は「確認・追跡する」。ビジネス英語の必須語彙。"},
+{id:13,cat:'📧 メール・報告',jp:'確認させてください',sub:'',en:"Just to confirm…",alt:"Let me double-check that.",tip:"Just to confirm… は確認メールの書き出しとしてよく使われる。"},
+{id:14,cat:'📧 メール・報告',jp:'添付ファイルをご確認ください',sub:'',en:"Please find the attachment.",alt:"I've attached the file for your reference.",tip:"Please find the attachment. はメールの定番フレーズ。"},
+{id:15,cat:'📧 メール・報告',jp:'ご不明な点があればご連絡ください',sub:'',en:"Feel free to reach out if you have any questions.",alt:"Don't hesitate to contact me.",tip:"Feel free to reach out. はメールの締めによく使われる丁寧な表現。"},
+{id:16,cat:'📧 メール・報告',jp:'最新情報をお知らせします',sub:'',en:"I'll keep you updated.",alt:"I'll keep you in the loop.",tip:"keep in the loop は「情報を共有し続ける」という定番表現。"},
+{id:17,cat:'📧 メール・報告',jp:'ご確認よろしくお願いします',sub:'',en:"Please let me know your thoughts.",alt:"I'd love your feedback.",tip:"Please let me know your thoughts. は意見や確認を求める定番フレーズ。"},
+{id:18,cat:'📧 メール・報告',jp:'よろしくお願いいたします',sub:'メールの締め',en:"Best regards.",alt:"Thanks again.",tip:"Best regards はメールの締めの最もフォーマルな表現。"},
+{id:19,cat:'📧 メール・報告',jp:'ご返信をお待ちしております',sub:'',en:"I look forward to hearing from you.",alt:"Looking forward to your reply.",tip:"I look forward to hearing from you. はメールの締めの定番。"},
+{id:20,cat:'📧 メール・報告',jp:'お返事が遅くなり申し訳ありません',sub:'',en:"Sorry for the delayed response.",alt:"Apologies for getting back to you late.",tip:"Sorry for the delayed response. は遅延への謝罪の定番フレーズ。"},
+{id:21,cat:'🤝 依頼・お願い',jp:'これをお願いできますか？',sub:'',en:"Could you take care of this?",alt:"Can you handle this?",tip:"take care of は「対処する・担当する」。"},
+{id:22,cat:'🤝 依頼・お願い',jp:'手伝っていただけますか？',sub:'',en:"I could use a hand with this.",alt:"Could you give me a hand?",tip:"I could use a hand は「助けが必要」という自然な口語表現。"},
+{id:23,cat:'🤝 依頼・お願い',jp:'〜までに仕上げられますか？',sub:'',en:"Can you get this done by…?",alt:"Is it possible to finish this by…?",tip:"get this done は「仕上げる・完成させる」。"},
+{id:24,cat:'🤝 依頼・お願い',jp:'これを確認してもらえますか？',sub:'',en:"Could you review this for me?",alt:"Can you take a look at this?",tip:"take a look at はカジュアルで使いやすい確認依頼の表現。"},
+{id:25,cat:'🤝 依頼・お願い',jp:'担当者につないでもらえますか？',sub:'',en:"Could you connect me with the right person?",alt:"Who should I speak to about this?",tip:"connect me with は「つないでもらう」。"},
+{id:26,cat:'🤝 依頼・お願い',jp:'優先してもらえますか？',sub:'',en:"Could you prioritize this?",alt:"Can we bump this up?",tip:"bump this up はカジュアルで「優先順位を上げる」というニュアンス。"},
+{id:27,cat:'🤝 依頼・お願い',jp:'もう少し時間をもらえますか？',sub:'',en:"Can I have a bit more time?",alt:"Could I get an extension?",tip:"get an extension は「期限を延ばしてもらう」というフォーマルな表現。"},
+{id:28,cat:'🤝 依頼・お願い',jp:'引き受けてもらえますか？',sub:'',en:"Would you be able to take this on?",alt:"Are you able to handle this?",tip:"take this on は「引き受ける・担当する」。"},
+{id:29,cat:'🤝 依頼・お願い',jp:'意見を聞かせてください',sub:'',en:"I'd love your input on this.",alt:"What's your take on this?",tip:"What's your take? は「どう思う？」というカジュアルな表現。"},
+{id:30,cat:'🤝 依頼・お願い',jp:'ご都合はいかがですか？',sub:'',en:"Does that work for you?",alt:"Is that okay with you?",tip:"Does that work for you? は日程・条件の確認に幅広く使える。"},
+{id:31,cat:'⏰ 締め切り・スケジュール',jp:'締め切りはいつですか？',sub:'',en:"What's the deadline?",alt:"When does this need to be done by?",tip:"What's the deadline? はシンプルで最もよく使われる表現。"},
+{id:32,cat:'⏰ 締め切り・スケジュール',jp:'少し遅れています',sub:'',en:"I'm running a bit behind.",alt:"I'm slightly behind schedule.",tip:"running behind は「遅れている」。"},
+{id:33,cat:'⏰ 締め切り・スケジュール',jp:'スケジュール通りです',sub:'',en:"We're on schedule.",alt:"Everything is on track.",tip:"on track はスケジュール・計画が順調なときの定番表現。"},
+{id:34,cat:'⏰ 締め切り・スケジュール',jp:'今週中に終わらせます',sub:'',en:"I'll have it done by end of the week.",alt:"I'll wrap it up this week.",tip:"wrap it up は「仕上げる・片付ける」。"},
+{id:35,cat:'⏰ 締め切り・スケジュール',jp:'来週に延期できますか？',sub:'',en:"Can we push this to next week?",alt:"Can we postpone this?",tip:"push は「日程を後ろにずらす」。"},
+{id:36,cat:'⏰ 締め切り・スケジュール',jp:'いつ空いていますか？',sub:'',en:"When are you free?",alt:"When works for you?",tip:"When works for you? は相手の都合を聞く自然な口語表現。"},
+{id:37,cat:'⏰ 締め切り・スケジュール',jp:'急ぎですか？',sub:'',en:"Is this urgent?",alt:"How soon do you need this?",tip:"How soon do you need this? は優先度を確認するのに便利。"},
+{id:38,cat:'⏰ 締め切り・スケジュール',jp:'先約があります',sub:'',en:"I have something scheduled already.",alt:"I'm already booked.",tip:"I'm already booked. は「予定が埋まっている」というカジュアルな表現。"},
+{id:39,cat:'⏰ 締め切り・スケジュール',jp:'カレンダーに入れておきます',sub:'',en:"I'll put it in my calendar.",alt:"I'll block that time.",tip:"block that time は「その時間をブロックする」。"},
+{id:40,cat:'⏰ 締め切り・スケジュール',jp:'リスケできますか？',sub:'',en:"Can we reschedule?",alt:"Can we find another time?",tip:"reschedule は日程変更の定番語。"},
+{id:41,cat:'💬 雑談・関係づくり',jp:'週末はどうでしたか？',sub:'',en:"How was your weekend?",alt:"Did you get up to anything fun?",tip:"Did you get up to anything fun? はオーストラリアでよく使われる自然な雑談フレーズ。"},
+{id:42,cat:'💬 雑談・関係づくり',jp:'それは面白い！',sub:'',en:"That's interesting!",alt:"Oh wow, really?",tip:"Oh wow, really? はカジュアルで会話を弾ませる反応。"},
+{id:43,cat:'💬 雑談・関係づくり',jp:'笑えますね！',sub:'',en:"That's hilarious!",alt:"That's so funny!",tip:"hilarious は「爆笑レベルで面白い」。"},
+{id:44,cat:'💬 雑談・関係づくり',jp:'最近どうですか？',sub:'',en:"How have you been?",alt:"How's everything going?",tip:"How have you been? は久しぶりの挨拶にも使える。"},
+{id:45,cat:'💬 雑談・関係づくり',jp:'お疲れ様です',sub:'',en:"Good work today.",alt:"You've been working hard.",tip:"日本語の「お疲れ様」に直訳はない。Good work today. が自然。"},
+{id:46,cat:'💬 雑談・関係づくり',jp:'それ知らなかった！',sub:'',en:"I didn't know that!",alt:"No way, really?",tip:"No way, really? はカジュアルで驚きを表す定番表現。"},
+{id:47,cat:'💬 雑談・関係づくり',jp:'同感です',sub:'',en:"I know exactly what you mean.",alt:"I totally get that.",tip:"I know exactly what you mean. は共感の強い表現。"},
+{id:48,cat:'💬 雑談・関係づくり',jp:'いつかランチ行きましょう',sub:'',en:"We should grab lunch sometime.",alt:"Let's catch up over coffee.",tip:"grab lunch はカジュアルで「ランチに行く」。"},
+{id:49,cat:'💬 雑談・関係づくり',jp:'助かりました、ありがとう',sub:'',en:"That was really helpful, thanks.",alt:"I really appreciate it.",tip:"I really appreciate it. はより丁寧で感謝の気持ちが伝わる。"},
+{id:50,cat:'💬 雑談・関係づくり',jp:'またいつでも声かけてください',sub:'',en:"Feel free to reach out anytime.",alt:"My door is always open.",tip:"My door is always open. は「いつでも相談して」という温かい表現。"},
+{id:51,cat:'🙏 謝罪・フォロー',jp:'遅れて申し訳ありません',sub:'',en:"I apologize for the delay.",alt:"Sorry for keeping you waiting.",tip:"I apologize for the delay. はメールでも口頭でも使えるフォーマルな謝罪。"},
+{id:52,cat:'🙏 謝罪・フォロー',jp:'二度とこのようなことがないようにします',sub:'',en:"I'll make sure it doesn't happen again.",alt:"This won't happen again.",tip:"I'll make sure it doesn't happen again. は再発防止を約束する定番表現。"},
+{id:53,cat:'🙏 謝罪・フォロー',jp:'誤解させてしまいました',sub:'',en:"I think there was a miscommunication.",alt:"I may have not been clear.",tip:"miscommunication は「コミュニケーションのミス・誤解」。"},
+{id:54,cat:'🙏 謝罪・フォロー',jp:'すぐに対応します',sub:'',en:"I'll get right on it.",alt:"I'll take care of it right away.",tip:"get right on it は「すぐ取り掛かる」というカジュアルで頼もしい表現。"},
+{id:55,cat:'🙏 謝罪・フォロー',jp:'ご迷惑をおかけしました',sub:'',en:"I'm sorry for any inconvenience.",alt:"I apologize for the trouble.",tip:"any inconvenience は「ご不便・ご迷惑」という丁寧な表現。"},
+{id:56,cat:'🙏 謝罪・フォロー',jp:'確認不足でした',sub:'',en:"I should have double-checked.",alt:"That was my oversight.",tip:"oversight は「見落とし・確認漏れ」。フォーマルで責任ある表現。"},
+{id:57,cat:'🙏 謝罪・フォロー',jp:'私の間違いでした',sub:'',en:"That was my mistake.",alt:"My bad.",tip:"My bad. はカジュアルな謝罪。ビジネスでは That was my mistake. が適切。"},
+{id:58,cat:'🙏 謝罪・フォロー',jp:'修正させてください',sub:'',en:"Let me correct that.",alt:"Allow me to fix this.",tip:"Let me correct that. は間違いを訂正するときの丁寧な表現。"},
+{id:59,cat:'🙏 謝罪・フォロー',jp:'ご心配をおかけしました',sub:'',en:"I'm sorry for the concern.",alt:"I didn't mean to cause any worry.",tip:"I didn't mean to cause any worry. は柔らかい謝罪。"},
+{id:60,cat:'🙏 謝罪・フォロー',jp:'今後ともよろしくお願いします',sub:'',en:"I look forward to working with you.",alt:"I appreciate your continued support.",tip:"I look forward to working with you. は関係継続を示す定番表現。"},
+{id:61,cat:'👍 賛成・反対・意見',jp:'全くその通りです',sub:'',en:"I totally agree.",alt:"Absolutely.",tip:"Absolutely. は一言で強い同意を表せる便利な表現。"},
+{id:62,cat:'👍 賛成・反対・意見',jp:'少し違う見方をしています',sub:'',en:"I see it a bit differently.",alt:"I have a different perspective.",tip:"I see it differently. は反論を柔らかく伝える定番表現。"},
+{id:63,cat:'👍 賛成・反対・意見',jp:'いい点だと思います',sub:'',en:"That's a good point.",alt:"You make a fair point.",tip:"You make a fair point. は相手の意見を認めつつ返す丁寧な表現。"},
+{id:64,cat:'👍 賛成・反対・意見',jp:'懸念があります',sub:'',en:"I have some concerns about that.",alt:"I'm not so sure about this.",tip:"I have some concerns はビジネスで反対意見を伝える最も丁寧な言い方。"},
+{id:65,cat:'👍 賛成・反対・意見',jp:'おっしゃる通りです',sub:'',en:"You're right.",alt:"That makes sense.",tip:"That makes sense. は「なるほど」という同意や理解を示す表現。"},
+{id:66,cat:'👍 賛成・反対・意見',jp:'難しい質問ですね',sub:'',en:"That's a tough question.",alt:"That's not an easy one.",tip:"That's a tough question. は答えに時間が必要なときの時間稼ぎにも使える。"},
+{id:67,cat:'👍 賛成・反対・意見',jp:'ちょっと考えさせてください',sub:'',en:"Let me think about that.",alt:"I need to give that some thought.",tip:"I need to give that some thought. は即答を避けるときの丁寧な表現。"},
+{id:68,cat:'👍 賛成・反対・意見',jp:'賛成も反対もあります',sub:'',en:"I see both sides.",alt:"There are pros and cons.",tip:"There are pros and cons. は「メリットとデメリットがある」という定番表現。"},
+{id:69,cat:'👍 賛成・反対・意見',jp:'追加で言うと…',sub:'',en:"I'd also like to add…",alt:"Just to add to that…",tip:"Just to add to that… は会話に追加情報を自然に足すときのフレーズ。"},
+{id:70,cat:'👍 賛成・反対・意見',jp:'基本的には賛成です',sub:'',en:"I'm generally on board with that.",alt:"I'm mostly in agreement.",tip:"on board は「賛成している・同意している」というビジネス定番表現。"},
+{id:71,cat:'📊 進捗・状況報告',jp:'順調です',sub:'',en:"We're on track.",alt:"Things are going well.",tip:"We're on track. はスケジュールや進捗が計画通りのときの定番表現。"},
+{id:72,cat:'📊 進捗・状況報告',jp:'少し遅れが出ています',sub:'',en:"We've hit a bit of a delay.",alt:"There's been a slight setback.",tip:"setback は「遅延・障害」。"},
+{id:73,cat:'📊 進捗・状況報告',jp:'90%完成しています',sub:'',en:"We're about 90% done.",alt:"We're almost there.",tip:"We're almost there. はゴールが近いときのカジュアルな報告。"},
+{id:74,cat:'📊 進捗・状況報告',jp:'問題が発生しました',sub:'',en:"We've run into an issue.",alt:"There's a problem we need to address.",tip:"run into は「〜に直面する」。"},
+{id:75,cat:'📊 進捗・状況報告',jp:'解決策を検討中です',sub:'',en:"We're working on a solution.",alt:"We're looking into it.",tip:"We're looking into it. は問題を調査・対処中であることを伝える。"},
+{id:76,cat:'📊 進捗・状況報告',jp:'予定より早く終わりそうです',sub:'',en:"We might finish ahead of schedule.",alt:"We're actually ahead of plan.",tip:"ahead of schedule は「予定より早い」。"},
+{id:77,cat:'📊 進捗・状況報告',jp:'最新の状況をお知らせします',sub:'',en:"Here's a quick update.",alt:"Let me bring you up to speed.",tip:"bring you up to speed は「最新情報を共有する」というビジネス定番表現。"},
+{id:78,cat:'📊 進捗・状況報告',jp:'まだ確認中です',sub:'',en:"I'm still looking into it.",alt:"I haven't confirmed that yet.",tip:"I'm still looking into it. は調査中であることを正直に伝える表現。"},
+{id:79,cat:'📊 進捗・状況報告',jp:'ボールはあなたのコートに',sub:'次のアクションを相手に',en:"The ball is in your court.",alt:"It's over to you now.",tip:"The ball is in your court. は「次はあなたの番」というスポーツ由来の慣用表現。"},
+{id:80,cat:'📊 進捗・状況報告',jp:'完了しました',sub:'',en:"That's been taken care of.",alt:"All done.",tip:"That's been taken care of. は「対処済み」というビジネスらしい表現。"},
+{id:81,cat:'🚀 提案・アイデア',jp:'こうしたらどうでしょう？',sub:'',en:"What if we tried…?",alt:"How about we…?",tip:"What if we tried…? は提案を柔らかく切り出す定番フレーズ。"},
+{id:82,cat:'🚀 提案・アイデア',jp:'提案があります',sub:'',en:"I have a suggestion.",alt:"I have an idea.",tip:"I have a suggestion. はフォーマル。I have an idea. はよりカジュアル。"},
+{id:83,cat:'🚀 提案・アイデア',jp:'別のアプローチを試しませんか？',sub:'',en:"Should we try a different approach?",alt:"What if we looked at this differently?",tip:"a different approach は「別の手法・視点」。"},
+{id:84,cat:'🚀 提案・アイデア',jp:'いいアイデアだと思います',sub:'',en:"I think that's a great idea.",alt:"I love that idea.",tip:"I love that idea. はカジュアルで熱意が伝わる。"},
+{id:85,cat:'🚀 提案・アイデア',jp:'少し調整してみましょう',sub:'',en:"Let's tweak it a bit.",alt:"Let's make some adjustments.",tip:"tweak はカジュアルで「少し変える・調整する」というニュアンス。"},
+{id:86,cat:'🚀 提案・アイデア',jp:'試してみる価値がありそうです',sub:'',en:"It's worth a try.",alt:"Let's give it a shot.",tip:"give it a shot は「試してみる」のカジュアルな表現。"},
+{id:87,cat:'🚀 提案・アイデア',jp:'より効率的な方法があります',sub:'',en:"There's a more efficient way to do this.",alt:"I know a better way.",tip:"more efficient は「より効率的な」。"},
+{id:88,cat:'🚀 提案・アイデア',jp:'先例を参考にしましょう',sub:'',en:"Let's look at what's worked before.",alt:"Let's learn from past experience.",tip:"what's worked before は「過去にうまくいったこと」。"},
+{id:89,cat:'🚀 提案・アイデア',jp:'チームで協力しましょう',sub:'',en:"Let's collaborate on this.",alt:"Let's work on this together.",tip:"collaborate は「協力する」。チームワークを示す前向きな表現。"},
+{id:90,cat:'🚀 提案・アイデア',jp:'まずテストしてみましょう',sub:'',en:"Let's test it out first.",alt:"Why don't we run a pilot?",tip:"run a pilot は「試験的に実施する」というビジネス用語。"},
+{id:91,cat:'🏁 締め・確認',jp:'まとめましょう',sub:'会議・話の締め',en:"Let's wrap up.",alt:"Let's bring this to a close.",tip:"wrap up は「まとめる・締める」。"},
+{id:92,cat:'🏁 締め・確認',jp:'要点を確認します',sub:'',en:"Just to recap…",alt:"To summarize…",tip:"Just to recap は「要点をまとめると」という会議の締めに定番のフレーズ。"},
+{id:93,cat:'🏁 締め・確認',jp:'次のステップは？',sub:'',en:"What are the next steps?",alt:"What's our action plan?",tip:"next steps は会議終了時の必須確認事項。"},
+{id:94,cat:'🏁 締め・確認',jp:'誰が担当しますか？',sub:'',en:"Who's taking ownership of this?",alt:"Who's responsible for this?",tip:"taking ownership は「責任を持って担当する」という前向きな表現。"},
+{id:95,cat:'🏁 締め・確認',jp:'今日の決定事項をまとめます',sub:'',en:"Let me summarize what we decided today.",alt:"Here's what we agreed on.",tip:"Here's what we agreed on. はシンプルで合意内容を明確にする。"},
+{id:96,cat:'🏁 締め・確認',jp:'認識が合っていますか？',sub:'',en:"Are we all on the same page?",alt:"Do we all agree?",tip:"on the same page は「全員の認識が一致している」というビジネス定番表現。"},
+{id:97,cat:'🏁 締め・確認',jp:'議事録を送ります',sub:'',en:"I'll send out the meeting notes.",alt:"I'll circulate the minutes.",tip:"circulate the minutes はフォーマルな「議事録を回覧する」。"},
+{id:98,cat:'🏁 締め・確認',jp:'何かご質問はありますか？',sub:'',en:"Does anyone have any questions?",alt:"Any questions before we finish?",tip:"Any questions before we finish? は会議の締めに自然に使える。"},
+{id:99,cat:'🏁 締め・確認',jp:'それでは以上です',sub:'',en:"That's all from me.",alt:"That's a wrap.",tip:"That's a wrap. は「以上で終わり」のカジュアルで締まりのある表現。"},
+{id:100,cat:'🏁 締め・確認',jp:'ご参加ありがとうございました',sub:'',en:"Thank you all for joining.",alt:"Thanks everyone for your time.",tip:"Thanks everyone for your time. は時間を割いてくれた感謝を伝える定番。"}
+];
+const CATS=[...new Set(PHRASES.map(p=>p.cat))];
+const CAT_COLORS={'📅 会議・打ち合わせ':'#3d5a8a','📧 メール・報告':'#4a7c59','🤝 依頼・お願い':'#c8962a','⏰ 締め切り・スケジュール':'#a03030','💬 雑談・関係づくり':'#7a5a2a','🙏 謝罪・フォロー':'#5a2a7a','👍 賛成・反対・意見':'#2a7a7a','📊 進捗・状況報告':'#2a5a7a','🚀 提案・アイデア':'#7a2a5a','🏁 締め・確認':'#4a4a8a'};
+
+let gApiKey = localStorage.getItem('g_tts_key') || '';
+let currentAudio = null;
+let isPlaying = false;
+
+function saveApiKey() {
+  const key = document.getElementById('api-key-input').value.trim();
+  if (!key) { showToast('APIキーを入力してください'); return; }
+  gApiKey = key;
+  localStorage.setItem('g_tts_key', key);
+  document.getElementById('api-modal').style.display = 'none';
+  showToast('✓ APIキーを保存しました');
+}
+function skipApiKey() { document.getElementById('api-modal').style.display = 'none'; }
+function showApiModal() {
+  document.getElementById('api-key-input').value = gApiKey;
+  document.getElementById('api-modal').style.display = 'flex';
+}
+
+let currentFlowToken = 0; // incremented each time a new flow starts
+
+function stopAudio() {
+  currentFlowToken++; // invalidate any pending promises
+  if (currentAudio) {
+    currentAudio.pause();
+    currentAudio = null;
+  }
+  isPlaying = false;
+  setVoiceBtnState(false);
+  setVoiceStatus('');
+}
+
+async function speakGoogle(text, lang) {
+  if (!gApiKey) {
+    showToast('🔑 右上の「音声設定」からAPIキーを設定してください');
+    return false;
+  }
+  const myToken = currentFlowToken;
+  const voiceConfig = lang === 'ja'
+    ? { languageCode: 'ja-JP', name: 'ja-JP-Neural2-B' }
+    : { languageCode: 'en-AU', name: 'en-AU-Neural2-A' };
+
+  try {
+    const res = await fetch(
+      `https://texttospeech.googleapis.com/v1/text:synthesize?key=${gApiKey}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          input: { text },
+          voice: voiceConfig,
+          audioConfig: { audioEncoding: 'MP3', speakingRate: 0.95 }
+        })
+      }
+    );
+    // Check if still valid after async fetch
+    if (myToken !== currentFlowToken) return false;
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error?.message || `エラー ${res.status}`);
+    }
+    const data = await res.json();
+    if (myToken !== currentFlowToken) return false;
+
+    const audio = new Audio('data:audio/mp3;base64,' + data.audioContent);
+    currentAudio = audio;
+    isPlaying = true;
+
+    return new Promise((resolve) => {
+      const cleanup = (val) => {
+        if (currentAudio === audio) { currentAudio = null; isPlaying = false; }
+        resolve(val);
+      };
+      audio.onended = () => cleanup(true);
+      audio.onerror = () => cleanup(false);
+      audio.play().catch(() => cleanup(false));
+
+      // Poll for token invalidation (stopAudio called externally)
+      const poll = setInterval(() => {
+        if (myToken !== currentFlowToken) {
+          clearInterval(poll);
+          audio.pause();
+          resolve(false);
+        }
+        if (!isPlaying && currentAudio !== audio) {
+          clearInterval(poll);
+        }
+      }, 100);
+    });
+  } catch(e) {
+    if (myToken !== currentFlowToken) return false;
+    showToast('⚠️ ' + e.message);
+    return false;
+  }
+}
+
+function setVoiceBtnState(playing) {
+  const btn = document.getElementById('voice-play-btn');
+  if (!btn) return;
+  btn.classList.toggle('playing', playing);
+  document.getElementById('voice-btn-label').textContent = playing ? '再生中（タップで停止）' : '英語を聴く';
+}
+function setVoiceStatus(msg) {
+  const el = document.getElementById('voice-status');
+  if (el) el.textContent = msg;
+}
+
+// ===================== AUTO-PLAY STATE =====================
+let autoPlay = false;
+let autoFlowAbort = false; // flag to cancel current auto flow
+
+function toggleAutoPlay() {
+  autoPlay = !autoPlay;
+  const btn = document.getElementById('auto-play-btn');
+  if (autoPlay) {
+    btn.textContent = '▶ 自動ON';
+    btn.classList.add('on');
+    showToast('自動再生ON：日本語→英語→次の問題と自動で進みます');
+  } else {
+    btn.textContent = '▶ 自動OFF';
+    btn.classList.remove('on');
+    autoFlowAbort = true;
+    stopAudio();
+    setApStatus('idle', '');
+    showToast('自動再生OFF');
+  }
+  const bar = document.getElementById('autoplay-bar');
+  if (bar) bar.classList.toggle('visible', autoPlay);
+}
+
+function setApStatus(state, label) {
+  const dot = document.getElementById('ap-dot');
+  const lbl = document.getElementById('ap-label');
+  if (!dot || !lbl) return;
+  dot.className = 'ap-dot ' + state;
+  lbl.textContent = label || '自動再生モード';
+  const card = document.getElementById('flash-card');
+  if (card) {
+    card.classList.remove('jp-speaking', 'en-speaking');
+    if (state === 'jp') card.classList.add('jp-speaking');
+    if (state === 'en') card.classList.add('en-speaking');
+  }
+}
+
+// The main auto-play coroutine
+async function runAutoFlow(phraseId) {
+  const p = PHRASES.find(x => x.id === phraseId);
+  if (!p) return;
+
+  // Step 1: speak Japanese
+  setApStatus('jp', '🇯🇵 日本語を読み上げ中...');
+  setVoiceStatus('日本語を読み上げ中...');
+  await speakGoogle(p.jp, 'ja');
+  if (autoFlowAbort) return;
+
+  // Step 2: wait 1.5s
+  setApStatus('wait', '少々お待ちください...');
+  setVoiceStatus('');
+  await sleep(1500);
+  if (autoFlowAbort) return;
+
+  // Step 3: reveal card
+  revealCard(true); // silent reveal (no auto-trigger from revealCard)
+  await sleep(300);
+  if (autoFlowAbort) return;
+
+  // Step 4: speak English
+  setApStatus('en', '🇦🇺 英語を読み上げ中...');
+  setVoiceStatus('英語を読み上げ中...');
+  setVoiceBtnState(true);
+  await speakGoogle(p.en, 'en');
+  setVoiceBtnState(false);
+  if (autoFlowAbort) return;
+
+  // Step 5: wait 2s then advance
+  setApStatus('wait', '次の問題に移ります...');
+  setVoiceStatus('');
+  await sleep(2000);
+  if (autoFlowAbort) return;
+
+  // Step 6: auto advance (mark as OK for stats)
+  setApStatus('idle', '自動再生モード');
+  autoAdvance();
+}
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function autoAdvance() {
+  // In auto mode, just move forward (counts as OK for stats)
+  const p = queue[qIdx];
+  if (!p) return;
+  sessionOk++;
+  wrong.delete(p.id);
+  if (currentMode === 'loop') {
+    loopCounts[p.id] = (loopCounts[p.id] || 0) + 1;
+    if (loopCounts[p.id] >= 5) { mastered.add(p.id); save(); qIdx++; }
+    else { const ins = qIdx + 1 + Math.floor(Math.random() * Math.min(5, queue.length - qIdx - 1)); queue.splice(ins, 0, p); qIdx++; }
+  } else {
+    mastered.add(p.id); save(); qIdx++;
+  }
+  updateHeader();
+  showCard();
+}
+
+function autoSkipNow() {
+  autoFlowAbort = true;
+  stopAudio();
+  setApStatus('idle', '自動再生モード');
+  qIdx++;
+  showCard();
+}
+
+// Manual English play button
+async function playEnglishManual() {
+  if (isPlaying) { stopAudio(); return; }
+  const p = queue[qIdx];
+  if (!p) return;
+  setVoiceBtnState(true);
+  setVoiceStatus('英語を読み上げ中...');
+  await speakGoogle(p.en, 'en');
+  setVoiceBtnState(false);
+  setVoiceStatus('');
+}
+
+// List page play
+async function playPhrase(en) {
+  if (isPlaying) { stopAudio(); return; }
+  await speakGoogle(en, 'en');
+}
+
+// ===================== STATE =====================
+let mastered = new Set(JSON.parse(localStorage.getItem('biz_mastered') || '[]'));
+let wrong = new Set(JSON.parse(localStorage.getItem('biz_wrong') || '[]'));
+let queue = [], qIdx = 0, isRevealed = false;
+let currentMode = 'normal', selectedCat = 'all';
+let sessionOk = 0, sessionNg = 0;
+let timerInterval = null, timerLeft = 3;
+let loopCounts = {};
+
+function save() {
+  localStorage.setItem('biz_mastered', JSON.stringify([...mastered]));
+  localStorage.setItem('biz_wrong', JSON.stringify([...wrong]));
+}
+function updateHeader() { document.getElementById('h-mastered').textContent = mastered.size; }
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+function switchTab(p, btn) {
+  document.querySelectorAll('.page').forEach(x => x.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+  document.getElementById('page-' + p).classList.add('active');
+  btn.classList.add('active');
+  if (p === 'list') renderList();
+  if (p === 'stats') renderStats();
+}
+
+function initSetup() {
+  const cc = document.getElementById('cat-chips');
+  cc.innerHTML = `<button class="cat-chip active" onclick="selCat('all',this)">すべて (${PHRASES.length})</button>`;
+  CATS.forEach(c => {
+    const n = PHRASES.filter(p => p.cat === c).length;
+    cc.innerHTML += `<button class="cat-chip" onclick="selCat('${c}',this)">${c} (${n})</button>`;
+  });
+}
+function selCat(cat, btn) {
+  selectedCat = cat;
+  document.querySelectorAll('#cat-chips .cat-chip').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+}
+function selectMode(mode) {
+  currentMode = mode;
+  document.querySelectorAll('.mode-card').forEach(c => c.classList.remove('selected'));
+  document.getElementById('mode-' + mode).classList.add('selected');
+}
+
+function startTraining() {
+  let pool = selectedCat === 'all' ? [...PHRASES] : PHRASES.filter(p => p.cat === selectedCat);
+  if (currentMode === 'review') pool = pool.filter(p => !mastered.has(p.id) || wrong.has(p.id));
+  if (pool.length === 0) { alert('該当するフレーズがありません！'); return; }
+  for (let i = pool.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [pool[i], pool[j]] = [pool[j], pool[i]]; }
+  queue = pool; qIdx = 0; sessionOk = 0; sessionNg = 0; loopCounts = {};
+  document.getElementById('train-setup').style.display = 'none';
+  document.getElementById('train-result').style.display = 'none';
+  document.getElementById('train-area').style.display = 'block';
+  document.getElementById('timer-wrap').style.display = currentMode === 'timer' ? 'flex' : 'none';
+  document.getElementById('loop-banner').style.display = currentMode === 'loop' ? 'block' : 'none';
+  document.getElementById('autoplay-bar').classList.toggle('visible', autoPlay);
+  showCard();
+}
+
+function showCard() {
+  if (qIdx >= queue.length) { endTraining(); return; }
+  const p = queue[qIdx]; isRevealed = false;
+
+  // Abort any running auto flow and stop audio
+  autoFlowAbort = true;
+  stopAudio();
+  setApStatus('idle', '自動再生モード');
+
+  document.getElementById('flash-card').className = 'flash-card';
+  document.getElementById('card-cat').textContent = p.cat;
+  document.getElementById('card-jp').textContent = p.jp;
+  document.getElementById('card-sub').textContent = p.sub || '';
+  document.getElementById('card-en').textContent = p.en;
+  document.getElementById('card-alt').textContent = p.alt ? '💡 ' + p.alt : '';
+  document.getElementById('card-tip').textContent = p.tip ? '🔑 ' + p.tip : '';
+  const chunksEl = document.getElementById('card-chunks'); if(chunksEl) chunksEl.innerHTML = (p.chunks || []).map((c, i) =>
+    `<div class="cc-row"><span class="cc-num">${i + 1}</span><span class="cc-en">${c}</span></div>`).join('');
+  document.getElementById('card-hint').style.display = '';
+  document.getElementById('btn-reveal').style.display = 'inline-block';
+  document.getElementById('btn-ok').style.display = 'none';
+  document.getElementById('btn-ng').style.display = 'none';
+  document.getElementById('voice-btn-wrap').style.display = 'none';
+  setVoiceBtnState(false);
+  setVoiceStatus('');
+  document.getElementById('train-ctr').textContent = `${qIdx + 1} / ${queue.length}`;
+  document.getElementById('train-prog').style.width = (qIdx / queue.length * 100) + '%';
+  if (currentMode === 'loop') {
+    const cnt = loopCounts[p.id] || 0;
+    document.getElementById('loop-remain').textContent = 5 - cnt;
+  }
+
+  // Auto-play flow: start after short delay so card renders first
+  if (autoPlay) {
+    const flowId = p.id;
+    const myToken = currentFlowToken; // capture token AFTER stopAudio incremented it
+    setTimeout(() => {
+      // Only start if no new stopAudio has been called since
+      if (myToken !== currentFlowToken) return;
+      autoFlowAbort = false;
+      runAutoFlow(flowId);
+    }, 400);
+  } else if (currentMode === 'timer') {
+    startTimer();
+  }
+}
+
+function onCardTap() {
+  if (autoPlay) {
+    // In auto mode, tapping the card cancels auto flow and manual reveal
+    autoFlowAbort = true;
+    stopAudio();
+    setApStatus('idle', '手動モード（一時停止中）');
+    revealCard(true);
+  } else {
+    revealCard(false);
+  }
+}
+
+// silent: true = don't trigger auto flow again from here
+function revealCard(silent) {
+  if (isRevealed) return; isRevealed = true;
+  clearInterval(timerInterval);
+  document.getElementById('flash-card').classList.add('revealed');
+  document.getElementById('flash-card').classList.remove('jp-speaking', 'en-speaking');
+  document.getElementById('card-hint').style.display = 'none';
+  document.getElementById('btn-reveal').style.display = 'none';
+  document.getElementById('btn-ok').style.display = 'inline-block';
+  document.getElementById('btn-ng').style.display = 'inline-block';
+  document.getElementById('voice-btn-wrap').style.display = 'flex';
+}
+
+function startTimer() {
+  clearInterval(timerInterval); timerLeft = 3; updateTimerUI(3, 3);
+  timerInterval = setInterval(() => {
+    timerLeft -= 0.1;
+    if (timerLeft <= 0) { clearInterval(timerInterval); timerLeft = 0; revealCard(false); }
+    updateTimerUI(timerLeft, 3);
+  }, 100);
+}
+function updateTimerUI(val, max) {
+  const offset = 169.6 * (1 - val / max);
+  document.getElementById('timer-circle').style.strokeDashoffset = offset;
+  document.getElementById('timer-num').textContent = Math.ceil(val);
+  document.getElementById('timer-circle').style.stroke = val > 2 ? '#c8962a' : val > 1 ? '#c86a2a' : '#a03030';
+}
+
+function markOk() {
+  autoFlowAbort = true; stopAudio();
+  const p = queue[qIdx]; sessionOk++; wrong.delete(p.id);
+  if (currentMode === 'loop') {
+    loopCounts[p.id] = (loopCounts[p.id] || 0) + 1;
+    if (loopCounts[p.id] >= 5) { mastered.add(p.id); save(); qIdx++; }
+    else { const ins = qIdx + 1 + Math.floor(Math.random() * Math.min(5, queue.length - qIdx - 1)); queue.splice(ins, 0, p); qIdx++; }
+  } else { mastered.add(p.id); save(); qIdx++; }
+  updateHeader(); showCard();
+}
+function markNg() {
+  autoFlowAbort = true; stopAudio();
+  const p = queue[qIdx]; sessionNg++; wrong.add(p.id);
+  if (currentMode === 'loop') {
+    loopCounts[p.id] = 0;
+    const ins = qIdx + 1 + Math.floor(Math.random() * Math.min(4, queue.length - qIdx - 1));
+    queue.splice(Math.min(ins, queue.length), 0, p);
+  }
+  save(); qIdx++; showCard();
+}
+function skipCard() { autoFlowAbort = true; stopAudio(); qIdx++; showCard(); }
+function quitTraining() { autoFlowAbort = true; stopAudio(); clearInterval(timerInterval); backToSetup(); }
+
+function endTraining() {
+  autoFlowAbort = true; stopAudio(); clearInterval(timerInterval);
+  document.getElementById('train-area').style.display = 'none';
+  document.getElementById('train-result').style.display = 'block';
+  const total = sessionOk + sessionNg;
+  const pct = total > 0 ? Math.round(sessionOk / total * 100) : 0;
+  document.getElementById('res-ok').textContent = sessionOk;
+  document.getElementById('res-ng').textContent = sessionNg;
+  document.getElementById('res-total').textContent = total;
+  document.getElementById('res-emoji').textContent = pct >= 80 ? '🎉' : pct >= 50 ? '💪' : '🔥';
+  document.getElementById('res-title').textContent = pct >= 80 ? '素晴らしい！' : pct >= 50 ? 'いい調子！' : 'もう一息！';
+  document.getElementById('res-sub').textContent = `正解率 ${pct}%（${sessionOk}/${total}）`;
+  document.getElementById('res-loop-btn').style.display = sessionNg > 0 && currentMode !== 'loop' ? 'block' : 'none';
+  updateHeader();
+}
+
+function startLoopFromResult() {
+  currentMode = 'loop';
+  const ng = [...wrong];
+  if (ng.length === 0) { alert('間違えたフレーズがありません！'); return; }
+  queue = PHRASES.filter(p => ng.includes(p.id));
+  for (let i = queue.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [queue[i], queue[j]] = [queue[j], queue[i]]; }
+  qIdx = 0; sessionOk = 0; sessionNg = 0; loopCounts = {};
+  document.getElementById('train-result').style.display = 'none';
+  document.getElementById('train-area').style.display = 'block';
+  document.getElementById('loop-banner').style.display = 'block';
+  document.getElementById('timer-wrap').style.display = 'none';
+  document.getElementById('autoplay-bar').classList.toggle('visible', autoPlay);
+  showCard();
+}
+function backToSetup() {
+  document.getElementById('train-area').style.display = 'none';
+  document.getElementById('train-result').style.display = 'none';
+  document.getElementById('train-setup').style.display = 'block';
+}
+
+function renderList() {
+  const lcc = document.getElementById('list-cat-chips');
+  lcc.innerHTML = `<button class="cat-chip active" onclick="filterList('all',this)">すべて</button>`;
+  CATS.forEach(c => { lcc.innerHTML += `<button class="cat-chip" onclick="filterList('${c}',this)">${c}</button>`; });
+  filterList('all', lcc.firstElementChild);
+}
+function filterList(cat, btn) {
+  document.querySelectorAll('#list-cat-chips .cat-chip').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  const pool = cat === 'all' ? PHRASES : PHRASES.filter(p => p.cat === cat);
+  document.getElementById('list-items').innerHTML = pool.map(p => `
+    <div class="list-item">
+      <div class="li-dot" style="background:${CAT_COLORS[p.cat] || '#888'}"></div>
+      <div class="li-body">
+        <div class="li-cat">${p.cat}</div>
+        <div class="li-jp">${p.jp}</div>
+        <div class="li-en">${p.en}</div>
+      </div>
+      <div class="li-right">
+        <button class="li-voice-btn" onclick="playPhrase(${JSON.stringify(p.en)})">🔊</button>
+        <div class="li-done ${mastered.has(p.id) ? 'show' : ''}">✓ 習得</div>
+      </div>
+    </div>`).join('');
+}
+function renderStats() {
+  document.getElementById('st-mastered').textContent = mastered.size;
+  document.getElementById('st-total').textContent = PHRASES.length;
+  document.getElementById('cat-stats').innerHTML = CATS.map(c => {
+    const total = PHRASES.filter(p => p.cat === c).length;
+    const done = PHRASES.filter(p => p.cat === c && mastered.has(p.id)).length;
+    const pct = Math.round(done / total * 100);
+    return `<div class="cat-stat">
+      <div class="cs-top"><span class="cs-name">${c}</span><span class="cs-pct">${done}/${total} (${pct}%)</span></div>
+      <div class="cs-bar"><div class="cs-fill" style="width:${pct}%;background:${CAT_COLORS[c] || 'var(--moss)'}"></div></div>
+    </div>`;
+  }).join('');
+}
+function resetAll() { if (!confirm('全データをリセットしますか？')) return; mastered.clear(); wrong.clear(); save(); updateHeader(); renderStats(); }
+function resetAllData() { resetAll(); }
+
+// INIT
+initSetup(); updateHeader();
+if (!gApiKey) {
+  document.getElementById('api-modal').style.display = 'flex';
+} else {
+  document.getElementById('api-modal').style.display = 'none';
+}
+</script>
+</body>
+</html>
