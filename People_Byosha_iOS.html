@@ -376,6 +376,31 @@ const CAT_COLORS={'👤 外見・体型':'#c8962a','👁️ 顔・表情':'#3d5a
 let currentAudio = null;
 let isPlaying = false;
 let currentFlowToken = 0; // incremented each time a new flow starts
+function speakWebSpeech(text, lang) {
+  return new Promise((resolve) => {
+    if (!window.speechSynthesis) { resolve(false); return; }
+    const myToken = currentFlowToken;
+    setTimeout(() => {
+      if (myToken !== currentFlowToken) { resolve(false); return; }
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = lang === 'ja' ? 'ja-JP' : 'en-AU';
+      utter.rate = 0.9;
+      utter.volume = 1.0;
+      const voices = window.speechSynthesis.getVoices();
+      const match = voices.find(v => v.lang.startsWith(lang === 'ja' ? 'ja' : 'en'));
+      if (match) utter.voice = match;
+      let done = false;
+      const finish = (val) => {
+        if (done) return;
+        done = true;
+        resolve(myToken === currentFlowToken ? val : false);
+      };
+      utter.onend = () => finish(true);
+      utter.onerror = (e) => finish(false);
+      window.speechSynthesis.speak(utter);
+    }, 150);
+  });
+}
 
 function stopAudio() {
   currentFlowToken++; // invalidate any pending promises
