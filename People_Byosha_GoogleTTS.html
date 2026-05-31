@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🏠 家の中の日常動作 — 瞬間反射トレーニング</title>
+<title>👤 人の描写 — 瞬間反射トレーニング</title>
 <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
 <style>
 :root{--ink:#1a1410;--paper:#f5f0e8;--gold:#c8962a;--moss:#4a7c59;--indigo:#3d5a8a;--crimson:#a03030;--panel:#fffdf8;--border:rgba(26,20,16,0.12);}
@@ -160,7 +160,7 @@ main{padding:14px;max-width:600px;margin:0 auto;}
 <!-- MODAL -->
 <div class="modal-overlay" id="api-modal">
 <div class="modal-box">
-<div class="modal-logo">🏠</div>
+<div class="modal-logo">👤</div>
 <div class="modal-title">Google Cloud 音声設定</div>
 <div class="modal-sub">ネイティブ音声を使うために<br>Google Cloud Text-to-Speech APIキーを設定してください。<br>一度入力するとブラウザに保存されます。</div>
 <label class="modal-label">Google Cloud APIキー</label>
@@ -173,9 +173,9 @@ main{padding:14px;max-width:600px;margin:0 auto;}
 <div class="toast" id="toast"></div>
 <header>
 <div class="h-top">
-<div class="h-logo">🏠</div>
+<div class="h-logo">👤</div>
 <div class="h-titles">
-<h1>家の中の日常動作</h1>
+<h1>人の描写</h1>
 <p>瞬間反射トレーニング — 100フレーズ</p>
 </div>
 <div class="h-right">
@@ -282,109 +282,109 @@ main{padding:14px;max-width:600px;margin:0 auto;}
 </main>
 <script>
 const PHRASES = [
-{id:1,cat:'移動・位置',jp:'どけて',sub:'邪魔なとき',en:'Move. / Get out of the way.',alt:'Scoot over.',tip:'Moveだけでも十分伝わる。Get out of the way はやや強め。'},
-{id:2,cat:'移動・位置',jp:'ちょっとそこ退いて',sub:'少しだけ場所を空けて',en:'Could you move a little?',alt:'Scoot over a bit.',tip:'Could you ...? で丁寧さが出る。'},
-{id:3,cat:'移動・位置',jp:'ここに来て',sub:'近くに呼ぶ',en:'Come here.',alt:'Come over here.',tip:'シンプルにCome here.が最も自然。'},
-{id:4,cat:'移動・位置',jp:'あっちに行って',sub:'離れてほしい',en:'Go over there.',alt:'Step aside.',tip:'Step aside はフォーマルな場面にも使える。'},
-{id:5,cat:'移動・位置',jp:'ここに座って',sub:'席を指定する',en:'Sit here.',alt:'Have a seat here.',tip:'Have a seat は少し丁寧なバージョン。'},
-{id:6,cat:'移動・位置',jp:'立って',sub:'座っている人に',en:'Stand up.',alt:'Get up.',tip:'Get up の方が日常会話では多く使われる。'},
-{id:7,cat:'移動・位置',jp:'寝て',sub:'横になって',en:'Lie down.',alt:'Go lie down.',tip:'犬にも人にも使える。Go lie down. はより指示的。'},
-{id:8,cat:'移動・位置',jp:'こっちに向いて',sub:'向きを変えて',en:'Turn this way.',alt:'Face this way.',tip:'Turn / Face どちらも自然。'},
-{id:9,cat:'移動・位置',jp:'前に進んで',sub:'もう少し前に',en:'Move forward.',alt:'Step forward.',tip:'Step forward はより一歩という感じ。'},
-{id:10,cat:'移動・位置',jp:'後ろに下がって',sub:'後退して',en:'Step back.',alt:'Move back.',tip:'Step back は危険回避の場面でもよく使う。'},
-{id:11,cat:'物の操作',jp:'棚に上げて',sub:'高いところに置く',en:'Put it on the shelf.',alt:'Can you put that up on the shelf?',tip:'Put it + 場所 が基本パターン。'},
-{id:12,cat:'物の操作',jp:'これ持って',sub:'手渡す・持ってもらう',en:'Hold this.',alt:'Can you hold this for me?',tip:'Hold this. は一番シンプルで自然。'},
-{id:13,cat:'物の操作',jp:'置いといて',sub:'とりあえず置いて',en:'Just put it down.',alt:'Leave it there.',tip:'Leave it there. は「そこに置いておいて」のニュアンス。'},
-{id:14,cat:'物の操作',jp:'持ってきて',sub:'取ってきて',en:'Bring it here.',alt:'Can you grab that for me?',tip:'Grab は口語でよく使われる「取ってくる」。'},
-{id:15,cat:'物の操作',jp:'向こうに持っていって',sub:'別の場所へ',en:'Take it over there.',alt:'Put it over there.',tip:'Take it + 場所 で「持っていく」。'},
-{id:16,cat:'物の操作',jp:'開けて',sub:'箱・扉など',en:'Open it.',alt:'Can you open this?',tip:'シンプルに Open it. でOK。'},
-{id:17,cat:'物の操作',jp:'閉めて',sub:'ドア・窓など',en:'Close it.',alt:'Shut it.',tip:'Shut it. はよりカジュアル。怒った感じにも聞こえることがある。'},
-{id:18,cat:'物の操作',jp:'捨てといて',sub:'ゴミを捨てる',en:'Throw it away.',alt:'Toss it.',tip:'Toss it. は口語でカジュアル。'},
-{id:19,cat:'物の操作',jp:'片付けて',sub:'散らかったものを',en:'Put it away.',alt:'Clean this up.',tip:'Put it away は「元の場所に戻す」感覚。'},
-{id:20,cat:'物の操作',jp:'引っ張って',sub:'引っ張る動作',en:'Pull it.',alt:'Give it a pull.',tip:'Give it a pull. は「一回引いてみて」のニュアンス。'},
-{id:21,cat:'料理・台所',jp:'火をつけて',sub:'コンロなど',en:'Turn on the stove.',alt:'Light the stove.',tip:'Turn on は電気・ガス全般に使える。'},
-{id:22,cat:'料理・台所',jp:'火を止めて',sub:'コンロを消す',en:'Turn off the stove.',alt:'Turn down the heat.',tip:'Turn down the heat は「火を弱める」。'},
-{id:23,cat:'料理・台所',jp:'混ぜて',sub:'かき混ぜる',en:'Stir it.',alt:'Mix it up.',tip:'Stir は鍋の中をかき回す。Mix はより全体を混ぜる感じ。'},
-{id:24,cat:'料理・台所',jp:'切って',sub:'包丁で',en:'Cut it.',alt:'Chop it up.',tip:'Chop it up は「細かく切る」。Slice は「薄く切る」。'},
-{id:25,cat:'料理・台所',jp:'洗って',sub:'野菜・食器など',en:'Wash it.',alt:'Rinse it off.',tip:'Rinse it off は「さっと水で洗い流す」。'},
-{id:26,cat:'料理・台所',jp:'温めて',sub:'電子レンジで',en:'Heat it up.',alt:'Warm it up. / Microwave it.',tip:'Microwave it. はレンジで温める場合に使える。'},
-{id:27,cat:'料理・台所',jp:'冷蔵庫に入れて',sub:'保存する',en:"Put it in the fridge.",alt:"Pop it in the fridge.",tip:'Pop it in はよりカジュアルで自然な口語表現。'},
-{id:28,cat:'料理・台所',jp:'お皿に盛って',sub:'料理を盛り付ける',en:'Plate it.',alt:'Put it on a plate.',tip:'Plate it. は料理用語として自然。'},
-{id:29,cat:'料理・台所',jp:'沸騰するまで待って',sub:'お湯を沸かす',en:'Wait until it boils.',alt:'Let it come to a boil.',tip:'Let it come to a boil. のほうがネイティブ的。'},
-{id:30,cat:'料理・台所',jp:'味見して',sub:'塩加減など確認',en:'Have a taste.',alt:'Try it and see.',tip:'Have a taste. はシンプルで自然な表現。'},
-{id:31,cat:'掃除・整理',jp:'掃除機をかけて',sub:'床を掃除',en:'Vacuum the floor.',alt:'Run the vacuum.',tip:'Run the vacuum. はよりカジュアルな言い方。'},
-{id:32,cat:'掃除・整理',jp:'拭いて',sub:'テーブルなど',en:'Wipe it down.',alt:'Give it a wipe.',tip:'Give it a wipe. は「ちょっと拭いて」というカジュアルな表現。'},
-{id:33,cat:'掃除・整理',jp:'洗濯して',sub:'洗濯機を回す',en:'Do the laundry.',alt:'Run a load of laundry.',tip:'Run a load は「一回洗濯機を回す」。'},
-{id:34,cat:'掃除・整理',jp:'洗濯物を干して',sub:'洗濯後',en:'Hang up the laundry.',alt:'Hang out the washing.',tip:'どちらも自然。地域によって表現が違う。'},
-{id:35,cat:'掃除・整理',jp:'たたんで',sub:'洗濯物を',en:'Fold it.',alt:'Fold the laundry.',tip:'Fold it. だけでたたむ動作を表現できる。'},
-{id:36,cat:'掃除・整理',jp:'ゴミを出して',sub:'ゴミ捨て場へ',en:'Take out the trash.',alt:'Put the garbage out.',tip:'Take out the trash. が最もよく使われる。'},
-{id:37,cat:'掃除・整理',jp:'窓を開けて換気して',sub:'空気を入れ替える',en:'Open the window and air it out.',alt:'Let some fresh air in.',tip:'Let some fresh air in. がネイティブらしい自然な表現。'},
-{id:38,cat:'掃除・整理',jp:'整理して',sub:'散らかったものを',en:'Tidy it up.',alt:'Organize this.',tip:'Tidy up はイギリス英語でよく使われるが米語でも通じる。'},
-{id:39,cat:'掃除・整理',jp:'床を掃いて',sub:'ほうきで',en:'Sweep the floor.',alt:'Give the floor a sweep.',tip:'Sweep the floor. が基本。'},
-{id:40,cat:'掃除・整理',jp:'汚れを落として',sub:'こびりついた汚れ',en:'Scrub it off.',alt:'Get the stain out.',tip:'Scrub は力を入れてこする感じ。Get the stain out は「汚れを落とす」。'},
-{id:41,cat:'電気・スイッチ',jp:'電気をつけて',sub:'部屋の照明',en:'Turn on the light.',alt:'Switch on the light.',tip:'どちらも自然。Turn on が最も一般的。'},
-{id:42,cat:'電気・スイッチ',jp:'電気を消して',sub:'照明を消す',en:'Turn off the light.',alt:'Switch off the light.',tip:'Turn off the light. が最も一般的。'},
-{id:43,cat:'電気・スイッチ',jp:'テレビをつけて',sub:'',en:'Turn on the TV.',alt:'Put the TV on.',tip:'Put the TV on. はイギリス英語でよく使われる。'},
-{id:44,cat:'電気・スイッチ',jp:'テレビを消して',sub:'',en:'Turn off the TV.',alt:'Switch off the TV.',tip:'Turn off the TV. が最も一般的。'},
-{id:45,cat:'電気・スイッチ',jp:'音量を上げて',sub:'テレビ・音楽',en:'Turn it up.',alt:'Can you turn up the volume?',tip:'Turn it up. だけで通じる。とても使いやすい。'},
-{id:46,cat:'電気・スイッチ',jp:'音量を下げて',sub:'静かにして',en:'Turn it down.',alt:'Can you lower the volume?',tip:'Turn it down. は音量だけでなく「抑えて」の意味でも使える。'},
-{id:47,cat:'電気・スイッチ',jp:'エアコンをつけて',sub:'',en:'Turn on the AC.',alt:'Put the air conditioning on.',tip:'AC は air conditioning の略。日常会話では AC が一般的。'},
-{id:48,cat:'電気・スイッチ',jp:'充電して',sub:'スマホなど',en:'Charge it.',alt:'Put it on charge.',tip:'Put it on charge. はイギリス英語。Charge it. が最も簡単。'},
-{id:49,cat:'電気・スイッチ',jp:'Wi-Fiにつないで',sub:'',en:'Connect to the Wi-Fi.',alt:'Get on the Wi-Fi.',tip:'Get on the Wi-Fi. はよりカジュアル。'},
-{id:50,cat:'電気・スイッチ',jp:'アラームをセットして',sub:'目覚まし',en:'Set an alarm.',alt:'Set your alarm for a specific time.',tip:'Set an alarm for 7. のように時間を加えるとより自然。'},
-{id:51,cat:'お風呂・トイレ',jp:'お風呂を沸かして',sub:'お湯を張る',en:'Run a bath.',alt:'Fill up the tub.',tip:'Run a bath. は「お風呂を準備する」定番表現。'},
-{id:52,cat:'お風呂・トイレ',jp:'シャワーを浴びて',sub:'',en:'Take a shower.',alt:'Have a shower.',tip:'Take a shower（米）Have a shower（英）どちらも正しい。'},
-{id:53,cat:'お風呂・トイレ',jp:'タオルを取って',sub:'',en:'Grab a towel.',alt:'Get me a towel.',tip:'Grab は「取ってくる」の口語表現。'},
-{id:54,cat:'お風呂・トイレ',jp:'石鹸を出して',sub:'補充する',en:'Refill the soap.',alt:'Put out some soap.',tip:'Refill は「補充する」。Put out は「用意する」。'},
-{id:55,cat:'お風呂・トイレ',jp:'水をとめて',sub:'蛇口・シャワー',en:'Turn off the water.',alt:'Shut off the tap.',tip:'Turn off the water. が最も汎用性が高い。'},
-{id:56,cat:'お風呂・トイレ',jp:'手を洗って',sub:'',en:'Wash your hands.',alt:'Go wash your hands.',tip:'Go wash your hands. は子供などへの指示でよく使う。'},
-{id:57,cat:'お風呂・トイレ',jp:'歯を磨いて',sub:'',en:'Brush your teeth.',alt:'Go brush your teeth.',tip:'シンプルに Brush your teeth. でOK。'},
-{id:58,cat:'お風呂・トイレ',jp:'髪を乾かして',sub:'ドライヤーで',en:'Dry your hair.',alt:'Use the hair dryer.',tip:'Dry your hair. がシンプルで自然。'},
-{id:59,cat:'お風呂・トイレ',jp:'鏡を見て',sub:'',en:'Look in the mirror.',alt:'Check yourself in the mirror.',tip:'Check yourself in the mirror. は「ちゃんと確認して」のニュアンス。'},
-{id:60,cat:'お風呂・トイレ',jp:'お湯を入れ直して',sub:'冷めたとき',en:'Reheat the bath.',alt:'Top up the hot water.',tip:'Top up は「補充する」。Top up the hot water. がネイティブらしい。'},
-{id:61,cat:'就寝・起床',jp:'もう寝て',sub:'就寝の指示',en:'Go to bed.',alt:'Time for bed.',tip:'Time for bed. は子供への定番フレーズ。大人にも使える。'},
-{id:62,cat:'就寝・起床',jp:'起きて',sub:'朝、起こす',en:'Wake up.',alt:'Get up. / Rise and shine.',tip:'Rise and shine. は「元気よく起きて」という明るい表現。'},
-{id:63,cat:'就寝・起床',jp:'電気消して寝て',sub:'',en:'Turn off the light and go to sleep.',alt:'Lights out.',tip:'Lights out. は軍隊・寮などで使われるが日常でも通じる。'},
-{id:64,cat:'就寝・起床',jp:'毛布をかけて',sub:'',en:'Put a blanket on.',alt:'Cover yourself with the blanket.',tip:'Put a blanket on. がシンプルで自然。'},
-{id:65,cat:'就寝・起床',jp:'もう少し寝ていいよ',sub:'',en:'You can sleep a little longer.',alt:'Sleep in a bit.',tip:'Sleep in は「いつもより長く寝る」。Sleep in a bit. で「もう少し寝て」。'},
-{id:66,cat:'就寝・起床',jp:'枕を整えて',sub:'',en:'Fix your pillow.',alt:'Fluff up the pillow.',tip:'Fluff up は枕を膨らませる動作。'},
-{id:67,cat:'就寝・起床',jp:'布団を干して',sub:'',en:'Air out the futon.',alt:'Put the futon out to dry.',tip:'Futon はそのまま英語になっている。'},
-{id:68,cat:'就寝・起床',jp:'カーテンを開けて',sub:'朝、明るくする',en:'Open the curtains.',alt:'Pull back the curtains.',tip:'Pull back the curtains. がよりネイティブらしい表現。'},
-{id:69,cat:'就寝・起床',jp:'静かにして',sub:'寝ている人がいる',en:'Keep it down.',alt:'Please be quiet.',tip:'Keep it down. は「音を小さくして」という日常的な表現。'},
-{id:70,cat:'就寝・起床',jp:'もうすぐ起こすよ',sub:'',en:"I'll wake you up soon.",alt:"I'll come get you in a bit.",tip:"I'll come get you in a bit. は「もうすぐ起こしに来る」という温かい表現。"},
-{id:71,cat:'着替え・身支度',jp:'着替えて',sub:'',en:'Get changed.',alt:'Change your clothes.',tip:'Get changed. がよりカジュアルで自然。'},
-{id:72,cat:'着替え・身支度',jp:'靴を履いて',sub:'',en:'Put your shoes on.',alt:'Slip on your shoes.',tip:'Slip on は「サッと履く」。Put your shoes on が基本。'},
-{id:73,cat:'着替え・身支度',jp:'上着を着て',sub:'寒いとき',en:'Put on a jacket.',alt:'Grab a jacket.',tip:'Grab a jacket. は「ジャケット持って」というニュアンスもある。'},
-{id:74,cat:'着替え・身支度',jp:'脱いで',sub:'コートなど',en:'Take it off.',alt:'Take off your coat.',tip:'Take it off. はシンプルで最もよく使われる。'},
-{id:75,cat:'着替え・身支度',jp:'ボタンを留めて',sub:'',en:'Button it up.',alt:'Do up the buttons.',tip:'Do up はイギリス英語でよく使われる。'},
-{id:76,cat:'着替え・身支度',jp:'ジッパーを上げて',sub:'',en:'Zip it up.',alt:'Do up the zipper.',tip:'Zip it up. がシンプルで一番自然。'},
-{id:77,cat:'着替え・身支度',jp:'髪を整えて',sub:'',en:'Fix your hair.',alt:'Do your hair.',tip:'Do your hair. は「ちゃんとセットして」というニュアンス。'},
-{id:78,cat:'着替え・身支度',jp:'準備して',sub:'出かける前に',en:'Get ready.',alt:'Hurry up and get ready.',tip:'Get ready. が最もシンプルで使いやすい。'},
-{id:79,cat:'着替え・身支度',jp:'荷物をまとめて',sub:'',en:'Pack your things.',alt:'Get your stuff together.',tip:'Get your stuff together. はよりカジュアルな表現。'},
-{id:80,cat:'着替え・身支度',jp:'マスクして',sub:'',en:'Put on your mask.',alt:'Wear your mask.',tip:'どちらも自然。Put on はより動作的なニュアンス。'},
-{id:81,cat:'依頼・確認',jp:'ちょっと待って',sub:'少しだけ',en:'Hang on.',alt:'Just a sec. / One moment.',tip:'Hang on. はとてもよく使われる口語表現。'},
-{id:82,cat:'依頼・確認',jp:'もう一回言って',sub:'聞き取れなかった',en:'Say that again.',alt:'Could you repeat that?',tip:'Say that again. がカジュアル。Could you repeat that? は丁寧。'},
-{id:83,cat:'依頼・確認',jp:'もっとゆっくり言って',sub:'',en:'Could you slow down?',alt:'Speak more slowly, please.',tip:'Could you slow down? がより自然な口語表現。'},
-{id:84,cat:'依頼・確認',jp:'確認してみて',sub:'',en:'Check it.',alt:'Double-check it.',tip:'Double-check は「念のため再確認する」。'},
-{id:85,cat:'依頼・確認',jp:'後で教えて',sub:'',en:'Let me know later.',alt:'Tell me later.',tip:'Let me know later. がよりネイティブらしい表現。'},
-{id:86,cat:'依頼・確認',jp:'急いで',sub:'',en:'Hurry up.',alt:"Come on, let's go.",tip:"Come on, let's go. は「さあ行くよ」という感じで自然。"},
-{id:87,cat:'依頼・確認',jp:'気をつけて',sub:'',en:'Be careful.',alt:'Watch out.',tip:'Watch out. は「危ない！」という緊急のニュアンス。Be careful. は全般的な注意。'},
-{id:88,cat:'依頼・確認',jp:'大丈夫？',sub:'',en:'You okay?',alt:'Are you alright?',tip:'You okay? はカジュアルな確認。Are you alright? は少し丁寧。'},
-{id:89,cat:'依頼・確認',jp:'手伝って',sub:'',en:'Can you help me?',alt:'Give me a hand.',tip:'Give me a hand. は口語でとてもよく使われる。'},
-{id:90,cat:'依頼・確認',jp:'そのままにしておいて',sub:'触らないで',en:"Leave it.",alt:"Don't touch it.",tip:"Leave it. はシンプルで強い指示。Don't touch it. はより明示的。"},
-{id:91,cat:'ペット・日常',jp:'ごはんあげて',sub:'ペットに',en:'Feed them.',alt:'Give them their food.',tip:'Feed them. がシンプルで一番自然。'},
-{id:92,cat:'ペット・日常',jp:'水を換えて',sub:'ペットの水',en:'Change the water.',alt:'Refill the water bowl.',tip:'Refill the water bowl. はより具体的。'},
-{id:93,cat:'ペット・日常',jp:'撫でてあげて',sub:'',en:'Give them a pat.',alt:'Pet them.',tip:'Give them a pat. は軽く撫でる感じ。Pet them. は動詞として使う。'},
-{id:94,cat:'ペット・日常',jp:'連れてきて',sub:'ペットを呼ぶ',en:'Bring them here.',alt:'Call them over.',tip:'Call them over. は「呼び寄せる」。'},
-{id:95,cat:'ペット・日常',jp:'外に出してあげて',sub:'',en:'Let them out.',alt:'Take them outside.',tip:'Let them out. は「扉を開けて出す」。Take them outside. は連れて行く感じ。'},
-{id:96,cat:'ペット・日常',jp:'植物に水をあげて',sub:'',en:'Water the plants.',alt:'Give the plants some water.',tip:'Water the plants. が最もシンプルで自然。'},
-{id:97,cat:'ペット・日常',jp:'郵便を取ってきて',sub:'',en:'Get the mail.',alt:'Grab the mail.',tip:'Grab the mail. はよりカジュアル。'},
-{id:98,cat:'ペット・日常',jp:'ドアに鍵かけて',sub:'',en:'Lock the door.',alt:'Make sure the door is locked.',tip:'Make sure the door is locked. は「ちゃんと確認して」のニュアンス。'},
-{id:99,cat:'ペット・日常',jp:'窓閉めて',sub:'',en:'Close the window.',alt:'Shut the window.',tip:'どちらも自然。Shut はより強い感じ。'},
-{id:100,cat:'ペット・日常',jp:'カメラを確認して',sub:'防犯カメラ・ドアカメラ',en:'Check the camera.',alt:'Have a look at the camera.',tip:'Have a look at the camera. は「ちょっと見てみて」のニュアンス。'}
+{id:1,cat:'👤 外見・体型',jp:'細身でスラっとしている',sub:'',en:"She has a slim, slender build.",alt:"She's quite lean and tall.",tip:"slim（細身）slender（スラっとした）は女性に使いやすい表現。"},
+{id:2,cat:'👤 外見・体型',jp:'がっしりした体格',sub:'',en:"He has a solid, muscular build.",alt:"He's quite stocky and broad-shouldered.",tip:"solid（しっかりした）muscular（筋肉質）。stocky は「がっしり」。"},
+{id:3,cat:'👤 外見・体型',jp:'背が高くて目を引く',sub:'',en:"He's really tall — you can't miss him.",alt:"He towers over everyone in the room.",tip:"towers over（〜より頭一つ抜ける）は背の高さを表す定番の比喩表現。"},
+{id:4,cat:'👤 外見・体型',jp:'小柄で可愛らしい雰囲気',sub:'',en:"She's petite with a really cute vibe.",alt:"She's small but has such a big presence.",tip:"petite（小柄な）はフランス語由来で女性に使う表現。"},
+{id:5,cat:'👤 外見・体型',jp:'見た目より若く見える',sub:'',en:"She looks younger than she actually is.",alt:"She doesn't look her age at all.",tip:"doesn't look her age（年齢より若く見える）は定番の褒め言葉。"},
+{id:6,cat:'👤 外見・体型',jp:'すごく印象的な見た目',sub:'',en:"He has a really striking appearance.",alt:"He's very easy on the eyes.",tip:"striking（印象的な）easy on the eyes（見目麗しい）は「見て気持ちいい」の口語表現。"},
+{id:7,cat:'👤 外見・体型',jp:'自然体で清潔感がある',sub:'',en:"She has a natural, fresh look about her.",alt:"She looks effortlessly put together.",tip:"effortlessly put together（力を入れずにまとまっている）は自然な褒め言葉。"},
+{id:8,cat:'👤 外見・体型',jp:'健康的でアクティブそう',sub:'',en:"He looks really fit and healthy.",alt:"He has that active, outdoorsy look.",tip:"outdoorsy（アウトドア派っぽい）は健康的な雰囲気を表すカジュアルな表現。"},
+{id:9,cat:'👤 外見・体型',jp:'どこかエキゾチックな雰囲気',sub:'',en:"She has an exotic, unique look.",alt:"There's something really unique about the way she looks.",tip:"exotic（エキゾチックな）はそのまま英語で使える。"},
+{id:10,cat:'👤 外見・体型',jp:'年齢を感じさせない',sub:'',en:"He's aged really gracefully.",alt:"He's in incredible shape for his age.",tip:"aged gracefully（優雅に歳を重ねた）はとても上品な褒め言葉。"},
+{id:11,cat:'👁️ 顔・表情',jp:'目がとても印象的',sub:'',en:"She has really striking eyes.",alt:"You can't help but notice her eyes.",tip:"striking eyes（印象的な目）はシンプルで力強い表現。"},
+{id:12,cat:'👁️ 顔・表情',jp:'温かくて優しい顔',sub:'',en:"He has a warm, kind face.",alt:"There's something really gentle about his face.",tip:"warm, kind face（温かく優しい顔）はそのまま使える定番の表現。"},
+{id:13,cat:'👁️ 顔・表情',jp:'笑顔がとても素敵',sub:'',en:"She has a beautiful smile.",alt:"Her smile just lights up her whole face.",tip:"lights up her face（顔が輝く）は笑顔の表現として非常に自然でポエティック。"},
+{id:14,cat:'👁️ 顔・表情',jp:'いつも表情が豊か',sub:'',en:"He's so expressive.",alt:"You can always tell what he's thinking just by looking at his face.",tip:"expressive（表情豊か）はシンプルで正確な一言。"},
+{id:15,cat:'👁️ 顔・表情',jp:'鋭くて知的な目',sub:'',en:"She has sharp, intelligent eyes.",alt:"There's a real intensity in her gaze.",tip:"intensity in her gaze（眼差しの強さ）は知性と集中力を同時に表す表現。"},
+{id:16,cat:'👁️ 顔・表情',jp:'いつも楽しそうな顔',sub:'',en:"He always looks like he's about to laugh.",alt:"He has a permanently cheerful expression.",tip:"about to laugh（今にも笑い出しそう）は楽しい雰囲気を生き生きと表現。"},
+{id:17,cat:'👁️ 顔・表情',jp:'穏やかで落ち着いた表情',sub:'',en:"She has a calm, serene expression.",alt:"There's a real peacefulness about her face.",tip:"serene（穏やかな）はcalmより詩的で品のある表現。"},
+{id:18,cat:'👁️ 顔・表情',jp:'思慮深い顔つき',sub:'',en:"He has a thoughtful look about him.",alt:"He always looks like he's deep in thought.",tip:"thoughtful look（物思いにふけった顔）deep in thought（深く考えている）は自然な表現。"},
+{id:19,cat:'👁️ 顔・表情',jp:'チャーミングな笑顔',sub:'',en:"She has the most charming smile.",alt:"Her smile is completely disarming.",tip:"disarming（人の警戒心を解く）は笑顔の魅力を表す上級の表現。"},
+{id:20,cat:'👁️ 顔・表情',jp:'目に力がある',sub:'',en:"He has really intense, focused eyes.",alt:"There's a fire in his eyes.",tip:"fire in his eyes（目に炎がある）は情熱と意志の強さを表すポエティックな表現。"},
+{id:21,cat:'💇 髪・スタイル',jp:'さらさらのストレートヘア',sub:'',en:"She has sleek, straight hair.",alt:"Her hair is so smooth and shiny.",tip:"sleek（なめらかで光沢のある）はstraightより洗練された印象を与える表現。"},
+{id:22,cat:'💇 髪・スタイル',jp:'ふわふわのウェーブヘア',sub:'',en:"She has soft, wavy hair.",alt:"Her hair has a beautiful natural wave to it.",tip:"natural wave（自然なウェーブ）は自然さを強調。"},
+{id:23,cat:'💇 髪・スタイル',jp:'短く清潔感のある髪型',sub:'',en:"He keeps his hair short and neat.",alt:"He has a clean-cut look.",tip:"clean-cut（清潔感のある）は髪型だけでなく全体的な印象にも使える。"},
+{id:24,cat:'💇 髪・スタイル',jp:'くるくるとした天然パーマ',sub:'',en:"She has gorgeous natural curls.",alt:"Her curly hair is absolutely beautiful.",tip:"natural curls（天然カール）gorgeous（素晴らしい）を組み合わせると力強い褒め言葉。"},
+{id:25,cat:'💇 髪・スタイル',jp:'赤みがかったブラウンの髪',sub:'',en:"She has auburn hair.",alt:"Her hair has a beautiful reddish-brown colour.",tip:"auburn（赤みがかった茶色）は色の名前として覚えておくと便利。"},
+{id:26,cat:'💇 髪・スタイル',jp:'白髪がかっこいい',sub:'',en:"His silver hair really suits him.",alt:"He rocks the grey hair look.",tip:"rocks（〜を格好よく着こなす）はカジュアルでとても自然な口語表現。"},
+{id:27,cat:'💇 髪・スタイル',jp:'いつもおしゃれにセットしている',sub:'',en:"He always has his hair perfectly styled.",alt:"His hair is always on point.",tip:"on point（完璧な・バッチリ決まった）は現代英語の定番カジュアル表現。"},
+{id:28,cat:'💇 髪・スタイル',jp:'自然体でラフな髪型',sub:'',en:"She has that effortless, tousled look.",alt:"Her hair looks casually perfect.",tip:"tousled（くしゃっとした）はポジティブな表現。effortless（力を入れずに）もよく使われる。"},
+{id:29,cat:'💇 髪・スタイル',jp:'ロングヘアが似合っている',sub:'',en:"Long hair really suits her.",alt:"She looks stunning with long hair.",tip:"stunning（息をのむほど美しい）はbeautifulより強い褒め言葉。"},
+{id:30,cat:'💇 髪・スタイル',jp:'坊主が似合っている',sub:'',en:"He pulls off the shaved head look really well.",alt:"The bald look really works for him.",tip:"pull off（難しいスタイルを難なく決める）はとても自然な口語表現。"},
+{id:31,cat:'👗 ファッション・印象',jp:'いつもおしゃれにまとまっている',sub:'',en:"She's always so well put together.",alt:"She always looks incredibly stylish.",tip:"well put together（きちんとまとまっている）はファッション全体の印象を表す定番表現。"},
+{id:32,cat:'👗 ファッション・印象',jp:'カジュアルだけどセンスがいい',sub:'',en:"He dresses casually but always looks stylish.",alt:"He has that effortlessly cool style.",tip:"effortlessly cool（力を抜いたクール感）はカジュアルファッションを褒める定番表現。"},
+{id:33,cat:'👗 ファッション・印象',jp:'クラシックで上品なスタイル',sub:'',en:"She has a really classic, elegant style.",alt:"She dresses in a timeless way.",tip:"timeless（時代を超えた）はファッションを褒める最上の表現の一つ。"},
+{id:34,cat:'👗 ファッション・印象',jp:'個性的なファッションセンス',sub:'',en:"He has a really unique sense of style.",alt:"He's not afraid to express himself through fashion.",tip:"not afraid to express himself（自己表現を恐れない）は個性的なスタイルを前向きに表現。"},
+{id:35,cat:'👗 ファッション・印象',jp:'シンプルだけど洗練されている',sub:'',en:"She keeps it simple but everything looks so refined.",alt:"Less is more with her style.",tip:"less is more（シンプルイズベスト）はミニマルなスタイルを褒める定番フレーズ。"},
+{id:36,cat:'👗 ファッション・印象',jp:'第一印象がとても良い',sub:'',en:"He makes a great first impression.",alt:"He comes across really well when you first meet him.",tip:"comes across（印象を与える）make a great impression（良い印象を与える）はどちらも定番表現。"},
+{id:37,cat:'👗 ファッション・印象',jp:'自然体でありのままの雰囲気',sub:'',en:"She has such a natural, authentic vibe.",alt:"What you see is what you get with her.",tip:"authentic vibe（本物の雰囲気）はとても現代的な表現。"},
+{id:38,cat:'👗 ファッション・印象',jp:'スポーティでさわやか',sub:'',en:"He has a sporty, fresh look.",alt:"He always looks clean and energetic.",tip:"sporty（スポーティ）fresh（さわやか）clean（清潔感）energetic（エネルギッシュ）を組み合わせて使える。"},
+{id:39,cat:'👗 ファッション・印象',jp:'大人っぽくてセクシー',sub:'',en:"She has a really mature, sophisticated look.",alt:"She carries herself with such elegance.",tip:"carries herself with elegance（品よく立ち振る舞う）は見た目だけでなく所作も含む表現。"},
+{id:40,cat:'👗 ファッション・印象',jp:'どんな服でも着こなす',sub:'',en:"He can pull off anything.",alt:"Everything looks good on him.",tip:"pull off anything（何でも着こなせる）は服装の最高の褒め言葉。"},
+{id:41,cat:'🎭 性格・気質',jp:'明るくてエネルギッシュ',sub:'',en:"She's so bubbly and full of energy.",alt:"She's always upbeat and positive.",tip:"bubbly（シュワシュワと弾けるような明るさ）はとてもよく使われる口語表現。"},
+{id:42,cat:'🎭 性格・気質',jp:'穏やかで落ち着いている',sub:'',en:"He's really calm and easygoing.",alt:"Nothing seems to rattle him.",tip:"easygoing（おっとりとした）はcalmより穏やかで柔軟なニュアンス。"},
+{id:43,cat:'🎭 性格・気質',jp:'思いやりがある',sub:'',en:"She's incredibly thoughtful and caring.",alt:"She always thinks of others before herself.",tip:"thoughtful（思慮深い）caring（思いやりのある）はセットでよく使われる。"},
+{id:44,cat:'🎭 性格・気質',jp:'正直でまっすぐ',sub:'',en:"He's very straightforward and honest.",alt:"He says exactly what he means — no games.",tip:"no games（駆け引きがない）は正直さを表すカジュアルで力強い表現。"},
+{id:45,cat:'🎭 性格・気質',jp:'好奇心旺盛',sub:'',en:"She's incredibly curious and open-minded.",alt:"She's always eager to learn new things.",tip:"eager to learn（学ぶことに熱心）open-minded（オープンマインドな）はよくセットになる表現。"},
+{id:46,cat:'🎭 性格・気質',jp:'負けず嫌いで向上心がある',sub:'',en:"He's very driven and competitive.",alt:"He always pushes himself to be better.",tip:"driven（向上心がある）はambitious より現代的でよく使われる。"},
+{id:47,cat:'🎭 性格・気質',jp:'ユーモアがあって面白い',sub:'',en:"She has such a great sense of humour.",alt:"She always knows how to make people laugh.",tip:"sense of humour（ユーモアのセンス）は人の性格を表すとてもよく使われる表現。"},
+{id:48,cat:'🎭 性格・気質',jp:'繊細で感受性が高い',sub:'',en:"He's very sensitive and emotionally aware.",alt:"He picks up on things others miss.",tip:"emotionally aware（感情的に意識が高い）picks up on things（細かいことに気づく）は感受性の高さを表す。"},
+{id:49,cat:'🎭 性格・気質',jp:'頼りがいがある',sub:'',en:"She's incredibly reliable.",alt:"You can always count on her.",tip:"reliable（頼りになる）count on（〜を頼りにする）はどちらも信頼性を表す定番表現。"},
+{id:50,cat:'🎭 性格・気質',jp:'自分のペースを持っている',sub:'',en:"He marches to the beat of his own drum.",alt:"He does things his own way — and it works.",tip:"marches to the beat of his own drum（自分のリズムで動く）は個性を表すとても自然な慣用表現。"},
+{id:51,cat:'💪 雰囲気・存在感',jp:'部屋に入るだけで場が明るくなる',sub:'',en:"She lights up the room when she walks in.",alt:"The whole atmosphere changes when she arrives.",tip:"lights up the room（部屋を明るくする）は存在感を表す最も定番の英語表現のひとつ。"},
+{id:52,cat:'💪 雰囲気・存在感',jp:'静かな自信がある',sub:'',en:"He has a quiet confidence about him.",alt:"There's a calm, assured quality to him.",tip:"quiet confidence（静かな自信）はshowy でない内側からの自信を表す最高の表現。"},
+{id:53,cat:'💪 雰囲気・存在感',jp:'自然とみんなが集まってくる',sub:'',en:"People are naturally drawn to her.",alt:"She has a magnetic personality.",tip:"drawn to（惹きつけられる）magnetic personality（磁石のような個性）はカリスマ性の定番表現。"},
+{id:54,cat:'💪 雰囲気・存在感',jp:'威圧感はないのに存在感がある',sub:'',en:"He has a strong presence without being intimidating.",alt:"He commands attention without even trying.",tip:"commands attention（注目を集める）without even trying（意識せずに）は自然なカリスマ性を表す。"},
+{id:55,cat:'💪 雰囲気・存在感',jp:'一緒にいると安心する',sub:'',en:"She has a really calming presence.",alt:"Just being around her puts you at ease.",tip:"calming presence（落ち着かせる存在感）puts you at ease（心を落ち着かせる）は安心感を表す定番。"},
+{id:56,cat:'💪 雰囲気・存在感',jp:'エネルギーが伝染する',sub:'',en:"Her energy is contagious.",alt:"You can't help but feel good when you're around her.",tip:"contagious（伝染する）はポジティブな意味でもよく使われる。"},
+{id:57,cat:'💪 雰囲気・存在感',jp:'どこにいても目立つ',sub:'',en:"He stands out wherever he goes.",alt:"He has a way of making himself noticed.",tip:"stands out（目立つ）makes himself noticed（自分を目立たせる）はどちらも自然な表現。"},
+{id:58,cat:'💪 雰囲気・存在感',jp:'地に足がついている',sub:'',en:"She's very grounded.",alt:"She has a really solid, stable energy.",tip:"grounded（地に足がついた）は精神的な安定感を表す現代英語の定番表現。"},
+{id:59,cat:'💪 雰囲気・存在感',jp:'圧倒的な存在感',sub:'',en:"He has an incredible presence.",alt:"You feel him in the room before you even see him.",tip:"you feel him before you see him はとても詩的で印象的な存在感の表現。"},
+{id:60,cat:'💪 雰囲気・存在感',jp:'自分らしさを持っている',sub:'',en:"She's so authentically herself.",alt:"She's completely comfortable in her own skin.",tip:"comfortable in her own skin（自分の肌に心地よい）は自己受容と自然体を表す最も定番の英語表現。"},
+{id:61,cat:'🗣️ 話し方・声',jp:'声がとても聞き取りやすい',sub:'',en:"She speaks really clearly.",alt:"Her voice is really easy to understand.",tip:"speaks clearly（明瞭に話す）はシンプルで最も実用的な表現。"},
+{id:62,cat:'🗣️ 話し方・声',jp:'低くて落ち着いた声',sub:'',en:"He has a deep, soothing voice.",alt:"His voice is really warm and resonant.",tip:"soothing（心を落ち着かせる）resonant（響きのある）は声の魅力を表す定番。"},
+{id:63,cat:'🗣️ 話し方・声',jp:'話すのが上手',sub:'',en:"She's a really good communicator.",alt:"She has a way with words.",tip:"has a way with words（言葉の使い方が上手）は話術の巧みさを表すとても自然な慣用表現。"},
+{id:64,cat:'🗣️ 話し方・声',jp:'話し方がゆっくりで丁寧',sub:'',en:"He speaks slowly and thoughtfully.",alt:"He chooses his words carefully.",tip:"chooses his words carefully（言葉を慎重に選ぶ）は知性と丁寧さを同時に表す表現。"},
+{id:65,cat:'🗣️ 話し方・声',jp:'笑い声がとても気持ちいい',sub:'',en:"She has the most infectious laugh.",alt:"Her laugh just makes everyone smile.",tip:"infectious laugh（伝染する笑い声）は笑い声の最も定番の褒め表現。"},
+{id:66,cat:'🗣️ 話し方・声',jp:'人を引きつける話し方をする',sub:'',en:"He's a really engaging speaker.",alt:"You can't help but listen when he talks.",tip:"engaging speaker（引き込む話し手）can't help but listen（聞かずにいられない）は話術の魅力を表す。"},
+{id:67,cat:'🗣️ 話し方・声',jp:'自然に話の中心になる',sub:'',en:"She naturally becomes the centre of the conversation.",alt:"Everyone just gravitates towards her when she speaks.",tip:"gravitates towards（引き寄せられる）は磁力のような引力を表す比喩表現。"},
+{id:68,cat:'🗣️ 話し方・声',jp:'聞き上手',sub:'',en:"He's a really good listener.",alt:"He makes you feel like you're the only person in the room.",tip:"makes you feel like the only person in the room は最高の傾聴スキルの表現。"},
+{id:69,cat:'🗣️ 話し方・声',jp:'ユニークなアクセントが素敵',sub:'',en:"She has the most beautiful accent.",alt:"Her accent is really charming.",tip:"beautiful accent（美しいアクセント）charming（魅力的な）はアクセントを褒める定番の言い方。"},
+{id:70,cat:'🗣️ 話し方・声',jp:'言葉が少ないけど重みがある',sub:'',en:"He doesn't say much, but when he does, it means something.",alt:"Every word he says carries weight.",tip:"carries weight（重みがある）はシンプルで力強い表現。"},
+{id:71,cat:'🤝 人との関わり方',jp:'誰とでも仲良くなれる',sub:'',en:"She gets along with everyone.",alt:"She has a gift for connecting with people.",tip:"gift for connecting（繋がる才能）はsociableより上品な言い方。"},
+{id:72,cat:'🤝 人との関わり方',jp:'初対面でも気を遣ってくれる',sub:'',en:"He makes everyone feel welcome from the start.",alt:"He's really good at making people feel at ease.",tip:"feel welcome（歓迎された気持ちになる）feel at ease（くつろいだ気持ちになる）はホスピタリティの定番表現。"},
+{id:73,cat:'🤝 人との関わり方',jp:'人の良いところを見つけるのが上手',sub:'',en:"She always sees the best in people.",alt:"She brings out the best in everyone around her.",tip:"brings out the best in people（人の最善を引き出す）は関わり方の最高の褒め言葉。"},
+{id:74,cat:'🤝 人との関わり方',jp:'困っているときに自然と助けてくれる',sub:'',en:"He's always there when you need him.",alt:"He has a way of knowing when someone needs help.",tip:"always there when you need him（必要なときにそこにいる）は信頼性と思いやりの最高の表現。"},
+{id:75,cat:'🤝 人との関わり方',jp:'グループをまとめるのが上手',sub:'',en:"She's great at bringing people together.",alt:"She's a natural at getting everyone on the same page.",tip:"bringing people together（人を一つにまとめる）on the same page（同じ認識を持つ）はリーダーシップの表現。"},
+{id:76,cat:'🤝 人との関わり方',jp:'相手の話をちゃんと聞く',sub:'',en:"He really listens — not just hears.",alt:"He gives you his full attention.",tip:"listens not just hears（ただ聞くのでなく本当に聴く）は傾聴の本質を表す深い表現。"},
+{id:77,cat:'🤝 人との関わり方',jp:'空気を読むのが上手',sub:'',en:"She's really good at reading the room.",alt:"She always knows what people need.",tip:"reading the room（場の空気を読む）は現代英語でとてもよく使われる表現。"},
+{id:78,cat:'🤝 人との関わり方',jp:'誰に対しても平等に接する',sub:'',en:"He treats everyone the same, no matter who they are.",alt:"He has no ego when it comes to people.",tip:"no ego when it comes to people（人に対してエゴがない）は謙虚さと平等性を表す力強い表現。"},
+{id:79,cat:'🤝 人との関わり方',jp:'感謝を忘れない',sub:'',en:"She's always so appreciative.",alt:"She never forgets to say thank you.",tip:"appreciative（感謝の気持ちを持った）はthankful より上品で日常的に使いやすい。"},
+{id:80,cat:'🤝 人との関わり方',jp:'一緒にいると自然と笑顔になる',sub:'',en:"You can't help but smile when you're around him.",alt:"He brings out the best in everyone.",tip:"can't help but smile（思わず笑顔になる）は存在の明るさを表す最高の表現のひとつ。"},
+{id:81,cat:'🧠 能力・才能',jp:'頭の回転が速い',sub:'',en:"She has a really sharp mind.",alt:"She's incredibly quick on her feet.",tip:"quick on her feet（素早く反応できる）sharp mind（鋭い頭脳）はどちらも知性の速さを表す定番表現。"},
+{id:82,cat:'🧠 能力・才能',jp:'クリエイティブで発想が豊か',sub:'',en:"He's incredibly creative.",alt:"He has an amazing imagination.",tip:"incredible（信じられないほどの）creative と imaginative の違いも覚えておくと便利。"},
+{id:83,cat:'🧠 能力・才能',jp:'問題解決が得意',sub:'',en:"She's a natural problem-solver.",alt:"She always finds a way.",tip:"natural（生まれながらの才能）she always finds a way（必ず方法を見つける）は力強い能力の表現。"},
+{id:84,cat:'🧠 能力・才能',jp:'細かいことによく気づく',sub:'',en:"He has a real eye for detail.",alt:"He notices things that others miss.",tip:"eye for detail（細部への目）は観察力の定番表現。"},
+{id:85,cat:'🧠 能力・才能',jp:'語学の才能がある',sub:'',en:"She has a real gift for languages.",alt:"She picks up languages incredibly fast.",tip:"gift for languages（語学の才能）picks up（習得する）はどちらも語学の才能を表す表現。"},
+{id:86,cat:'🧠 能力・才能',jp:'音楽の才能がある',sub:'',en:"He's incredibly musical.",alt:"He has a natural talent for music.",tip:"musical（音楽的な）はシンプルで最も直接的。"},
+{id:87,cat:'🧠 能力・才能',jp:'どんな状況でも冷静に対処できる',sub:'',en:"She stays cool under pressure.",alt:"Nothing throws her off.",tip:"stays cool under pressure（プレッシャーの下でも冷静）は定番。"},
+{id:88,cat:'🧠 能力・才能',jp:'人の心をつかむのが上手',sub:'',en:"He knows how to connect with people on a deeper level.",alt:"He has an emotional intelligence that's rare.",tip:"emotional intelligence（感情知性・EQ）はビジネスでも日常でも使われる重要な概念。"},
+{id:89,cat:'🧠 能力・才能',jp:'何でもすぐに覚える',sub:'',en:"She picks things up incredibly fast.",alt:"She's a quick learner.",tip:"picks things up fast（すぐに覚える）quick learner（物覚えが早い）はどちらも自然な表現。"},
+{id:90,cat:'🧠 能力・才能',jp:'独自の視点を持っている',sub:'',en:"He sees things in a way that others don't.",alt:"He has a really unique perspective on things.",tip:"sees things others don't（他の人が見ないものを見る）unique perspective（独自の視点）は個性と知性の表現。"},
+{id:91,cat:'❤️ 好きな人・特別な人',jp:'彼女は私にとって世界そのもの',sub:'',en:"She means the world to me.",alt:"I can't imagine my life without her.",tip:"means the world to me（世界そのもの）は愛情表現の最も定番のフレーズ。"},
+{id:92,cat:'❤️ 好きな人・特別な人',jp:'唯一無二の人',sub:'',en:"He's one of a kind.",alt:"There's nobody else like him.",tip:"one of a kind（唯一無二）は特別さを表す定番表現。"},
+{id:93,cat:'❤️ 好きな人・特別な人',jp:'一緒にいるだけで幸せ',sub:'',en:"Just being with her makes me happy.",alt:"She makes everything better just by being there.",tip:"makes everything better just by being there は深い愛情表現。"},
+{id:94,cat:'❤️ 好きな人・特別な人',jp:'この人に出会えてよかった',sub:'',en:"I'm so glad I met him.",alt:"Meeting him changed everything for me.",tip:"changed everything（全てを変えた）は出会いの大切さを表す力強い表現。"},
+{id:95,cat:'❤️ 好きな人・特別な人',jp:'彼女のことを考えると顔がほころぶ',sub:'',en:"I can't help but smile when I think of her.",alt:"She makes my heart feel full.",tip:"makes my heart feel full（心が満たされる）は愛情の満足感を表す温かい表現。"},
+{id:96,cat:'❤️ 好きな人・特別な人',jp:'彼のいないところは想像できない',sub:'',en:"I can't picture this place without him.",alt:"He's become such an important part of my life.",tip:"an important part of my life（人生の大切な一部）はシンプルで深い愛情表現。"},
+{id:97,cat:'❤️ 好きな人・特別な人',jp:'どんな自分でも受け入れてくれる',sub:'',en:"She accepts me for exactly who I am.",alt:"She loves me unconditionally.",tip:"accepts me for who I am（ありのままの私を受け入れる）unconditionally（無条件に）は深い愛の表現。"},
+{id:98,cat:'❤️ 好きな人・特別な人',jp:'彼女といると自分らしくいられる',sub:'',en:"I'm most myself when I'm with her.",alt:"She brings out the best in me.",tip:"most myself when with her（彼女といる時が最も自分らしい）は最高の関係性を表す表現。"},
+{id:99,cat:'❤️ 好きな人・特別な人',jp:'毎日が楽しみになる存在',sub:'',en:"He makes every day worth looking forward to.",alt:"Life is just better with him in it.",tip:"life is just better with him in it（彼がいるだけで人生が良くなる）はシンプルで深い愛情表現。"},
+{id:100,cat:'❤️ 好きな人・特別な人',jp:'言葉では言い表せないくらい大切',sub:'',en:"Words can't describe how much she means to me.",alt:"There aren't enough words to say how much I care.",tip:"words can't describe（言葉では言い表せない）は感情の深さを表す定番表現。"}
 ];
 const CATS=[...new Set(PHRASES.map(p=>p.cat))];
-const CAT_COLORS={'移動・位置':'#c8962a','物の操作':'#4a7c59','料理・台所':'#a03030','掃除・整理':'#3d5a8a','電気・スイッチ':'#7a5a2a','お風呂・トイレ':'#2a7a7a','就寝・起床':'#5a2a7a','着替え・身支度':'#7a2a5a','依頼・確認':'#2a5a2a','ペット・日常':'#c8962a'};
+const CAT_COLORS={'👤 外見・体型':'#c8962a','👁️ 顔・表情':'#3d5a8a','💇 髪・スタイル':'#7a5a2a','👗 ファッション・印象':'#a03030','🎭 性格・気質':'#4a7c59','💪 雰囲気・存在感':'#5a2a7a','🗣️ 話し方・声':'#2a7a5a','🤝 人との関わり方':'#2a5a7a','🧠 能力・才能':'#7a2a5a','❤️ 好きな人・特別な人':'#a03050'};
 
 let gApiKey = localStorage.getItem('g_tts_key') || '';
 let currentAudio = null;
@@ -618,8 +618,8 @@ async function playPhrase(en) {
 }
 
 // ===================== STATE =====================
-let mastered = new Set(JSON.parse(localStorage.getItem('hd_mastered') || '[]'));
-let wrong = new Set(JSON.parse(localStorage.getItem('hd_wrong') || '[]'));
+let mastered = new Set(JSON.parse(localStorage.getItem('ppl_mastered') || '[]'));
+let wrong = new Set(JSON.parse(localStorage.getItem('ppl_wrong') || '[]'));
 let queue = [], qIdx = 0, isRevealed = false;
 let currentMode = 'normal', selectedCat = 'all';
 let sessionOk = 0, sessionNg = 0;
@@ -627,8 +627,8 @@ let timerInterval = null, timerLeft = 3;
 let loopCounts = {};
 
 function save() {
-  localStorage.setItem('hd_mastered', JSON.stringify([...mastered]));
-  localStorage.setItem('hd_wrong', JSON.stringify([...wrong]));
+  localStorage.setItem('ppl_mastered', JSON.stringify([...mastered]));
+  localStorage.setItem('ppl_wrong', JSON.stringify([...wrong]));
 }
 function updateHeader() { document.getElementById('h-mastered').textContent = mastered.size; }
 

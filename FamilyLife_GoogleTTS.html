@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🏠 家の中の日常動作 — 瞬間反射トレーニング</title>
+<title>👶 結婚・育児・離婚 — 瞬間反射トレーニング</title>
 <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
 <style>
 :root{--ink:#1a1410;--paper:#f5f0e8;--gold:#c8962a;--moss:#4a7c59;--indigo:#3d5a8a;--crimson:#a03030;--panel:#fffdf8;--border:rgba(26,20,16,0.12);}
@@ -160,7 +160,7 @@ main{padding:14px;max-width:600px;margin:0 auto;}
 <!-- MODAL -->
 <div class="modal-overlay" id="api-modal">
 <div class="modal-box">
-<div class="modal-logo">🏠</div>
+<div class="modal-logo">👶</div>
 <div class="modal-title">Google Cloud 音声設定</div>
 <div class="modal-sub">ネイティブ音声を使うために<br>Google Cloud Text-to-Speech APIキーを設定してください。<br>一度入力するとブラウザに保存されます。</div>
 <label class="modal-label">Google Cloud APIキー</label>
@@ -173,9 +173,9 @@ main{padding:14px;max-width:600px;margin:0 auto;}
 <div class="toast" id="toast"></div>
 <header>
 <div class="h-top">
-<div class="h-logo">🏠</div>
+<div class="h-logo">👶</div>
 <div class="h-titles">
-<h1>家の中の日常動作</h1>
+<h1>結婚・育児・離婚</h1>
 <p>瞬間反射トレーニング — 100フレーズ</p>
 </div>
 <div class="h-right">
@@ -282,109 +282,109 @@ main{padding:14px;max-width:600px;margin:0 auto;}
 </main>
 <script>
 const PHRASES = [
-{id:1,cat:'移動・位置',jp:'どけて',sub:'邪魔なとき',en:'Move. / Get out of the way.',alt:'Scoot over.',tip:'Moveだけでも十分伝わる。Get out of the way はやや強め。'},
-{id:2,cat:'移動・位置',jp:'ちょっとそこ退いて',sub:'少しだけ場所を空けて',en:'Could you move a little?',alt:'Scoot over a bit.',tip:'Could you ...? で丁寧さが出る。'},
-{id:3,cat:'移動・位置',jp:'ここに来て',sub:'近くに呼ぶ',en:'Come here.',alt:'Come over here.',tip:'シンプルにCome here.が最も自然。'},
-{id:4,cat:'移動・位置',jp:'あっちに行って',sub:'離れてほしい',en:'Go over there.',alt:'Step aside.',tip:'Step aside はフォーマルな場面にも使える。'},
-{id:5,cat:'移動・位置',jp:'ここに座って',sub:'席を指定する',en:'Sit here.',alt:'Have a seat here.',tip:'Have a seat は少し丁寧なバージョン。'},
-{id:6,cat:'移動・位置',jp:'立って',sub:'座っている人に',en:'Stand up.',alt:'Get up.',tip:'Get up の方が日常会話では多く使われる。'},
-{id:7,cat:'移動・位置',jp:'寝て',sub:'横になって',en:'Lie down.',alt:'Go lie down.',tip:'犬にも人にも使える。Go lie down. はより指示的。'},
-{id:8,cat:'移動・位置',jp:'こっちに向いて',sub:'向きを変えて',en:'Turn this way.',alt:'Face this way.',tip:'Turn / Face どちらも自然。'},
-{id:9,cat:'移動・位置',jp:'前に進んで',sub:'もう少し前に',en:'Move forward.',alt:'Step forward.',tip:'Step forward はより一歩という感じ。'},
-{id:10,cat:'移動・位置',jp:'後ろに下がって',sub:'後退して',en:'Step back.',alt:'Move back.',tip:'Step back は危険回避の場面でもよく使う。'},
-{id:11,cat:'物の操作',jp:'棚に上げて',sub:'高いところに置く',en:'Put it on the shelf.',alt:'Can you put that up on the shelf?',tip:'Put it + 場所 が基本パターン。'},
-{id:12,cat:'物の操作',jp:'これ持って',sub:'手渡す・持ってもらう',en:'Hold this.',alt:'Can you hold this for me?',tip:'Hold this. は一番シンプルで自然。'},
-{id:13,cat:'物の操作',jp:'置いといて',sub:'とりあえず置いて',en:'Just put it down.',alt:'Leave it there.',tip:'Leave it there. は「そこに置いておいて」のニュアンス。'},
-{id:14,cat:'物の操作',jp:'持ってきて',sub:'取ってきて',en:'Bring it here.',alt:'Can you grab that for me?',tip:'Grab は口語でよく使われる「取ってくる」。'},
-{id:15,cat:'物の操作',jp:'向こうに持っていって',sub:'別の場所へ',en:'Take it over there.',alt:'Put it over there.',tip:'Take it + 場所 で「持っていく」。'},
-{id:16,cat:'物の操作',jp:'開けて',sub:'箱・扉など',en:'Open it.',alt:'Can you open this?',tip:'シンプルに Open it. でOK。'},
-{id:17,cat:'物の操作',jp:'閉めて',sub:'ドア・窓など',en:'Close it.',alt:'Shut it.',tip:'Shut it. はよりカジュアル。怒った感じにも聞こえることがある。'},
-{id:18,cat:'物の操作',jp:'捨てといて',sub:'ゴミを捨てる',en:'Throw it away.',alt:'Toss it.',tip:'Toss it. は口語でカジュアル。'},
-{id:19,cat:'物の操作',jp:'片付けて',sub:'散らかったものを',en:'Put it away.',alt:'Clean this up.',tip:'Put it away は「元の場所に戻す」感覚。'},
-{id:20,cat:'物の操作',jp:'引っ張って',sub:'引っ張る動作',en:'Pull it.',alt:'Give it a pull.',tip:'Give it a pull. は「一回引いてみて」のニュアンス。'},
-{id:21,cat:'料理・台所',jp:'火をつけて',sub:'コンロなど',en:'Turn on the stove.',alt:'Light the stove.',tip:'Turn on は電気・ガス全般に使える。'},
-{id:22,cat:'料理・台所',jp:'火を止めて',sub:'コンロを消す',en:'Turn off the stove.',alt:'Turn down the heat.',tip:'Turn down the heat は「火を弱める」。'},
-{id:23,cat:'料理・台所',jp:'混ぜて',sub:'かき混ぜる',en:'Stir it.',alt:'Mix it up.',tip:'Stir は鍋の中をかき回す。Mix はより全体を混ぜる感じ。'},
-{id:24,cat:'料理・台所',jp:'切って',sub:'包丁で',en:'Cut it.',alt:'Chop it up.',tip:'Chop it up は「細かく切る」。Slice は「薄く切る」。'},
-{id:25,cat:'料理・台所',jp:'洗って',sub:'野菜・食器など',en:'Wash it.',alt:'Rinse it off.',tip:'Rinse it off は「さっと水で洗い流す」。'},
-{id:26,cat:'料理・台所',jp:'温めて',sub:'電子レンジで',en:'Heat it up.',alt:'Warm it up. / Microwave it.',tip:'Microwave it. はレンジで温める場合に使える。'},
-{id:27,cat:'料理・台所',jp:'冷蔵庫に入れて',sub:'保存する',en:"Put it in the fridge.",alt:"Pop it in the fridge.",tip:'Pop it in はよりカジュアルで自然な口語表現。'},
-{id:28,cat:'料理・台所',jp:'お皿に盛って',sub:'料理を盛り付ける',en:'Plate it.',alt:'Put it on a plate.',tip:'Plate it. は料理用語として自然。'},
-{id:29,cat:'料理・台所',jp:'沸騰するまで待って',sub:'お湯を沸かす',en:'Wait until it boils.',alt:'Let it come to a boil.',tip:'Let it come to a boil. のほうがネイティブ的。'},
-{id:30,cat:'料理・台所',jp:'味見して',sub:'塩加減など確認',en:'Have a taste.',alt:'Try it and see.',tip:'Have a taste. はシンプルで自然な表現。'},
-{id:31,cat:'掃除・整理',jp:'掃除機をかけて',sub:'床を掃除',en:'Vacuum the floor.',alt:'Run the vacuum.',tip:'Run the vacuum. はよりカジュアルな言い方。'},
-{id:32,cat:'掃除・整理',jp:'拭いて',sub:'テーブルなど',en:'Wipe it down.',alt:'Give it a wipe.',tip:'Give it a wipe. は「ちょっと拭いて」というカジュアルな表現。'},
-{id:33,cat:'掃除・整理',jp:'洗濯して',sub:'洗濯機を回す',en:'Do the laundry.',alt:'Run a load of laundry.',tip:'Run a load は「一回洗濯機を回す」。'},
-{id:34,cat:'掃除・整理',jp:'洗濯物を干して',sub:'洗濯後',en:'Hang up the laundry.',alt:'Hang out the washing.',tip:'どちらも自然。地域によって表現が違う。'},
-{id:35,cat:'掃除・整理',jp:'たたんで',sub:'洗濯物を',en:'Fold it.',alt:'Fold the laundry.',tip:'Fold it. だけでたたむ動作を表現できる。'},
-{id:36,cat:'掃除・整理',jp:'ゴミを出して',sub:'ゴミ捨て場へ',en:'Take out the trash.',alt:'Put the garbage out.',tip:'Take out the trash. が最もよく使われる。'},
-{id:37,cat:'掃除・整理',jp:'窓を開けて換気して',sub:'空気を入れ替える',en:'Open the window and air it out.',alt:'Let some fresh air in.',tip:'Let some fresh air in. がネイティブらしい自然な表現。'},
-{id:38,cat:'掃除・整理',jp:'整理して',sub:'散らかったものを',en:'Tidy it up.',alt:'Organize this.',tip:'Tidy up はイギリス英語でよく使われるが米語でも通じる。'},
-{id:39,cat:'掃除・整理',jp:'床を掃いて',sub:'ほうきで',en:'Sweep the floor.',alt:'Give the floor a sweep.',tip:'Sweep the floor. が基本。'},
-{id:40,cat:'掃除・整理',jp:'汚れを落として',sub:'こびりついた汚れ',en:'Scrub it off.',alt:'Get the stain out.',tip:'Scrub は力を入れてこする感じ。Get the stain out は「汚れを落とす」。'},
-{id:41,cat:'電気・スイッチ',jp:'電気をつけて',sub:'部屋の照明',en:'Turn on the light.',alt:'Switch on the light.',tip:'どちらも自然。Turn on が最も一般的。'},
-{id:42,cat:'電気・スイッチ',jp:'電気を消して',sub:'照明を消す',en:'Turn off the light.',alt:'Switch off the light.',tip:'Turn off the light. が最も一般的。'},
-{id:43,cat:'電気・スイッチ',jp:'テレビをつけて',sub:'',en:'Turn on the TV.',alt:'Put the TV on.',tip:'Put the TV on. はイギリス英語でよく使われる。'},
-{id:44,cat:'電気・スイッチ',jp:'テレビを消して',sub:'',en:'Turn off the TV.',alt:'Switch off the TV.',tip:'Turn off the TV. が最も一般的。'},
-{id:45,cat:'電気・スイッチ',jp:'音量を上げて',sub:'テレビ・音楽',en:'Turn it up.',alt:'Can you turn up the volume?',tip:'Turn it up. だけで通じる。とても使いやすい。'},
-{id:46,cat:'電気・スイッチ',jp:'音量を下げて',sub:'静かにして',en:'Turn it down.',alt:'Can you lower the volume?',tip:'Turn it down. は音量だけでなく「抑えて」の意味でも使える。'},
-{id:47,cat:'電気・スイッチ',jp:'エアコンをつけて',sub:'',en:'Turn on the AC.',alt:'Put the air conditioning on.',tip:'AC は air conditioning の略。日常会話では AC が一般的。'},
-{id:48,cat:'電気・スイッチ',jp:'充電して',sub:'スマホなど',en:'Charge it.',alt:'Put it on charge.',tip:'Put it on charge. はイギリス英語。Charge it. が最も簡単。'},
-{id:49,cat:'電気・スイッチ',jp:'Wi-Fiにつないで',sub:'',en:'Connect to the Wi-Fi.',alt:'Get on the Wi-Fi.',tip:'Get on the Wi-Fi. はよりカジュアル。'},
-{id:50,cat:'電気・スイッチ',jp:'アラームをセットして',sub:'目覚まし',en:'Set an alarm.',alt:'Set your alarm for a specific time.',tip:'Set an alarm for 7. のように時間を加えるとより自然。'},
-{id:51,cat:'お風呂・トイレ',jp:'お風呂を沸かして',sub:'お湯を張る',en:'Run a bath.',alt:'Fill up the tub.',tip:'Run a bath. は「お風呂を準備する」定番表現。'},
-{id:52,cat:'お風呂・トイレ',jp:'シャワーを浴びて',sub:'',en:'Take a shower.',alt:'Have a shower.',tip:'Take a shower（米）Have a shower（英）どちらも正しい。'},
-{id:53,cat:'お風呂・トイレ',jp:'タオルを取って',sub:'',en:'Grab a towel.',alt:'Get me a towel.',tip:'Grab は「取ってくる」の口語表現。'},
-{id:54,cat:'お風呂・トイレ',jp:'石鹸を出して',sub:'補充する',en:'Refill the soap.',alt:'Put out some soap.',tip:'Refill は「補充する」。Put out は「用意する」。'},
-{id:55,cat:'お風呂・トイレ',jp:'水をとめて',sub:'蛇口・シャワー',en:'Turn off the water.',alt:'Shut off the tap.',tip:'Turn off the water. が最も汎用性が高い。'},
-{id:56,cat:'お風呂・トイレ',jp:'手を洗って',sub:'',en:'Wash your hands.',alt:'Go wash your hands.',tip:'Go wash your hands. は子供などへの指示でよく使う。'},
-{id:57,cat:'お風呂・トイレ',jp:'歯を磨いて',sub:'',en:'Brush your teeth.',alt:'Go brush your teeth.',tip:'シンプルに Brush your teeth. でOK。'},
-{id:58,cat:'お風呂・トイレ',jp:'髪を乾かして',sub:'ドライヤーで',en:'Dry your hair.',alt:'Use the hair dryer.',tip:'Dry your hair. がシンプルで自然。'},
-{id:59,cat:'お風呂・トイレ',jp:'鏡を見て',sub:'',en:'Look in the mirror.',alt:'Check yourself in the mirror.',tip:'Check yourself in the mirror. は「ちゃんと確認して」のニュアンス。'},
-{id:60,cat:'お風呂・トイレ',jp:'お湯を入れ直して',sub:'冷めたとき',en:'Reheat the bath.',alt:'Top up the hot water.',tip:'Top up は「補充する」。Top up the hot water. がネイティブらしい。'},
-{id:61,cat:'就寝・起床',jp:'もう寝て',sub:'就寝の指示',en:'Go to bed.',alt:'Time for bed.',tip:'Time for bed. は子供への定番フレーズ。大人にも使える。'},
-{id:62,cat:'就寝・起床',jp:'起きて',sub:'朝、起こす',en:'Wake up.',alt:'Get up. / Rise and shine.',tip:'Rise and shine. は「元気よく起きて」という明るい表現。'},
-{id:63,cat:'就寝・起床',jp:'電気消して寝て',sub:'',en:'Turn off the light and go to sleep.',alt:'Lights out.',tip:'Lights out. は軍隊・寮などで使われるが日常でも通じる。'},
-{id:64,cat:'就寝・起床',jp:'毛布をかけて',sub:'',en:'Put a blanket on.',alt:'Cover yourself with the blanket.',tip:'Put a blanket on. がシンプルで自然。'},
-{id:65,cat:'就寝・起床',jp:'もう少し寝ていいよ',sub:'',en:'You can sleep a little longer.',alt:'Sleep in a bit.',tip:'Sleep in は「いつもより長く寝る」。Sleep in a bit. で「もう少し寝て」。'},
-{id:66,cat:'就寝・起床',jp:'枕を整えて',sub:'',en:'Fix your pillow.',alt:'Fluff up the pillow.',tip:'Fluff up は枕を膨らませる動作。'},
-{id:67,cat:'就寝・起床',jp:'布団を干して',sub:'',en:'Air out the futon.',alt:'Put the futon out to dry.',tip:'Futon はそのまま英語になっている。'},
-{id:68,cat:'就寝・起床',jp:'カーテンを開けて',sub:'朝、明るくする',en:'Open the curtains.',alt:'Pull back the curtains.',tip:'Pull back the curtains. がよりネイティブらしい表現。'},
-{id:69,cat:'就寝・起床',jp:'静かにして',sub:'寝ている人がいる',en:'Keep it down.',alt:'Please be quiet.',tip:'Keep it down. は「音を小さくして」という日常的な表現。'},
-{id:70,cat:'就寝・起床',jp:'もうすぐ起こすよ',sub:'',en:"I'll wake you up soon.",alt:"I'll come get you in a bit.",tip:"I'll come get you in a bit. は「もうすぐ起こしに来る」という温かい表現。"},
-{id:71,cat:'着替え・身支度',jp:'着替えて',sub:'',en:'Get changed.',alt:'Change your clothes.',tip:'Get changed. がよりカジュアルで自然。'},
-{id:72,cat:'着替え・身支度',jp:'靴を履いて',sub:'',en:'Put your shoes on.',alt:'Slip on your shoes.',tip:'Slip on は「サッと履く」。Put your shoes on が基本。'},
-{id:73,cat:'着替え・身支度',jp:'上着を着て',sub:'寒いとき',en:'Put on a jacket.',alt:'Grab a jacket.',tip:'Grab a jacket. は「ジャケット持って」というニュアンスもある。'},
-{id:74,cat:'着替え・身支度',jp:'脱いで',sub:'コートなど',en:'Take it off.',alt:'Take off your coat.',tip:'Take it off. はシンプルで最もよく使われる。'},
-{id:75,cat:'着替え・身支度',jp:'ボタンを留めて',sub:'',en:'Button it up.',alt:'Do up the buttons.',tip:'Do up はイギリス英語でよく使われる。'},
-{id:76,cat:'着替え・身支度',jp:'ジッパーを上げて',sub:'',en:'Zip it up.',alt:'Do up the zipper.',tip:'Zip it up. がシンプルで一番自然。'},
-{id:77,cat:'着替え・身支度',jp:'髪を整えて',sub:'',en:'Fix your hair.',alt:'Do your hair.',tip:'Do your hair. は「ちゃんとセットして」というニュアンス。'},
-{id:78,cat:'着替え・身支度',jp:'準備して',sub:'出かける前に',en:'Get ready.',alt:'Hurry up and get ready.',tip:'Get ready. が最もシンプルで使いやすい。'},
-{id:79,cat:'着替え・身支度',jp:'荷物をまとめて',sub:'',en:'Pack your things.',alt:'Get your stuff together.',tip:'Get your stuff together. はよりカジュアルな表現。'},
-{id:80,cat:'着替え・身支度',jp:'マスクして',sub:'',en:'Put on your mask.',alt:'Wear your mask.',tip:'どちらも自然。Put on はより動作的なニュアンス。'},
-{id:81,cat:'依頼・確認',jp:'ちょっと待って',sub:'少しだけ',en:'Hang on.',alt:'Just a sec. / One moment.',tip:'Hang on. はとてもよく使われる口語表現。'},
-{id:82,cat:'依頼・確認',jp:'もう一回言って',sub:'聞き取れなかった',en:'Say that again.',alt:'Could you repeat that?',tip:'Say that again. がカジュアル。Could you repeat that? は丁寧。'},
-{id:83,cat:'依頼・確認',jp:'もっとゆっくり言って',sub:'',en:'Could you slow down?',alt:'Speak more slowly, please.',tip:'Could you slow down? がより自然な口語表現。'},
-{id:84,cat:'依頼・確認',jp:'確認してみて',sub:'',en:'Check it.',alt:'Double-check it.',tip:'Double-check は「念のため再確認する」。'},
-{id:85,cat:'依頼・確認',jp:'後で教えて',sub:'',en:'Let me know later.',alt:'Tell me later.',tip:'Let me know later. がよりネイティブらしい表現。'},
-{id:86,cat:'依頼・確認',jp:'急いで',sub:'',en:'Hurry up.',alt:"Come on, let's go.",tip:"Come on, let's go. は「さあ行くよ」という感じで自然。"},
-{id:87,cat:'依頼・確認',jp:'気をつけて',sub:'',en:'Be careful.',alt:'Watch out.',tip:'Watch out. は「危ない！」という緊急のニュアンス。Be careful. は全般的な注意。'},
-{id:88,cat:'依頼・確認',jp:'大丈夫？',sub:'',en:'You okay?',alt:'Are you alright?',tip:'You okay? はカジュアルな確認。Are you alright? は少し丁寧。'},
-{id:89,cat:'依頼・確認',jp:'手伝って',sub:'',en:'Can you help me?',alt:'Give me a hand.',tip:'Give me a hand. は口語でとてもよく使われる。'},
-{id:90,cat:'依頼・確認',jp:'そのままにしておいて',sub:'触らないで',en:"Leave it.",alt:"Don't touch it.",tip:"Leave it. はシンプルで強い指示。Don't touch it. はより明示的。"},
-{id:91,cat:'ペット・日常',jp:'ごはんあげて',sub:'ペットに',en:'Feed them.',alt:'Give them their food.',tip:'Feed them. がシンプルで一番自然。'},
-{id:92,cat:'ペット・日常',jp:'水を換えて',sub:'ペットの水',en:'Change the water.',alt:'Refill the water bowl.',tip:'Refill the water bowl. はより具体的。'},
-{id:93,cat:'ペット・日常',jp:'撫でてあげて',sub:'',en:'Give them a pat.',alt:'Pet them.',tip:'Give them a pat. は軽く撫でる感じ。Pet them. は動詞として使う。'},
-{id:94,cat:'ペット・日常',jp:'連れてきて',sub:'ペットを呼ぶ',en:'Bring them here.',alt:'Call them over.',tip:'Call them over. は「呼び寄せる」。'},
-{id:95,cat:'ペット・日常',jp:'外に出してあげて',sub:'',en:'Let them out.',alt:'Take them outside.',tip:'Let them out. は「扉を開けて出す」。Take them outside. は連れて行く感じ。'},
-{id:96,cat:'ペット・日常',jp:'植物に水をあげて',sub:'',en:'Water the plants.',alt:'Give the plants some water.',tip:'Water the plants. が最もシンプルで自然。'},
-{id:97,cat:'ペット・日常',jp:'郵便を取ってきて',sub:'',en:'Get the mail.',alt:'Grab the mail.',tip:'Grab the mail. はよりカジュアル。'},
-{id:98,cat:'ペット・日常',jp:'ドアに鍵かけて',sub:'',en:'Lock the door.',alt:'Make sure the door is locked.',tip:'Make sure the door is locked. は「ちゃんと確認して」のニュアンス。'},
-{id:99,cat:'ペット・日常',jp:'窓閉めて',sub:'',en:'Close the window.',alt:'Shut the window.',tip:'どちらも自然。Shut はより強い感じ。'},
-{id:100,cat:'ペット・日常',jp:'カメラを確認して',sub:'防犯カメラ・ドアカメラ',en:'Check the camera.',alt:'Have a look at the camera.',tip:'Have a look at the camera. は「ちょっと見てみて」のニュアンス。'}
+{id:1,cat:'💍 プロポーズ・婚約',jp:'結婚してください',sub:'',en:"Will you marry me?",alt:"I want to spend the rest of my life with you.",tip:"Will you marry me? は世界共通のプロポーズ表現。"},
+{id:2,cat:'💍 プロポーズ・婚約',jp:'婚約しました',sub:'',en:"We got engaged!",alt:"We're engaged!",tip:"got engaged（婚約した）we're engaged（婚約しています）はどちらも自然。"},
+{id:3,cat:'💍 プロポーズ・婚約',jp:'指輪を選びに行きました',sub:'',en:"We went to pick out a ring.",alt:"We're ring shopping.",tip:"pick out（選ぶ）ring shopping（指輪を選びに行く）はどちらも自然。"},
+{id:4,cat:'💍 プロポーズ・婚約',jp:'婚約パーティーをします',sub:'',en:"We're having an engagement party.",alt:"We're celebrating our engagement.",tip:"engagement party（婚約パーティー）はオーストラリアでもよく行われる。"},
+{id:5,cat:'💍 プロポーズ・婚約',jp:'婚約指輪を見せてもらえますか？',sub:'',en:"Can I see the ring?",alt:"Let me see the ring!",tip:"Can I see the ring? はお祝いの定番フレーズ。"},
+{id:6,cat:'💍 プロポーズ・婚約',jp:'おめでとうございます！',sub:'',en:"Congratulations!",alt:"That's amazing news — congratulations!",tip:"Congratulations! は婚約・結婚・出産など全ての祝福に使える。"},
+{id:7,cat:'💍 プロポーズ・婚約',jp:'どんな風にプロポーズしたの？',sub:'',en:"How did he propose?",alt:"Tell me everything — how did it happen?",tip:"Tell me everything! は嬉しい出来事を聞くときの定番表現。"},
+{id:8,cat:'💍 プロポーズ・婚約',jp:'結婚式はいつにするの？',sub:'',en:"When are you planning the wedding?",alt:"Have you set a date yet?",tip:"set a date（日取りを決める）はウェディングの定番フレーズ。"},
+{id:9,cat:'💍 プロポーズ・婚約',jp:'婚約期間はどのくらい？',sub:'',en:"How long have you been engaged?",alt:"When did you get engaged?",tip:"been engaged（婚約している）の期間を聞く自然な表現。"},
+{id:10,cat:'💍 プロポーズ・婚約',jp:'サプライズプロポーズでした',sub:'',en:"It was a complete surprise.",alt:"I had no idea it was coming.",tip:"complete surprise（完全なサプライズ）had no idea（全く予想していなかった）はどちらも自然。"},
+{id:11,cat:'👰 結婚準備・式',jp:'結婚します！',sub:'',en:"We're getting married!",alt:"We're tying the knot!",tip:"tying the knot（結婚する）は慣用表現でとても自然な口語。"},
+{id:12,cat:'👰 結婚準備・式',jp:'式場を予約しました',sub:'',en:"We've booked the venue.",alt:"The venue is all sorted.",tip:"booked the venue（会場を予約した）all sorted はオーストラリア英語で「手配済み」。"},
+{id:13,cat:'👰 結婚準備・式',jp:'ウェディングドレスを選んでいます',sub:'',en:"I'm looking for my wedding dress.",alt:"I've been dress shopping.",tip:"dress shopping（ドレスを選びに行く）はそのまま使える自然な表現。"},
+{id:14,cat:'👰 結婚準備・式',jp:'招待状を送りました',sub:'',en:"We sent out the invitations.",alt:"The invites have gone out.",tip:"invitations / invites（招待状）sent out / gone out どちらも自然。"},
+{id:15,cat:'👰 結婚準備・式',jp:'ハネムーンはどこに行くの？',sub:'',en:"Where are you going for your honeymoon?",alt:"Have you planned the honeymoon?",tip:"honeymoon（新婚旅行）はそのまま英語として使われる。"},
+{id:16,cat:'👰 結婚準備・式',jp:'結婚式の準備がとても大変',sub:'',en:"Wedding planning is so stressful.",alt:"There's so much to organise for the wedding.",tip:"wedding planning（ウェディングプランニング）stressful は世界共通の感覚。"},
+{id:17,cat:'👰 結婚準備・式',jp:'披露宴はどのくらいの人数？',sub:'',en:"How many guests are you having?",alt:"What's the guest list looking like?",tip:"guest list（招待客リスト）What's it looking like? は状況確認の定番表現。"},
+{id:18,cat:'👰 結婚準備・式',jp:'フォトグラファーを探しています',sub:'',en:"We're looking for a wedding photographer.",alt:"We haven't booked a photographer yet.",tip:"wedding photographer（ウェディングフォトグラファー）はそのまま使える。"},
+{id:19,cat:'👰 結婚準備・式',jp:'素晴らしい式でした',sub:'',en:"It was a beautiful wedding.",alt:"The wedding was absolutely stunning.",tip:"beautiful wedding（素晴らしい結婚式）stunning（息をのむほど素晴らしい）は最上表現。"},
+{id:20,cat:'👰 結婚準備・式',jp:'感動して泣きました',sub:'',en:"I cried happy tears.",alt:"It was so emotional — I cried.",tip:"happy tears（嬉し泣き）so emotional（とても感動的だった）はどちらも自然。"},
+{id:21,cat:'🏡 新婚・夫婦生活',jp:'一緒に引っ越しました',sub:'',en:"We just moved in together.",alt:"We've set up our first home together.",tip:"moved in together（同居した）set up our first home（最初の家を作った）は新婚らしい表現。"},
+{id:22,cat:'🏡 新婚・夫婦生活',jp:'家事を分担しています',sub:'',en:"We split the chores.",alt:"We share the housework.",tip:"split the chores（家事を分担する）share the housework（家事を分かち合う）はどちらも自然。"},
+{id:23,cat:'🏡 新婚・夫婦生活',jp:'結婚生活は楽しいです',sub:'',en:"Married life is wonderful.",alt:"We're really enjoying being married.",tip:"married life（結婚生活）wonderful はシンプルで自然。"},
+{id:24,cat:'🏡 新婚・夫婦生活',jp:'お互いの違いに気づいてきた',sub:'',en:"We're starting to notice our differences.",alt:"Living together is different from dating.",tip:"notice our differences（違いに気づく）は正直な夫婦の感覚。"},
+{id:25,cat:'🏡 新婚・夫婦生活',jp:'コミュニケーションを大切にしています',sub:'',en:"We make communication a priority.",alt:"We try to talk things through.",tip:"make communication a priority（コミュニケーションを優先する）は健全な関係の表現。"},
+{id:26,cat:'🏡 新婚・夫婦生活',jp:'家を買う予定です',sub:'',en:"We're planning to buy a house.",alt:"We're looking to get into the property market.",tip:"property market（不動産市場）はオーストラリアでよく使われる表現。"},
+{id:27,cat:'🏡 新婚・夫婦生活',jp:'お互いの時間も大切にしています',sub:'',en:"We give each other space.",alt:"We both have our own interests.",tip:"give each other space（お互いにスペースを与える）はバランスの取れた関係を示す表現。"},
+{id:28,cat:'🏡 新婚・夫婦生活',jp:'子供を持つことを考えています',sub:'',en:"We're thinking about starting a family.",alt:"We're considering having kids.",tip:"starting a family（家族を始める）は「子供を持つ」の丁寧な表現。"},
+{id:29,cat:'🏡 新婚・夫婦生活',jp:'義家族との関係も大切にしています',sub:'',en:"We make an effort with both families.",alt:"Getting along with the in-laws is important to us.",tip:"in-laws（義家族）getting along（仲良くやる）は夫婦生活で重要な表現。"},
+{id:30,cat:'🏡 新婚・夫婦生活',jp:'一緒に料理するのが好き',sub:'',en:"We love cooking together.",alt:"Cooking together is our thing.",tip:"our thing（私たちの習慣）はカップルらしいカジュアルで温かい表現。"},
+{id:31,cat:'👶 妊娠・出産',jp:'妊娠しました！',sub:'',en:"We're expecting!",alt:"We're having a baby!",tip:"We're expecting! は最もポジティブで自然な妊娠の報告表現。"},
+{id:32,cat:'👶 妊娠・出産',jp:'出産予定日は6月です',sub:'',en:"My due date is in June.",alt:"The baby is due in June.",tip:"due date（出産予定日）due in June（6月が予定日）はどちらも妊娠中の定番表現。"},
+{id:33,cat:'👶 妊娠・出産',jp:'男の子か女の子か分かった？',sub:'',en:"Do you know the gender yet?",alt:"Are you finding out the sex?",tip:"gender / sex（性別）finding out は「調べる・知る」という動詞。"},
+{id:34,cat:'👶 妊娠・出産',jp:'性別を知りたくない',sub:'',en:"We want it to be a surprise.",alt:"We're keeping it a surprise.",tip:"keeping it a surprise（サプライズにしておく）は性別を知らないままにすることを表す表現。"},
+{id:35,cat:'👶 妊娠・出産',jp:'つわりがつらい',sub:'',en:"Morning sickness has been really rough.",alt:"I've been feeling so nauseous.",tip:"morning sickness（つわり）rough（つらい・きつい）はオーストラリアでよく使われる形容詞。"},
+{id:36,cat:'👶 妊娠・出産',jp:'赤ちゃんが生まれました！',sub:'',en:"The baby has arrived!",alt:"She's here! / He's here!",tip:"The baby has arrived! は出産報告の定番フレーズ。"},
+{id:37,cat:'👶 妊娠・出産',jp:'無事に生まれました',sub:'',en:"Everything went smoothly.",alt:"Mum and baby are doing well.",tip:"Mum and baby are doing well. は出産後の定番報告表現。"},
+{id:38,cat:'👶 妊娠・出産',jp:'体重は何キロでしたか？',sub:'',en:"How much did the baby weigh?",alt:"What was the birth weight?",tip:"birth weight（出生体重）は出産後の定番の質問。"},
+{id:39,cat:'👶 妊娠・出産',jp:'名前はもう決めましたか？',sub:'',en:"Have you chosen a name yet?",alt:"What are you going to name them?",tip:"chosen a name（名前を決めた）は自然な質問。"},
+{id:40,cat:'👶 妊娠・出産',jp:'赤ちゃんに会いに行ってもいいですか？',sub:'',en:"Can we come and meet the baby?",alt:"We'd love to come and see the little one.",tip:"little one（小さな子）は赤ちゃんへの愛情ある呼び方。"},
+{id:41,cat:'🍼 赤ちゃん・乳児期',jp:'夜通し寝てくれない',sub:'',en:"She's not sleeping through the night yet.",alt:"We're still up every two hours.",tip:"sleeping through the night（夜通し寝る）はベビーケアの定番フレーズ。"},
+{id:42,cat:'🍼 赤ちゃん・乳児期',jp:'歯が生えてきています',sub:'',en:"He's teething.",alt:"His first teeth are coming through.",tip:"teething（歯が生えている）coming through（出てきている）は乳児期の定番表現。"},
+{id:43,cat:'🍼 赤ちゃん・乳児期',jp:'授乳をしています',sub:'',en:"I'm breastfeeding.",alt:"She's still on the breast.",tip:"breastfeeding（母乳育児）はオーストラリアでもよく使われる。"},
+{id:44,cat:'🍼 赤ちゃん・乳児期',jp:'離乳食を始めました',sub:'',en:"We've started solids.",alt:"She's just started eating solid food.",tip:"started solids（固形食を始めた）はオーストラリアでよく使われる離乳食の表現。"},
+{id:45,cat:'🍼 赤ちゃん・乳児期',jp:'はじめて笑いました',sub:'',en:"She gave us her first smile.",alt:"He smiled for the first time today!",tip:"first smile（初めての笑顔）はベビーの成長マイルストーンの定番表現。"},
+{id:46,cat:'🍼 赤ちゃん・乳児期',jp:'もうすぐ歩きそうです',sub:'',en:"She's almost walking.",alt:"He's pulling himself up and cruising.",tip:"cruising（つかまり立ちで移動する）はベビーケアの専門用語。"},
+{id:47,cat:'🍼 赤ちゃん・乳児期',jp:'産後うつで大変でした',sub:'',en:"I went through postnatal depression.",alt:"I struggled with PND after the birth.",tip:"postnatal depression / PND（産後うつ）はオーストラリアでよく使われる。"},
+{id:48,cat:'🍼 赤ちゃん・乳児期',jp:'育児休暇を取っています',sub:'',en:"I'm on parental leave.",alt:"I'm taking maternity / paternity leave.",tip:"parental leave（育児休暇）maternity（母親）paternity（父親）は性別で使い分ける。"},
+{id:49,cat:'🍼 赤ちゃん・乳児期',jp:'保育園を探しています',sub:'',en:"We're looking for childcare.",alt:"We're on the waitlist for a daycare.",tip:"childcare（保育）daycare（デイケア）waitlist（ウェイトリスト）はオーストラリアで必須の語彙。"},
+{id:50,cat:'🍼 赤ちゃん・乳児期',jp:'仕事に復帰しました',sub:'',en:"I've gone back to work.",alt:"I returned to work after maternity leave.",tip:"gone back to work（仕事に復帰した）は産後復職の定番表現。"},
+{id:51,cat:'🧒 子育て・しつけ',jp:'境界線を設けるようにしています',sub:'',en:"We're trying to set boundaries.",alt:"We're working on consistent rules.",tip:"set boundaries（境界線を設ける）consistent rules（一貫したルール）は子育ての重要表現。"},
+{id:52,cat:'🧒 子育て・しつけ',jp:'スクリーンタイムが問題です',sub:'',en:"Screen time is a constant battle.",alt:"We struggle with limiting screen time.",tip:"screen time（スクリーンタイム）constant battle（終わりなき戦い）はどの親にも共感される表現。"},
+{id:53,cat:'🧒 子育て・しつけ',jp:'イヤイヤ期で大変です',sub:'',en:"We're going through the terrible twos.",alt:"She's in full tantrum mode.",tip:"terrible twos（イヤイヤ期）tantrum（癇癪）はどちも子育ての定番表現。"},
+{id:54,cat:'🧒 子育て・しつけ',jp:'子育ては楽しいけど疲れる',sub:'',en:"Parenting is rewarding but exhausting.",alt:"I love being a parent but it's really tiring.",tip:"rewarding（やりがいがある）exhausting（疲れ果てる）は親の正直な感覚を表す定番。"},
+{id:55,cat:'🧒 子育て・しつけ',jp:'子供の前では喧嘩しないようにしています',sub:'',en:"We try not to argue in front of the kids.",alt:"We keep disagreements away from the children.",tip:"argue in front of（〜の前で言い合う）は大切な親の姿勢。"},
+{id:56,cat:'🧒 子育て・しつけ',jp:'お父さん・お母さんとしての役割が大切',sub:'',en:"We both take our parenting roles seriously.",alt:"We're very hands-on as parents.",tip:"hands-on（積極的に関わる）take parenting seriously（子育てを真剣に考える）は現代的な親の姿勢。"},
+{id:57,cat:'🧒 子育て・しつけ',jp:'ポジティブな子育てを心がけています',sub:'',en:"We use positive parenting techniques.",alt:"We focus on positive reinforcement.",tip:"positive parenting（ポジティブペアレンティング）は現代子育ての重要概念。"},
+{id:58,cat:'🧒 子育て・しつけ',jp:'祖父母がよく助けてくれます',sub:'',en:"The grandparents help out a lot.",alt:"We're lucky to have family support.",tip:"help out（助けてくれる）family support（家族のサポート）は子育てのテーマ。"},
+{id:59,cat:'🧒 子育て・しつけ',jp:'子供が病気でまた保育園を休んだ',sub:'',en:"The kids are sick again — another day off daycare.",alt:"We've had so many sick days this term.",tip:"sick days（病欠日）this term（この学期）はオーストラリアの保育園文化で使われる表現。"},
+{id:60,cat:'🧒 子育て・しつけ',jp:'子育ては一人ではできない',sub:'',en:"It takes a village to raise a child.",alt:"You really need support to raise kids.",tip:"it takes a village（村全体が必要）は有名な諺で世界共通。"},
+{id:61,cat:'🏫 教育・学校',jp:'今年から学校が始まりました',sub:'',en:"She just started school.",alt:"He's in his first year of school.",tip:"started school（学校が始まった）first year of school はオーストラリアの教育に合った表現。"},
+{id:62,cat:'🏫 教育・学校',jp:'学校に馴染めているか心配です',sub:'',en:"I worry about how she's settling in.",alt:"I hope he's making friends at school.",tip:"settling in（環境に馴染む）making friends（友達を作る）は親として最初の心配を表す表現。"},
+{id:63,cat:'🏫 教育・学校',jp:'読むのが少し苦手みたい',sub:'',en:"He's really struggling with reading.",alt:"She finds reading quite challenging.",tip:"struggling with（苦労している）challenging（難しい）は否定的すぎない表現。"},
+{id:64,cat:'🏫 教育・学校',jp:'先生と面談がありました',sub:'',en:"We had a parent-teacher interview.",alt:"We met with the teacher to discuss progress.",tip:"parent-teacher interview（保護者面談）はオーストラリアでよく使われる表現。"},
+{id:65,cat:'🏫 教育・学校',jp:'宿題をするのが嫌いみたい',sub:'',en:"Getting them to do homework is a struggle.",alt:"Homework time is always a battle.",tip:"a struggle（苦労）a battle（戦い）は宿題に関してどの家でも共感される表現。"},
+{id:66,cat:'🏫 教育・学校',jp:'学校でいじめにあっているかもしれない',sub:'',en:"I think she might be getting bullied at school.",alt:"We're concerned about bullying.",tip:"bullied（いじめられている）bullying（いじめ）はどちらも重要な学校生活の話題。"},
+{id:67,cat:'🏫 教育・学校',jp:'高校卒業しました',sub:'',en:"She just finished Year 12.",alt:"He graduated from high school.",tip:"Year 12（高校最終学年）はオーストラリアの教育制度特有の表現。"},
+{id:68,cat:'🏫 教育・学校',jp:'大学に進学する予定です',sub:'',en:"She's planning to go to uni.",alt:"He's applying for university.",tip:"uni（大学）はオーストラリアでの university の口語表現。"},
+{id:69,cat:'🏫 教育・学校',jp:'子供の将来を考えると不安になる',sub:'',en:"It's hard not to worry about their future.",alt:"I just want the best for my kids.",tip:"I just want the best for my kids. はどの親も共感する表現。"},
+{id:70,cat:'🏫 教育・学校',jp:'子供の成長を見るのが喜び',sub:'',en:"Watching them grow is the greatest joy.",alt:"Seeing them learn new things every day is amazing.",tip:"greatest joy（最大の喜び）はシンプルで深い親の感情表現。"},
+{id:71,cat:'💔 夫婦関係の問題',jp:'最近うまくいっていない',sub:'',en:"We've been having a rough patch.",alt:"Things have been really tough between us lately.",tip:"rough patch（辛い時期）は関係の問題を表す定番表現。"},
+{id:72,cat:'💔 夫婦関係の問題',jp:'カウンセリングを受けています',sub:'',en:"We're seeing a counsellor.",alt:"We've started couples therapy.",tip:"counsellor（カウンセラー）couples therapy（カップルカウンセリング）はどちらも一般的。"},
+{id:73,cat:'💔 夫婦関係の問題',jp:'コミュニケーションが取れていない',sub:'',en:"We're not communicating well.",alt:"There's been a real breakdown in communication.",tip:"breakdown in communication（コミュニケーションの崩壊）は正確な問題の説明。"},
+{id:74,cat:'💔 夫婦関係の問題',jp:'価値観が合わなくなってきた',sub:'',en:"We've grown apart.",alt:"Our values have changed over time.",tip:"grown apart（離れていった）values have changed（価値観が変わった）は関係の変化を表す表現。"},
+{id:75,cat:'💔 夫婦関係の問題',jp:'信頼を失ってしまった',sub:'',en:"Trust has been broken.",alt:"We're working on rebuilding trust.",tip:"trust has been broken（信頼が壊れた）rebuilding trust（信頼を再構築する）は重要な表現。"},
+{id:76,cat:'💔 夫婦関係の問題',jp:'お互いのために最善を考えています',sub:'',en:"We're trying to do what's best for both of us.",alt:"We both want what's best for the family.",tip:"what's best for both of us（二人にとって最善）はバランスのとれた表現。"},
+{id:77,cat:'💔 夫婦関係の問題',jp:'別居することにしました',sub:'',en:"We've decided to separate.",alt:"We're taking some time apart.",tip:"separate（別居する）taking time apart（少し距離を置く）は関係の変化を示す表現。"},
+{id:78,cat:'💔 夫婦関係の問題',jp:'子供たちのために頑張っています',sub:'',en:"We're staying strong for the kids.",alt:"We're trying to keep things stable for the children.",tip:"staying strong for the kids（子供たちのために頑張る）は多くの親が共感する表現。"},
+{id:79,cat:'💔 夫婦関係の問題',jp:'家族として尊重し合っています',sub:'',en:"We still respect each other as co-parents.",alt:"Despite everything, we treat each other with respect.",tip:"respect each other as co-parents（共同親として尊重する）は現代的で重要な概念。"},
+{id:80,cat:'💔 夫婦関係の問題',jp:'子供たちには正直に話しました',sub:'',en:"We were honest with the kids about what's happening.",alt:"We sat down and explained things to the children.",tip:"honest with the kids（子供たちに正直に話す）は大切な親の姿勢。"},
+{id:81,cat:'⚖️ 離婚・別居',jp:'離婚することになりました',sub:'',en:"We're going through a divorce.",alt:"We've decided to end our marriage.",tip:"going through a divorce（離婚の手続き中）end our marriage（婚姻を終える）はどちらも正直な表現。"},
+{id:82,cat:'⚖️ 離婚・別居',jp:'円満離婚です',sub:'',en:"It's an amicable split.",alt:"We're parting ways on good terms.",tip:"amicable split（円満な別れ）parting on good terms（良い関係で別れる）は前向きな離婚の表現。"},
+{id:83,cat:'⚖️ 離婚・別居',jp:'弁護士を立てています',sub:'',en:"We both have lawyers.",alt:"We're going through the legal process.",tip:"lawyers（弁護士）legal process（法的手続き）はオーストラリアの離婚手続きで必要な語彙。"},
+{id:84,cat:'⚖️ 離婚・別居',jp:'親権について話し合っています',sub:'',en:"We're working out the custody arrangements.",alt:"We're negotiating custody of the kids.",tip:"custody arrangements（親権の取り決め）negotiating custody（親権を交渉する）は重要な離婚用語。"},
+{id:85,cat:'⚖️ 離婚・別居',jp:'子供たちは週ごとに行き来しています',sub:'',en:"The kids alternate between us each week.",alt:"We do a week on, week off arrangement.",tip:"alternate between us（交互に行き来する）week on week off（1週間ずつ）はオーストラリアの共同親権の定番。"},
+{id:86,cat:'⚖️ 離婚・別居',jp:'財産分与を進めています',sub:'',en:"We're sorting out the finances.",alt:"We're dividing up the assets.",tip:"sorting out the finances（財産整理をする）dividing up the assets（資産を分ける）は離婚手続きの重要表現。"},
+{id:87,cat:'⚖️ 離婚・別居',jp:'子供たちへの影響が心配です',sub:'',en:"I worry about how this affects the kids.",alt:"We want to minimise the impact on the children.",tip:"impact on the children（子供たちへの影響）minimise（最小化する）は離婚時の親の責任感を表す。"},
+{id:88,cat:'⚖️ 離婚・別居',jp:'しばらく実家に戻ります',sub:'',en:"I'm moving back in with my parents for a while.",alt:"I'm staying at my parents' place temporarily.",tip:"moving back in with parents（実家に戻る）temporarily（一時的に）はオーストラリアでもよくある選択。"},
+{id:89,cat:'⚖️ 離婚・別居',jp:'精神的にとても辛い時期です',sub:'',en:"It's been a really tough time emotionally.",alt:"I'm going through a lot right now.",tip:"tough time emotionally（感情的に辛い時期）going through a lot（色々と大変）はどちらも誠実な表現。"},
+{id:90,cat:'⚖️ 離婚・別居',jp:'少しずつ前を向いています',sub:'',en:"I'm slowly moving forward.",alt:"I'm taking it one day at a time.",tip:"taking it one day at a time（一日一日を大切に）は困難な時期を乗り越える定番フレーズ。"},
+{id:91,cat:'🌱 離婚後・新しい生活',jp:'共同親権で育てています',sub:'',en:"We're co-parenting.",alt:"We share the parenting responsibilities.",tip:"co-parenting（共同育児）はオーストラリアでも広く使われる現代的な表現。"},
+{id:92,cat:'🌱 離婚後・新しい生活',jp:'新しい生活を始めています',sub:'',en:"I'm starting over.",alt:"I'm building a new life for myself.",tip:"starting over（やり直す）building a new life（新しい人生を作る）はどちも前向きな変化を示す。"},
+{id:93,cat:'🌱 離婚後・新しい生活',jp:'子供たちのために良い関係を保っています',sub:'',en:"We keep things civil for the kids.",alt:"We put the children first, no matter what.",tip:"keep things civil（礼儀正しく保つ）children first（子供を最優先）は成熟した共同親権の表現。"},
+{id:94,cat:'🌱 離婚後・新しい生活',jp:'自分自身を取り戻してきた',sub:'',en:"I'm finding myself again.",alt:"I'm rediscovering who I am.",tip:"finding myself again（自分を再発見する）rediscovering who I am（自分が誰かを再発見する）は成長を示す。"},
+{id:95,cat:'🌱 離婚後・新しい生活',jp:'また誰かに出会えるか不安です',sub:'',en:"I'm not sure I'm ready to date again.",alt:"The thought of dating again is scary.",tip:"ready to date again（また付き合う準備ができている）is a common feeling after divorce."},
+{id:96,cat:'🌱 離婚後・新しい生活',jp:'子供たちはとても頑張っています',sub:'',en:"The kids are handling it really well.",alt:"The children have been incredibly resilient.",tip:"handling it well（うまく対処している）resilient（回復力がある）は子供の強さを示す表現。"},
+{id:97,cat:'🌱 離婚後・新しい生活',jp:'セラピーに通っています',sub:'',en:"I'm seeing a therapist.",alt:"I've been getting counselling.",tip:"seeing a therapist（セラピーに通っている）getting counselling（カウンセリングを受ける）はどちも自然。"},
+{id:98,cat:'🌱 離婚後・新しい生活',jp:'家族の形は変わっても愛は変わらない',sub:'',en:"Our family looks different now, but the love is still there.",alt:"We're still a family — just a different kind.",tip:"family looks different（家族の形が違う）still a family（それでも家族）は前向きで温かい表現。"},
+{id:99,cat:'🌱 離婚後・新しい生活',jp:'一人の時間を楽しめるようになった',sub:'',en:"I've learned to enjoy my own company.",alt:"I'm actually enjoying having time to myself.",tip:"enjoy my own company（一人の時間を楽しむ）is a sign of personal growth."},
+{id:100,cat:'🌱 離婚後・新しい生活',jp:'これからの自分の人生が楽しみ',sub:'',en:"I'm excited about what's next for me.",alt:"I feel hopeful about the future.",tip:"excited about what's next（次のことが楽しみ）hopeful about the future（未来に希望がある）は前向きな変化の表現。"},
 ];
 const CATS=[...new Set(PHRASES.map(p=>p.cat))];
-const CAT_COLORS={'移動・位置':'#c8962a','物の操作':'#4a7c59','料理・台所':'#a03030','掃除・整理':'#3d5a8a','電気・スイッチ':'#7a5a2a','お風呂・トイレ':'#2a7a7a','就寝・起床':'#5a2a7a','着替え・身支度':'#7a2a5a','依頼・確認':'#2a5a2a','ペット・日常':'#c8962a'};
+const CAT_COLORS={'💍 プロポーズ・婚約':'#c8962a','👰 結婚準備・式':'#a03050','🏡 新婚・夫婦生活':'#4a7c59','👶 妊娠・出産':'#3d5a8a','🍼 赤ちゃん・乳児期':'#7a5a2a','🧒 子育て・しつけ':'#2a7a5a','🏫 教育・学校':'#5a2a7a','💔 夫婦関係の問題':'#a03030','⚖️ 離婚・別居':'#5a5a7a','🌱 離婚後・新しい生活':'#2a5a2a'};
 
 let gApiKey = localStorage.getItem('g_tts_key') || '';
 let currentAudio = null;
@@ -618,8 +618,8 @@ async function playPhrase(en) {
 }
 
 // ===================== STATE =====================
-let mastered = new Set(JSON.parse(localStorage.getItem('hd_mastered') || '[]'));
-let wrong = new Set(JSON.parse(localStorage.getItem('hd_wrong') || '[]'));
+let mastered = new Set(JSON.parse(localStorage.getItem('fam_m') || '[]'));
+let wrong = new Set(JSON.parse(localStorage.getItem('fam_w') || '[]'));
 let queue = [], qIdx = 0, isRevealed = false;
 let currentMode = 'normal', selectedCat = 'all';
 let sessionOk = 0, sessionNg = 0;
@@ -627,8 +627,8 @@ let timerInterval = null, timerLeft = 3;
 let loopCounts = {};
 
 function save() {
-  localStorage.setItem('hd_mastered', JSON.stringify([...mastered]));
-  localStorage.setItem('hd_wrong', JSON.stringify([...wrong]));
+  localStorage.setItem('fam_m', JSON.stringify([...mastered]));
+  localStorage.setItem('fam_w', JSON.stringify([...wrong]));
 }
 function updateHeader() { document.getElementById('h-mastered').textContent = mastered.size; }
 

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🏠 家の中の日常動作 — 瞬間反射トレーニング</title>
+<title>💼 仕事・職場・ビジネス英語 — 瞬間反射トレーニング</title>
 <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
 <style>
 :root{--ink:#1a1410;--paper:#f5f0e8;--gold:#c8962a;--moss:#4a7c59;--indigo:#3d5a8a;--crimson:#a03030;--panel:#fffdf8;--border:rgba(26,20,16,0.12);}
@@ -160,7 +160,7 @@ main{padding:14px;max-width:600px;margin:0 auto;}
 <!-- MODAL -->
 <div class="modal-overlay" id="api-modal">
 <div class="modal-box">
-<div class="modal-logo">🏠</div>
+<div class="modal-logo">💼</div>
 <div class="modal-title">Google Cloud 音声設定</div>
 <div class="modal-sub">ネイティブ音声を使うために<br>Google Cloud Text-to-Speech APIキーを設定してください。<br>一度入力するとブラウザに保存されます。</div>
 <label class="modal-label">Google Cloud APIキー</label>
@@ -173,9 +173,9 @@ main{padding:14px;max-width:600px;margin:0 auto;}
 <div class="toast" id="toast"></div>
 <header>
 <div class="h-top">
-<div class="h-logo">🏠</div>
+<div class="h-logo">💼</div>
 <div class="h-titles">
-<h1>家の中の日常動作</h1>
+<h1>仕事・職場・ビジネス英語</h1>
 <p>瞬間反射トレーニング — 100フレーズ</p>
 </div>
 <div class="h-right">
@@ -282,109 +282,109 @@ main{padding:14px;max-width:600px;margin:0 auto;}
 </main>
 <script>
 const PHRASES = [
-{id:1,cat:'移動・位置',jp:'どけて',sub:'邪魔なとき',en:'Move. / Get out of the way.',alt:'Scoot over.',tip:'Moveだけでも十分伝わる。Get out of the way はやや強め。'},
-{id:2,cat:'移動・位置',jp:'ちょっとそこ退いて',sub:'少しだけ場所を空けて',en:'Could you move a little?',alt:'Scoot over a bit.',tip:'Could you ...? で丁寧さが出る。'},
-{id:3,cat:'移動・位置',jp:'ここに来て',sub:'近くに呼ぶ',en:'Come here.',alt:'Come over here.',tip:'シンプルにCome here.が最も自然。'},
-{id:4,cat:'移動・位置',jp:'あっちに行って',sub:'離れてほしい',en:'Go over there.',alt:'Step aside.',tip:'Step aside はフォーマルな場面にも使える。'},
-{id:5,cat:'移動・位置',jp:'ここに座って',sub:'席を指定する',en:'Sit here.',alt:'Have a seat here.',tip:'Have a seat は少し丁寧なバージョン。'},
-{id:6,cat:'移動・位置',jp:'立って',sub:'座っている人に',en:'Stand up.',alt:'Get up.',tip:'Get up の方が日常会話では多く使われる。'},
-{id:7,cat:'移動・位置',jp:'寝て',sub:'横になって',en:'Lie down.',alt:'Go lie down.',tip:'犬にも人にも使える。Go lie down. はより指示的。'},
-{id:8,cat:'移動・位置',jp:'こっちに向いて',sub:'向きを変えて',en:'Turn this way.',alt:'Face this way.',tip:'Turn / Face どちらも自然。'},
-{id:9,cat:'移動・位置',jp:'前に進んで',sub:'もう少し前に',en:'Move forward.',alt:'Step forward.',tip:'Step forward はより一歩という感じ。'},
-{id:10,cat:'移動・位置',jp:'後ろに下がって',sub:'後退して',en:'Step back.',alt:'Move back.',tip:'Step back は危険回避の場面でもよく使う。'},
-{id:11,cat:'物の操作',jp:'棚に上げて',sub:'高いところに置く',en:'Put it on the shelf.',alt:'Can you put that up on the shelf?',tip:'Put it + 場所 が基本パターン。'},
-{id:12,cat:'物の操作',jp:'これ持って',sub:'手渡す・持ってもらう',en:'Hold this.',alt:'Can you hold this for me?',tip:'Hold this. は一番シンプルで自然。'},
-{id:13,cat:'物の操作',jp:'置いといて',sub:'とりあえず置いて',en:'Just put it down.',alt:'Leave it there.',tip:'Leave it there. は「そこに置いておいて」のニュアンス。'},
-{id:14,cat:'物の操作',jp:'持ってきて',sub:'取ってきて',en:'Bring it here.',alt:'Can you grab that for me?',tip:'Grab は口語でよく使われる「取ってくる」。'},
-{id:15,cat:'物の操作',jp:'向こうに持っていって',sub:'別の場所へ',en:'Take it over there.',alt:'Put it over there.',tip:'Take it + 場所 で「持っていく」。'},
-{id:16,cat:'物の操作',jp:'開けて',sub:'箱・扉など',en:'Open it.',alt:'Can you open this?',tip:'シンプルに Open it. でOK。'},
-{id:17,cat:'物の操作',jp:'閉めて',sub:'ドア・窓など',en:'Close it.',alt:'Shut it.',tip:'Shut it. はよりカジュアル。怒った感じにも聞こえることがある。'},
-{id:18,cat:'物の操作',jp:'捨てといて',sub:'ゴミを捨てる',en:'Throw it away.',alt:'Toss it.',tip:'Toss it. は口語でカジュアル。'},
-{id:19,cat:'物の操作',jp:'片付けて',sub:'散らかったものを',en:'Put it away.',alt:'Clean this up.',tip:'Put it away は「元の場所に戻す」感覚。'},
-{id:20,cat:'物の操作',jp:'引っ張って',sub:'引っ張る動作',en:'Pull it.',alt:'Give it a pull.',tip:'Give it a pull. は「一回引いてみて」のニュアンス。'},
-{id:21,cat:'料理・台所',jp:'火をつけて',sub:'コンロなど',en:'Turn on the stove.',alt:'Light the stove.',tip:'Turn on は電気・ガス全般に使える。'},
-{id:22,cat:'料理・台所',jp:'火を止めて',sub:'コンロを消す',en:'Turn off the stove.',alt:'Turn down the heat.',tip:'Turn down the heat は「火を弱める」。'},
-{id:23,cat:'料理・台所',jp:'混ぜて',sub:'かき混ぜる',en:'Stir it.',alt:'Mix it up.',tip:'Stir は鍋の中をかき回す。Mix はより全体を混ぜる感じ。'},
-{id:24,cat:'料理・台所',jp:'切って',sub:'包丁で',en:'Cut it.',alt:'Chop it up.',tip:'Chop it up は「細かく切る」。Slice は「薄く切る」。'},
-{id:25,cat:'料理・台所',jp:'洗って',sub:'野菜・食器など',en:'Wash it.',alt:'Rinse it off.',tip:'Rinse it off は「さっと水で洗い流す」。'},
-{id:26,cat:'料理・台所',jp:'温めて',sub:'電子レンジで',en:'Heat it up.',alt:'Warm it up. / Microwave it.',tip:'Microwave it. はレンジで温める場合に使える。'},
-{id:27,cat:'料理・台所',jp:'冷蔵庫に入れて',sub:'保存する',en:"Put it in the fridge.",alt:"Pop it in the fridge.",tip:'Pop it in はよりカジュアルで自然な口語表現。'},
-{id:28,cat:'料理・台所',jp:'お皿に盛って',sub:'料理を盛り付ける',en:'Plate it.',alt:'Put it on a plate.',tip:'Plate it. は料理用語として自然。'},
-{id:29,cat:'料理・台所',jp:'沸騰するまで待って',sub:'お湯を沸かす',en:'Wait until it boils.',alt:'Let it come to a boil.',tip:'Let it come to a boil. のほうがネイティブ的。'},
-{id:30,cat:'料理・台所',jp:'味見して',sub:'塩加減など確認',en:'Have a taste.',alt:'Try it and see.',tip:'Have a taste. はシンプルで自然な表現。'},
-{id:31,cat:'掃除・整理',jp:'掃除機をかけて',sub:'床を掃除',en:'Vacuum the floor.',alt:'Run the vacuum.',tip:'Run the vacuum. はよりカジュアルな言い方。'},
-{id:32,cat:'掃除・整理',jp:'拭いて',sub:'テーブルなど',en:'Wipe it down.',alt:'Give it a wipe.',tip:'Give it a wipe. は「ちょっと拭いて」というカジュアルな表現。'},
-{id:33,cat:'掃除・整理',jp:'洗濯して',sub:'洗濯機を回す',en:'Do the laundry.',alt:'Run a load of laundry.',tip:'Run a load は「一回洗濯機を回す」。'},
-{id:34,cat:'掃除・整理',jp:'洗濯物を干して',sub:'洗濯後',en:'Hang up the laundry.',alt:'Hang out the washing.',tip:'どちらも自然。地域によって表現が違う。'},
-{id:35,cat:'掃除・整理',jp:'たたんで',sub:'洗濯物を',en:'Fold it.',alt:'Fold the laundry.',tip:'Fold it. だけでたたむ動作を表現できる。'},
-{id:36,cat:'掃除・整理',jp:'ゴミを出して',sub:'ゴミ捨て場へ',en:'Take out the trash.',alt:'Put the garbage out.',tip:'Take out the trash. が最もよく使われる。'},
-{id:37,cat:'掃除・整理',jp:'窓を開けて換気して',sub:'空気を入れ替える',en:'Open the window and air it out.',alt:'Let some fresh air in.',tip:'Let some fresh air in. がネイティブらしい自然な表現。'},
-{id:38,cat:'掃除・整理',jp:'整理して',sub:'散らかったものを',en:'Tidy it up.',alt:'Organize this.',tip:'Tidy up はイギリス英語でよく使われるが米語でも通じる。'},
-{id:39,cat:'掃除・整理',jp:'床を掃いて',sub:'ほうきで',en:'Sweep the floor.',alt:'Give the floor a sweep.',tip:'Sweep the floor. が基本。'},
-{id:40,cat:'掃除・整理',jp:'汚れを落として',sub:'こびりついた汚れ',en:'Scrub it off.',alt:'Get the stain out.',tip:'Scrub は力を入れてこする感じ。Get the stain out は「汚れを落とす」。'},
-{id:41,cat:'電気・スイッチ',jp:'電気をつけて',sub:'部屋の照明',en:'Turn on the light.',alt:'Switch on the light.',tip:'どちらも自然。Turn on が最も一般的。'},
-{id:42,cat:'電気・スイッチ',jp:'電気を消して',sub:'照明を消す',en:'Turn off the light.',alt:'Switch off the light.',tip:'Turn off the light. が最も一般的。'},
-{id:43,cat:'電気・スイッチ',jp:'テレビをつけて',sub:'',en:'Turn on the TV.',alt:'Put the TV on.',tip:'Put the TV on. はイギリス英語でよく使われる。'},
-{id:44,cat:'電気・スイッチ',jp:'テレビを消して',sub:'',en:'Turn off the TV.',alt:'Switch off the TV.',tip:'Turn off the TV. が最も一般的。'},
-{id:45,cat:'電気・スイッチ',jp:'音量を上げて',sub:'テレビ・音楽',en:'Turn it up.',alt:'Can you turn up the volume?',tip:'Turn it up. だけで通じる。とても使いやすい。'},
-{id:46,cat:'電気・スイッチ',jp:'音量を下げて',sub:'静かにして',en:'Turn it down.',alt:'Can you lower the volume?',tip:'Turn it down. は音量だけでなく「抑えて」の意味でも使える。'},
-{id:47,cat:'電気・スイッチ',jp:'エアコンをつけて',sub:'',en:'Turn on the AC.',alt:'Put the air conditioning on.',tip:'AC は air conditioning の略。日常会話では AC が一般的。'},
-{id:48,cat:'電気・スイッチ',jp:'充電して',sub:'スマホなど',en:'Charge it.',alt:'Put it on charge.',tip:'Put it on charge. はイギリス英語。Charge it. が最も簡単。'},
-{id:49,cat:'電気・スイッチ',jp:'Wi-Fiにつないで',sub:'',en:'Connect to the Wi-Fi.',alt:'Get on the Wi-Fi.',tip:'Get on the Wi-Fi. はよりカジュアル。'},
-{id:50,cat:'電気・スイッチ',jp:'アラームをセットして',sub:'目覚まし',en:'Set an alarm.',alt:'Set your alarm for a specific time.',tip:'Set an alarm for 7. のように時間を加えるとより自然。'},
-{id:51,cat:'お風呂・トイレ',jp:'お風呂を沸かして',sub:'お湯を張る',en:'Run a bath.',alt:'Fill up the tub.',tip:'Run a bath. は「お風呂を準備する」定番表現。'},
-{id:52,cat:'お風呂・トイレ',jp:'シャワーを浴びて',sub:'',en:'Take a shower.',alt:'Have a shower.',tip:'Take a shower（米）Have a shower（英）どちらも正しい。'},
-{id:53,cat:'お風呂・トイレ',jp:'タオルを取って',sub:'',en:'Grab a towel.',alt:'Get me a towel.',tip:'Grab は「取ってくる」の口語表現。'},
-{id:54,cat:'お風呂・トイレ',jp:'石鹸を出して',sub:'補充する',en:'Refill the soap.',alt:'Put out some soap.',tip:'Refill は「補充する」。Put out は「用意する」。'},
-{id:55,cat:'お風呂・トイレ',jp:'水をとめて',sub:'蛇口・シャワー',en:'Turn off the water.',alt:'Shut off the tap.',tip:'Turn off the water. が最も汎用性が高い。'},
-{id:56,cat:'お風呂・トイレ',jp:'手を洗って',sub:'',en:'Wash your hands.',alt:'Go wash your hands.',tip:'Go wash your hands. は子供などへの指示でよく使う。'},
-{id:57,cat:'お風呂・トイレ',jp:'歯を磨いて',sub:'',en:'Brush your teeth.',alt:'Go brush your teeth.',tip:'シンプルに Brush your teeth. でOK。'},
-{id:58,cat:'お風呂・トイレ',jp:'髪を乾かして',sub:'ドライヤーで',en:'Dry your hair.',alt:'Use the hair dryer.',tip:'Dry your hair. がシンプルで自然。'},
-{id:59,cat:'お風呂・トイレ',jp:'鏡を見て',sub:'',en:'Look in the mirror.',alt:'Check yourself in the mirror.',tip:'Check yourself in the mirror. は「ちゃんと確認して」のニュアンス。'},
-{id:60,cat:'お風呂・トイレ',jp:'お湯を入れ直して',sub:'冷めたとき',en:'Reheat the bath.',alt:'Top up the hot water.',tip:'Top up は「補充する」。Top up the hot water. がネイティブらしい。'},
-{id:61,cat:'就寝・起床',jp:'もう寝て',sub:'就寝の指示',en:'Go to bed.',alt:'Time for bed.',tip:'Time for bed. は子供への定番フレーズ。大人にも使える。'},
-{id:62,cat:'就寝・起床',jp:'起きて',sub:'朝、起こす',en:'Wake up.',alt:'Get up. / Rise and shine.',tip:'Rise and shine. は「元気よく起きて」という明るい表現。'},
-{id:63,cat:'就寝・起床',jp:'電気消して寝て',sub:'',en:'Turn off the light and go to sleep.',alt:'Lights out.',tip:'Lights out. は軍隊・寮などで使われるが日常でも通じる。'},
-{id:64,cat:'就寝・起床',jp:'毛布をかけて',sub:'',en:'Put a blanket on.',alt:'Cover yourself with the blanket.',tip:'Put a blanket on. がシンプルで自然。'},
-{id:65,cat:'就寝・起床',jp:'もう少し寝ていいよ',sub:'',en:'You can sleep a little longer.',alt:'Sleep in a bit.',tip:'Sleep in は「いつもより長く寝る」。Sleep in a bit. で「もう少し寝て」。'},
-{id:66,cat:'就寝・起床',jp:'枕を整えて',sub:'',en:'Fix your pillow.',alt:'Fluff up the pillow.',tip:'Fluff up は枕を膨らませる動作。'},
-{id:67,cat:'就寝・起床',jp:'布団を干して',sub:'',en:'Air out the futon.',alt:'Put the futon out to dry.',tip:'Futon はそのまま英語になっている。'},
-{id:68,cat:'就寝・起床',jp:'カーテンを開けて',sub:'朝、明るくする',en:'Open the curtains.',alt:'Pull back the curtains.',tip:'Pull back the curtains. がよりネイティブらしい表現。'},
-{id:69,cat:'就寝・起床',jp:'静かにして',sub:'寝ている人がいる',en:'Keep it down.',alt:'Please be quiet.',tip:'Keep it down. は「音を小さくして」という日常的な表現。'},
-{id:70,cat:'就寝・起床',jp:'もうすぐ起こすよ',sub:'',en:"I'll wake you up soon.",alt:"I'll come get you in a bit.",tip:"I'll come get you in a bit. は「もうすぐ起こしに来る」という温かい表現。"},
-{id:71,cat:'着替え・身支度',jp:'着替えて',sub:'',en:'Get changed.',alt:'Change your clothes.',tip:'Get changed. がよりカジュアルで自然。'},
-{id:72,cat:'着替え・身支度',jp:'靴を履いて',sub:'',en:'Put your shoes on.',alt:'Slip on your shoes.',tip:'Slip on は「サッと履く」。Put your shoes on が基本。'},
-{id:73,cat:'着替え・身支度',jp:'上着を着て',sub:'寒いとき',en:'Put on a jacket.',alt:'Grab a jacket.',tip:'Grab a jacket. は「ジャケット持って」というニュアンスもある。'},
-{id:74,cat:'着替え・身支度',jp:'脱いで',sub:'コートなど',en:'Take it off.',alt:'Take off your coat.',tip:'Take it off. はシンプルで最もよく使われる。'},
-{id:75,cat:'着替え・身支度',jp:'ボタンを留めて',sub:'',en:'Button it up.',alt:'Do up the buttons.',tip:'Do up はイギリス英語でよく使われる。'},
-{id:76,cat:'着替え・身支度',jp:'ジッパーを上げて',sub:'',en:'Zip it up.',alt:'Do up the zipper.',tip:'Zip it up. がシンプルで一番自然。'},
-{id:77,cat:'着替え・身支度',jp:'髪を整えて',sub:'',en:'Fix your hair.',alt:'Do your hair.',tip:'Do your hair. は「ちゃんとセットして」というニュアンス。'},
-{id:78,cat:'着替え・身支度',jp:'準備して',sub:'出かける前に',en:'Get ready.',alt:'Hurry up and get ready.',tip:'Get ready. が最もシンプルで使いやすい。'},
-{id:79,cat:'着替え・身支度',jp:'荷物をまとめて',sub:'',en:'Pack your things.',alt:'Get your stuff together.',tip:'Get your stuff together. はよりカジュアルな表現。'},
-{id:80,cat:'着替え・身支度',jp:'マスクして',sub:'',en:'Put on your mask.',alt:'Wear your mask.',tip:'どちらも自然。Put on はより動作的なニュアンス。'},
-{id:81,cat:'依頼・確認',jp:'ちょっと待って',sub:'少しだけ',en:'Hang on.',alt:'Just a sec. / One moment.',tip:'Hang on. はとてもよく使われる口語表現。'},
-{id:82,cat:'依頼・確認',jp:'もう一回言って',sub:'聞き取れなかった',en:'Say that again.',alt:'Could you repeat that?',tip:'Say that again. がカジュアル。Could you repeat that? は丁寧。'},
-{id:83,cat:'依頼・確認',jp:'もっとゆっくり言って',sub:'',en:'Could you slow down?',alt:'Speak more slowly, please.',tip:'Could you slow down? がより自然な口語表現。'},
-{id:84,cat:'依頼・確認',jp:'確認してみて',sub:'',en:'Check it.',alt:'Double-check it.',tip:'Double-check は「念のため再確認する」。'},
-{id:85,cat:'依頼・確認',jp:'後で教えて',sub:'',en:'Let me know later.',alt:'Tell me later.',tip:'Let me know later. がよりネイティブらしい表現。'},
-{id:86,cat:'依頼・確認',jp:'急いで',sub:'',en:'Hurry up.',alt:"Come on, let's go.",tip:"Come on, let's go. は「さあ行くよ」という感じで自然。"},
-{id:87,cat:'依頼・確認',jp:'気をつけて',sub:'',en:'Be careful.',alt:'Watch out.',tip:'Watch out. は「危ない！」という緊急のニュアンス。Be careful. は全般的な注意。'},
-{id:88,cat:'依頼・確認',jp:'大丈夫？',sub:'',en:'You okay?',alt:'Are you alright?',tip:'You okay? はカジュアルな確認。Are you alright? は少し丁寧。'},
-{id:89,cat:'依頼・確認',jp:'手伝って',sub:'',en:'Can you help me?',alt:'Give me a hand.',tip:'Give me a hand. は口語でとてもよく使われる。'},
-{id:90,cat:'依頼・確認',jp:'そのままにしておいて',sub:'触らないで',en:"Leave it.",alt:"Don't touch it.",tip:"Leave it. はシンプルで強い指示。Don't touch it. はより明示的。"},
-{id:91,cat:'ペット・日常',jp:'ごはんあげて',sub:'ペットに',en:'Feed them.',alt:'Give them their food.',tip:'Feed them. がシンプルで一番自然。'},
-{id:92,cat:'ペット・日常',jp:'水を換えて',sub:'ペットの水',en:'Change the water.',alt:'Refill the water bowl.',tip:'Refill the water bowl. はより具体的。'},
-{id:93,cat:'ペット・日常',jp:'撫でてあげて',sub:'',en:'Give them a pat.',alt:'Pet them.',tip:'Give them a pat. は軽く撫でる感じ。Pet them. は動詞として使う。'},
-{id:94,cat:'ペット・日常',jp:'連れてきて',sub:'ペットを呼ぶ',en:'Bring them here.',alt:'Call them over.',tip:'Call them over. は「呼び寄せる」。'},
-{id:95,cat:'ペット・日常',jp:'外に出してあげて',sub:'',en:'Let them out.',alt:'Take them outside.',tip:'Let them out. は「扉を開けて出す」。Take them outside. は連れて行く感じ。'},
-{id:96,cat:'ペット・日常',jp:'植物に水をあげて',sub:'',en:'Water the plants.',alt:'Give the plants some water.',tip:'Water the plants. が最もシンプルで自然。'},
-{id:97,cat:'ペット・日常',jp:'郵便を取ってきて',sub:'',en:'Get the mail.',alt:'Grab the mail.',tip:'Grab the mail. はよりカジュアル。'},
-{id:98,cat:'ペット・日常',jp:'ドアに鍵かけて',sub:'',en:'Lock the door.',alt:'Make sure the door is locked.',tip:'Make sure the door is locked. は「ちゃんと確認して」のニュアンス。'},
-{id:99,cat:'ペット・日常',jp:'窓閉めて',sub:'',en:'Close the window.',alt:'Shut the window.',tip:'どちらも自然。Shut はより強い感じ。'},
-{id:100,cat:'ペット・日常',jp:'カメラを確認して',sub:'防犯カメラ・ドアカメラ',en:'Check the camera.',alt:'Have a look at the camera.',tip:'Have a look at the camera. は「ちょっと見てみて」のニュアンス。'}
+{id:1,cat:'📅 会議・打ち合わせ',jp:'始めましょう',sub:'会議の開始',en:"Let's get started.",alt:"Let's kick things off.",tip:"kick things off はよりカジュアルで活気ある開始の表現。"},
+{id:2,cat:'📅 会議・打ち合わせ',jp:'後でもう一度議論しましょう',sub:'',en:"Let's circle back to that.",alt:"Let's revisit that later.",tip:"circle back はビジネス英語の定番。「後で戻ってくる」イメージ。"},
+{id:3,cat:'📅 会議・打ち合わせ',jp:'要点だけ教えてください',sub:'',en:"Can you give me the short version?",alt:"Can you summarize that?",tip:"the short version は「簡単に言うと」というニュアンス。"},
+{id:4,cat:'📅 会議・打ち合わせ',jp:'話題を変えましょう',sub:'',en:"Let's move on.",alt:"Let's shift gears.",tip:"shift gears は話題や方向を切り替えるときのカジュアルな表現。"},
+{id:5,cat:'📅 会議・打ち合わせ',jp:'議題に戻りましょう',sub:'',en:"Let's get back on track.",alt:"Let's stick to the agenda.",tip:"on track は「軌道に乗っている」。"},
+{id:6,cat:'📅 会議・打ち合わせ',jp:'今日の目的は何ですか？',sub:'',en:"What's the goal for today?",alt:"What are we trying to accomplish?",tip:"What are we trying to accomplish? は目的を明確にするときの表現。"},
+{id:7,cat:'📅 会議・打ち合わせ',jp:'少し時間をもらえますか？',sub:'',en:"Can I have a moment?",alt:"Give me a second.",tip:"Give me a second. はカジュアルで使いやすい。"},
+{id:8,cat:'📅 会議・打ち合わせ',jp:'聞こえていますか？（オンライン）',sub:'',en:"Can you hear me okay?",alt:"Am I coming through?",tip:"Am I coming through? はオンライン会議でよく使われる。"},
+{id:9,cat:'📅 会議・打ち合わせ',jp:'画面を共有します',sub:'',en:"I'll share my screen.",alt:"Let me pull that up.",tip:"Let me pull that up. は「今開きます」という自然な口語。"},
+{id:10,cat:'📅 会議・打ち合わせ',jp:'他に何かありますか？',sub:'会議の終わりに',en:"Is there anything else?",alt:"Any other business?",tip:"Any other business? は議題の最後に使うフォーマルな表現。"},
+{id:11,cat:'📧 メール・報告',jp:'ご連絡ありがとうございます',sub:'メールの書き出し',en:"Thank you for reaching out.",alt:"Thanks for getting in touch.",tip:"reaching out はビジネスメールの定番の書き出し。"},
+{id:12,cat:'📧 メール・報告',jp:'後でフォローアップします',sub:'',en:"I'll follow up on that.",alt:"I'll get back to you on this.",tip:"follow up は「確認・追跡する」。ビジネス英語の必須語彙。"},
+{id:13,cat:'📧 メール・報告',jp:'確認させてください',sub:'',en:"Just to confirm…",alt:"Let me double-check that.",tip:"Just to confirm… は確認メールの書き出しとしてよく使われる。"},
+{id:14,cat:'📧 メール・報告',jp:'添付ファイルをご確認ください',sub:'',en:"Please find the attachment.",alt:"I've attached the file for your reference.",tip:"Please find the attachment. はメールの定番フレーズ。"},
+{id:15,cat:'📧 メール・報告',jp:'ご不明な点があればご連絡ください',sub:'',en:"Feel free to reach out if you have any questions.",alt:"Don't hesitate to contact me.",tip:"Feel free to reach out. はメールの締めによく使われる丁寧な表現。"},
+{id:16,cat:'📧 メール・報告',jp:'最新情報をお知らせします',sub:'',en:"I'll keep you updated.",alt:"I'll keep you in the loop.",tip:"keep in the loop は「情報を共有し続ける」という定番表現。"},
+{id:17,cat:'📧 メール・報告',jp:'ご確認よろしくお願いします',sub:'',en:"Please let me know your thoughts.",alt:"I'd love your feedback.",tip:"Please let me know your thoughts. は意見や確認を求める定番フレーズ。"},
+{id:18,cat:'📧 メール・報告',jp:'よろしくお願いいたします',sub:'メールの締め',en:"Best regards.",alt:"Thanks again.",tip:"Best regards はメールの締めの最もフォーマルな表現。"},
+{id:19,cat:'📧 メール・報告',jp:'ご返信をお待ちしております',sub:'',en:"I look forward to hearing from you.",alt:"Looking forward to your reply.",tip:"I look forward to hearing from you. はメールの締めの定番。"},
+{id:20,cat:'📧 メール・報告',jp:'お返事が遅くなり申し訳ありません',sub:'',en:"Sorry for the delayed response.",alt:"Apologies for getting back to you late.",tip:"Sorry for the delayed response. は遅延への謝罪の定番フレーズ。"},
+{id:21,cat:'🤝 依頼・お願い',jp:'これをお願いできますか？',sub:'',en:"Could you take care of this?",alt:"Can you handle this?",tip:"take care of は「対処する・担当する」。"},
+{id:22,cat:'🤝 依頼・お願い',jp:'手伝っていただけますか？',sub:'',en:"I could use a hand with this.",alt:"Could you give me a hand?",tip:"I could use a hand は「助けが必要」という自然な口語表現。"},
+{id:23,cat:'🤝 依頼・お願い',jp:'〜までに仕上げられますか？',sub:'',en:"Can you get this done by…?",alt:"Is it possible to finish this by…?",tip:"get this done は「仕上げる・完成させる」。"},
+{id:24,cat:'🤝 依頼・お願い',jp:'これを確認してもらえますか？',sub:'',en:"Could you review this for me?",alt:"Can you take a look at this?",tip:"take a look at はカジュアルで使いやすい確認依頼の表現。"},
+{id:25,cat:'🤝 依頼・お願い',jp:'担当者につないでもらえますか？',sub:'',en:"Could you connect me with the right person?",alt:"Who should I speak to about this?",tip:"connect me with は「つないでもらう」。"},
+{id:26,cat:'🤝 依頼・お願い',jp:'優先してもらえますか？',sub:'',en:"Could you prioritize this?",alt:"Can we bump this up?",tip:"bump this up はカジュアルで「優先順位を上げる」というニュアンス。"},
+{id:27,cat:'🤝 依頼・お願い',jp:'もう少し時間をもらえますか？',sub:'',en:"Can I have a bit more time?",alt:"Could I get an extension?",tip:"get an extension は「期限を延ばしてもらう」というフォーマルな表現。"},
+{id:28,cat:'🤝 依頼・お願い',jp:'引き受けてもらえますか？',sub:'',en:"Would you be able to take this on?",alt:"Are you able to handle this?",tip:"take this on は「引き受ける・担当する」。"},
+{id:29,cat:'🤝 依頼・お願い',jp:'意見を聞かせてください',sub:'',en:"I'd love your input on this.",alt:"What's your take on this?",tip:"What's your take? は「どう思う？」というカジュアルな表現。"},
+{id:30,cat:'🤝 依頼・お願い',jp:'ご都合はいかがですか？',sub:'',en:"Does that work for you?",alt:"Is that okay with you?",tip:"Does that work for you? は日程・条件の確認に幅広く使える。"},
+{id:31,cat:'⏰ 締め切り・スケジュール',jp:'締め切りはいつですか？',sub:'',en:"What's the deadline?",alt:"When does this need to be done by?",tip:"What's the deadline? はシンプルで最もよく使われる表現。"},
+{id:32,cat:'⏰ 締め切り・スケジュール',jp:'少し遅れています',sub:'',en:"I'm running a bit behind.",alt:"I'm slightly behind schedule.",tip:"running behind は「遅れている」。"},
+{id:33,cat:'⏰ 締め切り・スケジュール',jp:'スケジュール通りです',sub:'',en:"We're on schedule.",alt:"Everything is on track.",tip:"on track はスケジュール・計画が順調なときの定番表現。"},
+{id:34,cat:'⏰ 締め切り・スケジュール',jp:'今週中に終わらせます',sub:'',en:"I'll have it done by end of the week.",alt:"I'll wrap it up this week.",tip:"wrap it up は「仕上げる・片付ける」。"},
+{id:35,cat:'⏰ 締め切り・スケジュール',jp:'来週に延期できますか？',sub:'',en:"Can we push this to next week?",alt:"Can we postpone this?",tip:"push は「日程を後ろにずらす」。"},
+{id:36,cat:'⏰ 締め切り・スケジュール',jp:'いつ空いていますか？',sub:'',en:"When are you free?",alt:"When works for you?",tip:"When works for you? は相手の都合を聞く自然な口語表現。"},
+{id:37,cat:'⏰ 締め切り・スケジュール',jp:'急ぎですか？',sub:'',en:"Is this urgent?",alt:"How soon do you need this?",tip:"How soon do you need this? は優先度を確認するのに便利。"},
+{id:38,cat:'⏰ 締め切り・スケジュール',jp:'先約があります',sub:'',en:"I have something scheduled already.",alt:"I'm already booked.",tip:"I'm already booked. は「予定が埋まっている」というカジュアルな表現。"},
+{id:39,cat:'⏰ 締め切り・スケジュール',jp:'カレンダーに入れておきます',sub:'',en:"I'll put it in my calendar.",alt:"I'll block that time.",tip:"block that time は「その時間をブロックする」。"},
+{id:40,cat:'⏰ 締め切り・スケジュール',jp:'リスケできますか？',sub:'',en:"Can we reschedule?",alt:"Can we find another time?",tip:"reschedule は日程変更の定番語。"},
+{id:41,cat:'💬 雑談・関係づくり',jp:'週末はどうでしたか？',sub:'',en:"How was your weekend?",alt:"Did you get up to anything fun?",tip:"Did you get up to anything fun? はオーストラリアでよく使われる自然な雑談フレーズ。"},
+{id:42,cat:'💬 雑談・関係づくり',jp:'それは面白い！',sub:'',en:"That's interesting!",alt:"Oh wow, really?",tip:"Oh wow, really? はカジュアルで会話を弾ませる反応。"},
+{id:43,cat:'💬 雑談・関係づくり',jp:'笑えますね！',sub:'',en:"That's hilarious!",alt:"That's so funny!",tip:"hilarious は「爆笑レベルで面白い」。"},
+{id:44,cat:'💬 雑談・関係づくり',jp:'最近どうですか？',sub:'',en:"How have you been?",alt:"How's everything going?",tip:"How have you been? は久しぶりの挨拶にも使える。"},
+{id:45,cat:'💬 雑談・関係づくり',jp:'お疲れ様です',sub:'',en:"Good work today.",alt:"You've been working hard.",tip:"日本語の「お疲れ様」に直訳はない。Good work today. が自然。"},
+{id:46,cat:'💬 雑談・関係づくり',jp:'それ知らなかった！',sub:'',en:"I didn't know that!",alt:"No way, really?",tip:"No way, really? はカジュアルで驚きを表す定番表現。"},
+{id:47,cat:'💬 雑談・関係づくり',jp:'同感です',sub:'',en:"I know exactly what you mean.",alt:"I totally get that.",tip:"I know exactly what you mean. は共感の強い表現。"},
+{id:48,cat:'💬 雑談・関係づくり',jp:'いつかランチ行きましょう',sub:'',en:"We should grab lunch sometime.",alt:"Let's catch up over coffee.",tip:"grab lunch はカジュアルで「ランチに行く」。"},
+{id:49,cat:'💬 雑談・関係づくり',jp:'助かりました、ありがとう',sub:'',en:"That was really helpful, thanks.",alt:"I really appreciate it.",tip:"I really appreciate it. はより丁寧で感謝の気持ちが伝わる。"},
+{id:50,cat:'💬 雑談・関係づくり',jp:'またいつでも声かけてください',sub:'',en:"Feel free to reach out anytime.",alt:"My door is always open.",tip:"My door is always open. は「いつでも相談して」という温かい表現。"},
+{id:51,cat:'🙏 謝罪・フォロー',jp:'遅れて申し訳ありません',sub:'',en:"I apologize for the delay.",alt:"Sorry for keeping you waiting.",tip:"I apologize for the delay. はメールでも口頭でも使えるフォーマルな謝罪。"},
+{id:52,cat:'🙏 謝罪・フォロー',jp:'二度とこのようなことがないようにします',sub:'',en:"I'll make sure it doesn't happen again.",alt:"This won't happen again.",tip:"I'll make sure it doesn't happen again. は再発防止を約束する定番表現。"},
+{id:53,cat:'🙏 謝罪・フォロー',jp:'誤解させてしまいました',sub:'',en:"I think there was a miscommunication.",alt:"I may have not been clear.",tip:"miscommunication は「コミュニケーションのミス・誤解」。"},
+{id:54,cat:'🙏 謝罪・フォロー',jp:'すぐに対応します',sub:'',en:"I'll get right on it.",alt:"I'll take care of it right away.",tip:"get right on it は「すぐ取り掛かる」というカジュアルで頼もしい表現。"},
+{id:55,cat:'🙏 謝罪・フォロー',jp:'ご迷惑をおかけしました',sub:'',en:"I'm sorry for any inconvenience.",alt:"I apologize for the trouble.",tip:"any inconvenience は「ご不便・ご迷惑」という丁寧な表現。"},
+{id:56,cat:'🙏 謝罪・フォロー',jp:'確認不足でした',sub:'',en:"I should have double-checked.",alt:"That was my oversight.",tip:"oversight は「見落とし・確認漏れ」。フォーマルで責任ある表現。"},
+{id:57,cat:'🙏 謝罪・フォロー',jp:'私の間違いでした',sub:'',en:"That was my mistake.",alt:"My bad.",tip:"My bad. はカジュアルな謝罪。ビジネスでは That was my mistake. が適切。"},
+{id:58,cat:'🙏 謝罪・フォロー',jp:'修正させてください',sub:'',en:"Let me correct that.",alt:"Allow me to fix this.",tip:"Let me correct that. は間違いを訂正するときの丁寧な表現。"},
+{id:59,cat:'🙏 謝罪・フォロー',jp:'ご心配をおかけしました',sub:'',en:"I'm sorry for the concern.",alt:"I didn't mean to cause any worry.",tip:"I didn't mean to cause any worry. は柔らかい謝罪。"},
+{id:60,cat:'🙏 謝罪・フォロー',jp:'今後ともよろしくお願いします',sub:'',en:"I look forward to working with you.",alt:"I appreciate your continued support.",tip:"I look forward to working with you. は関係継続を示す定番表現。"},
+{id:61,cat:'👍 賛成・反対・意見',jp:'全くその通りです',sub:'',en:"I totally agree.",alt:"Absolutely.",tip:"Absolutely. は一言で強い同意を表せる便利な表現。"},
+{id:62,cat:'👍 賛成・反対・意見',jp:'少し違う見方をしています',sub:'',en:"I see it a bit differently.",alt:"I have a different perspective.",tip:"I see it differently. は反論を柔らかく伝える定番表現。"},
+{id:63,cat:'👍 賛成・反対・意見',jp:'いい点だと思います',sub:'',en:"That's a good point.",alt:"You make a fair point.",tip:"You make a fair point. は相手の意見を認めつつ返す丁寧な表現。"},
+{id:64,cat:'👍 賛成・反対・意見',jp:'懸念があります',sub:'',en:"I have some concerns about that.",alt:"I'm not so sure about this.",tip:"I have some concerns はビジネスで反対意見を伝える最も丁寧な言い方。"},
+{id:65,cat:'👍 賛成・反対・意見',jp:'おっしゃる通りです',sub:'',en:"You're right.",alt:"That makes sense.",tip:"That makes sense. は「なるほど」という同意や理解を示す表現。"},
+{id:66,cat:'👍 賛成・反対・意見',jp:'難しい質問ですね',sub:'',en:"That's a tough question.",alt:"That's not an easy one.",tip:"That's a tough question. は答えに時間が必要なときの時間稼ぎにも使える。"},
+{id:67,cat:'👍 賛成・反対・意見',jp:'ちょっと考えさせてください',sub:'',en:"Let me think about that.",alt:"I need to give that some thought.",tip:"I need to give that some thought. は即答を避けるときの丁寧な表現。"},
+{id:68,cat:'👍 賛成・反対・意見',jp:'賛成も反対もあります',sub:'',en:"I see both sides.",alt:"There are pros and cons.",tip:"There are pros and cons. は「メリットとデメリットがある」という定番表現。"},
+{id:69,cat:'👍 賛成・反対・意見',jp:'追加で言うと…',sub:'',en:"I'd also like to add…",alt:"Just to add to that…",tip:"Just to add to that… は会話に追加情報を自然に足すときのフレーズ。"},
+{id:70,cat:'👍 賛成・反対・意見',jp:'基本的には賛成です',sub:'',en:"I'm generally on board with that.",alt:"I'm mostly in agreement.",tip:"on board は「賛成している・同意している」というビジネス定番表現。"},
+{id:71,cat:'📊 進捗・状況報告',jp:'順調です',sub:'',en:"We're on track.",alt:"Things are going well.",tip:"We're on track. はスケジュールや進捗が計画通りのときの定番表現。"},
+{id:72,cat:'📊 進捗・状況報告',jp:'少し遅れが出ています',sub:'',en:"We've hit a bit of a delay.",alt:"There's been a slight setback.",tip:"setback は「遅延・障害」。"},
+{id:73,cat:'📊 進捗・状況報告',jp:'90%完成しています',sub:'',en:"We're about 90% done.",alt:"We're almost there.",tip:"We're almost there. はゴールが近いときのカジュアルな報告。"},
+{id:74,cat:'📊 進捗・状況報告',jp:'問題が発生しました',sub:'',en:"We've run into an issue.",alt:"There's a problem we need to address.",tip:"run into は「〜に直面する」。"},
+{id:75,cat:'📊 進捗・状況報告',jp:'解決策を検討中です',sub:'',en:"We're working on a solution.",alt:"We're looking into it.",tip:"We're looking into it. は問題を調査・対処中であることを伝える。"},
+{id:76,cat:'📊 進捗・状況報告',jp:'予定より早く終わりそうです',sub:'',en:"We might finish ahead of schedule.",alt:"We're actually ahead of plan.",tip:"ahead of schedule は「予定より早い」。"},
+{id:77,cat:'📊 進捗・状況報告',jp:'最新の状況をお知らせします',sub:'',en:"Here's a quick update.",alt:"Let me bring you up to speed.",tip:"bring you up to speed は「最新情報を共有する」というビジネス定番表現。"},
+{id:78,cat:'📊 進捗・状況報告',jp:'まだ確認中です',sub:'',en:"I'm still looking into it.",alt:"I haven't confirmed that yet.",tip:"I'm still looking into it. は調査中であることを正直に伝える表現。"},
+{id:79,cat:'📊 進捗・状況報告',jp:'ボールはあなたのコートに',sub:'次のアクションを相手に',en:"The ball is in your court.",alt:"It's over to you now.",tip:"The ball is in your court. は「次はあなたの番」というスポーツ由来の慣用表現。"},
+{id:80,cat:'📊 進捗・状況報告',jp:'完了しました',sub:'',en:"That's been taken care of.",alt:"All done.",tip:"That's been taken care of. は「対処済み」というビジネスらしい表現。"},
+{id:81,cat:'🚀 提案・アイデア',jp:'こうしたらどうでしょう？',sub:'',en:"What if we tried…?",alt:"How about we…?",tip:"What if we tried…? は提案を柔らかく切り出す定番フレーズ。"},
+{id:82,cat:'🚀 提案・アイデア',jp:'提案があります',sub:'',en:"I have a suggestion.",alt:"I have an idea.",tip:"I have a suggestion. はフォーマル。I have an idea. はよりカジュアル。"},
+{id:83,cat:'🚀 提案・アイデア',jp:'別のアプローチを試しませんか？',sub:'',en:"Should we try a different approach?",alt:"What if we looked at this differently?",tip:"a different approach は「別の手法・視点」。"},
+{id:84,cat:'🚀 提案・アイデア',jp:'いいアイデアだと思います',sub:'',en:"I think that's a great idea.",alt:"I love that idea.",tip:"I love that idea. はカジュアルで熱意が伝わる。"},
+{id:85,cat:'🚀 提案・アイデア',jp:'少し調整してみましょう',sub:'',en:"Let's tweak it a bit.",alt:"Let's make some adjustments.",tip:"tweak はカジュアルで「少し変える・調整する」というニュアンス。"},
+{id:86,cat:'🚀 提案・アイデア',jp:'試してみる価値がありそうです',sub:'',en:"It's worth a try.",alt:"Let's give it a shot.",tip:"give it a shot は「試してみる」のカジュアルな表現。"},
+{id:87,cat:'🚀 提案・アイデア',jp:'より効率的な方法があります',sub:'',en:"There's a more efficient way to do this.",alt:"I know a better way.",tip:"more efficient は「より効率的な」。"},
+{id:88,cat:'🚀 提案・アイデア',jp:'先例を参考にしましょう',sub:'',en:"Let's look at what's worked before.",alt:"Let's learn from past experience.",tip:"what's worked before は「過去にうまくいったこと」。"},
+{id:89,cat:'🚀 提案・アイデア',jp:'チームで協力しましょう',sub:'',en:"Let's collaborate on this.",alt:"Let's work on this together.",tip:"collaborate は「協力する」。チームワークを示す前向きな表現。"},
+{id:90,cat:'🚀 提案・アイデア',jp:'まずテストしてみましょう',sub:'',en:"Let's test it out first.",alt:"Why don't we run a pilot?",tip:"run a pilot は「試験的に実施する」というビジネス用語。"},
+{id:91,cat:'🏁 締め・確認',jp:'まとめましょう',sub:'会議・話の締め',en:"Let's wrap up.",alt:"Let's bring this to a close.",tip:"wrap up は「まとめる・締める」。"},
+{id:92,cat:'🏁 締め・確認',jp:'要点を確認します',sub:'',en:"Just to recap…",alt:"To summarize…",tip:"Just to recap は「要点をまとめると」という会議の締めに定番のフレーズ。"},
+{id:93,cat:'🏁 締め・確認',jp:'次のステップは？',sub:'',en:"What are the next steps?",alt:"What's our action plan?",tip:"next steps は会議終了時の必須確認事項。"},
+{id:94,cat:'🏁 締め・確認',jp:'誰が担当しますか？',sub:'',en:"Who's taking ownership of this?",alt:"Who's responsible for this?",tip:"taking ownership は「責任を持って担当する」という前向きな表現。"},
+{id:95,cat:'🏁 締め・確認',jp:'今日の決定事項をまとめます',sub:'',en:"Let me summarize what we decided today.",alt:"Here's what we agreed on.",tip:"Here's what we agreed on. はシンプルで合意内容を明確にする。"},
+{id:96,cat:'🏁 締め・確認',jp:'認識が合っていますか？',sub:'',en:"Are we all on the same page?",alt:"Do we all agree?",tip:"on the same page は「全員の認識が一致している」というビジネス定番表現。"},
+{id:97,cat:'🏁 締め・確認',jp:'議事録を送ります',sub:'',en:"I'll send out the meeting notes.",alt:"I'll circulate the minutes.",tip:"circulate the minutes はフォーマルな「議事録を回覧する」。"},
+{id:98,cat:'🏁 締め・確認',jp:'何かご質問はありますか？',sub:'',en:"Does anyone have any questions?",alt:"Any questions before we finish?",tip:"Any questions before we finish? は会議の締めに自然に使える。"},
+{id:99,cat:'🏁 締め・確認',jp:'それでは以上です',sub:'',en:"That's all from me.",alt:"That's a wrap.",tip:"That's a wrap. は「以上で終わり」のカジュアルで締まりのある表現。"},
+{id:100,cat:'🏁 締め・確認',jp:'ご参加ありがとうございました',sub:'',en:"Thank you all for joining.",alt:"Thanks everyone for your time.",tip:"Thanks everyone for your time. は時間を割いてくれた感謝を伝える定番。"}
 ];
 const CATS=[...new Set(PHRASES.map(p=>p.cat))];
-const CAT_COLORS={'移動・位置':'#c8962a','物の操作':'#4a7c59','料理・台所':'#a03030','掃除・整理':'#3d5a8a','電気・スイッチ':'#7a5a2a','お風呂・トイレ':'#2a7a7a','就寝・起床':'#5a2a7a','着替え・身支度':'#7a2a5a','依頼・確認':'#2a5a2a','ペット・日常':'#c8962a'};
+const CAT_COLORS={'📅 会議・打ち合わせ':'#3d5a8a','📧 メール・報告':'#4a7c59','🤝 依頼・お願い':'#c8962a','⏰ 締め切り・スケジュール':'#a03030','💬 雑談・関係づくり':'#7a5a2a','🙏 謝罪・フォロー':'#5a2a7a','👍 賛成・反対・意見':'#2a7a7a','📊 進捗・状況報告':'#2a5a7a','🚀 提案・アイデア':'#7a2a5a','🏁 締め・確認':'#4a4a8a'};
 
 let gApiKey = localStorage.getItem('g_tts_key') || '';
 let currentAudio = null;
@@ -618,8 +618,8 @@ async function playPhrase(en) {
 }
 
 // ===================== STATE =====================
-let mastered = new Set(JSON.parse(localStorage.getItem('hd_mastered') || '[]'));
-let wrong = new Set(JSON.parse(localStorage.getItem('hd_wrong') || '[]'));
+let mastered = new Set(JSON.parse(localStorage.getItem('biz_mastered') || '[]'));
+let wrong = new Set(JSON.parse(localStorage.getItem('biz_wrong') || '[]'));
 let queue = [], qIdx = 0, isRevealed = false;
 let currentMode = 'normal', selectedCat = 'all';
 let sessionOk = 0, sessionNg = 0;
@@ -627,8 +627,8 @@ let timerInterval = null, timerLeft = 3;
 let loopCounts = {};
 
 function save() {
-  localStorage.setItem('hd_mastered', JSON.stringify([...mastered]));
-  localStorage.setItem('hd_wrong', JSON.stringify([...wrong]));
+  localStorage.setItem('biz_mastered', JSON.stringify([...mastered]));
+  localStorage.setItem('biz_wrong', JSON.stringify([...wrong]));
 }
 function updateHeader() { document.getElementById('h-mastered').textContent = mastered.size; }
 

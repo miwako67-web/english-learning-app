@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🏠 家の中の日常動作 — 瞬間反射トレーニング</title>
+<title>🏥 健康・病院・食事 — 瞬間反射トレーニング</title>
 <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
 <style>
 :root{--ink:#1a1410;--paper:#f5f0e8;--gold:#c8962a;--moss:#4a7c59;--indigo:#3d5a8a;--crimson:#a03030;--panel:#fffdf8;--border:rgba(26,20,16,0.12);}
@@ -160,7 +160,7 @@ main{padding:14px;max-width:600px;margin:0 auto;}
 <!-- MODAL -->
 <div class="modal-overlay" id="api-modal">
 <div class="modal-box">
-<div class="modal-logo">🏠</div>
+<div class="modal-logo">🏥</div>
 <div class="modal-title">Google Cloud 音声設定</div>
 <div class="modal-sub">ネイティブ音声を使うために<br>Google Cloud Text-to-Speech APIキーを設定してください。<br>一度入力するとブラウザに保存されます。</div>
 <label class="modal-label">Google Cloud APIキー</label>
@@ -173,9 +173,9 @@ main{padding:14px;max-width:600px;margin:0 auto;}
 <div class="toast" id="toast"></div>
 <header>
 <div class="h-top">
-<div class="h-logo">🏠</div>
+<div class="h-logo">🏥</div>
 <div class="h-titles">
-<h1>家の中の日常動作</h1>
+<h1>健康・病院・食事</h1>
 <p>瞬間反射トレーニング — 100フレーズ</p>
 </div>
 <div class="h-right">
@@ -282,109 +282,109 @@ main{padding:14px;max-width:600px;margin:0 auto;}
 </main>
 <script>
 const PHRASES = [
-{id:1,cat:'移動・位置',jp:'どけて',sub:'邪魔なとき',en:'Move. / Get out of the way.',alt:'Scoot over.',tip:'Moveだけでも十分伝わる。Get out of the way はやや強め。'},
-{id:2,cat:'移動・位置',jp:'ちょっとそこ退いて',sub:'少しだけ場所を空けて',en:'Could you move a little?',alt:'Scoot over a bit.',tip:'Could you ...? で丁寧さが出る。'},
-{id:3,cat:'移動・位置',jp:'ここに来て',sub:'近くに呼ぶ',en:'Come here.',alt:'Come over here.',tip:'シンプルにCome here.が最も自然。'},
-{id:4,cat:'移動・位置',jp:'あっちに行って',sub:'離れてほしい',en:'Go over there.',alt:'Step aside.',tip:'Step aside はフォーマルな場面にも使える。'},
-{id:5,cat:'移動・位置',jp:'ここに座って',sub:'席を指定する',en:'Sit here.',alt:'Have a seat here.',tip:'Have a seat は少し丁寧なバージョン。'},
-{id:6,cat:'移動・位置',jp:'立って',sub:'座っている人に',en:'Stand up.',alt:'Get up.',tip:'Get up の方が日常会話では多く使われる。'},
-{id:7,cat:'移動・位置',jp:'寝て',sub:'横になって',en:'Lie down.',alt:'Go lie down.',tip:'犬にも人にも使える。Go lie down. はより指示的。'},
-{id:8,cat:'移動・位置',jp:'こっちに向いて',sub:'向きを変えて',en:'Turn this way.',alt:'Face this way.',tip:'Turn / Face どちらも自然。'},
-{id:9,cat:'移動・位置',jp:'前に進んで',sub:'もう少し前に',en:'Move forward.',alt:'Step forward.',tip:'Step forward はより一歩という感じ。'},
-{id:10,cat:'移動・位置',jp:'後ろに下がって',sub:'後退して',en:'Step back.',alt:'Move back.',tip:'Step back は危険回避の場面でもよく使う。'},
-{id:11,cat:'物の操作',jp:'棚に上げて',sub:'高いところに置く',en:'Put it on the shelf.',alt:'Can you put that up on the shelf?',tip:'Put it + 場所 が基本パターン。'},
-{id:12,cat:'物の操作',jp:'これ持って',sub:'手渡す・持ってもらう',en:'Hold this.',alt:'Can you hold this for me?',tip:'Hold this. は一番シンプルで自然。'},
-{id:13,cat:'物の操作',jp:'置いといて',sub:'とりあえず置いて',en:'Just put it down.',alt:'Leave it there.',tip:'Leave it there. は「そこに置いておいて」のニュアンス。'},
-{id:14,cat:'物の操作',jp:'持ってきて',sub:'取ってきて',en:'Bring it here.',alt:'Can you grab that for me?',tip:'Grab は口語でよく使われる「取ってくる」。'},
-{id:15,cat:'物の操作',jp:'向こうに持っていって',sub:'別の場所へ',en:'Take it over there.',alt:'Put it over there.',tip:'Take it + 場所 で「持っていく」。'},
-{id:16,cat:'物の操作',jp:'開けて',sub:'箱・扉など',en:'Open it.',alt:'Can you open this?',tip:'シンプルに Open it. でOK。'},
-{id:17,cat:'物の操作',jp:'閉めて',sub:'ドア・窓など',en:'Close it.',alt:'Shut it.',tip:'Shut it. はよりカジュアル。怒った感じにも聞こえることがある。'},
-{id:18,cat:'物の操作',jp:'捨てといて',sub:'ゴミを捨てる',en:'Throw it away.',alt:'Toss it.',tip:'Toss it. は口語でカジュアル。'},
-{id:19,cat:'物の操作',jp:'片付けて',sub:'散らかったものを',en:'Put it away.',alt:'Clean this up.',tip:'Put it away は「元の場所に戻す」感覚。'},
-{id:20,cat:'物の操作',jp:'引っ張って',sub:'引っ張る動作',en:'Pull it.',alt:'Give it a pull.',tip:'Give it a pull. は「一回引いてみて」のニュアンス。'},
-{id:21,cat:'料理・台所',jp:'火をつけて',sub:'コンロなど',en:'Turn on the stove.',alt:'Light the stove.',tip:'Turn on は電気・ガス全般に使える。'},
-{id:22,cat:'料理・台所',jp:'火を止めて',sub:'コンロを消す',en:'Turn off the stove.',alt:'Turn down the heat.',tip:'Turn down the heat は「火を弱める」。'},
-{id:23,cat:'料理・台所',jp:'混ぜて',sub:'かき混ぜる',en:'Stir it.',alt:'Mix it up.',tip:'Stir は鍋の中をかき回す。Mix はより全体を混ぜる感じ。'},
-{id:24,cat:'料理・台所',jp:'切って',sub:'包丁で',en:'Cut it.',alt:'Chop it up.',tip:'Chop it up は「細かく切る」。Slice は「薄く切る」。'},
-{id:25,cat:'料理・台所',jp:'洗って',sub:'野菜・食器など',en:'Wash it.',alt:'Rinse it off.',tip:'Rinse it off は「さっと水で洗い流す」。'},
-{id:26,cat:'料理・台所',jp:'温めて',sub:'電子レンジで',en:'Heat it up.',alt:'Warm it up. / Microwave it.',tip:'Microwave it. はレンジで温める場合に使える。'},
-{id:27,cat:'料理・台所',jp:'冷蔵庫に入れて',sub:'保存する',en:"Put it in the fridge.",alt:"Pop it in the fridge.",tip:'Pop it in はよりカジュアルで自然な口語表現。'},
-{id:28,cat:'料理・台所',jp:'お皿に盛って',sub:'料理を盛り付ける',en:'Plate it.',alt:'Put it on a plate.',tip:'Plate it. は料理用語として自然。'},
-{id:29,cat:'料理・台所',jp:'沸騰するまで待って',sub:'お湯を沸かす',en:'Wait until it boils.',alt:'Let it come to a boil.',tip:'Let it come to a boil. のほうがネイティブ的。'},
-{id:30,cat:'料理・台所',jp:'味見して',sub:'塩加減など確認',en:'Have a taste.',alt:'Try it and see.',tip:'Have a taste. はシンプルで自然な表現。'},
-{id:31,cat:'掃除・整理',jp:'掃除機をかけて',sub:'床を掃除',en:'Vacuum the floor.',alt:'Run the vacuum.',tip:'Run the vacuum. はよりカジュアルな言い方。'},
-{id:32,cat:'掃除・整理',jp:'拭いて',sub:'テーブルなど',en:'Wipe it down.',alt:'Give it a wipe.',tip:'Give it a wipe. は「ちょっと拭いて」というカジュアルな表現。'},
-{id:33,cat:'掃除・整理',jp:'洗濯して',sub:'洗濯機を回す',en:'Do the laundry.',alt:'Run a load of laundry.',tip:'Run a load は「一回洗濯機を回す」。'},
-{id:34,cat:'掃除・整理',jp:'洗濯物を干して',sub:'洗濯後',en:'Hang up the laundry.',alt:'Hang out the washing.',tip:'どちらも自然。地域によって表現が違う。'},
-{id:35,cat:'掃除・整理',jp:'たたんで',sub:'洗濯物を',en:'Fold it.',alt:'Fold the laundry.',tip:'Fold it. だけでたたむ動作を表現できる。'},
-{id:36,cat:'掃除・整理',jp:'ゴミを出して',sub:'ゴミ捨て場へ',en:'Take out the trash.',alt:'Put the garbage out.',tip:'Take out the trash. が最もよく使われる。'},
-{id:37,cat:'掃除・整理',jp:'窓を開けて換気して',sub:'空気を入れ替える',en:'Open the window and air it out.',alt:'Let some fresh air in.',tip:'Let some fresh air in. がネイティブらしい自然な表現。'},
-{id:38,cat:'掃除・整理',jp:'整理して',sub:'散らかったものを',en:'Tidy it up.',alt:'Organize this.',tip:'Tidy up はイギリス英語でよく使われるが米語でも通じる。'},
-{id:39,cat:'掃除・整理',jp:'床を掃いて',sub:'ほうきで',en:'Sweep the floor.',alt:'Give the floor a sweep.',tip:'Sweep the floor. が基本。'},
-{id:40,cat:'掃除・整理',jp:'汚れを落として',sub:'こびりついた汚れ',en:'Scrub it off.',alt:'Get the stain out.',tip:'Scrub は力を入れてこする感じ。Get the stain out は「汚れを落とす」。'},
-{id:41,cat:'電気・スイッチ',jp:'電気をつけて',sub:'部屋の照明',en:'Turn on the light.',alt:'Switch on the light.',tip:'どちらも自然。Turn on が最も一般的。'},
-{id:42,cat:'電気・スイッチ',jp:'電気を消して',sub:'照明を消す',en:'Turn off the light.',alt:'Switch off the light.',tip:'Turn off the light. が最も一般的。'},
-{id:43,cat:'電気・スイッチ',jp:'テレビをつけて',sub:'',en:'Turn on the TV.',alt:'Put the TV on.',tip:'Put the TV on. はイギリス英語でよく使われる。'},
-{id:44,cat:'電気・スイッチ',jp:'テレビを消して',sub:'',en:'Turn off the TV.',alt:'Switch off the TV.',tip:'Turn off the TV. が最も一般的。'},
-{id:45,cat:'電気・スイッチ',jp:'音量を上げて',sub:'テレビ・音楽',en:'Turn it up.',alt:'Can you turn up the volume?',tip:'Turn it up. だけで通じる。とても使いやすい。'},
-{id:46,cat:'電気・スイッチ',jp:'音量を下げて',sub:'静かにして',en:'Turn it down.',alt:'Can you lower the volume?',tip:'Turn it down. は音量だけでなく「抑えて」の意味でも使える。'},
-{id:47,cat:'電気・スイッチ',jp:'エアコンをつけて',sub:'',en:'Turn on the AC.',alt:'Put the air conditioning on.',tip:'AC は air conditioning の略。日常会話では AC が一般的。'},
-{id:48,cat:'電気・スイッチ',jp:'充電して',sub:'スマホなど',en:'Charge it.',alt:'Put it on charge.',tip:'Put it on charge. はイギリス英語。Charge it. が最も簡単。'},
-{id:49,cat:'電気・スイッチ',jp:'Wi-Fiにつないで',sub:'',en:'Connect to the Wi-Fi.',alt:'Get on the Wi-Fi.',tip:'Get on the Wi-Fi. はよりカジュアル。'},
-{id:50,cat:'電気・スイッチ',jp:'アラームをセットして',sub:'目覚まし',en:'Set an alarm.',alt:'Set your alarm for a specific time.',tip:'Set an alarm for 7. のように時間を加えるとより自然。'},
-{id:51,cat:'お風呂・トイレ',jp:'お風呂を沸かして',sub:'お湯を張る',en:'Run a bath.',alt:'Fill up the tub.',tip:'Run a bath. は「お風呂を準備する」定番表現。'},
-{id:52,cat:'お風呂・トイレ',jp:'シャワーを浴びて',sub:'',en:'Take a shower.',alt:'Have a shower.',tip:'Take a shower（米）Have a shower（英）どちらも正しい。'},
-{id:53,cat:'お風呂・トイレ',jp:'タオルを取って',sub:'',en:'Grab a towel.',alt:'Get me a towel.',tip:'Grab は「取ってくる」の口語表現。'},
-{id:54,cat:'お風呂・トイレ',jp:'石鹸を出して',sub:'補充する',en:'Refill the soap.',alt:'Put out some soap.',tip:'Refill は「補充する」。Put out は「用意する」。'},
-{id:55,cat:'お風呂・トイレ',jp:'水をとめて',sub:'蛇口・シャワー',en:'Turn off the water.',alt:'Shut off the tap.',tip:'Turn off the water. が最も汎用性が高い。'},
-{id:56,cat:'お風呂・トイレ',jp:'手を洗って',sub:'',en:'Wash your hands.',alt:'Go wash your hands.',tip:'Go wash your hands. は子供などへの指示でよく使う。'},
-{id:57,cat:'お風呂・トイレ',jp:'歯を磨いて',sub:'',en:'Brush your teeth.',alt:'Go brush your teeth.',tip:'シンプルに Brush your teeth. でOK。'},
-{id:58,cat:'お風呂・トイレ',jp:'髪を乾かして',sub:'ドライヤーで',en:'Dry your hair.',alt:'Use the hair dryer.',tip:'Dry your hair. がシンプルで自然。'},
-{id:59,cat:'お風呂・トイレ',jp:'鏡を見て',sub:'',en:'Look in the mirror.',alt:'Check yourself in the mirror.',tip:'Check yourself in the mirror. は「ちゃんと確認して」のニュアンス。'},
-{id:60,cat:'お風呂・トイレ',jp:'お湯を入れ直して',sub:'冷めたとき',en:'Reheat the bath.',alt:'Top up the hot water.',tip:'Top up は「補充する」。Top up the hot water. がネイティブらしい。'},
-{id:61,cat:'就寝・起床',jp:'もう寝て',sub:'就寝の指示',en:'Go to bed.',alt:'Time for bed.',tip:'Time for bed. は子供への定番フレーズ。大人にも使える。'},
-{id:62,cat:'就寝・起床',jp:'起きて',sub:'朝、起こす',en:'Wake up.',alt:'Get up. / Rise and shine.',tip:'Rise and shine. は「元気よく起きて」という明るい表現。'},
-{id:63,cat:'就寝・起床',jp:'電気消して寝て',sub:'',en:'Turn off the light and go to sleep.',alt:'Lights out.',tip:'Lights out. は軍隊・寮などで使われるが日常でも通じる。'},
-{id:64,cat:'就寝・起床',jp:'毛布をかけて',sub:'',en:'Put a blanket on.',alt:'Cover yourself with the blanket.',tip:'Put a blanket on. がシンプルで自然。'},
-{id:65,cat:'就寝・起床',jp:'もう少し寝ていいよ',sub:'',en:'You can sleep a little longer.',alt:'Sleep in a bit.',tip:'Sleep in は「いつもより長く寝る」。Sleep in a bit. で「もう少し寝て」。'},
-{id:66,cat:'就寝・起床',jp:'枕を整えて',sub:'',en:'Fix your pillow.',alt:'Fluff up the pillow.',tip:'Fluff up は枕を膨らませる動作。'},
-{id:67,cat:'就寝・起床',jp:'布団を干して',sub:'',en:'Air out the futon.',alt:'Put the futon out to dry.',tip:'Futon はそのまま英語になっている。'},
-{id:68,cat:'就寝・起床',jp:'カーテンを開けて',sub:'朝、明るくする',en:'Open the curtains.',alt:'Pull back the curtains.',tip:'Pull back the curtains. がよりネイティブらしい表現。'},
-{id:69,cat:'就寝・起床',jp:'静かにして',sub:'寝ている人がいる',en:'Keep it down.',alt:'Please be quiet.',tip:'Keep it down. は「音を小さくして」という日常的な表現。'},
-{id:70,cat:'就寝・起床',jp:'もうすぐ起こすよ',sub:'',en:"I'll wake you up soon.",alt:"I'll come get you in a bit.",tip:"I'll come get you in a bit. は「もうすぐ起こしに来る」という温かい表現。"},
-{id:71,cat:'着替え・身支度',jp:'着替えて',sub:'',en:'Get changed.',alt:'Change your clothes.',tip:'Get changed. がよりカジュアルで自然。'},
-{id:72,cat:'着替え・身支度',jp:'靴を履いて',sub:'',en:'Put your shoes on.',alt:'Slip on your shoes.',tip:'Slip on は「サッと履く」。Put your shoes on が基本。'},
-{id:73,cat:'着替え・身支度',jp:'上着を着て',sub:'寒いとき',en:'Put on a jacket.',alt:'Grab a jacket.',tip:'Grab a jacket. は「ジャケット持って」というニュアンスもある。'},
-{id:74,cat:'着替え・身支度',jp:'脱いで',sub:'コートなど',en:'Take it off.',alt:'Take off your coat.',tip:'Take it off. はシンプルで最もよく使われる。'},
-{id:75,cat:'着替え・身支度',jp:'ボタンを留めて',sub:'',en:'Button it up.',alt:'Do up the buttons.',tip:'Do up はイギリス英語でよく使われる。'},
-{id:76,cat:'着替え・身支度',jp:'ジッパーを上げて',sub:'',en:'Zip it up.',alt:'Do up the zipper.',tip:'Zip it up. がシンプルで一番自然。'},
-{id:77,cat:'着替え・身支度',jp:'髪を整えて',sub:'',en:'Fix your hair.',alt:'Do your hair.',tip:'Do your hair. は「ちゃんとセットして」というニュアンス。'},
-{id:78,cat:'着替え・身支度',jp:'準備して',sub:'出かける前に',en:'Get ready.',alt:'Hurry up and get ready.',tip:'Get ready. が最もシンプルで使いやすい。'},
-{id:79,cat:'着替え・身支度',jp:'荷物をまとめて',sub:'',en:'Pack your things.',alt:'Get your stuff together.',tip:'Get your stuff together. はよりカジュアルな表現。'},
-{id:80,cat:'着替え・身支度',jp:'マスクして',sub:'',en:'Put on your mask.',alt:'Wear your mask.',tip:'どちらも自然。Put on はより動作的なニュアンス。'},
-{id:81,cat:'依頼・確認',jp:'ちょっと待って',sub:'少しだけ',en:'Hang on.',alt:'Just a sec. / One moment.',tip:'Hang on. はとてもよく使われる口語表現。'},
-{id:82,cat:'依頼・確認',jp:'もう一回言って',sub:'聞き取れなかった',en:'Say that again.',alt:'Could you repeat that?',tip:'Say that again. がカジュアル。Could you repeat that? は丁寧。'},
-{id:83,cat:'依頼・確認',jp:'もっとゆっくり言って',sub:'',en:'Could you slow down?',alt:'Speak more slowly, please.',tip:'Could you slow down? がより自然な口語表現。'},
-{id:84,cat:'依頼・確認',jp:'確認してみて',sub:'',en:'Check it.',alt:'Double-check it.',tip:'Double-check は「念のため再確認する」。'},
-{id:85,cat:'依頼・確認',jp:'後で教えて',sub:'',en:'Let me know later.',alt:'Tell me later.',tip:'Let me know later. がよりネイティブらしい表現。'},
-{id:86,cat:'依頼・確認',jp:'急いで',sub:'',en:'Hurry up.',alt:"Come on, let's go.",tip:"Come on, let's go. は「さあ行くよ」という感じで自然。"},
-{id:87,cat:'依頼・確認',jp:'気をつけて',sub:'',en:'Be careful.',alt:'Watch out.',tip:'Watch out. は「危ない！」という緊急のニュアンス。Be careful. は全般的な注意。'},
-{id:88,cat:'依頼・確認',jp:'大丈夫？',sub:'',en:'You okay?',alt:'Are you alright?',tip:'You okay? はカジュアルな確認。Are you alright? は少し丁寧。'},
-{id:89,cat:'依頼・確認',jp:'手伝って',sub:'',en:'Can you help me?',alt:'Give me a hand.',tip:'Give me a hand. は口語でとてもよく使われる。'},
-{id:90,cat:'依頼・確認',jp:'そのままにしておいて',sub:'触らないで',en:"Leave it.",alt:"Don't touch it.",tip:"Leave it. はシンプルで強い指示。Don't touch it. はより明示的。"},
-{id:91,cat:'ペット・日常',jp:'ごはんあげて',sub:'ペットに',en:'Feed them.',alt:'Give them their food.',tip:'Feed them. がシンプルで一番自然。'},
-{id:92,cat:'ペット・日常',jp:'水を換えて',sub:'ペットの水',en:'Change the water.',alt:'Refill the water bowl.',tip:'Refill the water bowl. はより具体的。'},
-{id:93,cat:'ペット・日常',jp:'撫でてあげて',sub:'',en:'Give them a pat.',alt:'Pet them.',tip:'Give them a pat. は軽く撫でる感じ。Pet them. は動詞として使う。'},
-{id:94,cat:'ペット・日常',jp:'連れてきて',sub:'ペットを呼ぶ',en:'Bring them here.',alt:'Call them over.',tip:'Call them over. は「呼び寄せる」。'},
-{id:95,cat:'ペット・日常',jp:'外に出してあげて',sub:'',en:'Let them out.',alt:'Take them outside.',tip:'Let them out. は「扉を開けて出す」。Take them outside. は連れて行く感じ。'},
-{id:96,cat:'ペット・日常',jp:'植物に水をあげて',sub:'',en:'Water the plants.',alt:'Give the plants some water.',tip:'Water the plants. が最もシンプルで自然。'},
-{id:97,cat:'ペット・日常',jp:'郵便を取ってきて',sub:'',en:'Get the mail.',alt:'Grab the mail.',tip:'Grab the mail. はよりカジュアル。'},
-{id:98,cat:'ペット・日常',jp:'ドアに鍵かけて',sub:'',en:'Lock the door.',alt:'Make sure the door is locked.',tip:'Make sure the door is locked. は「ちゃんと確認して」のニュアンス。'},
-{id:99,cat:'ペット・日常',jp:'窓閉めて',sub:'',en:'Close the window.',alt:'Shut the window.',tip:'どちらも自然。Shut はより強い感じ。'},
-{id:100,cat:'ペット・日常',jp:'カメラを確認して',sub:'防犯カメラ・ドアカメラ',en:'Check the camera.',alt:'Have a look at the camera.',tip:'Have a look at the camera. は「ちょっと見てみて」のニュアンス。'}
+{id:1,cat:'🏥 病院・受診',jp:'予約を取りたいのですが',sub:'',en:"I'd like to make an appointment.",alt:'Can I book in to see a doctor?',tip:"make an appointment が正式。book in はオーストラリアでよく使われる表現。"},
+{id:2,cat:'🏥 病院・受診',jp:'しばらく前から気になっています',sub:'',en:"It's been bothering me for a while.",alt:"It started a few weeks ago.",tip:"been bothering me は「ずっと気になっている」という継続のニュアンス。"},
+{id:3,cat:'🏥 病院・受診',jp:'紹介状が必要ですか？',sub:'',en:"Do I need a referral?",alt:"Should I see a GP first?",tip:"referral はオーストラリアの医療で必須の単語。GP（一般医）からもらう。"},
+{id:4,cat:'🏥 病院・受診',jp:'自己負担はいくらですか？',sub:'',en:"What's the out-of-pocket cost?",alt:"How much will I have to pay?",tip:"out-of-pocket cost は「自己負担額」。オーストラリアの医療でよく使われる。"},
+{id:5,cat:'🏥 病院・受診',jp:'Medicareは使えますか？',sub:'',en:"Is this covered by Medicare?",alt:"Do you bulk bill?",tip:"bulk bill はMedicareで全額カバーされること。オーストラリア特有の表現。"},
+{id:6,cat:'🏥 病院・受診',jp:'待ち時間はどのくらいですか？',sub:'',en:"How long is the wait?",alt:"How long will I be waiting?",tip:"How long is the wait? がシンプルで最も自然。"},
+{id:7,cat:'🏥 病院・受診',jp:'救急に行くべきですか？',sub:'',en:"Should I go to emergency?",alt:"Is this serious enough for the ER?",tip:"emergency はオーストラリアでは emergency department とも言う。"},
+{id:8,cat:'🏥 病院・受診',jp:'もう一度診てもらいたいのですが',sub:'',en:"I'd like to get a second opinion.",alt:"Can I see another doctor about this?",tip:"second opinion は「別の医師の意見を聞く」という権利。"},
+{id:9,cat:'🏥 病院・受診',jp:'検査結果はいつ出ますか？',sub:'',en:"When will my results be ready?",alt:"How long will the results take?",tip:"results be ready が最も自然。come back も使える。"},
+{id:10,cat:'🏥 病院・受診',jp:'処方箋を書いてもらえますか？',sub:'',en:"Could you write me a prescription?",alt:"Can I get a script for that?",tip:"script はオーストラリアで処方箋の口語表現。prescription がフォーマル。"},
+{id:11,cat:'💊 薬・処方箋',jp:'これは処方箋が必要ですか？',sub:'',en:"Do I need a prescription for this?",alt:"Is this over the counter?",tip:"over the counter（OTC）は処方箋なしで買える薬のこと。"},
+{id:12,cat:'💊 薬・処方箋',jp:'食事と一緒に飲んでください',sub:'',en:"Take it with food.",alt:"Take this with a meal.",tip:"Take it with food. は薬の服用方法の定番フレーズ。"},
+{id:13,cat:'💊 薬・処方箋',jp:'1日2回飲んでください',sub:'',en:"Take it twice a day.",alt:"Two tablets a day.",tip:"twice a day / three times a day は服用回数の基本表現。"},
+{id:14,cat:'💊 薬・処方箋',jp:'副作用はありますか？',sub:'',en:"Are there any side effects?",alt:"What should I watch out for?",tip:"side effects は副作用。What should I watch out for? は幅広く使える。"},
+{id:15,cat:'💊 薬・処方箋',jp:'この薬はいつまで飲みますか？',sub:'',en:"How long do I need to take this?",alt:"When can I stop taking it?",tip:"How long do I need to take this? が最も自然な質問。"},
+{id:16,cat:'💊 薬・処方箋',jp:'ジェネリックはありますか？',sub:'',en:"Is there a generic version?",alt:"Is there a cheaper alternative?",tip:"generic は「ジェネリック医薬品」。オーストラリアでも generic で通じる。"},
+{id:17,cat:'💊 薬・処方箋',jp:'他の薬との飲み合わせは大丈夫ですか？',sub:'',en:"Is this okay to take with other medications?",alt:"Are there any drug interactions?",tip:"drug interactions は「薬の相互作用」の医療用語。"},
+{id:18,cat:'💊 薬・処方箋',jp:'薬を補充したいのですが',sub:'',en:"I need to refill my prescription.",alt:"Can I get a repeat prescription?",tip:"refill は「補充する」。repeat prescription はオーストラリアでよく使われる。"},
+{id:19,cat:'💊 薬・処方箋',jp:'アレルギーがあります',sub:'',en:"I have an allergy to this.",alt:"I'm allergic to penicillin.",tip:"I'm allergic to ... が最も直接的。アレルゲンの名前を入れて使う。"},
+{id:20,cat:'💊 薬・処方箋',jp:'鎮痛剤をください',sub:'',en:"Can I get something for the pain?",alt:"Do you have any pain relief?",tip:"pain relief は「鎮痛剤」の口語表現。painkillers も使える。"},
+{id:21,cat:'🤒 症状を伝える',jp:'頭が痛い',sub:'',en:"I have a headache.",alt:"My head is pounding.",tip:"My head is pounding. は「頭がズキズキする」という強い痛みの表現。"},
+{id:22,cat:'🤒 症状を伝える',jp:'気持ち悪い',sub:'',en:"I feel nauseous.",alt:"I feel like I'm going to be sick.",tip:"nauseous は「吐き気がする」。I feel sick. もよく使われる。"},
+{id:23,cat:'🤒 症状を伝える',jp:'熱があります',sub:'',en:"I have a fever.",alt:"I'm running a temperature.",tip:"running a temperature はよりネイティブらしい表現。"},
+{id:24,cat:'🤒 症状を伝える',jp:'喉が痛い',sub:'',en:"I have a sore throat.",alt:"My throat is killing me.",tip:"My throat is killing me. は「とても痛い」というカジュアルな表現。"},
+{id:25,cat:'🤒 症状を伝える',jp:'めまいがします',sub:'',en:"I feel dizzy.",alt:"The room is spinning.",tip:"The room is spinning. は回転性めまいの表現。"},
+{id:26,cat:'🤒 症状を伝える',jp:'息切れがします',sub:'',en:"I'm short of breath.",alt:"I get winded easily.",tip:"short of breath が医療での正式表現。get winded はよりカジュアル。"},
+{id:27,cat:'🤒 症状を伝える',jp:'お腹が痛い',sub:'',en:"I have a stomach ache.",alt:"My stomach is really bothering me.",tip:"stomach ache がシンプル。abdominal pain はよりフォーマル。"},
+{id:28,cat:'🤒 症状を伝える',jp:'関節が痛い',sub:'',en:"My joints are aching.",alt:"I have pain in my joints.",tip:"aching は鈍い持続する痛み。sharp pain は鋭い痛み。"},
+{id:29,cat:'🤒 症状を伝える',jp:'咳が止まらない',sub:'',en:"I can't stop coughing.",alt:"I have a persistent cough.",tip:"persistent は「しつこい・続く」。I can't stop coughing. がより口語的。"},
+{id:30,cat:'🤒 症状を伝える',jp:'ずっと疲れています',sub:'',en:"I've been feeling exhausted.",alt:"I'm constantly tired.",tip:"exhausted は tired より強い疲労感。constantly は「ずっと・常に」。"},
+{id:31,cat:'🦷 歯医者',jp:'歯が痛い',sub:'',en:"I have a toothache.",alt:"My tooth is really hurting.",tip:"toothache は歯痛の定番表現。My tooth is killing me. も使える。"},
+{id:32,cat:'🦷 歯医者',jp:'歯茎から血が出ます',sub:'',en:"My gums are bleeding.",alt:"I have bleeding gums.",tip:"gums は「歯茎」。bleeding gums は歯周病のサインとして伝わる。"},
+{id:33,cat:'🦷 歯医者',jp:'詰め物が取れました',sub:'',en:"My filling fell out.",alt:"I've lost a filling.",tip:"filling は「詰め物」。fell out / lost どちらも自然。"},
+{id:34,cat:'🦷 歯医者',jp:'歯が欠けました',sub:'',en:"I chipped my tooth.",alt:"Part of my tooth broke off.",tip:"chipped は「欠けた」。broke off は「折れた・取れた」。"},
+{id:35,cat:'🦷 歯医者',jp:'歯がしみます',sub:'',en:"My teeth are sensitive.",alt:"I get sharp pain when I eat something cold.",tip:"sensitive は「知覚過敏」。sensitive teeth はそのまま通じる。"},
+{id:36,cat:'🦷 歯医者',jp:'麻酔をしてもらえますか？',sub:'',en:"Can I have a local anaesthetic?",alt:"Can you numb it first?",tip:"numb it は「麻痺させる・感覚をなくす」という口語表現。"},
+{id:37,cat:'🦷 歯医者',jp:'定期検診をしたいのですが',sub:'',en:"I'd like a routine check-up.",alt:"I'm due for a clean and check.",tip:"clean and check はオーストラリアの歯医者でよく使われる表現。"},
+{id:38,cat:'🦷 歯医者',jp:'親知らずが痛い',sub:'',en:"My wisdom teeth are hurting.",alt:"I think I need my wisdom teeth out.",tip:"wisdom teeth は「親知らず」。get them out は「抜く」。"},
+{id:39,cat:'🦷 歯医者',jp:'歯ぎしりをします',sub:'',en:"I grind my teeth at night.",alt:"I think I have bruxism.",tip:"bruxism は歯ぎしりの医療用語。grind my teeth がより口語的。"},
+{id:40,cat:'🦷 歯医者',jp:'歯のホワイトニングに興味があります',sub:'',en:"I'm interested in teeth whitening.",alt:"Can you tell me about whitening options?",tip:"teeth whitening はそのまま通じる。options を聞くと選択肢が広がる。"},
+{id:41,cat:'🧘 健康習慣',jp:'毎日動くようにしています',sub:'',en:"I try to stay active every day.",alt:"I make sure to move my body daily.",tip:"stay active は「活動的でいる」。move my body はよりカジュアル。"},
+{id:42,cat:'🧘 健康習慣',jp:'水をたくさん飲むようにしています',sub:'',en:"I drink plenty of water.",alt:"I try to stay hydrated.",tip:"stay hydrated は「水分を保つ」という健康的な表現。"},
+{id:43,cat:'🧘 健康習慣',jp:'定期的に運動しています',sub:'',en:"I exercise regularly.",alt:"I work out most days.",tip:"work out はカジュアルで「運動する」。most days は「ほとんど毎日」。"},
+{id:44,cat:'🧘 健康習慣',jp:'ストレスを管理しようとしています',sub:'',en:"I'm trying to manage my stress.",alt:"I'm working on reducing stress.",tip:"manage stress は健康に関する会話でよく出る表現。"},
+{id:45,cat:'🧘 健康習慣',jp:'瞑想をしています',sub:'',en:"I meditate regularly.",alt:"I do mindfulness practice.",tip:"mindfulness practice はより広い瞑想・マインドフルネスの概念。"},
+{id:46,cat:'🧘 健康習慣',jp:'毎日歩くようにしています',sub:'',en:"I try to walk every day.",alt:"I get my steps in daily.",tip:"get my steps in は「歩数を稼ぐ」というカジュアルな表現。"},
+{id:47,cat:'🧘 健康習慣',jp:'アルコールを控えています',sub:'',en:"I'm cutting back on alcohol.",alt:"I'm trying to drink less.",tip:"cutting back on は「〜を減らす」。cutting out は「完全にやめる」。"},
+{id:48,cat:'🧘 健康習慣',jp:'禁煙しました',sub:'',en:"I quit smoking.",alt:"I gave up cigarettes.",tip:"quit smoking が最も一般的。gave up はよりカジュアル。"},
+{id:49,cat:'🧘 健康習慣',jp:'定期的に健診を受けています',sub:'',en:"I get regular check-ups.",alt:"I see my doctor for routine checks.",tip:"regular check-ups は予防医療の観点から大切な習慣。"},
+{id:50,cat:'🧘 健康習慣',jp:'規則正しい睡眠リズムを心がけています',sub:'',en:"I keep a consistent sleep schedule.",alt:"I try to go to bed and wake up at the same time.",tip:"consistent sleep schedule は「規則正しい睡眠リズム」。"},
+{id:51,cat:'🥗 食事・栄養',jp:'食事に気をつけています',sub:'',en:"I eat pretty clean.",alt:"I try to eat well.",tip:"eat clean は「添加物・加工食品を避けてシンプルに食べる」という意味。"},
+{id:52,cat:'🥗 食事・栄養',jp:'砂糖を減らしています',sub:'',en:"I'm cutting back on sugar.",alt:"I try to avoid refined sugar.",tip:"refined sugar は「精製された砂糖」。cutting back on は「減らす」。"},
+{id:53,cat:'🥗 食事・栄養',jp:'野菜をたくさん食べています',sub:'',en:"I eat a lot of vegetables.",alt:"I load up on veggies.",tip:"load up on は「たっぷり食べる・取り込む」というカジュアルな表現。"},
+{id:54,cat:'🥗 食事・栄養',jp:'タンパク質を意識しています',sub:'',en:"I focus on getting enough protein.",alt:"I make sure I'm hitting my protein goals.",tip:"hitting my protein goals は「たんぱく質の目標量を達成する」というフィットネス表現。"},
+{id:55,cat:'🥗 食事・栄養',jp:'加工食品を避けています',sub:'',en:"I avoid processed food.",alt:"I try to eat whole foods.",tip:"whole foods は「加工されていない自然食品」。"},
+{id:56,cat:'🥗 食事・栄養',jp:'グルテンフリーにしています',sub:'',en:"I'm gluten-free.",alt:"I don't eat gluten.",tip:"I'm gluten-free. はシンプルで最も伝わりやすい表現。"},
+{id:57,cat:'🥗 食事・栄養',jp:'ビーガンです',sub:'',en:"I'm vegan.",alt:"I don't eat any animal products.",tip:"I'm vegan. だけで伝わる。詳しく聞かれたら I don't eat any animal products. と説明。"},
+{id:58,cat:'🥗 食事・栄養',jp:'食物アレルギーがあります',sub:'',en:"I have a food allergy.",alt:"I'm allergic to nuts.",tip:"I'm allergic to ... でアレルゲンを伝える。ナッツ・乳製品・卵など具体的に。"},
+{id:59,cat:'🥗 食事・栄養',jp:'腸活をしています',sub:'',en:"I'm working on my gut health.",alt:"I eat a lot of fermented foods.",tip:"gut health は「腸の健康」。fermented foods は「発酵食品」。"},
+{id:60,cat:'🥗 食事・栄養',jp:'食べ過ぎてしまった',sub:'',en:"I overdid it.",alt:"I ate way too much.",tip:"I overdid it. は食べ過ぎ以外にも「やりすぎた」全般に使える便利な表現。"},
+{id:61,cat:'⚡ ファスティング',jp:'間欠的断食をしています',sub:'',en:"I do intermittent fasting.",alt:"I practice IF.",tip:"IF は intermittent fasting の略。フィットネス界では IF だけで通じる。"},
+{id:62,cat:'⚡ ファスティング',jp:'ファスティング中です',sub:'',en:"I'm in a fasting window.",alt:"I'm currently fasting.",tip:"fasting window は「断食時間帯」。I'm fasting. がよりシンプル。"},
+{id:63,cat:'⚡ ファスティング',jp:'16時間断食をしています',sub:'',en:"I do a 16-hour fast.",alt:"I fast for 16 hours a day.",tip:"16:8（16時間断食・8時間食事）が最もポピュラーなIFプロトコル。"},
+{id:64,cat:'⚡ ファスティング',jp:'食事の時間帯を決めています',sub:'',en:"I have an eating window.",alt:"I only eat between noon and eight.",tip:"eating window は「食事できる時間帯」。時間を具体的に言うとより伝わる。"},
+{id:65,cat:'⚡ ファスティング',jp:'断食中は水だけ飲みます',sub:'',en:"I only drink water during my fast.",alt:"I stick to water and black coffee.",tip:"stick to は「〜だけにする」。black coffee（ブラックコーヒー）は断食を破らない。"},
+{id:66,cat:'⚡ ファスティング',jp:'ファスティングが体に合っています',sub:'',en:"Fasting works really well for me.",alt:"My body responds well to fasting.",tip:"works well for me は「自分に合っている」。responds well はより体の反応を表す。"},
+{id:67,cat:'⚡ ファスティング',jp:'最初は空腹感がありました',sub:'',en:"At first I felt really hungry.",alt:"The hunger pangs were tough at the start.",tip:"hunger pangs は「空腹の痛み・空腹感」。at the start は「最初は」。"},
+{id:68,cat:'⚡ ファスティング',jp:'今は空腹を感じにくくなりました',sub:'',en:"I don't feel as hungry anymore.",alt:"My hunger has regulated itself.",tip:"regulated itself は「自然に調整された」。ホルモンが整った状態。"},
+{id:69,cat:'⚡ ファスティング',jp:'断食を早まって終わらせないようにしています',sub:'',en:"I try not to break my fast early.",alt:"I stick to my fasting schedule.",tip:"break my fast は「断食を終える」。breakfast（朝食）の語源。"},
+{id:70,cat:'⚡ ファスティング',jp:'食事を再開するときは消化の良いものから',sub:'',en:"I break my fast with something easy to digest.",alt:"I start with something light.",tip:"easy to digest は「消化しやすい」。start with something light も自然。"},
+{id:71,cat:'😴 睡眠・回復',jp:'最近よく眠れていません',sub:'',en:"I've been sleeping poorly lately.",alt:"My sleep has been terrible.",tip:"sleeping poorly は「質の悪い睡眠」。My sleep is terrible. もよく使われる。"},
+{id:72,cat:'😴 睡眠・回復',jp:'なかなか寝付けません',sub:'',en:"I have trouble falling asleep.",alt:"It takes me ages to fall asleep.",tip:"it takes me ages は「時間がかかる」というカジュアルな表現。"},
+{id:73,cat:'😴 睡眠・回復',jp:'夜中に目が覚めます',sub:'',en:"I keep waking up in the middle of the night.",alt:"I wake up several times a night.",tip:"keep -ing は「繰り返し〜する」。不眠の定番表現。"},
+{id:74,cat:'😴 睡眠・回復',jp:'ぐっすり眠れました',sub:'',en:"I slept really well.",alt:"I had a great night's sleep.",tip:"a great night's sleep は「良い睡眠」の定番表現。"},
+{id:75,cat:'😴 睡眠・回復',jp:'もっと休む必要があります',sub:'',en:"I need to rest up.",alt:"I really need some downtime.",tip:"rest up は「しっかり休む」。downtime は「休息・オフの時間」。"},
+{id:76,cat:'😴 睡眠・回復',jp:'回復に時間がかかっています',sub:'',en:"I'm taking a while to recover.",alt:"My body is taking longer than usual to bounce back.",tip:"bounce back は「回復する」というカジュアルな表現。"},
+{id:77,cat:'😴 睡眠・回復',jp:'睡眠の質を上げたいです',sub:'',en:"I want to improve my sleep quality.",alt:"I'm working on getting better sleep.",tip:"sleep quality は「睡眠の質」。improve / get better どちらも自然。"},
+{id:78,cat:'😴 睡眠・回復',jp:'昼寝をするようにしています',sub:'',en:"I try to take a nap during the day.",alt:"I sneak in a nap when I can.",tip:"sneak in a nap は「隙を見て昼寝する」というカジュアルな表現。"},
+{id:79,cat:'😴 睡眠・回復',jp:'寝る前にスクリーンを見ないようにしています',sub:'',en:"I try to avoid screens before bed.",alt:"I put my phone away before sleeping.",tip:"avoid screens before bed は睡眠の質を上げる定番アドバイス。"},
+{id:80,cat:'😴 睡眠・回復',jp:'今日は早く寝ます',sub:'',en:"I'm going to have an early night.",alt:"I'm turning in early tonight.",tip:"early night は「早寝」。turning in は「就寝する」のカジュアル表現。"},
+{id:81,cat:'🧪 検査・結果',jp:'血液検査をしました',sub:'',en:"I had some blood work done.",alt:"I got my blood tested.",tip:"blood work は「血液検査」。had it done は「してもらった」という受身。"},
+{id:82,cat:'🧪 検査・結果',jp:'結果は正常でした',sub:'',en:"My results came back normal.",alt:"Everything came back clear.",tip:"came back normal / clear はどちらも「正常だった」という定番表現。"},
+{id:83,cat:'🧪 検査・結果',jp:'コレステロールが高めです',sub:'',en:"My cholesterol is a bit high.",alt:"My cholesterol levels are elevated.",tip:"elevated は「上昇している」というやや医療的な表現。"},
+{id:84,cat:'🧪 検査・結果',jp:'ビタミンDが不足しています',sub:'',en:"I'm low in vitamin D.",alt:"My vitamin D levels are deficient.",tip:"low in / deficient in どちらも「不足している」。low in がよりカジュアル。"},
+{id:85,cat:'🧪 検査・結果',jp:'貧血気味です',sub:'',en:"I'm a bit anaemic.",alt:"My iron levels are low.",tip:"anaemic はオーストラリア英語のスペル（米: anemic）。iron levels low も同義。"},
+{id:86,cat:'🧪 検査・結果',jp:'血圧が高いです',sub:'',en:"My blood pressure is high.",alt:"I've been diagnosed with hypertension.",tip:"hypertension は高血圧の医療用語。blood pressure is high がより口語的。"},
+{id:87,cat:'🧪 検査・結果',jp:'甲状腺の検査をしました',sub:'',en:"I had my thyroid checked.",alt:"I got a thyroid function test.",tip:"thyroid function test は甲状腺機能検査の正式名称。"},
+{id:88,cat:'🧪 検査・結果',jp:'もう一度検査が必要です',sub:'',en:"I need to get retested.",alt:"I have to go back for more tests.",tip:"retested は「再検査」。go back for more tests もよく使われる。"},
+{id:89,cat:'🧪 検査・結果',jp:'専門医に紹介されました',sub:'',en:"I've been referred to a specialist.",alt:"My GP sent me to see a specialist.",tip:"referred to a specialist は「専門医に紹介された」。GP からの紹介が必要。"},
+{id:90,cat:'🧪 検査・結果',jp:'経過観察になっています',sub:'',en:"I'm being monitored.",alt:"I have to go back for follow-up checks.",tip:"monitored は「経過観察されている」。follow-up checks は「経過確認の検査」。"},
+{id:91,cat:'💪 体調管理・メンタル',jp:'最近体調が優れません',sub:'',en:"I've been feeling run down.",alt:"I haven't been feeling my best.",tip:"run down は「疲れ果てた・体力が落ちた」。"},
+{id:92,cat:'💪 体調管理・メンタル',jp:'体が重い感じがします',sub:'',en:"My body feels heavy.",alt:"I feel sluggish.",tip:"sluggish は「だるい・重い・動きが鈍い」。体調不良の定番表現。"},
+{id:93,cat:'💪 体調管理・メンタル',jp:'メンタルヘルスを大切にしています',sub:'',en:"I prioritize my mental health.",alt:"I take my mental health seriously.",tip:"prioritize は「優先する」。mental health は現代の健康会話に欠かせない語彙。"},
+{id:94,cat:'💪 体調管理・メンタル',jp:'バーンアウト気味です',sub:'',en:"I'm feeling burnt out.",alt:"I think I'm burning out.",tip:"burnt out / burning out は「燃え尽きた・燃え尽きかけている」。"},
+{id:95,cat:'💪 体調管理・メンタル',jp:'自分を大切にしています',sub:'',en:"I make time for self-care.",alt:"I prioritize looking after myself.",tip:"self-care は「自己ケア」。make time for は「時間を作る」。"},
+{id:96,cat:'💪 体調管理・メンタル',jp:'カウンセリングを受けています',sub:'',en:"I'm seeing a therapist.",alt:"I'm getting some counselling.",tip:"seeing a therapist はカジュアルで自然。counselling もよく使われる。"},
+{id:97,cat:'💪 体調管理・メンタル',jp:'少し落ち込んでいます',sub:'',en:"I've been feeling a bit low.",alt:"I'm going through a rough patch.",tip:"a rough patch は「つらい時期・スランプ」。feeling low は軽い抑うつ感。"},
+{id:98,cat:'💪 体調管理・メンタル',jp:'ゆっくり休むことにしました',sub:'',en:"I've decided to take it easy.",alt:"I'm giving myself permission to rest.",tip:"take it easy は「ゆっくりする」。giving myself permission は「自分に許可する」という表現。"},
+{id:99,cat:'💪 体調管理・メンタル',jp:'体の声を聞くようにしています',sub:'',en:"I try to listen to my body.",alt:"I pay attention to what my body needs.",tip:"listen to my body は「体のシグナルに従う」という健康的な考え方。"},
+{id:100,cat:'💪 体調管理・メンタル',jp:'少しずつよくなっています',sub:'',en:"I'm slowly getting better.",alt:"I'm on the mend.",tip:"on the mend は「回復途中」のネイティブらしい慣用表現。"}
 ];
 const CATS=[...new Set(PHRASES.map(p=>p.cat))];
-const CAT_COLORS={'移動・位置':'#c8962a','物の操作':'#4a7c59','料理・台所':'#a03030','掃除・整理':'#3d5a8a','電気・スイッチ':'#7a5a2a','お風呂・トイレ':'#2a7a7a','就寝・起床':'#5a2a7a','着替え・身支度':'#7a2a5a','依頼・確認':'#2a5a2a','ペット・日常':'#c8962a'};
+const CAT_COLORS={'🏥 病院・受診':'#a03030','💊 薬・処方箋':'#3d5a8a','🤒 症状を伝える':'#c86a2a','🦷 歯医者':'#5a5a7a','🧘 健康習慣':'#4a7c59','🥗 食事・栄養':'#2a7a5a','⚡ ファスティング':'#7a5a2a','😴 睡眠・回復':'#5a2a7a','🧪 検査・結果':'#2a5a7a','💪 体調管理・メンタル':'#7a2a5a'};
 
 let gApiKey = localStorage.getItem('g_tts_key') || '';
 let currentAudio = null;
@@ -618,8 +618,8 @@ async function playPhrase(en) {
 }
 
 // ===================== STATE =====================
-let mastered = new Set(JSON.parse(localStorage.getItem('hd_mastered') || '[]'));
-let wrong = new Set(JSON.parse(localStorage.getItem('hd_wrong') || '[]'));
+let mastered = new Set(JSON.parse(localStorage.getItem('hlth_mastered') || '[]'));
+let wrong = new Set(JSON.parse(localStorage.getItem('hlth_wrong') || '[]'));
 let queue = [], qIdx = 0, isRevealed = false;
 let currentMode = 'normal', selectedCat = 'all';
 let sessionOk = 0, sessionNg = 0;
@@ -627,8 +627,8 @@ let timerInterval = null, timerLeft = 3;
 let loopCounts = {};
 
 function save() {
-  localStorage.setItem('hd_mastered', JSON.stringify([...mastered]));
-  localStorage.setItem('hd_wrong', JSON.stringify([...wrong]));
+  localStorage.setItem('hlth_mastered', JSON.stringify([...mastered]));
+  localStorage.setItem('hlth_wrong', JSON.stringify([...wrong]));
 }
 function updateHeader() { document.getElementById('h-mastered').textContent = mastered.size; }
 
