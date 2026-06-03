@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Small Talk Training｜職場の雑談英語</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+  :root {
+    --bg: #f5f0e8;
+    --surface: #fffdf8;
+    --accent: #c8622a;
+    --accent2: #2a6b8a;
+    --text: #1a1208;
+    --muted: #8a7a5a;
+    --border: #d9ceb8;
+    --card-bg: #fffdf8;
+    --tag-bg: #e8dfc8;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 16px;
+  }
+
+  /* HEADER */
+  .header {
+    text-align: center;
+    padding: 24px 16px 16px;
+    position: relative;
+  }
+  .header-en {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2rem;
+    color: var(--accent);
+    line-height: 1.1;
+  }
+  .header-ja {
+    font-size: 0.78rem;
+    color: var(--muted);
+    letter-spacing: 0.15em;
+    margin-top: 4px;
+  }
+  .header-decoration {
+    width: 40px;
+    height: 2px;
+    background: var(--accent);
+    margin: 12px auto;
+  }
+
+  /* TABS */
+  .tabs {
+    display: flex;
+    background: var(--surface);
+    border-radius: 12px;
+    padding: 4px;
+    margin-bottom: 16px;
+    border: 1px solid var(--border);
+    gap: 2px;
+  }
+  .tab {
+    flex: 1;
+    padding: 8px 4px;
+    text-align: center;
+    font-size: 0.72rem;
+    font-weight: 500;
+    border-radius: 9px;
+    cursor: pointer;
+    color: var(--muted);
+    transition: all 0.2s;
+    border: none;
+    background: none;
+  }
+  .tab.active {
+    background: var(--accent);
+    color: white;
+  }
+
+  /* MODE BAR */
+  .mode-bar {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 14px;
+    overflow-x: auto;
+    padding-bottom: 2px;
+    scrollbar-width: none;
+  }
+  .mode-bar::-webkit-scrollbar { display: none; }
+  .mode-btn {
+    flex-shrink: 0;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.72rem;
+    font-weight: 500;
+    border: 1.5px solid var(--border);
+    background: var(--surface);
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .mode-btn.active {
+    background: var(--accent2);
+    border-color: var(--accent2);
+    color: white;
+  }
+
+  /* CATEGORY FILTER */
+  .category-scroll {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    margin-bottom: 14px;
+    scrollbar-width: none;
+  }
+  .category-scroll::-webkit-scrollbar { display: none; }
+  .cat-btn {
+    flex-shrink: 0;
+    padding: 5px 12px;
+    border-radius: 16px;
+    font-size: 0.7rem;
+    border: 1.5px solid var(--border);
+    background: var(--surface);
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .cat-btn.active {
+    background: var(--tag-bg);
+    border-color: var(--accent);
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  /* STATS */
+  .stats-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    background: var(--surface);
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    margin-bottom: 14px;
+    font-size: 0.72rem;
+    color: var(--muted);
+  }
+  .stats-bar strong { color: var(--accent); }
+
+  /* CARD */
+  .card-wrap {
+    perspective: 1000px;
+    margin-bottom: 14px;
+  }
+  .card {
+    background: var(--card-bg);
+    border-radius: 18px;
+    border: 1.5px solid var(--border);
+    padding: 28px 22px 22px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    transition: transform 0.15s ease;
+  }
+  .card:active { transform: scale(0.98); }
+
+  .card-category {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: var(--tag-bg);
+    padding: 3px 10px;
+    border-radius: 12px;
+  }
+  .card-num {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    font-size: 0.65rem;
+    color: var(--muted);
+  }
+  .card-en {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.4rem;
+    line-height: 1.4;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+  .card-context {
+    font-size: 0.7rem;
+    color: var(--muted);
+    font-style: italic;
+    margin-bottom: 12px;
+  }
+  .card-ja {
+    font-size: 0.9rem;
+    color: var(--accent2);
+    font-weight: 500;
+    padding-top: 12px;
+    border-top: 1px dashed var(--border);
+    width: 100%;
+    display: none;
+  }
+  .card-ja.visible { display: block; }
+
+  .card-note {
+    font-size: 0.68rem;
+    color: var(--muted);
+    margin-top: 8px;
+    display: none;
+    line-height: 1.6;
+  }
+  .card-note.visible { display: block; }
+
+  /* SOUND BTN - only after reveal */
+  .sound-btn {
+    display: none;
+    margin-top: 12px;
+    padding: 8px 20px;
+    background: var(--accent2);
+    color: white;
+    border: none;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    cursor: pointer;
+    gap: 6px;
+    align-items: center;
+    transition: opacity 0.2s;
+  }
+  .sound-btn.visible {
+    display: inline-flex;
+  }
+  .sound-btn:active { opacity: 0.7; }
+
+  /* REVEAL BTN */
+  .reveal-btn {
+    width: 100%;
+    padding: 14px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 14px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-bottom: 10px;
+    transition: opacity 0.2s;
+  }
+  .reveal-btn:active { opacity: 0.8; }
+
+  /* NAV */
+  .nav-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+  .nav-btn {
+    flex: 1;
+    padding: 12px;
+    border-radius: 12px;
+    border: 1.5px solid var(--border);
+    background: var(--surface);
+    font-size: 0.82rem;
+    font-weight: 500;
+    cursor: pointer;
+    color: var(--text);
+    transition: all 0.15s;
+  }
+  .nav-btn:active { background: var(--tag-bg); }
+  .nav-btn.primary {
+    background: var(--text);
+    color: white;
+    border-color: var(--text);
+  }
+
+  /* TIMER */
+  .timer-bar-wrap {
+    height: 6px;
+    background: var(--border);
+    border-radius: 3px;
+    margin-bottom: 14px;
+    overflow: hidden;
+    display: none;
+  }
+  .timer-bar-wrap.visible { display: block; }
+  .timer-bar {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 3px;
+    transition: width 0.1s linear;
+  }
+
+  /* VOICE SELECT */
+  .voice-row {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 14px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .voice-label { font-size: 0.7rem; color: var(--muted); }
+  .voice-option {
+    padding: 4px 12px;
+    border-radius: 14px;
+    border: 1.5px solid var(--border);
+    background: var(--surface);
+    font-size: 0.7rem;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .voice-option.active {
+    background: var(--accent2);
+    border-color: var(--accent2);
+    color: white;
+  }
+
+  /* LIST TAB */
+  .list-wrap { display: none; }
+  .list-wrap.visible { display: block; }
+  .list-search {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1.5px solid var(--border);
+    background: var(--surface);
+    font-size: 0.82rem;
+    margin-bottom: 12px;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text);
+    outline: none;
+  }
+  .list-item {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 14px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  .list-item-text { flex: 1; }
+  .list-item-en {
+    font-family: 'DM Serif Display', serif;
+    font-size: 0.95rem;
+    color: var(--text);
+    margin-bottom: 3px;
+  }
+  .list-item-ja { font-size: 0.75rem; color: var(--muted); }
+  .list-item-cat {
+    font-size: 0.6rem;
+    color: var(--accent);
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+  .list-sound {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--accent2);
+    color: white;
+    border: none;
+    font-size: 0.9rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* PROGRESS */
+  .progress-section {
+    background: var(--surface);
+    border-radius: 14px;
+    border: 1.5px solid var(--border);
+    padding: 16px;
+    margin-bottom: 14px;
+  }
+  .progress-title {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+  .progress-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .progress-item {
+    background: var(--bg);
+    border-radius: 10px;
+    padding: 10px;
+    text-align: center;
+  }
+  .progress-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.5rem;
+    color: var(--accent);
+  }
+  .progress-label { font-size: 0.65rem; color: var(--muted); }
+
+  .reset-btn {
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1.5px solid var(--border);
+    background: none;
+    color: var(--muted);
+    font-size: 0.75rem;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+
+  /* API KEY */
+  .api-section {
+    background: var(--surface);
+    border-radius: 14px;
+    border: 1.5px solid var(--border);
+    padding: 14px;
+    margin-bottom: 14px;
+  }
+  .api-label { font-size: 0.72rem; color: var(--muted); margin-bottom: 6px; }
+  .api-input {
+    width: 100%;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1.5px solid var(--border);
+    background: var(--bg);
+    font-size: 0.78rem;
+    font-family: monospace;
+    color: var(--text);
+    outline: none;
+    margin-bottom: 6px;
+  }
+  .api-save {
+    padding: 7px 16px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    cursor: pointer;
+  }
+  .api-status { font-size: 0.7rem; color: var(--muted); margin-top: 4px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-en">Small Talk Training</div>
+  <div class="header-ja">職場の雑談・英会話 瞬間反射トレーニング</div>
+  <div class="header-decoration"></div>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('train')">🃏 トレーニング</button>
+  <button class="tab" onclick="switchTab('list')">📋 フレーズ一覧</button>
+  <button class="tab" onclick="switchTab('progress')">📊 進捗</button>
+  <button class="tab" onclick="switchTab('settings')">⚙️ 設定</button>
+</div>
+
+<!-- TRAIN TAB -->
+<div id="tab-train">
+  <!-- MODE -->
+  <div class="mode-bar">
+    <button class="mode-btn active" onclick="setMode('normal')" id="mode-normal">通常</button>
+    <button class="mode-btn" onclick="setMode('timer')" id="mode-timer">⏱ タイマー</button>
+    <button class="mode-btn" onclick="setMode('loop')" id="mode-loop">🔁 ループ</button>
+    <button class="mode-btn" onclick="setMode('review')" id="mode-review">⭐ 復習</button>
+  </div>
+
+  <!-- VOICE -->
+  <div class="voice-row">
+    <span class="voice-label">声：</span>
+    <button class="voice-option active" onclick="setVoice('Rachel')" id="v-Rachel">Rachel</button>
+    <button class="voice-option" onclick="setVoice('Adam')" id="v-Adam">Adam</button>
+    <button class="voice-option" onclick="setVoice('Bella')" id="v-Bella">Bella</button>
+  </div>
+
+  <!-- CATEGORY -->
+  <div class="category-scroll" id="cat-filter"></div>
+
+  <!-- STATS -->
+  <div class="stats-bar">
+    <span id="stat-current">1 / 100</span>
+    <span id="stat-reviewed">復習済み: <strong>0</strong></span>
+    <span id="stat-mode-label">通常モード</span>
+  </div>
+
+  <!-- TIMER BAR -->
+  <div class="timer-bar-wrap" id="timer-bar-wrap">
+    <div class="timer-bar" id="timer-bar" style="width:100%"></div>
+  </div>
+
+  <!-- CARD -->
+  <div class="card-wrap">
+    <div class="card" id="main-card">
+      <div class="card-category" id="card-cat"></div>
+      <div class="card-num" id="card-num"></div>
+      <div class="card-en" id="card-en"></div>
+      <div class="card-context" id="card-context"></div>
+      <div class="card-ja" id="card-ja"></div>
+      <div class="card-note" id="card-note"></div>
+      <button class="sound-btn" id="sound-btn" onclick="speakCurrent()">🔊 聞く</button>
+    </div>
+  </div>
+
+  <button class="reveal-btn" id="reveal-btn" onclick="reveal()">日本語を見る</button>
+
+  <div class="nav-row">
+    <button class="nav-btn" onclick="prevCard()">← 前へ</button>
+    <button class="nav-btn" onclick="toggleReview()" id="star-btn">☆ 復習</button>
+    <button class="nav-btn primary" onclick="nextCard()">次へ →</button>
+  </div>
+</div>
+
+<!-- LIST TAB -->
+<div id="tab-list" class="list-wrap">
+  <input class="list-search" type="text" placeholder="フレーズを検索..." oninput="filterList(this.value)" id="list-search">
+  <div id="list-container"></div>
+</div>
+
+<!-- PROGRESS TAB -->
+<div id="tab-progress" style="display:none;">
+  <div class="progress-section">
+    <div class="progress-title">学習状況</div>
+    <div class="progress-grid">
+      <div class="progress-item">
+        <div class="progress-num" id="p-total">100</div>
+        <div class="progress-label">総フレーズ数</div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-num" id="p-seen">0</div>
+        <div class="progress-label">閲覧済み</div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-num" id="p-review">0</div>
+        <div class="progress-label">復習マーク</div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-num" id="p-pct">0%</div>
+        <div class="progress-label">完了率</div>
+      </div>
+    </div>
+    <button class="reset-btn" onclick="resetProgress()">🔄 進捗をリセット</button>
+  </div>
+</div>
+
+<!-- SETTINGS TAB -->
+<div id="tab-settings" style="display:none;">
+  <div class="api-section">
+    <div class="api-label">🔑 ElevenLabs API Key</div>
+    <input class="api-input" type="password" id="api-key-input" placeholder="sk-...">
+    <button class="api-save" onclick="saveApiKey()">保存</button>
+    <div class="api-status" id="api-status"></div>
+  </div>
+  <div class="api-section">
+    <div class="api-label">⏱ タイマー設定（秒）</div>
+    <input class="api-input" type="number" id="timer-sec" value="5" min="3" max="15" style="width:100px;">
+    <button class="api-save" onclick="saveTimer()">保存</button>
+  </div>
+</div>
+
+<script>
+const STORAGE_KEY = 'smalltalk_v1';
+
+const phrases = [
+  // 1. 週末の話題
+  { en: "How was your weekend?", ja: "週末どうだった？", ctx: "月曜日の定番", cat: "週末の話題", note: "👂 Australianは'How was ya weekend?'と略すことも" },
+  { en: "Did you get up to much on the weekend?", ja: "週末は何かしてた？", ctx: "カジュアルな聞き方", cat: "週末の話題", note: "👂 'get up to' = 〜をして過ごす（豪英語）" },
+  { en: "I just had a quiet one, honestly.", ja: "正直、静かに過ごしたよ。", ctx: "週末の返答", cat: "週末の話題", note: "" },
+  { en: "We ended up going to the beach.", ja: "結局、ビーチに行ったよ。", ctx: "週末の話題", cat: "週末の話題", note: "" },
+  { en: "I didn't do much — just recharged.", ja: "あまりしなかった、ただ充電したよ。", ctx: "週末の返答", cat: "週末の話題", note: "" },
+  { en: "Took the dog for a walk, that was about it.", ja: "犬を散歩させた、それくらいかな。", ctx: "Cocoとの散歩の話題に", cat: "週末の話題", note: "" },
+  { en: "Had a big one on Friday night, so Saturday was a write-off.", ja: "金曜夜に飲みすぎて、土曜は使い物にならなかった。", ctx: "笑いながら", cat: "週末の話題", note: "👂 'write-off' = 無駄になった日" },
+  { en: "How was your long weekend? Did you go anywhere?", ja: "ロングウィークエンドどうだった？どこか行った？", ctx: "祝日明けに", cat: "週末の話題", note: "" },
+  { en: "It was a good one — the weather was perfect.", ja: "最高だったよ。天気もばっちりだったし。", ctx: "週末の返答", cat: "週末の話題", note: "" },
+  { en: "Not enough, to be honest — went too fast.", ja: "正直、全然足りなかった、あっという間だった。", ctx: "月曜日に", cat: "週末の話題", note: "" },
+
+  // 2. 天気・季節
+  { en: "Can you believe this heat?", ja: "この暑さ、信じられる？", ctx: "夏のオーストラリア", cat: "天気・季節", note: "👂 メルボルンの夏の定番フレーズ" },
+  { en: "Typical Melbourne weather — four seasons in one day.", ja: "メルボルンらしい天気だね、一日で四季がある。", ctx: "天気が変わりやすいとき", cat: "天気・季節", note: "👂 地元の有名なフレーズ" },
+  { en: "At least it cooled down a bit today.", ja: "今日は少し涼しくなってよかった。", ctx: "暑い日の翌日", cat: "天気・季節", note: "" },
+  { en: "I heard it's going to be over 40 tomorrow.", ja: "明日40度超えるらしいよ。", ctx: "夏の予報", cat: "天気・季節", note: "" },
+  { en: "This rain is relentless.", ja: "この雨、ずっと続くね。", ctx: "雨の日", cat: "天気・季節", note: "" },
+  { en: "Perfect day for staying inside.", ja: "家にこもるには最高の日だね。", ctx: "悪天候のとき", cat: "天気・季節", note: "" },
+  { en: "I love this time of year, the weather's just right.", ja: "この季節好き、天気がちょうどいい。", ctx: "春や秋に", cat: "天気・季節", note: "" },
+  { en: "It's finally starting to feel like summer.", ja: "やっと夏らしくなってきたね。", ctx: "季節の変わり目", cat: "天気・季節", note: "" },
+  { en: "Did you feel the change this morning? So much cooler.", ja: "今朝の変化気づいた？ずいぶん涼しくなったよ。", ctx: "涼しくなった朝", cat: "天気・季節", note: "" },
+  { en: "The sun sets so early now, it's depressing.", ja: "日の入りが早くなったね、なんか暗くなる。", ctx: "冬に近づくとき", cat: "天気・季節", note: "" },
+
+  // 3. 食べ物・ランチ
+  { en: "Have you tried that new place down the road?", ja: "近くにできた新しいお店、行ってみた？", ctx: "新しいカフェ・レストランの話", cat: "食べ物・ランチ", note: "" },
+  { en: "I'm obsessed with their coffee.", ja: "あそこのコーヒー、ハマってる。", ctx: "カフェの話", cat: "食べ物・ランチ", note: "" },
+  { en: "Where are you thinking for lunch today?", ja: "今日のランチどうする？", ctx: "ランチ前に", cat: "食べ物・ランチ", note: "" },
+  { en: "I brought leftovers from last night — saved myself some cash.", ja: "昨夜の残り物持ってきた、節約できた。", ctx: "ランチの話", cat: "食べ物・ランチ", note: "" },
+  { en: "That smells amazing — what is it?", ja: "いい匂い、何それ？", ctx: "休憩室で", cat: "食べ物・ランチ", note: "" },
+  { en: "I've been trying to eat healthier lately.", ja: "最近ちゃんと食べるようにしてる。", ctx: "健康の話に", cat: "食べ物・ランチ", note: "" },
+  { en: "Do you want to grab a coffee?", ja: "コーヒー行く？", ctx: "休憩の誘い", cat: "食べ物・ランチ", note: "👂 シンプルで最もよく使うフレーズ" },
+  { en: "I'm so hungry — skipped breakfast this morning.", ja: "お腹すいた、朝ごはん抜いちゃった。", ctx: "午前中に", cat: "食べ物・ランチ", note: "" },
+  { en: "The cake in the break room is absolutely unreal.", ja: "休憩室のケーキ、めちゃくちゃおいしい。", ctx: "差し入れがあったとき", cat: "食べ物・ランチ", note: "👂 'unreal' = 最高に良い（豪スラング）" },
+  { en: "I'm trying to cut back on sugar at the moment.", ja: "今、砂糖を控えようとしてる。", ctx: "お菓子を断るとき", cat: "食べ物・ランチ", note: "" },
+
+  // 4. 仕事の愚痴（軽め）
+  { en: "It's been a long week.", ja: "長い一週間だったな。", ctx: "金曜日に", cat: "仕事の愚痴", note: "👂 最もよく使う締めの愚痴フレーズ" },
+  { en: "I'm hanging out for the weekend.", ja: "週末が待ち遠しい。", ctx: "週の後半", cat: "仕事の愚痴", note: "👂 'hang out for' = 〜を楽しみにして待つ（豪英語）" },
+  { en: "It's been absolutely slammed today.", ja: "今日はめちゃくちゃ忙しかった。", ctx: "忙しかった日", cat: "仕事の愚痴", note: "" },
+  { en: "I didn't even get a proper break.", ja: "ちゃんとした休憩も取れなかった。", ctx: "忙しい日に", cat: "仕事の愚痴", note: "" },
+  { en: "The roster is all over the place this week.", ja: "今週のシフト、ぐちゃぐちゃだよ。", ctx: "シフトの愚痴", cat: "仕事の愚痴", note: "👂 'roster' = シフト表（豪英語）" },
+  { en: "I need a holiday — badly.", ja: "休みが必要、本当に。", ctx: "疲れているとき", cat: "仕事の愚痴", note: "👂 'holiday' = vacation（豪英語）" },
+  { en: "Is it just me or is it chaos in here today?", ja: "私だけ？今日ここ、カオスじゃない？", ctx: "忙しいキッチンで", cat: "仕事の愚痴", note: "" },
+  { en: "I'm so over Mondays.", ja: "月曜日、もう嫌。", ctx: "週の始まりに", cat: "仕事の愚痴", note: "" },
+  { en: "We were understaffed again today.", ja: "また今日も人手不足だった。", ctx: "シフトの話", cat: "仕事の愚痴", note: "" },
+  { en: "At least it's nearly knock-off time.", ja: "もうすぐ終わりだしね。", ctx: "仕事終わり近くに", cat: "仕事の愚痴", note: "👂 'knock-off' = 仕事終わり（豪英語）" },
+
+  // 5. 褒める・感謝
+  { en: "You did a great job today.", ja: "今日よくやってくれたよ。", ctx: "仕事後に", cat: "褒める・感謝", note: "" },
+  { en: "That dish looked incredible.", ja: "あの料理、すごくよかったよ。", ctx: "キッチンで", cat: "褒める・感謝", note: "" },
+  { en: "Thanks for having my back out there.", ja: "フォローしてくれてありがとう。", ctx: "忙しかった後に", cat: "褒める・感謝", note: "" },
+  { en: "You're a legend — seriously.", ja: "あなたは最高だよ、本当に。", ctx: "強い感謝表現", cat: "褒める・感謝", note: "👂 'legend' = 最高の人（豪スラング）" },
+  { en: "I really appreciate your help today.", ja: "今日助けてくれて本当にありがとう。", ctx: "丁寧な感謝", cat: "褒める・感謝", note: "" },
+  { en: "You're always so on top of things.", ja: "いつもしっかりしてるよね。", ctx: "同僚を褒める", cat: "褒める・感謝", note: "" },
+  { en: "That was amazing — how did you do that so fast?", ja: "すごい、どうやってそんなに速くできたの？", ctx: "技術を褒める", cat: "褒める・感謝", note: "" },
+  { en: "You've got a great attitude.", ja: "姿勢がいいよね。", ctx: "新人への褒め言葉", cat: "褒める・感謝", note: "" },
+  { en: "Cheers — couldn't have done it without you.", ja: "ありがとう、あなたなしではできなかった。", ctx: "カジュアルな感謝", cat: "褒める・感謝", note: "👂 'cheers' = ありがとう（豪・英語）" },
+  { en: "You're really settling in well.", ja: "すっかり馴染んできたね。", ctx: "新しい同僚に", cat: "褒める・感謝", note: "" },
+
+  // 6. 体調・疲れ
+  { en: "I'm absolutely knackered.", ja: "もうくたくただよ。", ctx: "疲れているとき", cat: "体調・疲れ", note: "👂 'knackered' = 疲れ果てた（豪・英スラング）" },
+  { en: "I didn't sleep well at all last night.", ja: "昨夜全然眠れなかった。", ctx: "眠そうにしているとき", cat: "体調・疲れ", note: "" },
+  { en: "Are you feeling okay? You look a bit off.", ja: "大丈夫？ちょっと顔色悪いよ。", ctx: "同僚の様子が変なとき", cat: "体調・疲れ", note: "" },
+  { en: "I think I'm coming down with something.", ja: "なんか体調崩しそう。", ctx: "体の不調を感じるとき", cat: "体調・疲れ", note: "" },
+  { en: "I've got a splitting headache.", ja: "頭がガンガンする。", ctx: "頭痛のとき", cat: "体調・疲れ", note: "" },
+  { en: "I need another coffee — I'm dying here.", ja: "コーヒーもう一杯必要、死にそう。", ctx: "眠い午後に", cat: "体調・疲れ", note: "" },
+  { en: "My feet are killing me.", ja: "足が痛くてたまらない。", ctx: "立ち仕事の後", cat: "体調・疲れ", note: "👂 シェフに最適な表現" },
+  { en: "I've been run off my feet all morning.", ja: "午前中ずっと走り回ってたよ。", ctx: "忙しい朝の後", cat: "体調・疲れ", note: "" },
+  { en: "Finally sitting down — bliss.", ja: "やっと座れた、最高。", ctx: "休憩できたとき", cat: "体調・疲れ", note: "" },
+  { en: "I think I need an early night tonight.", ja: "今夜は早めに寝ようと思う。", ctx: "疲れているとき", cat: "体調・疲れ", note: "" },
+
+  // 7. 予定・休暇
+  { en: "Got anything planned for the long weekend?", ja: "ロングウィークエンドの予定は？", ctx: "祝日前に", cat: "予定・休暇", note: "" },
+  { en: "I'm taking some leave next month — finally.", ja: "来月やっと休みを取るよ。", ctx: "休暇の話", cat: "予定・休暇", note: "👂 'take leave' = 有給を使う（豪英語）" },
+  { en: "Are you working over the Easter break?", ja: "イースターの休みも働くの？", ctx: "祝日前に", cat: "予定・休暇", note: "" },
+  { en: "We're thinking of going up to Queensland.", ja: "クイーンズランドに行こうかと思ってる。", ctx: "旅行の話", cat: "予定・休暇", note: "" },
+  { en: "Nothing special — just chilling at home.", ja: "特に何もない、家でのんびりする。", ctx: "予定を聞かれたとき", cat: "予定・休暇", note: "" },
+  { en: "I've got a family thing on Saturday.", ja: "土曜日に家族の用事がある。", ctx: "予定の説明", cat: "予定・休暇", note: "" },
+  { en: "I booked tickets to the footy next week.", ja: "来週のフッティのチケット取った。", ctx: "AFL の話", cat: "予定・休暇", note: "👂 'footy' = Australian Rules Football" },
+  { en: "I need to use my annual leave before it expires.", ja: "期限切れる前に有給使わないと。", ctx: "休暇の話", cat: "予定・休暇", note: "" },
+  { en: "We're planning a trip to Bali.", ja: "バリ旅行を計画してる。", ctx: "旅行の話", cat: "予定・休暇", note: "👂 豪州人に人気の旅先" },
+  { en: "Can't wait — counting down the days.", ja: "楽しみ、もう日数を数えてる。", ctx: "旅行・休暇前", cat: "予定・休暇", note: "" },
+
+  // 8. スポーツ・TV
+  { en: "Did you watch the footy last night?", ja: "昨夜フッティ見た？", ctx: "AFL シーズン中", cat: "スポーツ・TV", note: "👂 最も一般的な豪州スポーツ話題" },
+  { en: "What a game last night.", ja: "昨夜の試合すごかったね。", ctx: "試合後の朝", cat: "スポーツ・TV", note: "" },
+  { en: "Did you see that series everyone's talking about?", ja: "みんなが話してるあのシリーズ見た？", ctx: "Netflixの話", cat: "スポーツ・TV", note: "" },
+  { en: "I'm watching this true crime doco at the moment.", ja: "今ドキュメンタリーのクライムもの見てる。", ctx: "TVの話", cat: "スポーツ・TV", note: "👂 'doco' = documentary（豪略語）" },
+  { en: "I'm not really a sports person, to be honest.", ja: "正直、スポーツはあまり興味ないんだよね。", ctx: "スポーツの話題をかわすとき", cat: "スポーツ・TV", note: "" },
+  { en: "My team lost again — not surprised though.", ja: "また負けた、まあ驚かないけど。", ctx: "スポーツの話", cat: "スポーツ・TV", note: "" },
+  { en: "Have you been following the cricket?", ja: "クリケット追ってる？", ctx: "夏のスポーツ", cat: "スポーツ・TV", note: "" },
+  { en: "I've been binge-watching it all weekend.", ja: "週末ずっと一気見してた。", ctx: "ドラマの話", cat: "スポーツ・TV", note: "" },
+  { en: "What are you watching at the moment?", ja: "今何見てる？", ctx: "TV話題の振り方", cat: "スポーツ・TV", note: "" },
+  { en: "The Grand Final was unbelievable.", ja: "グランドファイナル、信じられなかった。", ctx: "AFL決勝後", cat: "スポーツ・TV", note: "" },
+
+  // 9. 会話をつなぐ相槌
+  { en: "Oh really? Tell me more.", ja: "そうなの？もっと教えて。", ctx: "興味を示す", cat: "相槌・つなぎ", note: "👂 会話を続けさせる最強フレーズ" },
+  { en: "No way!", ja: "まさか！", ctx: "驚いたとき", cat: "相槌・つなぎ", note: "" },
+  { en: "Fair enough.", ja: "まあ、そうだよね。", ctx: "納得したとき", cat: "相槌・つなぎ", note: "👂 豪州人がよく使う納得の表現" },
+  { en: "That's so funny.", ja: "それおかしいね。", ctx: "笑えるとき", cat: "相槌・つなぎ", note: "" },
+  { en: "I know what you mean.", ja: "言いたいことわかる。", ctx: "共感するとき", cat: "相槌・つなぎ", note: "" },
+  { en: "Oh wow — when did that happen?", ja: "えー、それいつの話？", ctx: "驚いたとき", cat: "相槌・つなぎ", note: "" },
+  { en: "That's wild.", ja: "それ、すごいね。", ctx: "驚き・面白いとき", cat: "相槌・つなぎ", note: "" },
+  { en: "Aww, that's nice.", ja: "いい話だね。", ctx: "ほっこりするとき", cat: "相槌・つなぎ", note: "" },
+  { en: "Seriously?", ja: "マジで？", ctx: "信じられないとき", cat: "相槌・つなぎ", note: "" },
+  { en: "Same, honestly.", ja: "わかる、本当に。", ctx: "共感するとき", cat: "相槌・つなぎ", note: "" },
+
+  // 10. 会話を終わらせる
+  { en: "Anyway, I'd better get back to it.", ja: "そろそろ仕事に戻らないと。", ctx: "会話を締めるとき", cat: "会話の終わり方", note: "👂 最も自然な会話の締め方" },
+  { en: "Right, I'll let you get on.", ja: "じゃあ、邪魔しないようにするね。", ctx: "相手の仕事中", cat: "会話の終わり方", note: "" },
+  { en: "Catch you later.", ja: "またね。", ctx: "カジュアルな別れ", cat: "会話の終わり方", note: "👂 豪州の定番フレーズ" },
+  { en: "Alright, I'll leave you to it.", ja: "じゃあ、任せるね。", ctx: "仕事中に", cat: "会話の終わり方", note: "" },
+  { en: "Good chat — we should do it more often.", ja: "いい話だった、もっと話そうね。", ctx: "楽しい会話の後", cat: "会話の終わり方", note: "" },
+  { en: "Anyway, have a good one.", ja: "じゃあ、いい一日を。", ctx: "別れ際に", cat: "会話の終わり方", note: "👂 'have a good one' = 豪州の万能お別れ表現" },
+  { en: "See ya!", ja: "またね！", ctx: "カジュアルな別れ", cat: "会話の終わり方", note: "" },
+  { en: "Talk soon.", ja: "また話そう。", ctx: "別れ際に", cat: "会話の終わり方", note: "" },
+  { en: "Alright, back to the grind.", ja: "さあ、また頑張ろう。", ctx: "休憩後に", cat: "会話の終わり方", note: "" },
+  { en: "Let's catch up properly soon.", ja: "今度ちゃんと話そうね。", ctx: "忙しいとき", cat: "会話の終わり方", note: "" }
+];
+
+// State
+let state = {
+  currentIndex: 0,
+  mode: 'normal',
+  voice: 'Rachel',
+  revealed: false,
+  filterCat: 'all',
+  reviewList: [],
+  seenList: [],
+  timerSec: 5,
+  timerInterval: null,
+  loopInterval: null,
+  apiKey: '',
+  activeTab: 'train'
+};
+
+function loadState() {
+  const s = localStorage.getItem(STORAGE_KEY);
+  if (s) {
+    const parsed = JSON.parse(s);
+    state.reviewList = parsed.reviewList || [];
+    state.seenList = parsed.seenList || [];
+    state.apiKey = parsed.apiKey || '';
+    state.voice = parsed.voice || 'Rachel';
+    state.timerSec = parsed.timerSec || 5;
+  }
+  if (state.apiKey) document.getElementById('api-key-input').value = state.apiKey;
+  if (state.timerSec) document.getElementById('timer-sec').value = state.timerSec;
+  updateVoiceUI();
+  updateApiStatus();
+}
+
+function saveState() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify({
+    reviewList: state.reviewList,
+    seenList: state.seenList,
+    apiKey: state.apiKey,
+    voice: state.voice,
+    timerSec: state.timerSec
+  }));
+}
+
+function getFilteredPhrases() {
+  let list = phrases;
+  if (state.mode === 'review') {
+    list = phrases.filter((_, i) => state.reviewList.includes(i));
+  }
+  if (state.filterCat !== 'all') {
+    list = list.filter(p => p.cat === state.filterCat);
+  }
+  return list;
+}
+
+function getCurrentPhrase() {
+  const list = getFilteredPhrases();
+  if (list.length === 0) return null;
+  const idx = state.currentIndex % list.length;
+  return list[idx];
+}
+
+function getCurrentGlobalIndex() {
+  const p = getCurrentPhrase();
+  if (!p) return -1;
+  return phrases.indexOf(p);
+}
+
+function renderCard() {
+  const p = getCurrentPhrase();
+  const list = getFilteredPhrases();
+  if (!p) {
+    document.getElementById('card-en').textContent = mode === 'review' ? '復習フレーズなし' : 'フレーズなし';
+    document.getElementById('card-ja').textContent = '';
+    return;
+  }
+  state.revealed = false;
+  document.getElementById('card-cat').textContent = p.cat;
+  document.getElementById('card-en').textContent = p.en;
+  document.getElementById('card-context').textContent = p.ctx;
+  document.getElementById('card-num').textContent = `${(state.currentIndex % list.length) + 1} / ${list.length}`;
+  document.getElementById('card-ja').textContent = p.ja;
+  document.getElementById('card-ja').className = 'card-ja';
+  document.getElementById('card-note').textContent = p.note;
+  document.getElementById('card-note').className = 'card-note';
+  document.getElementById('sound-btn').className = 'sound-btn';
+  document.getElementById('reveal-btn').style.display = 'block';
+  document.getElementById('stat-current').textContent = `${(state.currentIndex % list.length) + 1} / ${list.length}`;
+  document.getElementById('stat-reviewed').innerHTML = `復習済み: <strong>${state.reviewList.length}</strong>`;
+
+  // Update star button
+  const gi = getCurrentGlobalIndex();
+  document.getElementById('star-btn').textContent = state.reviewList.includes(gi) ? '★ 復習済み' : '☆ 復習';
+
+  // Mark as seen
+  if (!state.seenList.includes(gi)) {
+    state.seenList.push(gi);
+    saveState();
+  }
+  updateProgress();
+}
+
+function reveal() {
+  state.revealed = true;
+  document.getElementById('card-ja').className = 'card-ja visible';
+  document.getElementById('card-note').className = 'card-note visible';
+  document.getElementById('sound-btn').className = 'sound-btn visible';
+  document.getElementById('reveal-btn').style.display = 'none';
+}
+
+function nextCard() {
+  clearTimers();
+  const list = getFilteredPhrases();
+  state.currentIndex = (state.currentIndex + 1) % list.length;
+  renderCard();
+  if (state.mode === 'timer') startTimer();
+  if (state.mode === 'loop') startLoop();
+}
+
+function prevCard() {
+  clearTimers();
+  const list = getFilteredPhrases();
+  state.currentIndex = (state.currentIndex - 1 + list.length) % list.length;
+  renderCard();
+}
+
+function toggleReview() {
+  const gi = getCurrentGlobalIndex();
+  if (gi < 0) return;
+  if (state.reviewList.includes(gi)) {
+    state.reviewList = state.reviewList.filter(i => i !== gi);
+  } else {
+    state.reviewList.push(gi);
+  }
+  saveState();
+  document.getElementById('star-btn').textContent = state.reviewList.includes(gi) ? '★ 復習済み' : '☆ 復習';
+  document.getElementById('stat-reviewed').innerHTML = `復習済み: <strong>${state.reviewList.length}</strong>`;
+  updateProgress();
+}
+
+function setMode(m) {
+  clearTimers();
+  state.mode = m;
+  state.currentIndex = 0;
+  ['normal','timer','loop','review'].forEach(x => {
+    document.getElementById('mode-' + x).className = 'mode-btn' + (x === m ? ' active' : '');
+  });
+  const labels = { normal: '通常モード', timer: 'タイマーモード', loop: 'ループモード', review: '復習モード' };
+  document.getElementById('stat-mode-label').textContent = labels[m];
+  document.getElementById('timer-bar-wrap').className = m === 'timer' ? 'timer-bar-wrap visible' : 'timer-bar-wrap';
+  renderCard();
+  if (m === 'timer') startTimer();
+  if (m === 'loop') startLoop();
+}
+
+function startTimer() {
+  clearTimers();
+  let remaining = state.timerSec * 10;
+  const total = state.timerSec * 10;
+  document.getElementById('timer-bar').style.width = '100%';
+  state.timerInterval = setInterval(() => {
+    remaining--;
+    document.getElementById('timer-bar').style.width = ((remaining / total) * 100) + '%';
+    if (remaining <= 0) { reveal(); clearInterval(state.timerInterval); }
+  }, 100);
+}
+
+function startLoop() {
+  clearTimers();
+  state.loopInterval = setInterval(() => { nextCard(); }, (state.timerSec + 3) * 1000);
+}
+
+function clearTimers() {
+  if (state.timerInterval) clearInterval(state.timerInterval);
+  if (state.loopInterval) clearInterval(state.loopInterval);
+}
+
+function setVoice(v) {
+  state.voice = v;
+  saveState();
+  updateVoiceUI();
+}
+function updateVoiceUI() {
+  ['Rachel','Adam','Bella'].forEach(v => {
+    document.getElementById('v-' + v).className = 'voice-option' + (v === state.voice ? ' active' : '');
+  });
+}
+
+async function speakCurrent() {
+  const p = getCurrentPhrase();
+  if (!p) return;
+  await speak(p.en);
+}
+
+async function speak(text) {
+  if (!state.apiKey) { alert('ElevenLabs APIキーを設定してください（設定タブ）'); return; }
+  const voiceIds = { Rachel: '21m00Tcm4TlvDq8ikWAM', Adam: 'pNInz6obpgDQGcFmaJgB', Bella: 'EXAVITQu4vr4xnSDxMaL' };
+  try {
+    const res = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceIds[state.voice]}`, {
+      method: 'POST',
+      headers: { 'xi-api-key': state.apiKey, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text, model_id: 'eleven_monolingual_v1', voice_settings: { stability: 0.5, similarity_boost: 0.75 } })
+    });
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    new Audio(url).play();
+  } catch(e) { alert('音声エラー: ' + e.message); }
+}
+
+function buildCategoryFilter() {
+  const cats = ['all', ...new Set(phrases.map(p => p.cat))];
+  const wrap = document.getElementById('cat-filter');
+  wrap.innerHTML = cats.map(c =>
+    `<button class="cat-btn${c === 'all' ? ' active' : ''}" onclick="filterCat('${c}')">${c === 'all' ? 'すべて' : c}</button>`
+  ).join('');
+}
+
+function filterCat(cat) {
+  state.filterCat = cat;
+  state.currentIndex = 0;
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  renderCard();
+}
+
+function buildList() {
+  renderListItems(phrases);
+}
+
+function filterList(q) {
+  const filtered = phrases.filter(p =>
+    p.en.toLowerCase().includes(q.toLowerCase()) ||
+    p.ja.includes(q) ||
+    p.cat.includes(q)
+  );
+  renderListItems(filtered);
+}
+
+function renderListItems(list) {
+  document.getElementById('list-container').innerHTML = list.map((p, i) => `
+    <div class="list-item">
+      <div class="list-item-text">
+        <div class="list-item-cat">${p.cat}</div>
+        <div class="list-item-en">${p.en}</div>
+        <div class="list-item-ja">${p.ja}</div>
+      </div>
+      <button class="list-sound" onclick="speak('${p.en.replace(/'/g,"\\'")}')">🔊</button>
+    </div>
+  `).join('');
+}
+
+function updateProgress() {
+  document.getElementById('p-total').textContent = phrases.length;
+  document.getElementById('p-seen').textContent = state.seenList.length;
+  document.getElementById('p-review').textContent = state.reviewList.length;
+  document.getElementById('p-pct').textContent = Math.round((state.seenList.length / phrases.length) * 100) + '%';
+}
+
+function resetProgress() {
+  if (confirm('進捗をリセットしますか？')) {
+    state.seenList = [];
+    state.reviewList = [];
+    state.currentIndex = 0;
+    saveState();
+    renderCard();
+    updateProgress();
+  }
+}
+
+function saveApiKey() {
+  state.apiKey = document.getElementById('api-key-input').value.trim();
+  saveState();
+  updateApiStatus();
+}
+function updateApiStatus() {
+  document.getElementById('api-status').textContent = state.apiKey ? '✓ 保存済み' : '未設定';
+}
+
+function saveTimer() {
+  state.timerSec = parseInt(document.getElementById('timer-sec').value) || 5;
+  saveState();
+}
+
+function switchTab(tab) {
+  state.activeTab = tab;
+  clearTimers();
+  const tabs = ['train', 'list', 'progress', 'settings'];
+  tabs.forEach(t => {
+    const el = document.getElementById('tab-' + t);
+    if (el) el.style.display = t === tab ? 'block' : 'none';
+  });
+  document.querySelectorAll('.tab').forEach((b, i) => {
+    b.classList.toggle('active', tabs[i] === tab);
+  });
+  if (tab === 'list') buildList();
+  if (tab === 'progress') updateProgress();
+}
+
+// Init
+loadState();
+buildCategoryFilter();
+renderCard();
+updateProgress();
+// Fix tab display
+document.getElementById('tab-list').style.display = 'none';
+</script>
+</body>
+</html>
