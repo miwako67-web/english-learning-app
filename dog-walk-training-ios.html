@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🐾 犬の散歩・公園での会話 iOS版</title>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#1a1410;--paper:#f5f0e8;--gold:#c8962a;--moss:#4a7c59;--indigo:#3d5a8a;--crimson:#a03030;--panel:#fffdf8;--border:rgba(26,20,16,0.12);}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);min-height:100vh;}
+header{background:var(--ink);padding:16px 20px 0;position:sticky;top:0;z-index:100;}
+.h-top{display:flex;align-items:center;gap:10px;padding-bottom:14px;}
+.h-logo{font-size:22px;}.h-titles{flex:1;}
+.h-titles h1{font-family:'Shippori Mincho',serif;color:var(--gold);font-size:16px;font-weight:700;}
+.h-titles p{color:rgba(245,240,232,0.42);font-size:10px;margin-top:1px;}
+.h-right{display:flex;align-items:center;gap:8px;}
+.h-score .num{font-size:20px;font-weight:500;color:var(--gold);}
+.h-score .lbl{font-family:'Shippori Mincho',serif;font-size:9px;color:rgba(245,240,232,0.4);}
+.h-auto-btn{padding:5px 10px;border-radius:7px;border:1px solid rgba(200,150,42,0.4);background:transparent;color:rgba(200,150,42,0.7);font-size:10px;cursor:pointer;transition:all .25s;white-space:nowrap;}
+.h-auto-btn.on{background:rgba(200,150,42,0.2);border-color:var(--gold);color:var(--gold);}
+nav{display:flex;}
+.tab{flex:1;padding:8px 4px;background:none;border:none;border-bottom:2px solid transparent;color:rgba(245,240,232,0.38);font-family:'DM Sans',sans-serif;font-size:10px;cursor:pointer;transition:all .2s;display:flex;flex-direction:column;align-items:center;gap:2px;}
+.tab span:first-child{font-size:13px;}.tab.active{color:var(--gold);border-bottom-color:var(--gold);}
+main{padding:14px;max-width:600px;margin:0 auto;}
+.page{display:none;}.page.active{display:block;}
+.sec{font-family:'Shippori Mincho',serif;font-size:10px;font-weight:600;color:rgba(26,20,16,0.35);letter-spacing:.12em;text-transform:uppercase;margin:16px 0 10px;}
+.cat-chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;}
+.cat-chip{padding:5px 12px;border-radius:20px;border:1.5px solid var(--border);background:var(--panel);font-size:11px;cursor:pointer;transition:all .2s;color:var(--ink);}
+.cat-chip.active{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+.mode-cards{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px;}
+.mode-card{background:var(--panel);border:1.5px solid var(--border);border-radius:14px;padding:14px 12px;cursor:pointer;transition:all .2s;text-align:center;}
+.mode-card.selected{border-color:var(--gold);background:rgba(200,150,42,0.07);}
+.mode-emoji{font-size:24px;margin-bottom:6px;}.mode-name{font-size:13px;font-weight:500;margin-bottom:3px;}
+.mode-desc{font-family:'Shippori Mincho',serif;font-size:10px;color:rgba(26,20,16,0.45);line-height:1.5;}
+.start-btn{width:100%;padding:14px;border-radius:12px;border:none;background:var(--ink);color:var(--gold);font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;cursor:pointer;}
+.train-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.train-prog-wrap{flex:1;height:5px;background:var(--border);border-radius:3px;margin:0 12px;overflow:hidden;}
+.train-prog-fill{height:100%;background:var(--gold);border-radius:3px;transition:width .4s;}
+.train-ctr{font-size:11px;color:rgba(26,20,16,0.4);}
+.quit-btn{font-size:11px;color:rgba(26,20,16,0.35);background:none;border:none;cursor:pointer;text-decoration:underline;}
+.timer-wrap{display:flex;justify-content:center;margin-bottom:14px;}
+.timer-ring{position:relative;width:64px;height:64px;}
+.timer-ring svg{transform:rotate(-90deg);}
+.timer-ring circle{fill:none;stroke-width:5;}
+.timer-bg{stroke:var(--border);}.timer-fg{stroke:var(--gold);stroke-linecap:round;transition:stroke-dashoffset .1s linear,stroke .3s;}
+.timer-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:500;color:var(--ink);}
+.loop-banner{background:rgba(200,150,42,0.1);border:1px solid rgba(200,150,42,0.3);border-radius:10px;padding:8px 12px;margin-bottom:12px;font-family:'Shippori Mincho',serif;font-size:12px;color:var(--gold);text-align:center;}
+.autoplay-bar{display:none;align-items:center;justify-content:space-between;background:rgba(200,150,42,0.1);border:1px solid rgba(200,150,42,0.28);border-radius:10px;padding:8px 14px;margin-bottom:12px;}
+.autoplay-bar.visible{display:flex;}
+.ap-left{display:flex;align-items:center;gap:8px;}
+.ap-dot{width:8px;height:8px;border-radius:50%;}
+.ap-dot.jp{background:#4a7c59;}.ap-dot.en{background:#3d5a8a;}
+.ap-dot.wait{background:#c86a2a;animation:blink 0.8s ease-in-out infinite;}
+.ap-dot.idle{background:rgba(200,150,42,0.3);}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0.2;}}
+.ap-label{font-family:'Shippori Mincho',serif;font-size:11px;color:var(--gold);}
+.flash-card{background:var(--panel);border:1.5px solid var(--border);border-radius:18px;padding:28px 22px;text-align:center;margin-bottom:14px;box-shadow:0 4px 24px rgba(26,20,16,0.08);min-height:200px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:border-color .2s;}
+.flash-card.revealed{border-color:var(--moss);}
+.flash-card.jp-speaking{border-color:#4a7c59;box-shadow:0 0 0 3px rgba(74,124,89,0.15);}
+.flash-card.en-speaking{border-color:#3d5a8a;box-shadow:0 0 0 3px rgba(61,90,138,0.15);}
+.card-cat{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(26,20,16,0.3);margin-bottom:10px;}
+.card-jp{font-family:'Shippori Mincho',serif;font-size:20px;font-weight:700;line-height:1.5;margin-bottom:6px;}
+.card-sub{font-family:'Shippori Mincho',serif;font-size:12px;color:rgba(26,20,16,0.4);margin-bottom:14px;font-style:italic;}
+.card-hint{font-size:11px;color:rgba(26,20,16,0.3);font-style:italic;}
+.card-en{font-size:17px;font-weight:500;line-height:1.5;margin-bottom:6px;display:none;}
+.card-alt{font-size:12px;color:rgba(26,20,16,0.5);display:none;font-style:italic;margin-bottom:10px;}
+.card-tip{font-family:'Shippori Mincho',serif;font-size:11px;color:var(--indigo);background:rgba(61,90,138,0.08);border-radius:6px;padding:6px 10px;display:none;line-height:1.6;}
+.flash-card.revealed .card-en,.flash-card.revealed .card-alt,.flash-card.revealed .card-tip{display:block;}
+.flash-card.revealed .card-hint{display:none;}
+.next-btn-wrap{display:flex;justify-content:center;margin-bottom:10px;}
+.next-btn{display:flex;align-items:center;gap:8px;padding:12px 28px;border-radius:30px;border:none;background:var(--indigo);color:#fff;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;display:none;}
+.voice-status{font-size:10px;color:rgba(26,20,16,0.4);text-align:center;margin-bottom:8px;min-height:14px;}
+.action-row{display:flex;gap:8px;margin-bottom:10px;}
+.act-btn{flex:1;padding:13px;border-radius:12px;border:none;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;}
+.act-reveal{background:var(--indigo);color:#fff;flex:2;}
+.act-ok{background:var(--moss);color:#fff;}
+.act-ng{background:rgba(160,48,48,0.12);color:var(--crimson);}
+.act-skip{width:100%;padding:9px;border-radius:9px;border:1.5px solid var(--border);background:var(--panel);font-family:'DM Sans',sans-serif;font-size:11px;cursor:pointer;color:rgba(26,20,16,0.45);}
+.result-wrap{text-align:center;padding:24px 0;}
+.result-emoji{font-size:52px;margin-bottom:12px;}
+.result-title{font-family:'Shippori Mincho',serif;font-size:20px;font-weight:700;margin-bottom:6px;}
+.result-sub{font-size:13px;color:rgba(26,20,16,0.5);margin-bottom:24px;font-family:'Shippori Mincho',serif;}
+.result-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:24px;}
+.rs{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:12px 8px;text-align:center;}
+.rs-num{font-size:24px;font-weight:500;line-height:1;margin-bottom:3px;}
+.rs-num.g{color:var(--moss);}.rs-num.r{color:var(--crimson);}.rs-num.b{color:var(--indigo);}
+.rs-lbl{font-family:'Shippori Mincho',serif;font-size:9px;color:rgba(26,20,16,0.4);}
+.result-btns{display:flex;flex-direction:column;gap:8px;}
+.res-btn{padding:13px;border-radius:12px;border:none;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;}
+.res-btn.primary{background:var(--crimson);color:#fff;}
+.res-btn.secondary{background:var(--ink);color:var(--paper);}
+.res-btn.tertiary{background:var(--panel);color:var(--ink);border:1.5px solid var(--border);}
+.list-item{background:var(--panel);border:1px solid var(--border);border-radius:11px;padding:12px 14px;margin-bottom:7px;display:flex;align-items:center;gap:12px;}
+.li-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}.li-body{flex:1;}
+.li-cat{font-size:9px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:rgba(26,20,16,0.3);margin-bottom:2px;}
+.li-jp{font-family:'Shippori Mincho',serif;font-size:14px;font-weight:600;margin-bottom:2px;}
+.li-en{font-size:13px;color:rgba(26,20,16,0.6);}
+.li-right{display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;}
+.li-done{font-size:10px;background:var(--moss);color:#fff;padding:2px 7px;border-radius:20px;display:none;}
+.li-done.show{display:inline;}
+.li-voice-btn{padding:3px 8px;border-radius:20px;border:1px solid var(--gold);background:transparent;color:var(--gold);font-size:10px;cursor:pointer;}
+.overall-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;}
+.os{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px 12px;text-align:center;}
+.os-num{font-size:26px;font-weight:500;line-height:1;margin-bottom:4px;}
+.os-num.g{color:var(--moss);}.os-num.gold{color:var(--gold);}
+.os-lbl{font-family:'Shippori Mincho',serif;font-size:10px;color:rgba(26,20,16,0.4);}
+.cat-stat{background:var(--panel);border:1px solid var(--border);border-radius:11px;padding:12px 14px;margin-bottom:8px;}
+.cs-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+.cs-name{font-size:13px;font-weight:500;}.cs-pct{font-size:12px;color:var(--moss);font-weight:500;}
+.cs-bar{height:4px;background:var(--border);border-radius:2px;overflow:hidden;}
+.cs-fill{height:100%;background:var(--moss);border-radius:2px;transition:width .5s;}
+.reset-all-btn{width:100%;padding:11px;border-radius:10px;border:1.5px solid var(--border);background:var(--panel);font-family:'DM Sans',sans-serif;font-size:12px;color:rgba(26,20,16,0.4);cursor:pointer;margin-top:12px;}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:10px 20px;border-radius:30px;font-size:12px;z-index:1000;opacity:0;transition:opacity .3s;pointer-events:none;}
+.toast.show{opacity:1;}
+.ios-badge{display:inline-block;background:rgba(61,90,138,0.12);color:var(--indigo);font-size:10px;padding:2px 8px;border-radius:10px;margin-left:6px;font-family:'Shippori Mincho',serif;}
+</style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+<header>
+<div class="h-top">
+<div class="h-logo">🐾</div>
+<div class="h-titles"><h1>犬の散歩・公園での会話<span class="ios-badge">iOS</span></h1><p>瞬間反射トレーニング — 100フレーズ</p></div>
+<div class="h-right">
+<button class="h-auto-btn" id="auto-play-btn" onclick="toggleAutoPlay()">▶ 自動OFF</button>
+<div class="h-score"><div class="num" id="h-mastered">0</div><div class="lbl">習得済み</div></div>
+</div>
+</div>
+<nav>
+<button class="tab active" onclick="switchTab('train',this)"><span>⚡</span><span>トレーニング</span></button>
+<button class="tab" onclick="switchTab('list',this)"><span>📋</span><span>一覧</span></button>
+<button class="tab" onclick="switchTab('stats',this)"><span>📊</span><span>記録</span></button>
+</nav>
+</header>
+<main>
+<div id="page-train" class="page active">
+<div id="train-setup">
+<div class="sec" style="margin-top:14px">カテゴリを選ぶ</div>
+<div class="cat-chips" id="cat-chips"></div>
+<div class="sec">モードを選ぶ</div>
+<div class="mode-cards">
+<div class="mode-card selected" id="mode-normal" onclick="selectMode('normal')"><div class="mode-emoji">🃏</div><div class="mode-name">通常モード</div><div class="mode-desc">自分のペースで1枚ずつ。</div></div>
+<div class="mode-card" id="mode-timer" onclick="selectMode('timer')"><div class="mode-emoji">⏱️</div><div class="mode-name">タイマーモード</div><div class="mode-desc">3秒以内に口から出す。</div></div>
+<div class="mode-card" id="mode-loop" onclick="selectMode('loop')"><div class="mode-emoji">🔁</div><div class="mode-name">ループモード</div><div class="mode-desc">5回連続正解で身体化。</div></div>
+<div class="mode-card" id="mode-review" onclick="selectMode('review')"><div class="mode-emoji">🔄</div><div class="mode-name">復習モード</div><div class="mode-desc">未習得・間違えたものだけ。</div></div>
+</div>
+<button class="start-btn" onclick="startTraining()">トレーニング開始 →</button>
+</div>
+<div id="train-area" style="display:none">
+<div class="train-hd"><span class="train-ctr" id="train-ctr">1 / 100</span><div class="train-prog-wrap"><div class="train-prog-fill" id="train-prog" style="width:0%"></div></div><button class="quit-btn" onclick="quitTraining()">終了</button></div>
+<div id="loop-banner" class="loop-banner" style="display:none">🔁 ループモード — あと<span id="loop-remain"></span>回正解で卒業！</div>
+<div id="timer-wrap" class="timer-wrap" style="display:none"><div class="timer-ring"><svg width="64" height="64" viewBox="0 0 64 64"><circle class="timer-bg" cx="32" cy="32" r="27"/><circle class="timer-fg" id="timer-circle" cx="32" cy="32" r="27" stroke-dasharray="169.6" stroke-dashoffset="0"/></svg><div class="timer-num" id="timer-num">3</div></div></div>
+<div class="autoplay-bar" id="autoplay-bar"><div class="ap-left"><div class="ap-dot idle" id="ap-dot"></div><span class="ap-label" id="ap-label">自動再生モード</span></div></div>
+<div class="flash-card" id="flash-card" onclick="onCardTap()">
+<div class="card-cat" id="card-cat"></div><div class="card-jp" id="card-jp"></div><div class="card-sub" id="card-sub"></div>
+<div class="card-hint" id="card-hint">タップして英語を確認</div>
+<div class="card-en" id="card-en"></div><div class="card-alt" id="card-alt"></div><div class="card-tip" id="card-tip"></div>
+</div>
+<div class="next-btn-wrap"><button class="next-btn" id="next-btn" onclick="onNextTap()">次へ →</button></div>
+<div class="voice-status" id="voice-status"></div>
+<div class="action-row">
+<button class="act-btn act-reveal" id="btn-reveal" onclick="revealCard()">英語を見る</button>
+<button class="act-btn act-ok" id="btn-ok" onclick="markOk()" style="display:none">✓ 言えた！</button>
+<button class="act-btn act-ng" id="btn-ng" onclick="markNg()" style="display:none">✕ 言えなかった</button>
+</div>
+<button class="act-skip" onclick="skipCard()">スキップ →</button>
+</div>
+<div id="train-result" style="display:none">
+<div class="result-wrap">
+<div class="result-emoji" id="res-emoji">🎉</div><div class="result-title" id="res-title">完了！</div><div class="result-sub" id="res-sub"></div>
+<div class="result-stats"><div class="rs"><div class="rs-num g" id="res-ok">0</div><div class="rs-lbl">言えた！</div></div><div class="rs"><div class="rs-num r" id="res-ng">0</div><div class="rs-lbl">言えなかった</div></div><div class="rs"><div class="rs-num b" id="res-total">0</div><div class="rs-lbl">総問数</div></div></div>
+<div class="result-btns"><button class="res-btn primary" id="res-loop-btn" onclick="startLoopFromResult()" style="display:none">🔁 言えなかった分をループ練習</button><button class="res-btn secondary" onclick="backToSetup()">もう一度設定から</button><button class="res-btn tertiary" onclick="switchTab('stats',document.querySelectorAll('.tab')[2])">記録を見る</button></div>
+</div>
+</div>
+</div>
+<div id="page-list" class="page"><div class="sec" style="margin-top:14px">カテゴリで絞り込む</div><div class="cat-chips" id="list-cat-chips"></div><div id="list-items"></div></div>
+<div id="page-stats" class="page">
+<div class="sec" style="margin-top:14px">全体の進捗</div>
+<div class="overall-stats"><div class="os"><div class="os-num g" id="st-mastered">0</div><div class="os-lbl">習得済み</div></div><div class="os"><div class="os-num gold" id="st-total">100</div><div class="os-lbl">総フレーズ数</div></div></div>
+<div class="sec">カテゴリ別</div><div id="cat-stats"></div>
+<button class="reset-all-btn" onclick="resetAllData()">↺ 全データをリセット</button>
+</div>
+</main>
+<script>
+const PHRASES=[
+{id:1,cat:'飼い主同士の挨拶',jp:'おはようございます！',en:"Morning! Lovely day for it.",alt:"Good morning! Beautiful day.",tip:""},
+{id:2,cat:'飼い主同士の挨拶',jp:'毎朝ここで会いますね。',en:"We keep running into each other!",alt:"We're always here at the same time.",tip:""},
+{id:3,cat:'飼い主同士の挨拶',jp:'いつもこの時間に来るんですか？',en:"Do you usually come at this time?",alt:"Is this your regular walk time?",tip:""},
+{id:4,cat:'飼い主同士の挨拶',jp:'あなたの犬、前にも会いましたよね？',en:"I think we've met before, haven't we?",alt:"Haven't we met here before?",tip:""},
+{id:5,cat:'飼い主同士の挨拶',jp:'今日も来ましたよ！',en:"Back again!",alt:"Here again!",tip:""},
+{id:6,cat:'飼い主同士の挨拶',jp:'あなたの犬の名前はなんですか？',en:"What's your dog's name?",alt:"And what's this one called?",tip:""},
+{id:7,cat:'飼い主同士の挨拶',jp:'私はMiwaといいます。',en:"I'm Miwa, by the way.",alt:"Oh, I'm Miwa.",tip:""},
+{id:8,cat:'飼い主同士の挨拶',jp:'今日は早いですね。',en:"You're out early today.",alt:"Early start today?",tip:""},
+{id:9,cat:'飼い主同士の挨拶',jp:'いい天気で散歩日和ですね。',en:"Perfect weather for a walk.",alt:"Great morning for it.",tip:""},
+{id:10,cat:'飼い主同士の挨拶',jp:'また会いましょう！',en:"See you around!",alt:"Catch you next time!",tip:""},
+{id:11,cat:'初めて会う犬への声かけ',jp:'わあ、かわいい！',en:"Oh, how gorgeous!",alt:"Oh wow, what a cutie!",tip:"👂 'gorgeous' は豪州でよく使う褒め言葉"},
+{id:12,cat:'初めて会う犬への声かけ',jp:'触ってもいいですか？',en:"Can I say hello?",alt:"Do you mind if I pat him?",tip:"👂 'pat' = なでる（豪英語）"},
+{id:13,cat:'初めて会う犬への声かけ',jp:'こんにちは、いい子だね！',en:"Hello there, good boy!",alt:"Hey there, aren't you lovely!",tip:""},
+{id:14,cat:'初めて会う犬への声かけ',jp:'おすわり！えらいね！',en:"Sit! Good boy!",alt:"Sit! What a clever dog.",tip:""},
+{id:15,cat:'初めて会う犬への声かけ',jp:'すごく人懐っこいね。',en:"He's so friendly!",alt:"What a friendly little thing.",tip:""},
+{id:16,cat:'初めて会う犬への声かけ',jp:'もふもふで触り心地がいい！',en:"Oh, so fluffy!",alt:"Look at all that fluff!",tip:""},
+{id:17,cat:'初めて会う犬への声かけ',jp:'目が大きくてかわいい。',en:"Look at those big eyes!",alt:"Such expressive eyes!",tip:""},
+{id:18,cat:'初めて会う犬への声かけ',jp:'何歳ですか？',en:"How old is he?",alt:"How old is she?",tip:""},
+{id:19,cat:'初めて会う犬への声かけ',jp:'おやつあげてもいいですか？',en:"Is it okay if I give him a treat?",alt:"Do you mind if I give her something?",tip:""},
+{id:20,cat:'初めて会う犬への声かけ',jp:'すごくおとなしい子だね。',en:"He's so well-behaved.",alt:"What a calm little dog.",tip:""},
+{id:21,cat:'散歩の話題',jp:'毎日何回散歩させてますか？',en:"How many walks do you do a day?",alt:"Do you walk him morning and night?",tip:""},
+{id:22,cat:'散歩の話題',jp:'朝と夜の2回です。',en:"Twice a day — morning and evening.",alt:"We try to get out morning and night.",tip:""},
+{id:23,cat:'散歩の話題',jp:'どのくらい歩きますか？',en:"How far do you usually walk?",alt:"How long do you go for?",tip:""},
+{id:24,cat:'散歩の話題',jp:'だいたい30分くらいです。',en:"About half an hour usually.",alt:"We do around 30 minutes.",tip:""},
+{id:25,cat:'散歩の話題',jp:'雨の日でも散歩しますか？',en:"Do you still walk in the rain?",alt:"Do you go out even when it's wet?",tip:""},
+{id:26,cat:'散歩の話題',jp:'暑い日は早朝に行くようにしてます。',en:"We try to go early before it gets too hot.",alt:"Early morning is the only option in summer.",tip:""},
+{id:27,cat:'散歩の話題',jp:'今日は特別長く歩きました。',en:"We went a bit further than usual today.",alt:"Had a longer walk today.",tip:""},
+{id:28,cat:'散歩の話題',jp:'散歩は私のストレス発散です。',en:"Walking the dog is my stress relief.",alt:"It's good for both of us.",tip:""},
+{id:29,cat:'散歩の話題',jp:'Cocoは散歩が大好きなんです。',en:"Coco absolutely loves his walks.",alt:"He goes crazy when he sees the lead.",tip:"👂 'lead' = リード（豪英語）"},
+{id:30,cat:'散歩の話題',jp:'リードを見せると興奮するんです。',en:"As soon as I pick up the lead, he goes wild.",alt:"He loses his mind when he sees the lead.",tip:""},
+{id:31,cat:'他の犬との交流',jp:'他の犬と仲良くできますか？',en:"Is your dog okay with other dogs?",alt:"Is he friendly with other dogs?",tip:""},
+{id:32,cat:'他の犬との交流',jp:'うちの犬は少し臆病なんです。',en:"Mine's a bit timid around other dogs.",alt:"He can be a bit shy.",tip:"👂 Cocoの性格"},
+{id:33,cat:'他の犬との交流',jp:'大きい犬が苦手みたいです。',en:"He's not great with bigger dogs.",alt:"Large dogs make him nervous.",tip:""},
+{id:34,cat:'他の犬との交流',jp:'仲良く遊んでますね！',en:"They're getting along so well!",alt:"Look at them go!",tip:""},
+{id:35,cat:'他の犬との交流',jp:'うちの犬は遊ぶのが大好きです。',en:"Mine loves to play.",alt:"He never says no to a play.",tip:""},
+{id:36,cat:'他の犬との交流',jp:'少しだけ慣れさせてみましょうか。',en:"We can let them sniff each other if you like.",alt:"Let them get acquainted slowly.",tip:""},
+{id:37,cat:'他の犬との交流',jp:'引っ張らないで、Coco！',en:"Stop pulling, Coco!",alt:"Easy, Coco!",tip:""},
+{id:38,cat:'他の犬との交流',jp:'吠えてしまってすみません。',en:"Sorry, he's a bit of a barker.",alt:"Sorry about the barking.",tip:""},
+{id:39,cat:'他の犬との交流',jp:'すっかり仲良しになったね。',en:"They've become best mates.",alt:"Looks like they're friends now.",tip:"👂 'best mates' = 豪英語"},
+{id:40,cat:'他の犬との交流',jp:'また遊ばせましょう！',en:"We should let them meet again!",alt:"Let's bring them together again sometime.",tip:""},
+{id:41,cat:'公園での雑談',jp:'ここは散歩にいい場所ですよね。',en:"This is such a great spot for a walk.",alt:"Love this park.",tip:""},
+{id:42,cat:'公園での雑談',jp:'今日は犬が多いですね。',en:"Lots of dogs out today.",alt:"So many dogs here today.",tip:""},
+{id:43,cat:'公園での雑談',jp:'いつもここに来るんですか？',en:"Do you come here often?",alt:"Is this your usual park?",tip:""},
+{id:44,cat:'公園での雑談',jp:'この近くに住んでるんですか？',en:"Do you live nearby?",alt:"Are you local?",tip:""},
+{id:45,cat:'公園での雑談',jp:'いい眺めですね。',en:"What a beautiful view.",alt:"You can't beat this view.",tip:""},
+{id:46,cat:'公園での雑談',jp:'芝生がきれいに手入れされてますね。',en:"The park's looking really well maintained.",alt:"They do a great job keeping it tidy.",tip:""},
+{id:47,cat:'公園での雑談',jp:'子供たちも楽しそうですね。',en:"The kids are having a ball too.",alt:"Everyone's enjoying it today.",tip:""},
+{id:48,cat:'公園での雑談',jp:'ここはノーリードエリアですか？',en:"Is this an off-lead area?",alt:"Can they run free here?",tip:"👂 'off-lead' = 豪英語"},
+{id:49,cat:'公園での雑談',jp:'ベンチで少し休みましょうか。',en:"Want to sit on the bench for a bit?",alt:"Let's take a break.",tip:""},
+{id:50,cat:'公園での雑談',jp:'犬を飼うと外に出る機会が増えますよね。',en:"Having a dog really gets you out of the house.",alt:"Dogs are great for getting you outside.",tip:""},
+{id:51,cat:'しつけ・トレーニング',jp:'ちゃんと訓練されてますね。',en:"He's really well trained.",alt:"Great obedience.",tip:""},
+{id:52,cat:'しつけ・トレーニング',jp:'おいで！',en:"Come!",alt:"Here boy!",tip:""},
+{id:53,cat:'しつけ・トレーニング',jp:'待て！',en:"Stay!",alt:"Wait!",tip:""},
+{id:54,cat:'しつけ・トレーニング',jp:'リコールをまだ練習中なんです。',en:"We're still working on the recall.",alt:"The recall's not quite there yet.",tip:""},
+{id:55,cat:'しつけ・トレーニング',jp:'どこでしつけを習いましたか？',en:"Did you take him to puppy school?",alt:"Did you do obedience classes?",tip:"👂 'puppy school' = 豪英語"},
+{id:56,cat:'しつけ・トレーニング',jp:'おやつでしつけてます。',en:"I use treats for training.",alt:"Positive reinforcement all the way.",tip:""},
+{id:57,cat:'しつけ・トレーニング',jp:'引っ張り癖があって困ってます。',en:"He's a terrible puller.",alt:"Still working on the pulling.",tip:""},
+{id:58,cat:'しつけ・トレーニング',jp:'おすわり、えらい！',en:"Sit! Good boy!",alt:"Sit! Well done!",tip:""},
+{id:59,cat:'しつけ・トレーニング',jp:'散歩中は集中力が続かないんです。',en:"He gets distracted easily on walks.",alt:"Everything's a distraction.",tip:""},
+{id:60,cat:'しつけ・トレーニング',jp:'少しずつ上手になってますよ。',en:"He's getting better bit by bit.",alt:"You can see the improvement.",tip:""},
+{id:61,cat:'健康・病院',jp:'年次検診の時期です。',en:"He's due for his annual checkup.",alt:"Time for the yearly vet visit.",tip:""},
+{id:62,cat:'健康・病院',jp:'ノミ・ダニの予防薬をつけてますか？',en:"Do you use flea and tick treatment?",alt:"Are you on a flea prevention?",tip:""},
+{id:63,cat:'健康・病院',jp:'うちの犬はアレルギーがあって。',en:"Mine has some allergies.",alt:"He's got a few food sensitivities.",tip:""},
+{id:64,cat:'健康・病院',jp:'いい獣医さんを知ってますか？',en:"Do you know a good vet around here?",alt:"Can you recommend a vet?",tip:""},
+{id:65,cat:'健康・病院',jp:'最近少し食欲がないんです。',en:"He's been a bit off his food lately.",alt:"Not eating as well as usual.",tip:""},
+{id:66,cat:'健康・病院',jp:'去勢手術はしましたか？',en:"Is he desexed?",alt:"Has he been neutered?",tip:"👂 'desexed' = 豪英語"},
+{id:67,cat:'健康・病院',jp:'足を少しひきずってるみたいです。',en:"He's been limping a little.",alt:"Something's up with his leg.",tip:""},
+{id:68,cat:'健康・病院',jp:'ペット保険に入ってますか？',en:"Do you have pet insurance?",alt:"Are you covered for vet bills?",tip:""},
+{id:69,cat:'健康・病院',jp:'水をたくさん飲ませてあげてね。',en:"Make sure he stays hydrated in this heat.",alt:"Don't forget to bring water for him.",tip:""},
+{id:70,cat:'健康・病院',jp:'元気そうで安心しました。',en:"He looks really healthy.",alt:"He's looking great.",tip:""},
+{id:71,cat:'困った行動',jp:'公園でテンションが上がりすぎて。',en:"He goes absolutely berserk at the park.",alt:"He loses it completely at the park.",tip:""},
+{id:72,cat:'困った行動',jp:'他の犬に吠えてしまうんです。',en:"He tends to bark at other dogs.",alt:"He's a bit reactive.",tip:""},
+{id:73,cat:'困った行動',jp:'穴を掘るのが好きで。',en:"He loves to dig.",alt:"He's a digger.",tip:""},
+{id:74,cat:'困った行動',jp:'なんでも口に入れようとするんです。',en:"He puts everything in his mouth.",alt:"He's still in the chewing phase.",tip:""},
+{id:75,cat:'困った行動',jp:'分離不安があるみたいです。',en:"He gets separation anxiety.",alt:"He doesn't like being left alone.",tip:"👂 Cocoにぴったり"},
+{id:76,cat:'困った行動',jp:'知らない人を見ると隠れるんです。',en:"He hides behind me with strangers.",alt:"He's very shy around new people.",tip:""},
+{id:77,cat:'困った行動',jp:'夜中に鳴くんです。',en:"He whines at night.",alt:"He cries at night sometimes.",tip:""},
+{id:78,cat:'困った行動',jp:'ソファに乗るのが好きすぎて。',en:"He's obsessed with the couch.",alt:"The couch is his favourite spot.",tip:""},
+{id:79,cat:'困った行動',jp:'食べ物には目がないんです。',en:"He's food obsessed.",alt:"He'd do anything for a treat.",tip:""},
+{id:80,cat:'困った行動',jp:'少しずつよくなってきてます。',en:"We're making progress though.",alt:"He's getting better slowly.",tip:""},
+{id:81,cat:'犬好き同士の会話',jp:'何犬ですか？',en:"What breed is he?",alt:"What kind of dog is he?",tip:""},
+{id:82,cat:'犬好き同士の会話',jp:'キャバプーです。',en:"He's a cavoodle.",alt:"He's a cavalier cross poodle.",tip:"👂 'cavoodle' = 豪で人気"},
+{id:83,cat:'犬好き同士の会話',jp:'オスですか、メスですか？',en:"Is he a boy or a girl?",alt:"Boy or girl?",tip:""},
+{id:84,cat:'犬好き同士の会話',jp:'何歳ですか？',en:"How old is he?",alt:"What age is he?",tip:""},
+{id:85,cat:'犬好き同士の会話',jp:'毛がすごくふわふわですね。',en:"His coat is so soft!",alt:"Such a fluffy coat.",tip:""},
+{id:86,cat:'犬好き同士の会話',jp:'どこで買ったんですか？',en:"Where did you get him from?",alt:"Did you get him from a breeder?",tip:""},
+{id:87,cat:'犬好き同士の会話',jp:'うちも同じ犬種を考えてます。',en:"We're thinking about getting the same breed.",alt:"We've been looking at getting one too.",tip:""},
+{id:88,cat:'犬好き同士の会話',jp:'犬を飼うと生活が変わりますよね。',en:"Having a dog really changes your life.",alt:"Life's so different with a dog.",tip:""},
+{id:89,cat:'犬好き同士の会話',jp:'大変だけど最高ですよね。',en:"It's a lot of work but so worth it.",alt:"Hard work but totally worth it.",tip:""},
+{id:90,cat:'犬好き同士の会話',jp:'Cocoがいると寂しくないです。',en:"Coco keeps me company.",alt:"He's great company.",tip:""},
+{id:91,cat:'別れ際の会話',jp:'またここで会いましょう。',en:"We'll probably see you here again.",alt:"See you next time!",tip:""},
+{id:92,cat:'別れ際の会話',jp:'明日も来ますか？',en:"Will you be here tomorrow?",alt:"See you tomorrow maybe?",tip:""},
+{id:93,cat:'別れ際の会話',jp:'散歩楽しんで！',en:"Enjoy the rest of your walk!",alt:"Have a good walk!",tip:""},
+{id:94,cat:'別れ際の会話',jp:'またお会いできて良かったです。',en:"Always nice to run into you.",alt:"Great seeing you again.",tip:""},
+{id:95,cat:'別れ際の会話',jp:'Cocoによろしく。',en:"Say hi to Coco for me!",alt:"Give Coco a pat from me!",tip:""},
+{id:96,cat:'別れ際の会話',jp:'また連絡しましょう。',en:"We should exchange numbers.",alt:"Let's swap details.",tip:""},
+{id:97,cat:'別れ際の会話',jp:'いつもありがとう。',en:"Always a pleasure.",alt:"Really enjoy our chats.",tip:""},
+{id:98,cat:'別れ際の会話',jp:'いい一日を！',en:"Have a great day!",alt:"Enjoy the rest of your day!",tip:""},
+{id:99,cat:'別れ際の会話',jp:'Cocoに会えるのを楽しみにしてます。',en:"Looking forward to seeing Coco next time.",alt:"Can't wait to see Coco again.",tip:""},
+{id:100,cat:'別れ際の会話',jp:'またね、バイバイ！',en:"Alright, bye for now!",alt:"See ya!",tip:""}
+];
+const CATS=[...new Set(PHRASES.map(p=>p.cat))];
+const CAT_COLORS={'飼い主同士の挨拶':'#3d5a8a','初めて会う犬への声かけ':'#4a7c59','散歩の話題':'#c8962a','他の犬との交流':'#a03030','公園での雑談':'#7a5a2a','しつけ・トレーニング':'#5a2a7a','健康・病院':'#2a7a7a','困った行動':'#2a5a7a','犬好き同士の会話':'#7a2a5a','別れ際の会話':'#4a4a8a'};
+let synth=window.speechSynthesis;
+let autoPlay=false,autoFlowAbort=false,isSpeaking=false;
+let mastered=new Set(JSON.parse(localStorage.getItem('dog_ios_mastered')||'[]'));
+let wrong=new Set(JSON.parse(localStorage.getItem('dog_ios_wrong')||'[]'));
+let queue=[],qIdx=0,isRevealed=false,currentMode='normal',selectedCat='all',sessionOk=0,sessionNg=0,timerInterval=null,timerLeft=3,loopCounts={};
+function save(){localStorage.setItem('dog_ios_mastered',JSON.stringify([...mastered]));localStorage.setItem('dog_ios_wrong',JSON.stringify([...wrong]));}
+function updateHeader(){document.getElementById('h-mastered').textContent=mastered.size;}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
+function getVoice(lang){const vs=synth.getVoices();return vs.find(v=>v.lang.startsWith(lang==='en'?'en-AU':'ja'))|| vs.find(v=>v.lang.startsWith(lang==='en'?'en-GB':'ja'))||vs.find(v=>v.lang.startsWith(lang==='en'?'en':'ja'))||null;}
+function speak(text,lang){return new Promise(resolve=>{if(!synth){resolve();return;}synth.cancel();const u=new SpeechSynthesisUtterance(text);u.lang=lang==='ja'?'ja-JP':'en-AU';u.rate=0.92;const v=getVoice(lang);if(v)u.voice=v;u.onend=()=>{isSpeaking=false;resolve();};u.onerror=()=>{isSpeaking=false;resolve();};isSpeaking=true;synth.speak(u);});}
+function speakList(en){if(isSpeaking){synth.cancel();isSpeaking=false;return;}speak(en,'en');}
+function stopSpeech(){autoFlowAbort=true;if(synth)synth.cancel();isSpeaking=false;}
+function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
+function setApStatus(state,label){const dot=document.getElementById('ap-dot'),lbl=document.getElementById('ap-label');if(!dot||!lbl)return;dot.className='ap-dot '+state;lbl.textContent=label||'自動再生モード';const card=document.getElementById('flash-card');if(card){card.classList.remove('jp-speaking','en-speaking');if(state==='jp')card.classList.add('jp-speaking');if(state==='en')card.classList.add('en-speaking');}}
+function setVoiceStatus(m){const e=document.getElementById('voice-status');if(e)e.textContent=m;}
+async function runAutoFlow(phraseId){const p=PHRASES.find(x=>x.id===phraseId);if(!p)return;setApStatus('jp','🇯🇵 日本語...');setVoiceStatus('日本語を読み上げ中...');await speak(p.jp,'ja');if(autoFlowAbort)return;setApStatus('wait','⏳');setVoiceStatus('');await sleep(1200);if(autoFlowAbort)return;revealCard(true);await sleep(200);if(autoFlowAbort)return;setApStatus('en','🇦🇺 英語...');setVoiceStatus('英語を読み上げ中...');await speak(p.en,'en');if(autoFlowAbort)return;setVoiceStatus('');setApStatus('idle','タップして次へ');showNextBtn();}
+function showNextBtn(){document.getElementById('next-btn').style.display='flex';}
+function hideNextBtn(){document.getElementById('next-btn').style.display='none';}
+function onNextTap(){if(!autoPlay)return;hideNextBtn();autoFlowAbort=false;const p=queue[qIdx];sessionOk++;wrong.delete(p.id);if(currentMode==='loop'){loopCounts[p.id]=(loopCounts[p.id]||0)+1;if(loopCounts[p.id]>=5){mastered.add(p.id);save();qIdx++;}else{const ins=qIdx+1+Math.floor(Math.random()*Math.min(5,queue.length-qIdx-1));queue.splice(ins,0,p);qIdx++;}}else{mastered.add(p.id);save();qIdx++;}updateHeader();showCard();}
+function toggleAutoPlay(){autoPlay=!autoPlay;const b=document.getElementById('auto-play-btn');if(autoPlay){b.textContent='▶ 自動ON';b.classList.add('on');showToast('自動再生ON');}else{b.textContent='▶ 自動OFF';b.classList.remove('on');stopSpeech();hideNextBtn();setApStatus('idle','');setVoiceStatus('');showToast('自動再生OFF');}document.getElementById('autoplay-bar').classList.toggle('visible',autoPlay);}
+function switchTab(p,btn){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));document.getElementById('page-'+p).classList.add('active');btn.classList.add('active');if(p==='list')renderList();if(p==='stats')renderStats();}
+function initSetup(){const cc=document.getElementById('cat-chips');cc.innerHTML=`<button class="cat-chip active" onclick="selCat('all',this)">すべて (${PHRASES.length})</button>`;CATS.forEach(c=>{const n=PHRASES.filter(p=>p.cat===c).length;cc.innerHTML+=`<button class="cat-chip" onclick="selCat('${c}',this)">${c} (${n})</button>`;});}
+function selCat(cat,btn){selectedCat=cat;document.querySelectorAll('#cat-chips .cat-chip').forEach(c=>c.classList.remove('active'));btn.classList.add('active');}
+function selectMode(mode){currentMode=mode;document.querySelectorAll('.mode-card').forEach(c=>c.classList.remove('selected'));document.getElementById('mode-'+mode).classList.add('selected');}
+function startTraining(){let pool=selectedCat==='all'?[...PHRASES]:PHRASES.filter(p=>p.cat===selectedCat);if(currentMode==='review')pool=pool.filter(p=>!mastered.has(p.id)||wrong.has(p.id));if(pool.length===0){alert('該当するフレーズがありません！');return;}for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]];}queue=pool;qIdx=0;sessionOk=0;sessionNg=0;loopCounts={};document.getElementById('train-setup').style.display='none';document.getElementById('train-result').style.display='none';document.getElementById('train-area').style.display='block';document.getElementById('timer-wrap').style.display=currentMode==='timer'?'flex':'none';document.getElementById('loop-banner').style.display=currentMode==='loop'?'block':'none';document.getElementById('autoplay-bar').classList.toggle('visible',autoPlay);showCard();}
+function showCard(){if(qIdx>=queue.length){endTraining();return;}const p=queue[qIdx];isRevealed=false;stopSpeech();hideNextBtn();setApStatus('idle','自動再生モード');document.getElementById('flash-card').className='flash-card';document.getElementById('card-cat').textContent=p.cat;document.getElementById('card-jp').textContent=p.jp;document.getElementById('card-en').textContent=p.en;document.getElementById('card-alt').textContent=p.alt?'💡 '+p.alt:'';document.getElementById('card-tip').textContent=p.tip||'';document.getElementById('card-hint').style.display='';document.getElementById('btn-reveal').style.display='inline-block';document.getElementById('btn-ok').style.display='none';document.getElementById('btn-ng').style.display='none';setVoiceStatus('');document.getElementById('train-ctr').textContent=`${qIdx+1} / ${queue.length}`;document.getElementById('train-prog').style.width=(qIdx/queue.length*100)+'%';if(currentMode==='loop')document.getElementById('loop-remain').textContent=5-(loopCounts[p.id]||0);if(autoPlay){const flowId=p.id;setTimeout(()=>{autoFlowAbort=false;runAutoFlow(flowId);},300);}else if(currentMode==='timer')startTimer();}
+function onCardTap(){if(autoPlay){stopSpeech();hideNextBtn();setApStatus('idle','手動モード');revealCard(true);}else revealCard(false);}
+function revealCard(silent){if(isRevealed)return;isRevealed=true;clearInterval(timerInterval);document.getElementById('flash-card').classList.add('revealed');document.getElementById('flash-card').classList.remove('jp-speaking','en-speaking');document.getElementById('card-hint').style.display='none';document.getElementById('btn-reveal').style.display='none';document.getElementById('btn-ok').style.display='inline-block';document.getElementById('btn-ng').style.display='inline-block';}
+function startTimer(){clearInterval(timerInterval);timerLeft=3;updateTimerUI(3,3);timerInterval=setInterval(()=>{timerLeft-=0.1;if(timerLeft<=0){clearInterval(timerInterval);timerLeft=0;revealCard(false);}updateTimerUI(timerLeft,3);},100);}
+function updateTimerUI(val,max){const offset=169.6*(1-val/max);document.getElementById('timer-circle').style.strokeDashoffset=offset;document.getElementById('timer-num').textContent=Math.ceil(val);document.getElementById('timer-circle').style.stroke=val>2?'#c8962a':val>1?'#c86a2a':'#a03030';}
+function markOk(){stopSpeech();hideNextBtn();const p=queue[qIdx];sessionOk++;wrong.delete(p.id);if(currentMode==='loop'){loopCounts[p.id]=(loopCounts[p.id]||0)+1;if(loopCounts[p.id]>=5){mastered.add(p.id);save();qIdx++;}else{const ins=qIdx+1+Math.floor(Math.random()*Math.min(5,queue.length-qIdx-1));queue.splice(ins,0,p);qIdx++;}}else{mastered.add(p.id);save();qIdx++;}updateHeader();showCard();}
+function markNg(){stopSpeech();hideNextBtn();const p=queue[qIdx];sessionNg++;wrong.add(p.id);if(currentMode==='loop'){loopCounts[p.id]=0;const ins=qIdx+1+Math.floor(Math.random()*Math.min(4,queue.length-qIdx-1));queue.splice(Math.min(ins,queue.length),0,p);}save();qIdx++;showCard();}
+function skipCard(){stopSpeech();hideNextBtn();qIdx++;showCard();}
+function quitTraining(){stopSpeech();clearInterval(timerInterval);backToSetup();}
+function endTraining(){stopSpeech();clearInterval(timerInterval);document.getElementById('train-area').style.display='none';document.getElementById('train-result').style.display='block';const total=sessionOk+sessionNg,pct=total>0?Math.round(sessionOk/total*100):0;document.getElementById('res-ok').textContent=sessionOk;document.getElementById('res-ng').textContent=sessionNg;document.getElementById('res-total').textContent=total;document.getElementById('res-emoji').textContent=pct>=80?'🎉':pct>=50?'💪':'🔥';document.getElementById('res-title').textContent=pct>=80?'素晴らしい！':pct>=50?'いい調子！':'もう一息！';document.getElementById('res-sub').textContent=`正解率 ${pct}%（${sessionOk}/${total}）`;document.getElementById('res-loop-btn').style.display=sessionNg>0&&currentMode!=='loop'?'block':'none';updateHeader();}
+function startLoopFromResult(){currentMode='loop';const ng=[...wrong];if(ng.length===0){alert('間違えたフレーズがありません！');return;}queue=PHRASES.filter(p=>ng.includes(p.id));for(let i=queue.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[queue[i],queue[j]]=[queue[j],queue[i]];}qIdx=0;sessionOk=0;sessionNg=0;loopCounts={};document.getElementById('train-result').style.display='none';document.getElementById('train-area').style.display='block';document.getElementById('loop-banner').style.display='block';document.getElementById('timer-wrap').style.display='none';document.getElementById('autoplay-bar').classList.toggle('visible',autoPlay);showCard();}
+function backToSetup(){document.getElementById('train-area').style.display='none';document.getElementById('train-result').style.display='none';document.getElementById('train-setup').style.display='block';}
+function renderList(){const lcc=document.getElementById('list-cat-chips');lcc.innerHTML=`<button class="cat-chip active" onclick="filterList('all',this)">すべて</button>`;CATS.forEach(c=>{lcc.innerHTML+=`<button class="cat-chip" onclick="filterList('${c}',this)">${c}</button>`;});filterList('all',lcc.firstElementChild);}
+function filterList(cat,btn){document.querySelectorAll('#list-cat-chips .cat-chip').forEach(c=>c.classList.remove('active'));btn.classList.add('active');const pool=cat==='all'?PHRASES:PHRASES.filter(p=>p.cat===cat);document.getElementById('list-items').innerHTML=pool.map(p=>`<div class="list-item"><div class="li-dot" style="background:${CAT_COLORS[p.cat]||'#888'}"></div><div class="li-body"><div class="li-cat">${p.cat}</div><div class="li-jp">${p.jp}</div><div class="li-en">${p.en}</div></div><div class="li-right"><button class="li-voice-btn" onclick="speakList(${JSON.stringify(p.en)})">🔊</button><div class="li-done ${mastered.has(p.id)?'show':''}">✓ 習得</div></div></div>`).join('');}
+function renderStats(){document.getElementById('st-mastered').textContent=mastered.size;document.getElementById('st-total').textContent=PHRASES.length;document.getElementById('cat-stats').innerHTML=CATS.map(c=>{const total=PHRASES.filter(p=>p.cat===c).length,done=PHRASES.filter(p=>p.cat===c&&mastered.has(p.id)).length,pct=Math.round(done/total*100);return`<div class="cat-stat"><div class="cs-top"><span class="cs-name">${c}</span><span class="cs-pct">${done}/${total} (${pct}%)</span></div><div class="cs-bar"><div class="cs-fill" style="width:${pct}%;background:${CAT_COLORS[c]||'var(--moss)'}"></div></div></div>`;}).join('');}
+function resetAllData(){if(!confirm('全データをリセットしますか？'))return;mastered.clear();wrong.clear();save();updateHeader();renderStats();}
+initSetup();updateHeader();
+synth.getVoices();window.speechSynthesis.onvoiceschanged=()=>synth.getVoices();
+</script>
+</body>
+</html>

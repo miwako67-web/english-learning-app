@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🌤️ 天気・体調の日常会話 iOS版</title>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#1a1410;--paper:#f5f0e8;--gold:#c8962a;--moss:#4a7c59;--indigo:#3d5a8a;--crimson:#a03030;--panel:#fffdf8;--border:rgba(26,20,16,0.12);}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);min-height:100vh;}
+header{background:var(--ink);padding:16px 20px 0;position:sticky;top:0;z-index:100;}
+.h-top{display:flex;align-items:center;gap:10px;padding-bottom:14px;}
+.h-logo{font-size:22px;}.h-titles{flex:1;}
+.h-titles h1{font-family:'Shippori Mincho',serif;color:var(--gold);font-size:16px;font-weight:700;}
+.h-titles p{color:rgba(245,240,232,0.42);font-size:10px;margin-top:1px;}
+.h-right{display:flex;align-items:center;gap:8px;}
+.h-score .num{font-size:20px;font-weight:500;color:var(--gold);}
+.h-score .lbl{font-family:'Shippori Mincho',serif;font-size:9px;color:rgba(245,240,232,0.4);}
+.h-auto-btn{padding:5px 10px;border-radius:7px;border:1px solid rgba(200,150,42,0.4);background:transparent;color:rgba(200,150,42,0.7);font-size:10px;cursor:pointer;transition:all .25s;white-space:nowrap;}
+.h-auto-btn.on{background:rgba(200,150,42,0.2);border-color:var(--gold);color:var(--gold);}
+nav{display:flex;}
+.tab{flex:1;padding:8px 4px;background:none;border:none;border-bottom:2px solid transparent;color:rgba(245,240,232,0.38);font-family:'DM Sans',sans-serif;font-size:10px;cursor:pointer;transition:all .2s;display:flex;flex-direction:column;align-items:center;gap:2px;}
+.tab span:first-child{font-size:13px;}.tab.active{color:var(--gold);border-bottom-color:var(--gold);}
+main{padding:14px;max-width:600px;margin:0 auto;}
+.page{display:none;}.page.active{display:block;}
+.sec{font-family:'Shippori Mincho',serif;font-size:10px;font-weight:600;color:rgba(26,20,16,0.35);letter-spacing:.12em;text-transform:uppercase;margin:16px 0 10px;}
+.cat-chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;}
+.cat-chip{padding:5px 12px;border-radius:20px;border:1.5px solid var(--border);background:var(--panel);font-size:11px;cursor:pointer;transition:all .2s;color:var(--ink);}
+.cat-chip.active{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+.mode-cards{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px;}
+.mode-card{background:var(--panel);border:1.5px solid var(--border);border-radius:14px;padding:14px 12px;cursor:pointer;transition:all .2s;text-align:center;}
+.mode-card.selected{border-color:var(--gold);background:rgba(200,150,42,0.07);}
+.mode-emoji{font-size:24px;margin-bottom:6px;}.mode-name{font-size:13px;font-weight:500;margin-bottom:3px;}
+.mode-desc{font-family:'Shippori Mincho',serif;font-size:10px;color:rgba(26,20,16,0.45);line-height:1.5;}
+.start-btn{width:100%;padding:14px;border-radius:12px;border:none;background:var(--ink);color:var(--gold);font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;cursor:pointer;}
+.train-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.train-prog-wrap{flex:1;height:5px;background:var(--border);border-radius:3px;margin:0 12px;overflow:hidden;}
+.train-prog-fill{height:100%;background:var(--gold);border-radius:3px;transition:width .4s;}
+.train-ctr{font-size:11px;color:rgba(26,20,16,0.4);}
+.quit-btn{font-size:11px;color:rgba(26,20,16,0.35);background:none;border:none;cursor:pointer;text-decoration:underline;}
+.timer-wrap{display:flex;justify-content:center;margin-bottom:14px;}
+.timer-ring{position:relative;width:64px;height:64px;}
+.timer-ring svg{transform:rotate(-90deg);}
+.timer-ring circle{fill:none;stroke-width:5;}
+.timer-bg{stroke:var(--border);}.timer-fg{stroke:var(--gold);stroke-linecap:round;transition:stroke-dashoffset .1s linear,stroke .3s;}
+.timer-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:500;color:var(--ink);}
+.loop-banner{background:rgba(200,150,42,0.1);border:1px solid rgba(200,150,42,0.3);border-radius:10px;padding:8px 12px;margin-bottom:12px;font-family:'Shippori Mincho',serif;font-size:12px;color:var(--gold);text-align:center;}
+.autoplay-bar{display:none;align-items:center;justify-content:space-between;background:rgba(200,150,42,0.1);border:1px solid rgba(200,150,42,0.28);border-radius:10px;padding:8px 14px;margin-bottom:12px;}
+.autoplay-bar.visible{display:flex;}
+.ap-left{display:flex;align-items:center;gap:8px;}
+.ap-dot{width:8px;height:8px;border-radius:50%;}
+.ap-dot.jp{background:#4a7c59;}.ap-dot.en{background:#3d5a8a;}
+.ap-dot.wait{background:#c86a2a;animation:blink 0.8s ease-in-out infinite;}
+.ap-dot.idle{background:rgba(200,150,42,0.3);}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0.2;}}
+.ap-label{font-family:'Shippori Mincho',serif;font-size:11px;color:var(--gold);}
+.flash-card{background:var(--panel);border:1.5px solid var(--border);border-radius:18px;padding:28px 22px;text-align:center;margin-bottom:14px;box-shadow:0 4px 24px rgba(26,20,16,0.08);min-height:200px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:border-color .2s;}
+.flash-card.revealed{border-color:var(--moss);}
+.flash-card.jp-speaking{border-color:#4a7c59;box-shadow:0 0 0 3px rgba(74,124,89,0.15);}
+.flash-card.en-speaking{border-color:#3d5a8a;box-shadow:0 0 0 3px rgba(61,90,138,0.15);}
+.card-cat{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(26,20,16,0.3);margin-bottom:10px;}
+.card-jp{font-family:'Shippori Mincho',serif;font-size:20px;font-weight:700;line-height:1.5;margin-bottom:6px;}
+.card-sub{font-family:'Shippori Mincho',serif;font-size:12px;color:rgba(26,20,16,0.4);margin-bottom:14px;font-style:italic;}
+.card-hint{font-size:11px;color:rgba(26,20,16,0.3);font-style:italic;}
+.card-en{font-size:17px;font-weight:500;line-height:1.5;margin-bottom:6px;display:none;}
+.card-alt{font-size:12px;color:rgba(26,20,16,0.5);display:none;font-style:italic;margin-bottom:10px;}
+.card-tip{font-family:'Shippori Mincho',serif;font-size:11px;color:var(--indigo);background:rgba(61,90,138,0.08);border-radius:6px;padding:6px 10px;display:none;line-height:1.6;}
+.flash-card.revealed .card-en,.flash-card.revealed .card-alt,.flash-card.revealed .card-tip{display:block;}
+.flash-card.revealed .card-hint{display:none;}
+.next-btn-wrap{display:flex;justify-content:center;margin-bottom:10px;}
+.next-btn{display:flex;align-items:center;gap:8px;padding:12px 28px;border-radius:30px;border:none;background:var(--indigo);color:#fff;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;display:none;}
+.voice-status{font-size:10px;color:rgba(26,20,16,0.4);text-align:center;margin-bottom:8px;min-height:14px;}
+.action-row{display:flex;gap:8px;margin-bottom:10px;}
+.act-btn{flex:1;padding:13px;border-radius:12px;border:none;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;}
+.act-reveal{background:var(--indigo);color:#fff;flex:2;}
+.act-ok{background:var(--moss);color:#fff;}
+.act-ng{background:rgba(160,48,48,0.12);color:var(--crimson);}
+.act-skip{width:100%;padding:9px;border-radius:9px;border:1.5px solid var(--border);background:var(--panel);font-family:'DM Sans',sans-serif;font-size:11px;cursor:pointer;color:rgba(26,20,16,0.45);}
+.result-wrap{text-align:center;padding:24px 0;}
+.result-emoji{font-size:52px;margin-bottom:12px;}
+.result-title{font-family:'Shippori Mincho',serif;font-size:20px;font-weight:700;margin-bottom:6px;}
+.result-sub{font-size:13px;color:rgba(26,20,16,0.5);margin-bottom:24px;font-family:'Shippori Mincho',serif;}
+.result-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:24px;}
+.rs{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:12px 8px;text-align:center;}
+.rs-num{font-size:24px;font-weight:500;line-height:1;margin-bottom:3px;}
+.rs-num.g{color:var(--moss);}.rs-num.r{color:var(--crimson);}.rs-num.b{color:var(--indigo);}
+.rs-lbl{font-family:'Shippori Mincho',serif;font-size:9px;color:rgba(26,20,16,0.4);}
+.result-btns{display:flex;flex-direction:column;gap:8px;}
+.res-btn{padding:13px;border-radius:12px;border:none;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;}
+.res-btn.primary{background:var(--crimson);color:#fff;}
+.res-btn.secondary{background:var(--ink);color:var(--paper);}
+.res-btn.tertiary{background:var(--panel);color:var(--ink);border:1.5px solid var(--border);}
+.list-item{background:var(--panel);border:1px solid var(--border);border-radius:11px;padding:12px 14px;margin-bottom:7px;display:flex;align-items:center;gap:12px;}
+.li-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}.li-body{flex:1;}
+.li-cat{font-size:9px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:rgba(26,20,16,0.3);margin-bottom:2px;}
+.li-jp{font-family:'Shippori Mincho',serif;font-size:14px;font-weight:600;margin-bottom:2px;}
+.li-en{font-size:13px;color:rgba(26,20,16,0.6);}
+.li-right{display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;}
+.li-done{font-size:10px;background:var(--moss);color:#fff;padding:2px 7px;border-radius:20px;display:none;}
+.li-done.show{display:inline;}
+.li-voice-btn{padding:3px 8px;border-radius:20px;border:1px solid var(--gold);background:transparent;color:var(--gold);font-size:10px;cursor:pointer;}
+.overall-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;}
+.os{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px 12px;text-align:center;}
+.os-num{font-size:26px;font-weight:500;line-height:1;margin-bottom:4px;}
+.os-num.g{color:var(--moss);}.os-num.gold{color:var(--gold);}
+.os-lbl{font-family:'Shippori Mincho',serif;font-size:10px;color:rgba(26,20,16,0.4);}
+.cat-stat{background:var(--panel);border:1px solid var(--border);border-radius:11px;padding:12px 14px;margin-bottom:8px;}
+.cs-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+.cs-name{font-size:13px;font-weight:500;}.cs-pct{font-size:12px;color:var(--moss);font-weight:500;}
+.cs-bar{height:4px;background:var(--border);border-radius:2px;overflow:hidden;}
+.cs-fill{height:100%;background:var(--moss);border-radius:2px;transition:width .5s;}
+.reset-all-btn{width:100%;padding:11px;border-radius:10px;border:1.5px solid var(--border);background:var(--panel);font-family:'DM Sans',sans-serif;font-size:12px;color:rgba(26,20,16,0.4);cursor:pointer;margin-top:12px;}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:10px 20px;border-radius:30px;font-size:12px;z-index:1000;opacity:0;transition:opacity .3s;pointer-events:none;}
+.toast.show{opacity:1;}
+.ios-badge{display:inline-block;background:rgba(61,90,138,0.12);color:var(--indigo);font-size:10px;padding:2px 8px;border-radius:10px;margin-left:6px;font-family:'Shippori Mincho',serif;}
+</style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+<header>
+<div class="h-top">
+<div class="h-logo">🌤️</div>
+<div class="h-titles"><h1>天気・体調の日常会話<span class="ios-badge">iOS</span></h1><p>瞬間反射トレーニング — 100フレーズ</p></div>
+<div class="h-right">
+<button class="h-auto-btn" id="auto-play-btn" onclick="toggleAutoPlay()">▶ 自動OFF</button>
+<div class="h-score"><div class="num" id="h-mastered">0</div><div class="lbl">習得済み</div></div>
+</div>
+</div>
+<nav>
+<button class="tab active" onclick="switchTab('train',this)"><span>⚡</span><span>トレーニング</span></button>
+<button class="tab" onclick="switchTab('list',this)"><span>📋</span><span>一覧</span></button>
+<button class="tab" onclick="switchTab('stats',this)"><span>📊</span><span>記録</span></button>
+</nav>
+</header>
+<main>
+<div id="page-train" class="page active">
+<div id="train-setup">
+<div class="sec" style="margin-top:14px">カテゴリを選ぶ</div>
+<div class="cat-chips" id="cat-chips"></div>
+<div class="sec">モードを選ぶ</div>
+<div class="mode-cards">
+<div class="mode-card selected" id="mode-normal" onclick="selectMode('normal')"><div class="mode-emoji">🃏</div><div class="mode-name">通常モード</div><div class="mode-desc">自分のペースで1枚ずつ。</div></div>
+<div class="mode-card" id="mode-timer" onclick="selectMode('timer')"><div class="mode-emoji">⏱️</div><div class="mode-name">タイマーモード</div><div class="mode-desc">3秒以内に口から出す。</div></div>
+<div class="mode-card" id="mode-loop" onclick="selectMode('loop')"><div class="mode-emoji">🔁</div><div class="mode-name">ループモード</div><div class="mode-desc">5回連続正解で身体化。</div></div>
+<div class="mode-card" id="mode-review" onclick="selectMode('review')"><div class="mode-emoji">🔄</div><div class="mode-name">復習モード</div><div class="mode-desc">未習得・間違えたものだけ。</div></div>
+</div>
+<button class="start-btn" onclick="startTraining()">トレーニング開始 →</button>
+</div>
+<div id="train-area" style="display:none">
+<div class="train-hd"><span class="train-ctr" id="train-ctr">1 / 100</span><div class="train-prog-wrap"><div class="train-prog-fill" id="train-prog" style="width:0%"></div></div><button class="quit-btn" onclick="quitTraining()">終了</button></div>
+<div id="loop-banner" class="loop-banner" style="display:none">🔁 ループモード — あと<span id="loop-remain"></span>回正解で卒業！</div>
+<div id="timer-wrap" class="timer-wrap" style="display:none"><div class="timer-ring"><svg width="64" height="64" viewBox="0 0 64 64"><circle class="timer-bg" cx="32" cy="32" r="27"/><circle class="timer-fg" id="timer-circle" cx="32" cy="32" r="27" stroke-dasharray="169.6" stroke-dashoffset="0"/></svg><div class="timer-num" id="timer-num">3</div></div></div>
+<div class="autoplay-bar" id="autoplay-bar"><div class="ap-left"><div class="ap-dot idle" id="ap-dot"></div><span class="ap-label" id="ap-label">自動再生モード</span></div></div>
+<div class="flash-card" id="flash-card" onclick="onCardTap()">
+<div class="card-cat" id="card-cat"></div><div class="card-jp" id="card-jp"></div><div class="card-sub" id="card-sub"></div>
+<div class="card-hint" id="card-hint">タップして英語を確認</div>
+<div class="card-en" id="card-en"></div><div class="card-alt" id="card-alt"></div><div class="card-tip" id="card-tip"></div>
+</div>
+<div class="next-btn-wrap"><button class="next-btn" id="next-btn" onclick="onNextTap()">次へ →</button></div>
+<div class="voice-status" id="voice-status"></div>
+<div class="action-row">
+<button class="act-btn act-reveal" id="btn-reveal" onclick="revealCard()">英語を見る</button>
+<button class="act-btn act-ok" id="btn-ok" onclick="markOk()" style="display:none">✓ 言えた！</button>
+<button class="act-btn act-ng" id="btn-ng" onclick="markNg()" style="display:none">✕ 言えなかった</button>
+</div>
+<button class="act-skip" onclick="skipCard()">スキップ →</button>
+</div>
+<div id="train-result" style="display:none">
+<div class="result-wrap">
+<div class="result-emoji" id="res-emoji">🎉</div><div class="result-title" id="res-title">完了！</div><div class="result-sub" id="res-sub"></div>
+<div class="result-stats"><div class="rs"><div class="rs-num g" id="res-ok">0</div><div class="rs-lbl">言えた！</div></div><div class="rs"><div class="rs-num r" id="res-ng">0</div><div class="rs-lbl">言えなかった</div></div><div class="rs"><div class="rs-num b" id="res-total">0</div><div class="rs-lbl">総問数</div></div></div>
+<div class="result-btns"><button class="res-btn primary" id="res-loop-btn" onclick="startLoopFromResult()" style="display:none">🔁 言えなかった分をループ練習</button><button class="res-btn secondary" onclick="backToSetup()">もう一度設定から</button><button class="res-btn tertiary" onclick="switchTab('stats',document.querySelectorAll('.tab')[2])">記録を見る</button></div>
+</div>
+</div>
+</div>
+<div id="page-list" class="page"><div class="sec" style="margin-top:14px">カテゴリで絞り込む</div><div class="cat-chips" id="list-cat-chips"></div><div id="list-items"></div></div>
+<div id="page-stats" class="page">
+<div class="sec" style="margin-top:14px">全体の進捗</div>
+<div class="overall-stats"><div class="os"><div class="os-num g" id="st-mastered">0</div><div class="os-lbl">習得済み</div></div><div class="os"><div class="os-num gold" id="st-total">100</div><div class="os-lbl">総フレーズ数</div></div></div>
+<div class="sec">カテゴリ別</div><div id="cat-stats"></div>
+<button class="reset-all-btn" onclick="resetAllData()">↺ 全データをリセット</button>
+</div>
+</main>
+<script>
+const PHRASES=[
+{id:1,cat:'今日の天気トーク',jp:'いい天気だね！',en:"Gorgeous day, isn't it?",alt:"Beautiful day today.",tip:"👂 'Gorgeous day, hey?' とも言う"},
+{id:2,cat:'今日の天気トーク',jp:'今日は風が強いね。',en:"It's really blowing out there today.",alt:"So windy today.",tip:""},
+{id:3,cat:'今日の天気トーク',jp:'今日は曇り空だね。',en:"Pretty overcast today.",alt:"Bit grey out there.",tip:""},
+{id:4,cat:'今日の天気トーク',jp:'午後は晴れるといいね。',en:"Hopefully it clears up this afternoon.",alt:"Fingers crossed it gets better later.",tip:""},
+{id:5,cat:'今日の天気トーク',jp:'完璧なビーチ日和だね。',en:"Perfect beach weather.",alt:"Great day to be outside.",tip:""},
+{id:6,cat:'今日の天気トーク',jp:'昨日より涼しいね。',en:"Much cooler than yesterday.",alt:"It's a lot nicer today.",tip:""},
+{id:7,cat:'今日の天気トーク',jp:'今日は外に出たくないな。',en:"Not a great day to be out.",alt:"I'd rather stay inside today.",tip:""},
+{id:8,cat:'今日の天気トーク',jp:'天気予報は合ってたね。',en:"They got the forecast right for once.",alt:"The weather app was actually right.",tip:""},
+{id:9,cat:'今日の天気トーク',jp:'日差しが強いね、日焼け止め塗った？',en:"The sun's really strong — did you put on sunscreen?",alt:"Don't forget your SPF today.",tip:""},
+{id:10,cat:'今日の天気トーク',jp:'こんな天気の日は最高だね。',en:"You can't beat a day like this.",alt:"Love days like this.",tip:""},
+{id:11,cat:'暑さ・熱波',jp:'この暑さ、尋常じゃない。',en:"This heat is something else.",alt:"It's absolutely brutal out there.",tip:""},
+{id:12,cat:'暑さ・熱波',jp:'エアコンなしじゃ無理だよ。',en:"I can't function without air con.",alt:"Thank god for air conditioning.",tip:"👂 'air con' = 豪英語"},
+{id:13,cat:'暑さ・熱波',jp:'溶けそう。',en:"I'm melting.",alt:"I'm absolutely dying in this heat.",tip:""},
+{id:14,cat:'暑さ・熱波',jp:'今日は40度超えるって。',en:"They're saying it'll hit 40 today.",alt:"It's going to be over 40 apparently.",tip:""},
+{id:15,cat:'暑さ・熱波',jp:'水分補給しっかりしてね。',en:"Make sure you stay hydrated.",alt:"Keep your fluids up in this heat.",tip:""},
+{id:16,cat:'暑さ・熱波',jp:'犬の散歩は朝早くしないと。',en:"Got to walk the dog early before it gets too hot.",alt:"Too hot to walk the dog after 9am.",tip:""},
+{id:17,cat:'暑さ・熱波',jp:'夜になっても全然涼しくならない。',en:"It's not even cooling down at night.",alt:"Still sweltering at midnight.",tip:""},
+{id:18,cat:'暑さ・熱波',jp:'週末は少し涼しくなるって。',en:"Apparently it's going to cool down this weekend.",alt:"A cool change is coming through.",tip:"👂 'cool change' = 豪の天気用語"},
+{id:19,cat:'暑さ・熱波',jp:'プール入りたい。',en:"I could really go a swim right now.",alt:"I'd kill for a pool right now.",tip:"👂 'could go a ...' = 豪英語"},
+{id:20,cat:'暑さ・熱波',jp:'アイスコーヒーが手放せない季節だね。',en:"Iced coffee weather for sure.",alt:"Nothing better than an iced coffee in this heat.",tip:""},
+{id:21,cat:'雨・嵐',jp:'土砂降りだよ。',en:"It's absolutely bucketing down.",alt:"It's pouring out there.",tip:"👂 'bucketing down' = 豪スラング"},
+{id:22,cat:'雨・嵐',jp:'傘持ってきた？',en:"Did you bring an umbrella?",alt:"You got an umbrella?",tip:""},
+{id:23,cat:'雨・嵐',jp:'雨、やむかな。',en:"I wonder if it'll let up.",alt:"Hopefully it stops soon.",tip:""},
+{id:24,cat:'雨・嵐',jp:'昨夜の嵐すごかったね。',en:"That storm last night was wild.",alt:"Did you hear the storm last night?",tip:""},
+{id:25,cat:'雨・嵐',jp:'雷が鳴ってるね。',en:"There's thunder rolling in.",alt:"Can you hear that thunder?",tip:""},
+{id:26,cat:'雨・嵐',jp:'洪水注意報が出てるって。',en:"They've issued a flood warning.",alt:"There's a flood warning out.",tip:""},
+{id:27,cat:'雨・嵐',jp:'外に出たくない日だね。',en:"Definitely a stay-inside day.",alt:"Not going anywhere in this.",tip:""},
+{id:28,cat:'雨・嵐',jp:'車の中でびしょ濡れになったよ。',en:"I got drenched just getting to the car.",alt:"Soaked in seconds.",tip:""},
+{id:29,cat:'雨・嵐',jp:'雨の日は気分が下がるな。',en:"Rainy days really bring my mood down.",alt:"Hard to stay motivated on days like this.",tip:""},
+{id:30,cat:'雨・嵐',jp:'でも雨の後は空気が澄むよね。',en:"At least everything smells fresh after the rain.",alt:"Love the smell after rain.",tip:""},
+{id:31,cat:'季節の変わり目',jp:'やっと秋らしくなってきたね。',en:"It's finally starting to feel like autumn.",alt:"Autumn's definitely in the air.",tip:""},
+{id:32,cat:'季節の変わり目',jp:'朝晩が冷えてきたね。',en:"The mornings and evenings are getting chilly.",alt:"Getting cooler at night now.",tip:""},
+{id:33,cat:'季節の変わり目',jp:'冬服を出さないと。',en:"Time to dig out the winter clothes.",alt:"Definitely need a jacket now.",tip:""},
+{id:34,cat:'季節の変わり目',jp:'日が短くなってきたね。',en:"The days are getting shorter.",alt:"It gets dark so early now.",tip:""},
+{id:35,cat:'季節の変わり目',jp:'花粉症の季節だよ。',en:"Hayfever season is here.",alt:"My allergies are going crazy.",tip:""},
+{id:36,cat:'季節の変わり目',jp:'春が近い感じがするね。',en:"Spring is just around the corner.",alt:"You can feel spring coming.",tip:""},
+{id:37,cat:'季節の変わり目',jp:'今年の夏は長かったね。',en:"Summer really dragged on this year.",alt:"That was a long summer.",tip:""},
+{id:38,cat:'季節の変わり目',jp:'急に寒くなったね。',en:"It turned cold overnight.",alt:"Where did the warm weather go?",tip:""},
+{id:39,cat:'季節の変わり目',jp:'今年は雨が多いね。',en:"It's been such a wet year.",alt:"We've had so much rain this year.",tip:""},
+{id:40,cat:'季節の変わり目',jp:'クリスマスの時期でも暑いのが不思議だよね。',en:"It still feels weird having Christmas in the heat.",alt:"Christmas in summer never gets old.",tip:"👂 豪州では12月が夏"},
+{id:41,cat:'体調を聞く・答える',jp:'調子どう？',en:"How are you going?",alt:"How are you feeling?",tip:"👂 豪州の定番挨拶"},
+{id:42,cat:'体調を聞く・答える',jp:'まあまあかな。',en:"Not too bad.",alt:"Can't complain.",tip:""},
+{id:43,cat:'体調を聞く・答える',jp:'今日はちょっとしんどいな。',en:"Feeling a bit off today.",alt:"Not quite myself today.",tip:""},
+{id:44,cat:'体調を聞く・答える',jp:'元気だよ、ありがとう。',en:"Yeah, good thanks.",alt:"All good, thanks for asking.",tip:""},
+{id:45,cat:'体調を聞く・答える',jp:'最高の気分！',en:"Feeling great, actually!",alt:"Really good today.",tip:""},
+{id:46,cat:'体調を聞く・答える',jp:'大丈夫？顔色悪いよ。',en:"You alright? You look a bit pale.",alt:"Are you feeling okay?",tip:""},
+{id:47,cat:'体調を聞く・答える',jp:'疲れてるだけだよ。',en:"Just tired, that's all.",alt:"I'm fine, just need sleep.",tip:""},
+{id:48,cat:'体調を聞く・答える',jp:'ゆっくり休んでね。',en:"Make sure you get some rest.",alt:"Take it easy.",tip:""},
+{id:49,cat:'体調を聞く・答える',jp:'最近体調はどう？',en:"How have you been feeling lately?",alt:"Been keeping well?",tip:""},
+{id:50,cat:'体調を聞く・答える',jp:'先週より良くなったよ。',en:"A lot better than last week.",alt:"Getting there.",tip:""},
+{id:51,cat:'風邪・病気',jp:'風邪をひいたみたい。',en:"I think I've come down with something.",alt:"I'm coming down with a cold.",tip:""},
+{id:52,cat:'風邪・病気',jp:'鼻がずるずるしてる。',en:"My nose won't stop running.",alt:"I've got a runny nose.",tip:""},
+{id:53,cat:'風邪・病気',jp:'喉が痛い。',en:"My throat is killing me.",alt:"I've got a really sore throat.",tip:""},
+{id:54,cat:'風邪・病気',jp:'熱があるかも。',en:"I might have a temperature.",alt:"I think I've got a fever.",tip:""},
+{id:55,cat:'風邪・病気',jp:'仕事を休んだ方がいいよ。',en:"You should probably call in sick.",alt:"Take the day off — you need it.",tip:""},
+{id:56,cat:'風邪・病気',jp:'コロナの検査した？',en:"Did you do a RAT test?",alt:"Have you tested for COVID?",tip:"👂 豪州で一般的"},
+{id:57,cat:'風邪・病気',jp:'胃が痛い。',en:"My stomach is giving me grief.",alt:"I've got a dodgy stomach.",tip:"👂 'dodgy' = 豪英語"},
+{id:58,cat:'風邪・病気',jp:'職場で風邪が流行ってるよ。',en:"There's a bug going around at work.",alt:"Everyone at work is getting sick.",tip:""},
+{id:59,cat:'風邪・病気',jp:'お大事に。',en:"Hope you feel better soon.",alt:"Get well soon.",tip:""},
+{id:60,cat:'風邪・病気',jp:'無理しないでね。',en:"Don't push yourself too hard.",alt:"Take it easy and rest up.",tip:""},
+{id:61,cat:'疲れ・睡眠',jp:'今日はエンプティで走ってる感じ。',en:"I'm running on empty today.",alt:"Absolutely exhausted.",tip:""},
+{id:62,cat:'疲れ・睡眠',jp:'昨夜全然眠れなかった。',en:"I had a terrible night's sleep.",alt:"Barely slept last night.",tip:""},
+{id:63,cat:'疲れ・睡眠',jp:'犬が夜中に起こすんだよね。',en:"The dog keeps waking me up at night.",alt:"My dog had me up at 3am.",tip:""},
+{id:64,cat:'疲れ・睡眠',jp:'今夜は早く寝る。',en:"I'm having an early night tonight.",alt:"Going to bed as soon as I get home.",tip:""},
+{id:65,cat:'疲れ・睡眠',jp:'コーヒーがないと動けない。',en:"I can't function without coffee.",alt:"Absolutely need my coffee today.",tip:""},
+{id:66,cat:'疲れ・睡眠',jp:'週末爆睡するつもり。',en:"I'm planning to sleep in this weekend.",alt:"Going to catch up on sleep this weekend.",tip:""},
+{id:67,cat:'疲れ・睡眠',jp:'体が重い感じがする。',en:"I feel really sluggish today.",alt:"My body feels so heavy.",tip:""},
+{id:68,cat:'疲れ・睡眠',jp:'昼寝したい。',en:"I could really use a nap.",alt:"Desperately need a nap.",tip:""},
+{id:69,cat:'疲れ・睡眠',jp:'最近ずっと疲れてる。',en:"I've just been so flat lately.",alt:"Running on fumes lately.",tip:"👂 'flat' = 豪英語"},
+{id:70,cat:'疲れ・睡眠',jp:'やっと少し回復してきた。',en:"I'm finally starting to feel more like myself.",alt:"Getting some energy back.",tip:""},
+{id:71,cat:'病院・薬',jp:'GPに診てもらった方がいいね。',en:"You should probably see your GP.",alt:"Time to book in with the doctor.",tip:""},
+{id:72,cat:'病院・薬',jp:'バルクビルできる病院知ってる？',en:"Do you know any bulk billing clinics nearby?",alt:"Is there a bulk billing doctor around here?",tip:"👂 豪州医療制度"},
+{id:73,cat:'病院・薬',jp:'薬局に寄らないと。',en:"I need to stop by the chemist.",alt:"Got to pick up my prescription.",tip:"👂 'chemist' = 豪英語"},
+{id:74,cat:'病院・薬',jp:'処方箋をもらった。',en:"The doctor gave me a script.",alt:"I got a prescription.",tip:"👂 'script' = 豪英語"},
+{id:75,cat:'病院・薬',jp:'紹介状が必要だって。',en:"I need a referral.",alt:"They said I need a referral to see a specialist.",tip:""},
+{id:76,cat:'病院・薬',jp:'抗生物質を飲んでる。',en:"I'm on antibiotics.",alt:"The doctor put me on antibiotics.",tip:""},
+{id:77,cat:'病院・薬',jp:'予約が2週間先しか取れない。',en:"The earliest appointment is two weeks away.",alt:"Can't get in until next fortnight.",tip:"👂 'fortnight' = 2週間"},
+{id:78,cat:'病院・薬',jp:'メディケアカード持ってきた？',en:"Did you bring your Medicare card?",alt:"Don't forget your Medicare card.",tip:""},
+{id:79,cat:'病院・薬',jp:'市販薬で様子を見てる。',en:"I'm just taking some over-the-counter stuff for now.",alt:"Managing it with pharmacy meds.",tip:""},
+{id:80,cat:'病院・薬',jp:'早く良くなるといいね。',en:"Hope the meds kick in soon.",alt:"Hope you're feeling better soon.",tip:""},
+{id:81,cat:'メンタル・ストレス',jp:'最近ずっと気分が落ち込んでる。',en:"I've just been feeling really flat lately.",alt:"I've been a bit down lately.",tip:""},
+{id:82,cat:'メンタル・ストレス',jp:'仕事のストレスがすごい。',en:"Work has been really stressful lately.",alt:"I'm really stressed out at the moment.",tip:""},
+{id:83,cat:'メンタル・ストレス',jp:'気分転換が必要だな。',en:"I need a change of scenery.",alt:"I just need to get away for a bit.",tip:""},
+{id:84,cat:'メンタル・ストレス',jp:'ちゃんと話を聞いてくれてありがとう。',en:"Thanks for listening.",alt:"Really appreciate you hearing me out.",tip:""},
+{id:85,cat:'メンタル・ストレス',jp:'最近何もやる気が出ない。',en:"I just can't seem to get motivated lately.",alt:"Everything feels like an effort.",tip:""},
+{id:86,cat:'メンタル・ストレス',jp:'散歩すると少し楽になるよ。',en:"A good walk always helps clear my head.",alt:"Getting outside always helps.",tip:""},
+{id:87,cat:'メンタル・ストレス',jp:'無理しすぎないようにね。',en:"Don't be too hard on yourself.",alt:"You're doing the best you can.",tip:""},
+{id:88,cat:'メンタル・ストレス',jp:'誰かに話すのって大事だよね。',en:"It helps to talk to someone.",alt:"Good to get it off your chest.",tip:""},
+{id:89,cat:'メンタル・ストレス',jp:'今日は自分を甘やかしていいよ。',en:"Give yourself a break today.",alt:"Be kind to yourself.",tip:""},
+{id:90,cat:'メンタル・ストレス',jp:'小さいことから始めればいい。',en:"Just take it one step at a time.",alt:"One day at a time.",tip:""},
+{id:91,cat:'回復・元気になった',jp:'やっと本調子に戻ってきたよ。',en:"I'm finally feeling like myself again.",alt:"Back to normal at last.",tip:""},
+{id:92,cat:'回復・元気になった',jp:'薬が効いてきた。',en:"The meds are starting to kick in.",alt:"Finally feeling the difference.",tip:""},
+{id:93,cat:'回復・元気になった',jp:'よく寝たらだいぶ楽になった。',en:"A good night's sleep made all the difference.",alt:"Sleep was exactly what I needed.",tip:""},
+{id:94,cat:'回復・元気になった',jp:'元気になったのが分かる？',en:"Can you tell I'm feeling better?",alt:"Do I seem more like myself today?",tip:""},
+{id:95,cat:'回復・元気になった',jp:'回復に時間がかかったね。',en:"It took a while to bounce back.",alt:"Longer than I expected.",tip:""},
+{id:96,cat:'回復・元気になった',jp:'もう仕事に戻れそう。',en:"I think I'm ready to get back into it.",alt:"Ready to be back at work.",tip:""},
+{id:97,cat:'回復・元気になった',jp:'ありがとう、心配してくれて。',en:"Thanks for checking in on me.",alt:"Really appreciate you thinking of me.",tip:""},
+{id:98,cat:'回復・元気になった',jp:'やっぱり食欲が戻ってきた。',en:"My appetite is finally coming back.",alt:"I'm actually hungry again.",tip:""},
+{id:99,cat:'回復・元気になった',jp:'外に出られるようになったよ。',en:"I'm well enough to get out and about now.",alt:"Finally up to going outside.",tip:""},
+{id:100,cat:'回復・元気になった',jp:'体が動くってありがたいね。',en:"You really appreciate your health when you get it back.",alt:"Makes you grateful for feeling good.",tip:""}
+];
+const CATS=[...new Set(PHRASES.map(p=>p.cat))];
+const CAT_COLORS={'今日の天気トーク':'#3d5a8a','暑さ・熱波':'#a03030','雨・嵐':'#2a5a7a','季節の変わり目':'#4a7c59','体調を聞く・答える':'#c8962a','風邪・病気':'#7a2a5a','疲れ・睡眠':'#5a2a7a','病院・薬':'#2a7a7a','メンタル・ストレス':'#7a5a2a','回復・元気になった':'#4a4a8a'};
+let synth=window.speechSynthesis;
+let autoPlay=false,autoFlowAbort=false,isSpeaking=false;
+let mastered=new Set(JSON.parse(localStorage.getItem('weather_ios_mastered')||'[]'));
+let wrong=new Set(JSON.parse(localStorage.getItem('weather_ios_wrong')||'[]'));
+let queue=[],qIdx=0,isRevealed=false,currentMode='normal',selectedCat='all',sessionOk=0,sessionNg=0,timerInterval=null,timerLeft=3,loopCounts={};
+function save(){localStorage.setItem('weather_ios_mastered',JSON.stringify([...mastered]));localStorage.setItem('weather_ios_wrong',JSON.stringify([...wrong]));}
+function updateHeader(){document.getElementById('h-mastered').textContent=mastered.size;}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
+function getVoice(lang){const vs=synth.getVoices();return vs.find(v=>v.lang.startsWith(lang==='en'?'en-AU':lang==='en'?'en-GB':'ja'))|| vs.find(v=>v.lang.startsWith(lang==='en'?'en':'ja'))||null;}
+function speak(text,lang){return new Promise(resolve=>{if(!synth){resolve();return;}synth.cancel();const u=new SpeechSynthesisUtterance(text);u.lang=lang==='ja'?'ja-JP':'en-AU';u.rate=0.92;const v=getVoice(lang);if(v)u.voice=v;u.onend=()=>{isSpeaking=false;resolve();};u.onerror=()=>{isSpeaking=false;resolve();};isSpeaking=true;synth.speak(u);});}
+function speakList(en){if(isSpeaking){synth.cancel();isSpeaking=false;return;}speak(en,'en');}
+function stopSpeech(){autoFlowAbort=true;if(synth)synth.cancel();isSpeaking=false;}
+function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
+function setApStatus(state,label){const dot=document.getElementById('ap-dot'),lbl=document.getElementById('ap-label');if(!dot||!lbl)return;dot.className='ap-dot '+state;lbl.textContent=label||'自動再生モード';const card=document.getElementById('flash-card');if(card){card.classList.remove('jp-speaking','en-speaking');if(state==='jp')card.classList.add('jp-speaking');if(state==='en')card.classList.add('en-speaking');}}
+function setVoiceStatus(m){const e=document.getElementById('voice-status');if(e)e.textContent=m;}
+async function runAutoFlow(phraseId){const p=PHRASES.find(x=>x.id===phraseId);if(!p)return;setApStatus('jp','🇯🇵 日本語...');setVoiceStatus('日本語を読み上げ中...');await speak(p.jp,'ja');if(autoFlowAbort)return;setApStatus('wait','⏳');setVoiceStatus('');await sleep(1200);if(autoFlowAbort)return;revealCard(true);await sleep(200);if(autoFlowAbort)return;setApStatus('en','🇦🇺 英語...');setVoiceStatus('英語を読み上げ中...');await speak(p.en,'en');if(autoFlowAbort)return;setVoiceStatus('');setApStatus('idle','タップして次へ');showNextBtn();}
+function showNextBtn(){document.getElementById('next-btn').style.display='flex';}
+function hideNextBtn(){document.getElementById('next-btn').style.display='none';}
+function onNextTap(){if(!autoPlay)return;hideNextBtn();autoFlowAbort=false;const p=queue[qIdx];sessionOk++;wrong.delete(p.id);if(currentMode==='loop'){loopCounts[p.id]=(loopCounts[p.id]||0)+1;if(loopCounts[p.id]>=5){mastered.add(p.id);save();qIdx++;}else{const ins=qIdx+1+Math.floor(Math.random()*Math.min(5,queue.length-qIdx-1));queue.splice(ins,0,p);qIdx++;}}else{mastered.add(p.id);save();qIdx++;}updateHeader();showCard();}
+function toggleAutoPlay(){autoPlay=!autoPlay;const b=document.getElementById('auto-play-btn');if(autoPlay){b.textContent='▶ 自動ON';b.classList.add('on');showToast('自動再生ON');}else{b.textContent='▶ 自動OFF';b.classList.remove('on');stopSpeech();hideNextBtn();setApStatus('idle','');setVoiceStatus('');showToast('自動再生OFF');}document.getElementById('autoplay-bar').classList.toggle('visible',autoPlay);}
+function switchTab(p,btn){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));document.getElementById('page-'+p).classList.add('active');btn.classList.add('active');if(p==='list')renderList();if(p==='stats')renderStats();}
+function initSetup(){const cc=document.getElementById('cat-chips');cc.innerHTML=`<button class="cat-chip active" onclick="selCat('all',this)">すべて (${PHRASES.length})</button>`;CATS.forEach(c=>{const n=PHRASES.filter(p=>p.cat===c).length;cc.innerHTML+=`<button class="cat-chip" onclick="selCat('${c}',this)">${c} (${n})</button>`;});}
+function selCat(cat,btn){selectedCat=cat;document.querySelectorAll('#cat-chips .cat-chip').forEach(c=>c.classList.remove('active'));btn.classList.add('active');}
+function selectMode(mode){currentMode=mode;document.querySelectorAll('.mode-card').forEach(c=>c.classList.remove('selected'));document.getElementById('mode-'+mode).classList.add('selected');}
+function startTraining(){let pool=selectedCat==='all'?[...PHRASES]:PHRASES.filter(p=>p.cat===selectedCat);if(currentMode==='review')pool=pool.filter(p=>!mastered.has(p.id)||wrong.has(p.id));if(pool.length===0){alert('該当するフレーズがありません！');return;}for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]];}queue=pool;qIdx=0;sessionOk=0;sessionNg=0;loopCounts={};document.getElementById('train-setup').style.display='none';document.getElementById('train-result').style.display='none';document.getElementById('train-area').style.display='block';document.getElementById('timer-wrap').style.display=currentMode==='timer'?'flex':'none';document.getElementById('loop-banner').style.display=currentMode==='loop'?'block':'none';document.getElementById('autoplay-bar').classList.toggle('visible',autoPlay);showCard();}
+function showCard(){if(qIdx>=queue.length){endTraining();return;}const p=queue[qIdx];isRevealed=false;stopSpeech();hideNextBtn();setApStatus('idle','自動再生モード');document.getElementById('flash-card').className='flash-card';document.getElementById('card-cat').textContent=p.cat;document.getElementById('card-jp').textContent=p.jp;document.getElementById('card-en').textContent=p.en;document.getElementById('card-alt').textContent=p.alt?'💡 '+p.alt:'';document.getElementById('card-tip').textContent=p.tip||'';document.getElementById('card-hint').style.display='';document.getElementById('btn-reveal').style.display='inline-block';document.getElementById('btn-ok').style.display='none';document.getElementById('btn-ng').style.display='none';setVoiceStatus('');document.getElementById('train-ctr').textContent=`${qIdx+1} / ${queue.length}`;document.getElementById('train-prog').style.width=(qIdx/queue.length*100)+'%';if(currentMode==='loop')document.getElementById('loop-remain').textContent=5-(loopCounts[p.id]||0);if(autoPlay){const flowId=p.id;setTimeout(()=>{autoFlowAbort=false;runAutoFlow(flowId);},300);}else if(currentMode==='timer')startTimer();}
+function onCardTap(){if(autoPlay){stopSpeech();hideNextBtn();setApStatus('idle','手動モード');revealCard(true);}else revealCard(false);}
+function revealCard(silent){if(isRevealed)return;isRevealed=true;clearInterval(timerInterval);document.getElementById('flash-card').classList.add('revealed');document.getElementById('flash-card').classList.remove('jp-speaking','en-speaking');document.getElementById('card-hint').style.display='none';document.getElementById('btn-reveal').style.display='none';document.getElementById('btn-ok').style.display='inline-block';document.getElementById('btn-ng').style.display='inline-block';}
+function startTimer(){clearInterval(timerInterval);timerLeft=3;updateTimerUI(3,3);timerInterval=setInterval(()=>{timerLeft-=0.1;if(timerLeft<=0){clearInterval(timerInterval);timerLeft=0;revealCard(false);}updateTimerUI(timerLeft,3);},100);}
+function updateTimerUI(val,max){const offset=169.6*(1-val/max);document.getElementById('timer-circle').style.strokeDashoffset=offset;document.getElementById('timer-num').textContent=Math.ceil(val);document.getElementById('timer-circle').style.stroke=val>2?'#c8962a':val>1?'#c86a2a':'#a03030';}
+function markOk(){stopSpeech();hideNextBtn();const p=queue[qIdx];sessionOk++;wrong.delete(p.id);if(currentMode==='loop'){loopCounts[p.id]=(loopCounts[p.id]||0)+1;if(loopCounts[p.id]>=5){mastered.add(p.id);save();qIdx++;}else{const ins=qIdx+1+Math.floor(Math.random()*Math.min(5,queue.length-qIdx-1));queue.splice(ins,0,p);qIdx++;}}else{mastered.add(p.id);save();qIdx++;}updateHeader();showCard();}
+function markNg(){stopSpeech();hideNextBtn();const p=queue[qIdx];sessionNg++;wrong.add(p.id);if(currentMode==='loop'){loopCounts[p.id]=0;const ins=qIdx+1+Math.floor(Math.random()*Math.min(4,queue.length-qIdx-1));queue.splice(Math.min(ins,queue.length),0,p);}save();qIdx++;showCard();}
+function skipCard(){stopSpeech();hideNextBtn();qIdx++;showCard();}
+function quitTraining(){stopSpeech();clearInterval(timerInterval);backToSetup();}
+function endTraining(){stopSpeech();clearInterval(timerInterval);document.getElementById('train-area').style.display='none';document.getElementById('train-result').style.display='block';const total=sessionOk+sessionNg,pct=total>0?Math.round(sessionOk/total*100):0;document.getElementById('res-ok').textContent=sessionOk;document.getElementById('res-ng').textContent=sessionNg;document.getElementById('res-total').textContent=total;document.getElementById('res-emoji').textContent=pct>=80?'🎉':pct>=50?'💪':'🔥';document.getElementById('res-title').textContent=pct>=80?'素晴らしい！':pct>=50?'いい調子！':'もう一息！';document.getElementById('res-sub').textContent=`正解率 ${pct}%（${sessionOk}/${total}）`;document.getElementById('res-loop-btn').style.display=sessionNg>0&&currentMode!=='loop'?'block':'none';updateHeader();}
+function startLoopFromResult(){currentMode='loop';const ng=[...wrong];if(ng.length===0){alert('間違えたフレーズがありません！');return;}queue=PHRASES.filter(p=>ng.includes(p.id));for(let i=queue.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[queue[i],queue[j]]=[queue[j],queue[i]];}qIdx=0;sessionOk=0;sessionNg=0;loopCounts={};document.getElementById('train-result').style.display='none';document.getElementById('train-area').style.display='block';document.getElementById('loop-banner').style.display='block';document.getElementById('timer-wrap').style.display='none';document.getElementById('autoplay-bar').classList.toggle('visible',autoPlay);showCard();}
+function backToSetup(){document.getElementById('train-area').style.display='none';document.getElementById('train-result').style.display='none';document.getElementById('train-setup').style.display='block';}
+function renderList(){const lcc=document.getElementById('list-cat-chips');lcc.innerHTML=`<button class="cat-chip active" onclick="filterList('all',this)">すべて</button>`;CATS.forEach(c=>{lcc.innerHTML+=`<button class="cat-chip" onclick="filterList('${c}',this)">${c}</button>`;});filterList('all',lcc.firstElementChild);}
+function filterList(cat,btn){document.querySelectorAll('#list-cat-chips .cat-chip').forEach(c=>c.classList.remove('active'));btn.classList.add('active');const pool=cat==='all'?PHRASES:PHRASES.filter(p=>p.cat===cat);document.getElementById('list-items').innerHTML=pool.map(p=>`<div class="list-item"><div class="li-dot" style="background:${CAT_COLORS[p.cat]||'#888'}"></div><div class="li-body"><div class="li-cat">${p.cat}</div><div class="li-jp">${p.jp}</div><div class="li-en">${p.en}</div></div><div class="li-right"><button class="li-voice-btn" onclick="speakList(${JSON.stringify(p.en)})">🔊</button><div class="li-done ${mastered.has(p.id)?'show':''}">✓ 習得</div></div></div>`).join('');}
+function renderStats(){document.getElementById('st-mastered').textContent=mastered.size;document.getElementById('st-total').textContent=PHRASES.length;document.getElementById('cat-stats').innerHTML=CATS.map(c=>{const total=PHRASES.filter(p=>p.cat===c).length,done=PHRASES.filter(p=>p.cat===c&&mastered.has(p.id)).length,pct=Math.round(done/total*100);return`<div class="cat-stat"><div class="cs-top"><span class="cs-name">${c}</span><span class="cs-pct">${done}/${total} (${pct}%)</span></div><div class="cs-bar"><div class="cs-fill" style="width:${pct}%;background:${CAT_COLORS[c]||'var(--moss)'}"></div></div></div>`;}).join('');}
+function resetAllData(){if(!confirm('全データをリセットしますか？'))return;mastered.clear();wrong.clear();save();updateHeader();renderStats();}
+initSetup();updateHeader();
+synth.getVoices();window.speechSynthesis.onvoiceschanged=()=>synth.getVoices();
+</script>
+</body>
+</html>
