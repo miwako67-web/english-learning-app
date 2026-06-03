@@ -3,8 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="人生再起動">
 <title>人生再起動プロトコル — Dan Koe Method</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&family=Noto+Sans+JP:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -31,12 +29,10 @@ body{font-family:'Noto Sans JP',sans-serif;color:#e8e4dc;}
 textarea{width:100%;background:#0d0d0d;border:0.5px solid #333;border-radius:8px;color:#e8e4dc;font-family:'Noto Sans JP',sans-serif;font-size:13px;line-height:1.7;padding:12px 14px;resize:none;outline:none;transition:border-color 0.2s;min-height:72px;}
 textarea:focus{border-color:#c8a96e;}
 textarea::placeholder{color:#444;}
-.btn-row{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;}
+.btn-row{display:flex;gap:8px;margin-top:10px;}
 .cbtn{padding:7px 16px;background:none;border:0.5px solid #444;border-radius:20px;color:#777;font-size:11px;cursor:pointer;font-family:'Noto Sans JP',sans-serif;transition:all 0.2s;}
 .cbtn:hover{border-color:#c8a96e;color:#c8a96e;}
 .cbtn.done{border-color:#4a7a4a;color:#6aaa6a;}
-.cbtn.undo{border-color:#7a5a3a;color:#aa8a6a;}
-.cbtn.undo:hover{border-color:#c8a96e;color:#c8a96e;}
 .progress-wrap{background:#1a1a1a;border-radius:4px;height:3px;margin-top:18px;overflow:hidden;}
 .progress-fill{height:100%;background:#c8a96e;border-radius:4px;transition:width 0.5s ease;}
 .progress-row{display:flex;justify-content:space-between;margin-top:6px;}
@@ -49,7 +45,7 @@ textarea::placeholder{color:#444;}
 .abtn:hover{background:#222;color:#e8e4dc;}
 .abtn.yes{border-color:#4a7a4a;color:#6aaa6a;background:#0e140e;}
 .abtn.no{border-color:#7a3a3a;color:#aa6a6a;background:#140e0e;}
-.abtn.reset{border-color:#555;color:#888;background:none;font-size:11px;flex:0 0 auto;padding:8px 12px;}
+.abtn.reset-btn{border-color:#555;color:#888;background:none;font-size:11px;flex:0 0 auto;padding:8px 12px;}
 .stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px;}
 .stat{background:#161616;border:0.5px solid #2a2a2a;border-radius:10px;padding:16px 12px;text-align:center;}
 .stat-val{font-family:'Noto Serif JP',serif;font-size:28px;color:#c8a96e;}
@@ -61,10 +57,10 @@ textarea::placeholder{color:#444;}
 .gitem{background:#161616;border:0.5px solid #2a2a2a;border-radius:8px;padding:12px 16px;margin-bottom:8px;display:flex;align-items:center;gap:10px;}
 .gitem.done{opacity:0.5;}
 .gitem.done .gtext{text-decoration:line-through;}
-.gcheck{width:20px;height:20px;border-radius:50%;border:0.5px solid #444;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;color:transparent;cursor:pointer;}
+.gcheck{width:20px;height:20px;border-radius:50%;border:0.5px solid #444;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;color:transparent;cursor:pointer;background:none;}
 .gitem.done .gcheck{background:#4a7a4a;border-color:#4a7a4a;color:#e8e4dc;}
-.gtext{font-size:13px;color:#b0a898;flex:1;cursor:pointer;}
-.gdel{width:24px;height:24px;border-radius:50%;border:0.5px solid #444;background:none;color:#666;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s;}
+.gtext{font-size:13px;color:#b0a898;flex:1;}
+.gdel{width:26px;height:26px;border-radius:50%;border:0.5px solid #444;background:none;color:#666;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s;line-height:1;}
 .gdel:hover{border-color:#aa4a4a;color:#aa4a4a;}
 .add-row{display:flex;gap:8px;margin-top:4px;}
 .ginput{flex:1;background:#0d0d0d;border:0.5px solid #333;border-radius:8px;color:#e8e4dc;font-family:'Noto Sans JP',sans-serif;font-size:13px;padding:10px 14px;outline:none;transition:border-color 0.2s;}
@@ -90,90 +86,50 @@ textarea::placeholder{color:#444;}
     <div class="date-badge" id="dateBadge"></div>
   </div>
   <div class="tabs">
-    <button class="tab active" id="tab-btn-morning">◐ 朝</button>
-    <button class="tab" id="tab-btn-daytime">○ 日中</button>
-    <button class="tab" id="tab-btn-evening">● 夜</button>
-    <button class="tab" id="tab-btn-game">◈ ゲーム</button>
+    <button class="tab active" id="tbtn-morning">◐ 朝</button>
+    <button class="tab" id="tbtn-daytime">○ 日中</button>
+    <button class="tab" id="tbtn-evening">● 夜</button>
+    <button class="tab" id="tbtn-game">◈ ゲーム</button>
   </div>
   <div class="content">
 
-    <!-- 朝 -->
     <div id="tab-morning">
       <div class="phase-title">心理的発掘</div>
       <div class="phase-sub">ビジョン · アンチビジョン · アイデンティティ</div>
-      <div class="qcard" id="qc-1">
-        <div class="qlabel" id="ql-1">質問 01 — アンチビジョン</div>
-        <div class="qtext">慣れてしまった、じわじわとした不満は何か？ 受け入れてしまっている「普通」は何か？</div>
-        <textarea id="a-1" placeholder="正直に、容赦なく..." rows="3"></textarea>
-        <div class="btn-row"><button class="cbtn" id="cb-1">完了にする</button></div>
-      </div>
-      <div class="qcard" id="qc-2">
-        <div class="qlabel" id="ql-2">質問 02 — 10年後の悪夢</div>
-        <div class="qtext">何も変えなかった10年後、ある火曜日を描け。どこにいる？ 体はどんな感じ？ 朝9時〜夜6時、何をしている？</div>
-        <textarea id="a-2" placeholder="具体的に、リアルに..." rows="3"></textarea>
-        <div class="btn-row"><button class="cbtn" id="cb-2">完了にする</button></div>
-      </div>
-      <div class="qcard" id="qc-3">
-        <div class="qlabel" id="ql-3">質問 03 — 理想のビジョン</div>
-        <div class="qtext">指を鳴らして3年後に別の人生を手に入れるとしたら、現実的かどうかは無視して、本当に望む生活を描け。</div>
-        <textarea id="a-3" placeholder="現実を忘れて..." rows="3"></textarea>
-        <div class="btn-row"><button class="cbtn" id="cb-3">完了にする</button></div>
-      </div>
-      <div class="qcard" id="qc-4">
-        <div class="qlabel" id="ql-4">質問 04 — アイデンティティ宣言</div>
-        <div class="qtext">その人生が「当然」に感じられるためには、自分自身についてどんなことを信じている必要があるか？</div>
-        <textarea id="a-4" placeholder="私は〜という人間だ..." rows="2"></textarea>
-        <div class="btn-row"><button class="cbtn" id="cb-4">完了にする</button></div>
-      </div>
+      <div class="qcard" id="qc-1"><div class="qlabel" id="ql-1">質問 01 — アンチビジョン</div><div class="qtext">慣れてしまった、じわじわとした不満は何か？ 受け入れてしまっている「普通」は何か？</div><textarea id="a-1" placeholder="正直に、容赦なく..." rows="3"></textarea><div class="btn-row"><button class="cbtn" id="cb-1">完了にする</button></div></div>
+      <div class="qcard" id="qc-2"><div class="qlabel" id="ql-2">質問 02 — 10年後の悪夢</div><div class="qtext">何も変えなかった10年後、ある火曜日を描け。どこにいる？ 体はどんな感じ？ 朝9時〜夜6時、何をしている？</div><textarea id="a-2" placeholder="具体的に、リアルに..." rows="3"></textarea><div class="btn-row"><button class="cbtn" id="cb-2">完了にする</button></div></div>
+      <div class="qcard" id="qc-3"><div class="qlabel" id="ql-3">質問 03 — 理想のビジョン</div><div class="qtext">指を鳴らして3年後に別の人生を手に入れるとしたら、現実的かどうかは無視して、本当に望む生活を描け。</div><textarea id="a-3" placeholder="現実を忘れて..." rows="3"></textarea><div class="btn-row"><button class="cbtn" id="cb-3">完了にする</button></div></div>
+      <div class="qcard" id="qc-4"><div class="qlabel" id="ql-4">質問 04 — アイデンティティ宣言</div><div class="qtext">その人生が「当然」に感じられるためには、自分自身についてどんなことを信じている必要があるか？</div><textarea id="a-4" placeholder="私は〜という人間だ..." rows="2"></textarea><div class="btn-row"><button class="cbtn" id="cb-4">完了にする</button></div></div>
       <div class="progress-wrap"><div class="progress-fill" id="mProg" style="width:0%"></div></div>
       <div class="progress-row"><span class="progress-text">朝の発掘</span><span class="progress-text" id="mPct">0 / 4</span></div>
     </div>
 
-    <!-- 日中 -->
     <div id="tab-daytime" class="hidden">
       <div class="phase-title">無意識の中断</div>
       <div class="phase-sub">オートパイロットを破る · 6つのチェックポイント</div>
       <div id="interrupts"></div>
       <div class="rules-box">
         <div class="rules-title">使い方</div>
-        <div class="ritem"><div class="rdot"></div>スマホのアラームを下の6つの時間にセットする</div>
+        <div class="ritem"><div class="rdot"></div>スマホのアラームを6つの時間にセットする</div>
         <div class="ritem"><div class="rdot"></div>アラームが鳴ったらこのアプリを開いて日中タブを選ぶ</div>
-        <div class="ritem"><div class="rdot"></div>その時間の問いに正直に答える（30秒でOK）</div>
         <div class="ritem"><div class="rdot"></div>間違えた場合は「取り消す」ボタンで修正できます</div>
       </div>
     </div>
 
-    <!-- 夜 -->
     <div id="tab-evening" class="hidden">
       <div class="phase-title">振り返りと再構築</div>
       <div class="phase-sub">敵に名前をつける · ルールを設定する</div>
-      <div class="qcard" id="qc-e1">
-        <div class="qlabel" id="ql-e1">今日の「敵」</div>
-        <div class="qtext">今日、自分を支配していた内的パターンや信念に名前をつけよ。</div>
-        <textarea id="a-e1" placeholder="例：「承認中毒」「先延ばし魔」「偽物症候群」..." rows="2"></textarea>
-        <div class="btn-row"><button class="cbtn" id="cb-e1">名前をつける</button></div>
-      </div>
-      <div class="qcard" id="qc-e2">
-        <div class="qlabel" id="ql-e2">アンチビジョンを1文に</div>
-        <div class="qtext">絶対にこうなりたくない、という未来を1文に圧縮せよ。</div>
-        <textarea id="a-e2" placeholder="私は絶対に〜にはならない..." rows="2"></textarea>
-        <div class="btn-row"><button class="cbtn" id="cb-e2">刻み込む</button></div>
-      </div>
-      <div class="qcard" id="qc-e3">
-        <div class="qlabel" id="ql-e3">絶対にやらないルール</div>
-        <div class="qtext">新しいアイデンティティを守る「絶対にやらないこと」のルールを設定せよ。（1行に1つ）</div>
-        <textarea id="a-e3" placeholder="9時前にスマホを見ない&#10;情熱を感じない仕事にYESと言わない..." rows="5"></textarea>
-        <div class="btn-row"><button class="cbtn" id="cb-e3">ルール確定</button></div>
-      </div>
+      <div class="qcard" id="qc-e1"><div class="qlabel" id="ql-e1">今日の「敵」</div><div class="qtext">今日、自分を支配していた内的パターンや信念に名前をつけよ。</div><textarea id="a-e1" placeholder="例：「承認中毒」「先延ばし魔」「偽物症候群」..." rows="2"></textarea><div class="btn-row"><button class="cbtn" id="cb-e1">名前をつける</button></div></div>
+      <div class="qcard" id="qc-e2"><div class="qlabel" id="ql-e2">アンチビジョンを1文に</div><div class="qtext">絶対にこうなりたくない、という未来を1文に圧縮せよ。</div><textarea id="a-e2" placeholder="私は絶対に〜にはならない..." rows="2"></textarea><div class="btn-row"><button class="cbtn" id="cb-e2">刻み込む</button></div></div>
+      <div class="qcard" id="qc-e3"><div class="qlabel" id="ql-e3">絶対にやらないルール</div><div class="qtext">新しいアイデンティティを守る「絶対にやらないこと」のルールを設定せよ。（1行に1つ）</div><textarea id="a-e3" placeholder="9時前にスマホを見ない&#10;情熱を感じない仕事にYESと言わない..." rows="5"></textarea><div class="btn-row"><button class="cbtn" id="cb-e3">ルール確定</button></div></div>
       <div class="progress-wrap"><div class="progress-fill" id="eProg" style="width:0%"></div></div>
       <div class="progress-row"><span class="progress-text">夜の統合</span><span class="progress-text" id="ePct">0 / 3</span></div>
     </div>
 
-    <!-- ゲーム -->
     <div id="tab-game" class="hidden">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:3px;">
         <div class="phase-title">人生をゲームとして再定義</div>
-        <button onclick="if(confirm('ゴールデータをリセットしますか？')){{localStorage.removeItem('dkp_goals');location.reload();}}" style="font-size:10px;color:#666;background:none;border:0.5px solid #444;border-radius:6px;padding:4px 8px;cursor:pointer;font-family:'Noto Sans JP',sans-serif;">データリセット</button>
+        <button id="resetBtn" style="font-size:10px;color:#666;background:none;border:0.5px solid #444;border-radius:6px;padding:4px 10px;cursor:pointer;font-family:'Noto Sans JP',sans-serif;">リセット</button>
       </div>
       <div class="phase-sub">ミッション · ボスファイト · デイリークエスト</div>
       <div class="stats-grid">
@@ -183,18 +139,18 @@ textarea::placeholder{color:#444;}
       </div>
       <div class="goal-sec">
         <div class="goal-head"><div class="gtitle">ミッション — 1年後の目標</div><div class="goal-badge">長期戦</div></div>
-        <div id="missions-list"></div>
-        <div class="add-row"><input class="ginput" id="inp-mission" placeholder="1年後のミッションを入力..."><button class="gadd" id="gadd-mission">＋ 追加</button></div>
+        <div id="list-mission"></div>
+        <div class="add-row"><input class="ginput" id="inp-mission" placeholder="1年後のミッションを入力..."><button class="gadd" id="add-mission">＋ 追加</button></div>
       </div>
       <div class="goal-sec">
         <div class="goal-head"><div class="gtitle">ボスファイト — 今月のプロジェクト</div><div class="goal-badge">30日勝負</div></div>
-        <div id="bosses-list"></div>
-        <div class="add-row"><input class="ginput" id="inp-boss" placeholder="今月倒すボスを入力..."><button class="gadd" id="gadd-boss">＋ 追加</button></div>
+        <div id="list-boss"></div>
+        <div class="add-row"><input class="ginput" id="inp-boss" placeholder="今月倒すボスを入力..."><button class="gadd" id="add-boss">＋ 追加</button></div>
       </div>
       <div class="goal-sec">
         <div class="goal-head"><div class="gtitle">デイリークエスト — 今日のタスク</div><div class="goal-badge">本日</div></div>
-        <div id="quests-list"></div>
-        <div class="add-row"><input class="ginput" id="inp-quest" placeholder="今日のクエストを入力..."><button class="gadd" id="gadd-quest">＋ 追加</button></div>
+        <div id="list-quest"></div>
+        <div class="add-row"><input class="ginput" id="inp-quest" placeholder="今日のクエストを入力..."><button class="gadd" id="add-quest">＋ 追加</button></div>
       </div>
     </div>
 
@@ -203,110 +159,92 @@ textarea::placeholder{color:#444;}
 </div>
 
 <script>
-var TABS=['morning','daytime','evening','game'];
-var M_IDS=['1','2','3','4'];
-var E_IDS=['e1','e2','e3'];
-var ALL_IDS=['1','2','3','4','e1','e2','e3'];
-var TYPES=['mission','boss','quest'];
-var INTERRUPTS=[
-  {time:'11:00',q:'今、理想の人生へ向かっているか？ それとも快適ゾーンを守っているか？'},
-  {time:'13:30',q:'本当はやるべきなのに、今日避けていることは何か？'},
-  {time:'15:15',q:'今やっていることは、未来の自分が承認するか？'},
-  {time:'17:00',q:'この瞬間の行動を動かしている「無意識の目的」は何か？'},
-  {time:'19:30',q:'今日、恐れが自分の代わりに決断を下した場面はあったか？'},
-  {time:'21:00',q:'今日、どれだけ意図的に生きたか？ 10点満点で何点か？'}
-];
+// ========== ストレージ ==========
+// 完全に新しいキー名で古いデータの影響をゼロに
+var DKEY = 'lrp_daily_v1';
+var GKEY = 'lrp_goals_v1';
 
-// ストレージキー（ゴールは永続保存、その他は日次）
-var KEY_DAILY='dkp_daily';
-var KEY_GOALS='dkp_goals'; // ← ゴール専用キーで永続保存
-
-// デフォルト状態
-function defaultDaily(){
-  return {ans:{},done:{},intr:{},streak:0,lastDate:''};
+function loadDaily() {
+  try { var d = JSON.parse(localStorage.getItem(DKEY)); return d || makeDaily(); } catch(e) { return makeDaily(); }
 }
-function defaultGoals(){
-  return {mission:[],boss:[],quest:[]};
+function loadGoals() {
+  try {
+    var g = JSON.parse(localStorage.getItem(GKEY));
+    if (g && Array.isArray(g.mission) && Array.isArray(g.boss) && Array.isArray(g.quest)) return g;
+    return makeGoals();
+  } catch(e) { return makeGoals(); }
 }
+function makeDaily() { return {ans:{}, done:{}, intr:{}, streak:0, lastDate:''}; }
+function makeGoals() { return {mission:[], boss:[], quest:[]}; }
+function saveD() { localStorage.setItem(DKEY, JSON.stringify(D)); }
+function saveG() { localStorage.setItem(GKEY, JSON.stringify(G)); }
 
-var D=JSON.parse(localStorage.getItem(KEY_DAILY)||'null')||defaultDaily();
-var G;
-try{
-  var _graw=localStorage.getItem(KEY_GOALS);
-  G=_graw?JSON.parse(_graw):defaultGoals();
-  if(!G||typeof G!=='object'||!Array.isArray(G.mission)||!Array.isArray(G.boss)||!Array.isArray(G.quest)){G=defaultGoals();saveGoals();}
-}catch(e){G=defaultGoals();saveGoals();}
+var D = loadDaily();
+var G = loadGoals();
 
-// 古いキーからマイグレーション
-(function migrate(){
-  var old=localStorage.getItem('dkpJP3')||localStorage.getItem('danKoeProtocolJP_v2')||localStorage.getItem('danKoeProtocolJP');
-  if(old){
-    try{
-      var o=JSON.parse(old);
-      if(o.goals){G=o.goals;saveGoals();}
-      if(o.ans){D.ans=o.ans;}
-      if(o.streak){D.streak=o.streak;}
-    }catch(e){}
-  }
-})();
+// ========== ユーティリティ ==========
+function ge(id) { return document.getElementById(id); }
+function today() { return new Date().toLocaleDateString('ja-JP', {year:'numeric',month:'2-digit',day:'2-digit'}); }
+function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
-function saveDaily(){localStorage.setItem(KEY_DAILY,JSON.stringify(D));}
-function saveGoals(){localStorage.setItem(KEY_GOALS,JSON.stringify(G));}
-function el(id){return document.getElementById(id);}
-function today(){return new Date().toLocaleDateString('ja-JP',{year:'numeric',month:'2-digit',day:'2-digit'});}
+// ========== 初期化 ==========
+window.addEventListener('DOMContentLoaded', function() {
+  var t = today();
+  ge('dateBadge').textContent = t;
 
-window.addEventListener('DOMContentLoaded',function(){
-  var t=today();
-  el('dateBadge').textContent=t;
-
-  // ストリーク更新（日次リセットはdone/intrのみ、ansとgoalsは保持）
-  if(D.lastDate!==t){
-    if(D.lastDate){
-      var diff=(new Date(t.replace(/\//g,'-'))-new Date(D.lastDate.replace(/\//g,'-')))/86400000;
-      D.streak=diff===1?D.streak+1:1;
-    } else {D.streak=1;}
-    D.lastDate=t;
-    D.done={};
-    D.intr={};
-    saveDaily();
+  // ストリーク
+  if (D.lastDate !== t) {
+    if (D.lastDate) {
+      var diff = (new Date(t.replace(/\//g,'-')) - new Date(D.lastDate.replace(/\//g,'-'))) / 86400000;
+      D.streak = (diff === 1) ? D.streak + 1 : 1;
+    } else { D.streak = 1; }
+    D.lastDate = t; D.done = {}; D.intr = {};
+    saveD();
   }
 
-  // テキストエリア復元 & イベント
-  ALL_IDS.forEach(function(k){
-    var ta=el('a-'+k);
-    if(ta){
-      if(D.ans[k])ta.value=D.ans[k];
-      ta.addEventListener('input',function(){D.ans[k]=this.value;saveDaily();});
-    }
-    if(D.done[k])applyDone(k);
-    var btn=el('cb-'+k);
-    if(btn)btn.addEventListener('click',function(){toggleDone(k);});
+  // テキストエリア
+  ['1','2','3','4','e1','e2','e3'].forEach(function(k) {
+    var ta = ge('a-' + k);
+    if (!ta) return;
+    if (D.ans[k]) ta.value = D.ans[k];
+    ta.addEventListener('input', function() { D.ans[k] = this.value; saveD(); });
+    if (D.done[k]) applyDone(k);
+    var btn = ge('cb-' + k);
+    if (btn) btn.addEventListener('click', function() { toggleDone(k); });
   });
 
   // タブ
-  TABS.forEach(function(name){
-    var btn=el('tab-btn-'+name);
-    if(btn)btn.addEventListener('click',function(){switchTab(name);});
+  ['morning','daytime','evening','game'].forEach(function(name) {
+    var b = ge('tbtn-' + name);
+    if (b) b.addEventListener('click', function() { switchTab(name); });
   });
 
-  // ゴール追加
-  TYPES.forEach(function(type){
-    var btn=el('gadd-'+type);
-    if(btn)btn.addEventListener('click',function(){addGoal(type);});
-    var inp=el('inp-'+type);
-    if(inp)inp.addEventListener('keydown',function(e){if(e.key==='Enter')addGoal(type);});
+  // ゴール追加ボタン
+  ['mission','boss','quest'].forEach(function(type) {
+    var btn = ge('add-' + type);
+    var inp = ge('inp-' + type);
+    if (btn) btn.addEventListener('click', function() { addGoal(type); });
+    if (inp) inp.addEventListener('keydown', function(e) { if (e.key === 'Enter') addGoal(type); });
   });
 
-  // ヒントバー
-  var hint=el('hintBar');
-  var isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
-  var isAndroid=/android/i.test(navigator.userAgent);
-  var isStandalone=(window.matchMedia('(display-mode: standalone)').matches)||window.navigator.standalone;
-  if(!isStandalone){
-    if(isIOS)hint.textContent='ホーム画面に追加：Safariの共有ボタン →「ホーム画面に追加」';
-    else if(isAndroid)hint.textContent='ホーム画面に追加：ブラウザのメニュー →「ホーム画面に追加」';
-    else hint.textContent='ブックマーク登録：Cmd+D（Mac）/ Ctrl+D（Windows）';
-  } else{hint.style.display='none';}
+  // リセットボタン
+  var rb = ge('resetBtn');
+  if (rb) rb.addEventListener('click', function() {
+    if (confirm('ゴールデータを全てリセットしますか？')) {
+      G = makeGoals(); saveG(); renderGoals(); updateStats();
+    }
+  });
+
+  // ヒント
+  var hint = ge('hintBar');
+  var isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  var isAnd = /android/i.test(navigator.userAgent);
+  var isSA = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+  if (!isSA) {
+    if (isIOS) hint.textContent = 'ホーム画面に追加：Safariの共有ボタン →「ホーム画面に追加」';
+    else if (isAnd) hint.textContent = 'ホーム画面に追加：ブラウザのメニュー →「ホーム画面に追加」';
+    else hint.textContent = 'ブックマーク登録：Cmd+D（Mac）/ Ctrl+D（Windows）';
+  } else { hint.style.display = 'none'; }
 
   renderInterrupts();
   renderGoals();
@@ -314,135 +252,143 @@ window.addEventListener('DOMContentLoaded',function(){
   updateProgress();
 });
 
-function switchTab(name){
-  TABS.forEach(function(t){
-    var p=el('tab-'+t),b=el('tab-btn-'+t);
-    if(p)p.classList.add('hidden');
-    if(b)b.classList.remove('active');
+// ========== タブ切り替え ==========
+function switchTab(name) {
+  ['morning','daytime','evening','game'].forEach(function(t) {
+    var p = ge('tab-' + t), b = ge('tbtn-' + t);
+    if (p) p.classList.add('hidden');
+    if (b) b.classList.remove('active');
   });
-  var p=el('tab-'+name),b=el('tab-btn-'+name);
-  if(p)p.classList.remove('hidden');
-  if(b)b.classList.add('active');
-  window.scrollTo({top:0,behavior:'smooth'});
+  var p = ge('tab-' + name), b = ge('tbtn-' + name);
+  if (p) p.classList.remove('hidden');
+  if (b) b.classList.add('active');
+  window.scrollTo({top:0, behavior:'smooth'});
 }
 
-// 完了トグル（完了↔未完了を切り替え）
-function toggleDone(id){
-  if(D.done[id]){
-    // 取り消し
-    D.done[id]=false;
-    var c=el('qc-'+id),l=el('ql-'+id),b=el('cb-'+id);
-    if(c)c.classList.remove('done');
-    if(l)l.classList.remove('done');
-    if(b){b.classList.remove('done');b.classList.remove('undo');b.textContent=getDoneLabel(id);}
-  } else {
-    // 完了
-    D.done[id]=true;
-    applyDone(id);
-  }
-  saveDaily();updateProgress();updateStats();
-}
-
-function getDoneLabel(id){
-  if(id==='e1')return '名前をつける';
-  if(id==='e2')return '刻み込む';
-  if(id==='e3')return 'ルール確定';
+// ========== 完了トグル ==========
+function getDoneLabel(id) {
+  if (id === 'e1') return '名前をつける';
+  if (id === 'e2') return '刻み込む';
+  if (id === 'e3') return 'ルール確定';
   return '完了にする';
 }
-
-function applyDone(id){
-  var c=el('qc-'+id),l=el('ql-'+id),b=el('cb-'+id);
-  if(c)c.classList.add('done');
-  if(l)l.classList.add('done');
-  if(b){b.classList.add('done');b.classList.add('undo');b.textContent='✓ 完了（取り消す）';}
+function toggleDone(id) {
+  D.done[id] = !D.done[id];
+  saveD();
+  var c = ge('qc-' + id), l = ge('ql-' + id), b = ge('cb-' + id);
+  if (D.done[id]) {
+    if (c) c.classList.add('done');
+    if (l) l.classList.add('done');
+    if (b) { b.classList.add('done'); b.textContent = '✓ 完了（取り消す）'; }
+  } else {
+    if (c) c.classList.remove('done');
+    if (l) l.classList.remove('done');
+    if (b) { b.classList.remove('done'); b.textContent = getDoneLabel(id); }
+  }
+  updateProgress(); updateStats();
+}
+function applyDone(id) {
+  var c = ge('qc-' + id), l = ge('ql-' + id), b = ge('cb-' + id);
+  if (c) c.classList.add('done');
+  if (l) l.classList.add('done');
+  if (b) { b.classList.add('done'); b.textContent = '✓ 完了（取り消す）'; }
 }
 
-function updateProgress(){
-  var m=M_IDS.filter(function(k){return D.done[k];}).length;
-  var e=E_IDS.filter(function(k){return D.done[k];}).length;
-  var mp=el('mProg'),mc=el('mPct'),ep=el('eProg'),ec=el('ePct');
-  if(mp)mp.style.width=(m/4*100)+'%';if(mc)mc.textContent=m+' / 4';
-  if(ep)ep.style.width=(e/3*100)+'%';if(ec)ec.textContent=e+' / 3';
+// ========== プログレス ==========
+function updateProgress() {
+  var m = ['1','2','3','4'].filter(function(k){return D.done[k];}).length;
+  var e = ['e1','e2','e3'].filter(function(k){return D.done[k];}).length;
+  var mp=ge('mProg'),mc=ge('mPct'),ep=ge('eProg'),ec=ge('ePct');
+  if(mp)mp.style.width=(m/4*100)+'%'; if(mc)mc.textContent=m+' / 4';
+  if(ep)ep.style.width=(e/3*100)+'%'; if(ec)ec.textContent=e+' / 3';
 }
 
-function renderInterrupts(){
-  var c=el('interrupts');if(!c)return;c.innerHTML='';
-  INTERRUPTS.forEach(function(intr,i){
-    var a=D.intr[i];
-    var d=document.createElement('div');d.className='intr-card';
-    d.innerHTML='<div class="intr-time">'+intr.time+'</div>'
-      +'<div class="intr-q">'+intr.q+'</div>'
-      +'<div class="ans-row">'
-      +'<button class="abtn'+(a==='yes'?' yes':'')+'" data-i="'+i+'" data-v="yes">✓ 向かっている</button>'
-      +'<button class="abtn'+(a==='no'?' no':'')+'" data-i="'+i+'" data-v="no">✗ 軌道修正が必要</button>'
-      +(a?'<button class="abtn reset" data-i="'+i+'" data-v="">取り消す</button>':'')
-      +'</div>';
+// ========== 日中チェックポイント ==========
+var INTRS = [
+  {time:'11:00', q:'今、理想の人生へ向かっているか？ それとも快適ゾーンを守っているか？'},
+  {time:'13:30', q:'本当はやるべきなのに、今日避けていることは何か？'},
+  {time:'15:15', q:'今やっていることは、未来の自分が承認するか？'},
+  {time:'17:00', q:'この瞬間の行動を動かしている「無意識の目的」は何か？'},
+  {time:'19:30', q:'今日、恐れが自分の代わりに決断を下した場面はあったか？'},
+  {time:'21:00', q:'今日、どれだけ意図的に生きたか？ 10点満点で何点か？'}
+];
+function renderInterrupts() {
+  var c = ge('interrupts'); if (!c) return; c.innerHTML = '';
+  INTRS.forEach(function(intr, i) {
+    var a = D.intr[i];
+    var d = document.createElement('div'); d.className = 'intr-card';
+    d.innerHTML = '<div class="intr-time">' + intr.time + '</div>'
+      + '<div class="intr-q">' + intr.q + '</div>'
+      + '<div class="ans-row">'
+      + '<button class="abtn' + (a==='yes'?' yes':'') + '" data-i="' + i + '" data-v="yes">✓ 向かっている</button>'
+      + '<button class="abtn' + (a==='no'?' no':'') + '" data-i="' + i + '" data-v="no">✗ 軌道修正が必要</button>'
+      + (a ? '<button class="abtn reset-btn" data-i="' + i + '" data-v="">取り消す</button>' : '')
+      + '</div>';
     c.appendChild(d);
   });
-  c.querySelectorAll('.abtn').forEach(function(btn){
-    btn.addEventListener('click',function(){
-      var i=parseInt(this.getAttribute('data-i'));
-      var v=this.getAttribute('data-v');
-      if(v===''){delete D.intr[i];}else{D.intr[i]=v;}
-      saveDaily();renderInterrupts();updateStats();
+  c.querySelectorAll('.abtn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var i = parseInt(this.getAttribute('data-i'));
+      var v = this.getAttribute('data-v');
+      if (v === '') { delete D.intr[i]; } else { D.intr[i] = v; }
+      saveD(); renderInterrupts(); updateStats();
     });
   });
 }
 
-function renderGoals(){
-  TYPES.forEach(function(type){
-    var list=el(type+'s-list');if(!list)return;list.innerHTML='';
-    if(!G[type])G[type]=[];
-    G[type].forEach(function(g,i){
-      var d=document.createElement('div');
-      d.className='gitem'+(g.done?' done':'');
-      d.innerHTML=
-        '<div class="gcheck" data-type="'+type+'" data-i="'+i+'">'+(g.done?'✓':'')+'</div>'
-        +'<div class="gtext" data-type="'+type+'" data-i="'+i+'">'+escapeHtml(g.text)+'</div>'
-        +'<button class="gdel" data-type="'+type+'" data-i="'+i+'" title="削除">×</button>';
+// ========== ゴール ==========
+function renderGoals() {
+  ['mission','boss','quest'].forEach(function(type) {
+    var list = ge('list-' + type); if (!list) return;
+    list.innerHTML = '';
+    var items = G[type] || [];
+    items.forEach(function(g, i) {
+      var d = document.createElement('div');
+      d.className = 'gitem' + (g.done ? ' done' : '');
+      d.innerHTML =
+        '<button class="gcheck" data-t="' + type + '" data-i="' + i + '">' + (g.done ? '✓' : '') + '</button>'
+        + '<span class="gtext">' + esc(g.text) + '</span>'
+        + '<button class="gdel" data-t="' + type + '" data-i="' + i + '">×</button>';
       list.appendChild(d);
     });
-    // イベント
-    list.querySelectorAll('.gcheck,.gtext').forEach(function(el){
-      el.addEventListener('click',function(){
-        var type=this.getAttribute('data-type');
-        var i=parseInt(this.getAttribute('data-i'));
-        G[type][i].done=!G[type][i].done;
-        saveGoals();renderGoals();updateStats();
+    list.querySelectorAll('.gcheck').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var t = this.getAttribute('data-t'), i = parseInt(this.getAttribute('data-i'));
+        G[t][i].done = !G[t][i].done;
+        saveG(); renderGoals(); updateStats();
       });
     });
-    list.querySelectorAll('.gdel').forEach(function(btn){
-      btn.addEventListener('click',function(){
-        var type=this.getAttribute('data-type');
-        var i=parseInt(this.getAttribute('data-i'));
-        if(confirm('「'+G[type][i].text+'」を削除しますか？')){
-          G[type].splice(i,1);
-          saveGoals();renderGoals();updateStats();
+    list.querySelectorAll('.gdel').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var t = this.getAttribute('data-t'), i = parseInt(this.getAttribute('data-i'));
+        if (confirm('「' + G[t][i].text + '」を削除しますか？')) {
+          G[t].splice(i, 1);
+          saveG(); renderGoals(); updateStats();
         }
       });
     });
   });
 }
 
-function addGoal(type){
-  var inp=el('inp-'+type);if(!inp)return;
-  var text=inp.value.trim();if(!text)return;
-  if(!G[type])G[type]=[];
-  G[type].push({text:text,done:false});
-  inp.value='';
-  saveGoals();  // ← goalsは別キーに保存
-  renderGoals();updateStats();
+function addGoal(type) {
+  var inp = ge('inp-' + type);
+  if (!inp) return;
+  var text = inp.value.trim();
+  if (!text) return;
+  if (!G[type]) G[type] = [];
+  G[type].push({text: text, done: false});
+  inp.value = '';
+  saveG();
+  renderGoals();
+  updateStats();
 }
 
-function escapeHtml(str){
-  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-function updateStats(){
-  var qd=(G.quest||[]).filter(function(q){return q.done;}).length;
-  var md=M_IDS.filter(function(k){return D.done[k];}).length;
-  var ed=E_IDS.filter(function(k){return D.done[k];}).length;
-  var ss=el('sStreak'),sq=el('sQuests'),sl=el('sLevel');
+// ========== 統計 ==========
+function updateStats() {
+  var qd = (G.quest || []).filter(function(q){return q.done;}).length;
+  var md = ['1','2','3','4'].filter(function(k){return D.done[k];}).length;
+  var ed = ['e1','e2','e3'].filter(function(k){return D.done[k];}).length;
+  var ss=ge('sStreak'),sq=ge('sQuests'),sl=ge('sLevel');
   if(ss)ss.textContent=D.streak;
   if(sq)sq.textContent=qd;
   if(sl)sl.textContent=Math.floor((md+ed+qd)/3)+1;
