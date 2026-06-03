@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="人生再起動">
+<title>人生再起動プロトコル — Dan Koe Method</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&family=Noto+Sans+JP:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{background:#0a0a0a;min-height:100%;}
+body{font-family:'Noto Sans JP',sans-serif;color:#e8e4dc;}
+.app{max-width:680px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;}
+.header{border-bottom:0.5px solid #2a2a2a;padding:20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:#0a0a0a;z-index:10;}
+.header h1{font-family:'Noto Serif JP',serif;font-size:17px;font-weight:700;}
+.header p{font-size:10px;color:#555;margin-top:3px;letter-spacing:1px;}
+.date-badge{font-size:11px;color:#888;background:#1a1a1a;border:0.5px solid #2a2a2a;padding:4px 10px;border-radius:20px;}
+.tabs{display:flex;padding:12px 16px;gap:8px;background:#1e1e1e;border-bottom:1px solid #111;position:sticky;top:61px;z-index:9;}
+.tab{flex:1;padding:11px 4px;font-size:12px;cursor:pointer;border:none;background:#333;color:#aaa;border-radius:8px;transition:all 0.2s;font-family:'Noto Sans JP',sans-serif;text-align:center;}
+.tab.active{background:#c8a96e;color:#1a1000;font-weight:500;}
+.tab:hover:not(.active){background:#444;color:#fff;}
+.content{padding:24px 20px;flex:1;}
+.phase-title{font-family:'Noto Serif JP',serif;font-size:20px;margin-bottom:3px;}
+.phase-sub{font-size:10px;color:#555;letter-spacing:1px;margin-bottom:20px;}
+.qcard{background:#161616;border:0.5px solid #2a2a2a;border-radius:10px;padding:16px 18px;margin-bottom:14px;}
+.qcard.done{border-color:#2a3a2a;background:#0e140e;}
+.qlabel{font-size:10px;color:#666;letter-spacing:1px;margin-bottom:8px;}
+.qlabel.done{color:#4a7a4a;}
+.qtext{font-size:13px;color:#b0a898;line-height:1.8;margin-bottom:12px;}
+textarea{width:100%;background:#0d0d0d;border:0.5px solid #333;border-radius:8px;color:#e8e4dc;font-family:'Noto Sans JP',sans-serif;font-size:13px;line-height:1.7;padding:12px 14px;resize:none;outline:none;transition:border-color 0.2s;min-height:72px;}
+textarea:focus{border-color:#c8a96e;}
+textarea::placeholder{color:#444;}
+.cbtn{margin-top:10px;padding:7px 16px;background:none;border:0.5px solid #444;border-radius:20px;color:#777;font-size:11px;cursor:pointer;font-family:'Noto Sans JP',sans-serif;transition:all 0.2s;}
+.cbtn:hover{border-color:#c8a96e;color:#c8a96e;}
+.cbtn.done{border-color:#4a7a4a;color:#6aaa6a;}
+.progress-wrap{background:#1a1a1a;border-radius:4px;height:3px;margin-top:18px;overflow:hidden;}
+.progress-fill{height:100%;background:#c8a96e;border-radius:4px;transition:width 0.5s ease;}
+.progress-row{display:flex;justify-content:space-between;margin-top:6px;}
+.progress-text{font-size:10px;color:#555;}
+.intr-card{background:#161616;border:0.5px solid #2a2a2a;border-radius:10px;padding:16px 18px;margin-bottom:12px;}
+.intr-time{font-family:'Noto Serif JP',serif;font-size:24px;color:#c8a96e;margin-bottom:4px;}
+.intr-q{font-size:13px;color:#888;line-height:1.7;margin-bottom:14px;}
+.ans-row{display:flex;gap:8px;}
+.abtn{flex:1;padding:10px;background:#1a1a1a;border:0.5px solid #333;border-radius:8px;color:#666;font-size:12px;cursor:pointer;font-family:'Noto Sans JP',sans-serif;transition:all 0.2s;}
+.abtn:hover{background:#222;color:#e8e4dc;}
+.abtn.yes{border-color:#4a7a4a;color:#6aaa6a;background:#0e140e;}
+.abtn.no{border-color:#7a3a3a;color:#aa6a6a;background:#140e0e;}
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px;}
+.stat{background:#161616;border:0.5px solid #2a2a2a;border-radius:10px;padding:16px 12px;text-align:center;}
+.stat-val{font-family:'Noto Serif JP',serif;font-size:28px;color:#c8a96e;}
+.stat-lbl{font-size:10px;color:#555;margin-top:3px;}
+.goal-sec{margin-bottom:20px;}
+.goal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.gtitle{font-size:11px;color:#666;letter-spacing:0.8px;}
+.goal-badge{font-size:10px;color:#c8a96e;background:#1e1800;border:0.5px solid #3a3000;padding:2px 8px;border-radius:10px;}
+.gitem{background:#161616;border:0.5px solid #2a2a2a;border-radius:8px;padding:13px 16px;margin-bottom:8px;display:flex;align-items:center;gap:12px;cursor:pointer;}
+.gitem.done{opacity:0.5;}
+.gitem.done .gtext{text-decoration:line-through;}
+.gcheck{width:20px;height:20px;border-radius:50%;border:0.5px solid #444;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;color:transparent;}
+.gitem.done .gcheck{background:#4a7a4a;border-color:#4a7a4a;color:#e8e4dc;}
+.gtext{font-size:13px;color:#b0a898;}
+.add-row{display:flex;gap:8px;margin-top:4px;}
+.ginput{flex:1;background:#0d0d0d;border:0.5px solid #333;border-radius:8px;color:#e8e4dc;font-family:'Noto Sans JP',sans-serif;font-size:13px;padding:10px 14px;outline:none;transition:border-color 0.2s;}
+.ginput:focus{border-color:#c8a96e;}
+.ginput::placeholder{color:#444;}
+.gadd{padding:10px 16px;background:#1e1800;border:0.5px solid #3a3000;border-radius:8px;color:#c8a96e;font-size:12px;cursor:pointer;font-family:'Noto Sans JP',sans-serif;white-space:nowrap;}
+.rules-box{background:#111;border:0.5px solid #222;border-radius:10px;padding:16px 18px;margin-top:16px;}
+.rules-title{font-size:10px;color:#666;letter-spacing:1px;margin-bottom:12px;}
+.ritem{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;font-size:12px;color:#888;line-height:1.6;}
+.rdot{width:4px;height:4px;border-radius:50%;background:#c8a96e;flex-shrink:0;margin-top:7px;}
+.hidden{display:none;}
+.hint-bar{background:#1e1800;border-top:0.5px solid #3a3000;padding:10px 20px;text-align:center;font-size:11px;color:#c8a96e;line-height:1.6;}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <div>
+      <h1>人生再起動プロトコル</h1>
+      <p>DAN KOE METHOD — 1日で人生を立て直す</p>
+    </div>
+    <div class="date-badge" id="dateBadge"></div>
+  </div>
+  <div class="tabs">
+    <button class="tab active" id="tab-btn-morning">◐ 朝</button>
+    <button class="tab" id="tab-btn-daytime">○ 日中</button>
+    <button class="tab" id="tab-btn-evening">● 夜</button>
+    <button class="tab" id="tab-btn-game">◈ ゲーム</button>
+  </div>
+  <div class="content">
+    <div id="tab-morning">
+      <div class="phase-title">心理的発掘</div>
+      <div class="phase-sub">ビジョン · アンチビジョン · アイデンティティ</div>
+      <div class="qcard" id="qc-1"><div class="qlabel" id="ql-1">質問 01 — アンチビジョン</div><div class="qtext">慣れてしまった、じわじわとした不満は何か？ 受け入れてしまっている「普通」は何か？</div><textarea id="a-1" placeholder="正直に、容赦なく..." rows="3"></textarea><button class="cbtn" id="cb-1">完了にする</button></div>
+      <div class="qcard" id="qc-2"><div class="qlabel" id="ql-2">質問 02 — 10年後の悪夢</div><div class="qtext">何も変えなかった10年後、ある火曜日を描け。どこにいる？ 体はどんな感じ？ 朝9時〜夜6時、何をしている？</div><textarea id="a-2" placeholder="具体的に、リアルに..." rows="3"></textarea><button class="cbtn" id="cb-2">完了にする</button></div>
+      <div class="qcard" id="qc-3"><div class="qlabel" id="ql-3">質問 03 — 理想のビジョン</div><div class="qtext">指を鳴らして3年後に別の人生を手に入れるとしたら、現実的かどうかは無視して、本当に望む生活を描け。</div><textarea id="a-3" placeholder="現実を忘れて..." rows="3"></textarea><button class="cbtn" id="cb-3">完了にする</button></div>
+      <div class="qcard" id="qc-4"><div class="qlabel" id="ql-4">質問 04 — アイデンティティ宣言</div><div class="qtext">その人生が「当然」に感じられるためには、自分自身についてどんなことを信じている必要があるか？</div><textarea id="a-4" placeholder="私は〜という人間だ..." rows="2"></textarea><button class="cbtn" id="cb-4">完了にする</button></div>
+      <div class="progress-wrap"><div class="progress-fill" id="mProg" style="width:0%"></div></div>
+      <div class="progress-row"><span class="progress-text">朝の発掘</span><span class="progress-text" id="mPct">0 / 4</span></div>
+    </div>
+    <div id="tab-daytime" class="hidden">
+      <div class="phase-title">無意識の中断</div>
+      <div class="phase-sub">オートパイロットを破る · 6つのチェックポイント</div>
+      <div id="interrupts"></div>
+      <div class="rules-box">
+        <div class="rules-title">使い方</div>
+        <div class="ritem"><div class="rdot"></div>スマホのアラームを下の6つの時間にセットする</div>
+        <div class="ritem"><div class="rdot"></div>アラームが鳴ったらこのアプリを開いて日中タブを選ぶ</div>
+        <div class="ritem"><div class="rdot"></div>その時間の問いに正直に答える（30秒でOK）</div>
+        <div class="ritem"><div class="rdot"></div>「いいえ」は失敗ではなく、気づきの情報として使う</div>
+      </div>
+    </div>
+    <div id="tab-evening" class="hidden">
+      <div class="phase-title">振り返りと再構築</div>
+      <div class="phase-sub">敵に名前をつける · ルールを設定する</div>
+      <div class="qcard" id="qc-e1"><div class="qlabel" id="ql-e1">今日の「敵」</div><div class="qtext">今日、自分を支配していた内的パターンや信念に名前をつけよ。</div><textarea id="a-e1" placeholder="例：「承認中毒」「先延ばし魔」「偽物症候群」..." rows="2"></textarea><button class="cbtn" id="cb-e1">名前をつける</button></div>
+      <div class="qcard" id="qc-e2"><div class="qlabel" id="ql-e2">アンチビジョンを1文に</div><div class="qtext">絶対にこうなりたくない、という未来を1文に圧縮せよ。</div><textarea id="a-e2" placeholder="私は絶対に〜にはならない..." rows="2"></textarea><button class="cbtn" id="cb-e2">刻み込む</button></div>
+      <div class="qcard" id="qc-e3"><div class="qlabel" id="ql-e3">絶対にやらないルール</div><div class="qtext">新しいアイデンティティを守る「絶対にやらないこと」のルールを設定せよ。（1行に1つ）</div><textarea id="a-e3" placeholder="9時前にスマホを見ない&#10;情熱を感じない仕事にYESと言わない..." rows="5"></textarea><button class="cbtn" id="cb-e3">ルール確定</button></div>
+      <div class="progress-wrap"><div class="progress-fill" id="eProg" style="width:0%"></div></div>
+      <div class="progress-row"><span class="progress-text">夜の統合</span><span class="progress-text" id="ePct">0 / 3</span></div>
+    </div>
+    <div id="tab-game" class="hidden">
+      <div class="phase-title">人生をゲームとして再定義</div>
+      <div class="phase-sub">ミッション · ボスファイト · デイリークエスト</div>
+      <div class="stats-grid">
+        <div class="stat"><div class="stat-val" id="sStreak">0</div><div class="stat-lbl">連続日数</div></div>
+        <div class="stat"><div class="stat-val" id="sQuests">0</div><div class="stat-lbl">クリア済み</div></div>
+        <div class="stat"><div class="stat-val" id="sLevel">1</div><div class="stat-lbl">Identity Lv</div></div>
+      </div>
+      <div class="goal-sec"><div class="goal-head"><div class="gtitle">ミッション — 1年後の目標</div><div class="goal-badge">長期戦</div></div><div id="missions-list"></div><div class="add-row"><input class="ginput" id="inp-mission" placeholder="1年後のミッションを入力..."><button class="gadd" id="gadd-mission">＋ 追加</button></div></div>
+      <div class="goal-sec"><div class="goal-head"><div class="gtitle">ボスファイト — 今月のプロジェクト</div><div class="goal-badge">30日勝負</div></div><div id="bosses-list"></div><div class="add-row"><input class="ginput" id="inp-boss" placeholder="今月倒すボスを入力..."><button class="gadd" id="gadd-boss">＋ 追加</button></div></div>
+      <div class="goal-sec"><div class="goal-head"><div class="gtitle">デイリークエスト — 今日のタスク</div><div class="goal-badge">本日</div></div><div id="quests-list"></div><div class="add-row"><input class="ginput" id="inp-quest" placeholder="今日のクエストを入力..."><button class="gadd" id="gadd-quest">＋ 追加</button></div></div>
+    </div>
+  </div>
+  <div class="hint-bar" id="hintBar"></div>
+</div>
+<script>
+const TABS=['morning','daytime','evening','game'];
+const IDS=['1','2','3','4','e1','e2','e3'];
+const TYPES=['mission','boss','quest'];
+const INTERRUPTS=[
+  {time:'11:00',q:'今、理想の人生へ向かっているか？ それとも快適ゾーンを守っているか？'},
+  {time:'13:30',q:'本当はやるべきなのに、今日避けていることは何か？'},
+  {time:'15:15',q:'今やっていることは、未来の自分が承認するか？'},
+  {time:'17:00',q:'この瞬間の行動を動かしている「無意識の目的」は何か？'},
+  {time:'19:30',q:'今日、恐れが自分の代わりに決断を下した場面はあったか？'},
+  {time:'21:00',q:'今日、どれだけ意図的に生きたか？ 10点満点で何点か？'},
+];
+const KEY='dkpJP3';
+let S=JSON.parse(localStorage.getItem(KEY)||'{"ans":{},"done":{},"intr":{},"goals":{"mission":[],"boss":[],"quest":[]},"streak":0,"lastDate":""}');
+function save(){localStorage.setItem(KEY,JSON.stringify(S));}
+function el(id){return document.getElementById(id);}
+function today(){return new Date().toLocaleDateString('ja-JP',{year:'numeric',month:'2-digit',day:'2-digit'});}
+
+window.addEventListener('DOMContentLoaded',function(){
+  // date & streak
+  var t=today();
+  el('dateBadge').textContent=t;
+  if(S.lastDate!==t){
+    if(S.lastDate){var diff=(new Date(t.replace(/\//g,'-'))-new Date(S.lastDate.replace(/\//g,'-')))/86400000;S.streak=diff===1?S.streak+1:1;}
+    else S.streak=1;
+    S.lastDate=t;S.done={};S.intr={};save();
+  }
+
+  // restore textarea values
+  IDS.forEach(function(k){
+    var ta=el('a-'+k);
+    if(ta){
+      if(S.ans[k])ta.value=S.ans[k];
+      ta.addEventListener('input',function(){S.ans[k]=this.value;save();});
+    }
+    if(S.done[k])applyDone(k);
+    var btn=el('cb-'+k);
+    if(btn)btn.addEventListener('click',function(){markDone(k);});
+  });
+
+  // tab buttons
+  TABS.forEach(function(name){
+    var btn=el('tab-btn-'+name);
+    if(btn)btn.addEventListener('click',function(){switchTab(name);});
+  });
+
+  // goal add buttons & enter key
+  TYPES.forEach(function(type){
+    var btn=el('gadd-'+type);
+    if(btn)btn.addEventListener('click',function(){addGoal(type);});
+    var inp=el('inp-'+type);
+    if(inp)inp.addEventListener('keydown',function(e){if(e.key==='Enter')addGoal(type);});
+  });
+
+  // hint bar
+  var hint=el('hintBar');
+  var isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
+  var isAndroid=/android/i.test(navigator.userAgent);
+  var isStandalone=(window.matchMedia('(display-mode: standalone)').matches)||window.navigator.standalone;
+  if(!isStandalone){
+    if(isIOS)hint.textContent='ホーム画面に追加：Safariの共有ボタン →「ホーム画面に追加」';
+    else if(isAndroid)hint.textContent='ホーム画面に追加：ブラウザのメニュー →「ホーム画面に追加」';
+    else hint.textContent='ブックマーク登録：Cmd+D（Mac）/ Ctrl+D（Windows）でいつでも開けます';
+  } else{hint.style.display='none';}
+
+  renderInterrupts();
+  renderGoals();
+  updateStats();
+  updateProgress();
+});
+
+function switchTab(name){
+  TABS.forEach(function(t){
+    var panel=el('tab-'+t);var btn=el('tab-btn-'+t);
+    if(panel)panel.classList.add('hidden');
+    if(btn)btn.classList.remove('active');
+  });
+  var p=el('tab-'+name);var b=el('tab-btn-'+name);
+  if(p)p.classList.remove('hidden');
+  if(b)b.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function applyDone(id){
+  var c=el('qc-'+id),l=el('ql-'+id),b=el('cb-'+id);
+  if(c)c.classList.add('done');
+  if(l)l.classList.add('done');
+  if(b){b.classList.add('done');b.textContent='✓ 完了';}
+}
+
+function markDone(id){S.done[id]=true;save();applyDone(id);updateProgress();updateStats();}
+
+function updateProgress(){
+  var m=['1','2','3','4'].filter(function(k){return S.done[k];}).length;
+  var e=['e1','e2','e3'].filter(function(k){return S.done[k];}).length;
+  var mp=el('mProg'),mc=el('mPct'),ep=el('eProg'),ec=el('ePct');
+  if(mp)mp.style.width=(m/4*100)+'%';if(mc)mc.textContent=m+' / 4';
+  if(ep)ep.style.width=(e/3*100)+'%';if(ec)ec.textContent=e+' / 3';
+}
+
+function renderInterrupts(){
+  var c=el('interrupts');if(!c)return;c.innerHTML='';
+  INTERRUPTS.forEach(function(intr,i){
+    var a=S.intr[i];
+    var d=document.createElement('div');d.className='intr-card';
+    d.innerHTML='<div class="intr-time">'+intr.time+'</div>'
+      +'<div class="intr-q">'+intr.q+'</div>'
+      +'<div class="ans-row">'
+      +'<button class="abtn'+(a==='yes'?' yes':'')+'" data-i="'+i+'" data-v="yes">✓ 向かっている</button>'
+      +'<button class="abtn'+(a==='no'?' no':'')+'" data-i="'+i+'" data-v="no">✗ 軌道修正が必要</button>'
+      +'</div>';
+    c.appendChild(d);
+  });
+  c.querySelectorAll('.abtn').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var i=parseInt(this.getAttribute('data-i'));
+      var v=this.getAttribute('data-v');
+      S.intr[i]=v;save();renderInterrupts();updateStats();
+    });
+  });
+}
+
+function renderGoals(){
+  TYPES.forEach(function(type){
+    var list=el(type+'s-list');if(!list)return;list.innerHTML='';
+    (S.goals[type]||[]).forEach(function(g,i){
+      var d=document.createElement('div');
+      d.className='gitem'+(g.done?' done':'');
+      d.innerHTML='<div class="gcheck">'+(g.done?'✓':'')+'</div><div class="gtext">'+g.text+'</div>';
+      d.addEventListener('click',function(){S.goals[type][i].done=!S.goals[type][i].done;save();renderGoals();updateStats();});
+      list.appendChild(d);
+    });
+  });
+}
+
+function addGoal(type){
+  var inp=el('inp-'+type);if(!inp)return;
+  var text=inp.value.trim();if(!text)return;
+  S.goals[type].push({text:text,done:false});
+  inp.value='';save();renderGoals();updateStats();
+}
+
+function updateStats(){
+  var qd=(S.goals.quest||[]).filter(function(q){return q.done;}).length;
+  var md=['1','2','3','4'].filter(function(k){return S.done[k];}).length;
+  var ed=['e1','e2','e3'].filter(function(k){return S.done[k];}).length;
+  var ss=el('sStreak'),sq=el('sQuests'),sl=el('sLevel');
+  if(ss)ss.textContent=S.streak;
+  if(sq)sq.textContent=qd;
+  if(sl)sl.textContent=Math.floor((md+ed+qd)/3)+1;
+}
+</script>
+</body>
+</html>
