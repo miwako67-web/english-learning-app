@@ -119,10 +119,16 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:12px;heigh
         <div class="title">孤独という贅沢</div>
         <div class="subtitle">English Speaking Practice</div>
       </div>
-      <div class="speed-control">
-        <span class="speed-label">Speed</span>
-        <input type="range" id="speedSlider" min="0.5" max="1.5" step="0.1" value="0.9">
-        <span class="speed-val" id="speedVal">0.9x</span>
+      <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-end;">
+        <div class="speed-control">
+          <span class="speed-label">Speed</span>
+          <input type="range" id="speedSlider" min="0.5" max="1.5" step="0.1" value="0.9">
+          <span class="speed-val" id="speedVal">0.9x</span>
+        </div>
+        <div class="speed-control" style="gap:6px;">
+          <span class="speed-label">Voice</span>
+          <select id="voiceSelect" style="background:var(--bg3);border:0.5px solid var(--border);color:var(--gold);font-size:11px;border-radius:6px;padding:2px 6px;outline:none;max-width:140px;font-family:'Noto Sans JP',sans-serif;"></select>
+        </div>
       </div>
     </div>
     <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
@@ -621,15 +627,67 @@ function updateNav() {
 
 // Speech
 var currentUtterance = null;
+var voices = [];
+var selectedVoice = null;
+
+function loadVoices() {
+  voices = window.speechSynthesis.getVoices().filter(function(v) {
+    return v.lang.startsWith('en');
+  });
+  var select = document.getElementById('voiceSelect');
+  if (!select) return;
+  select.innerHTML = '';
+  
+  // Group by quality
+  var preferred = ['Samantha','Karen','Daniel','Moira','Fiona','Tessa','Veena','Victoria','Alex','Tom','Allison','Ava','Susan','Zoe'];
+  var sorted = voices.slice().sort(function(a, b) {
+    var ai = preferred.indexOf(a.name);
+    var bi = preferred.indexOf(b.name);
+    if (ai === -1 && bi === -1) return a.name.localeCompare(b.name);
+    if (ai === -1) return 1;
+    if (bi === -1) return -1;
+    return ai - bi;
+  });
+
+  sorted.forEach(function(v) {
+    var opt = document.createElement('option');
+    opt.value = v.name;
+    var flag = v.lang === 'en-US' ? '🇺🇸' : v.lang === 'en-GB' ? '🇬🇧' : v.lang === 'en-AU' ? '🇦🇺' : '🌐';
+    opt.textContent = flag + ' ' + v.name;
+    select.appendChild(opt);
+  });
+
+  // Auto-select best voice
+  var best = sorted.find(function(v) { return preferred.indexOf(v.name) !== -1; });
+  if (best) {
+    select.value = best.name;
+    selectedVoice = best;
+  } else if (sorted.length > 0) {
+    selectedVoice = sorted[0];
+  }
+
+  select.addEventListener('change', function() {
+    selectedVoice = voices.find(function(v) { return v.name === select.value; }) || null;
+  });
+}
+
+// Load voices (Chrome needs event, Safari loads immediately)
+if (window.speechSynthesis) {
+  if (window.speechSynthesis.onvoiceschanged !== undefined) {
+    window.speechSynthesis.onvoiceschanged = loadVoices;
+  }
+  setTimeout(loadVoices, 200);
+}
+
 function speakText(btn, text) {
   if (!window.speechSynthesis) { alert('お使いのブラウザは音声に対応していません。'); return; }
   if (currentUtterance) { window.speechSynthesis.cancel(); }
-  // Reset all buttons
   document.querySelectorAll('.speak-btn, .ex-speak').forEach(function(b) { b.classList.remove('playing'); });
   var u = new SpeechSynthesisUtterance(text);
   u.lang = 'en-US';
   u.rate = speed;
   u.pitch = 1.0;
+  if (selectedVoice) u.voice = selectedVoice;
   if (btn) btn.classList.add('playing');
   u.onend = function() { if (btn) btn.classList.remove('playing'); };
   u.onerror = function() { if (btn) btn.classList.remove('playing'); };
