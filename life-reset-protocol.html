@@ -171,7 +171,10 @@ textarea::placeholder{color:#444;}
 
     <!-- ゲーム -->
     <div id="tab-game" class="hidden">
-      <div class="phase-title">人生をゲームとして再定義</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:3px;">
+        <div class="phase-title">人生をゲームとして再定義</div>
+        <button onclick="if(confirm('ゴールデータをリセットしますか？')){{localStorage.removeItem('dkp_goals');location.reload();}}" style="font-size:10px;color:#666;background:none;border:0.5px solid #444;border-radius:6px;padding:4px 8px;cursor:pointer;font-family:'Noto Sans JP',sans-serif;">データリセット</button>
+      </div>
       <div class="phase-sub">ミッション · ボスファイト · デイリークエスト</div>
       <div class="stats-grid">
         <div class="stat"><div class="stat-val" id="sStreak">0</div><div class="stat-lbl">連続日数</div></div>
@@ -227,7 +230,12 @@ function defaultGoals(){
 }
 
 var D=JSON.parse(localStorage.getItem(KEY_DAILY)||'null')||defaultDaily();
-var G=JSON.parse(localStorage.getItem(KEY_GOALS)||'null')||defaultGoals();
+var G;
+try{
+  var _graw=localStorage.getItem(KEY_GOALS);
+  G=_graw?JSON.parse(_graw):defaultGoals();
+  if(!G||typeof G!=='object'||!Array.isArray(G.mission)||!Array.isArray(G.boss)||!Array.isArray(G.quest)){G=defaultGoals();saveGoals();}
+}catch(e){G=defaultGoals();saveGoals();}
 
 // 古いキーからマイグレーション
 (function migrate(){
