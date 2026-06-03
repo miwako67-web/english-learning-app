@@ -3,215 +3,499 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>英語スピーキング練習 — アプリ一覧</title>
-<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
+<title>Miwa's English Learning Apps</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Noto+Sans+JP:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-:root{--ink:#1a1410;--paper:#f5f0e8;--gold:#c8962a;--moss:#4a7c59;--indigo:#3d5a8a;--panel:#fffdf8;--border:rgba(26,20,16,0.12);}
-*{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);min-height:100vh;}
-header{background:var(--ink);padding:20px 20px 16px;}
-.h-inner{max-width:640px;margin:0 auto;}
-.h-title{font-family:'Shippori Mincho',serif;color:var(--gold);font-size:20px;font-weight:700;margin-bottom:4px;}
-.h-sub{color:rgba(245,240,232,0.45);font-size:11px;}
-main{max-width:640px;margin:0 auto;padding:16px;}
-.sec{font-family:'Shippori Mincho',serif;font-size:10px;font-weight:600;color:rgba(26,20,16,0.35);letter-spacing:.12em;text-transform:uppercase;margin:20px 0 10px;}
-.app-card{background:var(--panel);border:1.5px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:10px;display:flex;align-items:center;gap:14px;}
-.app-logo{font-size:28px;flex-shrink:0;}
-.app-info{flex:1;}
-.app-title{font-family:'Shippori Mincho',serif;font-size:15px;font-weight:700;margin-bottom:2px;}
-.app-sub{font-size:10px;color:rgba(26,20,16,0.45);margin-bottom:8px;}
-.app-btns{display:flex;gap:6px;flex-wrap:wrap;}
-.btn{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:500;text-decoration:none;transition:opacity .15s;}
-.btn:hover{opacity:.8;}
-.btn-mac{background:var(--ink);color:var(--gold);}
-.btn-ios{background:rgba(61,90,138,0.1);color:var(--indigo);border:1px solid rgba(61,90,138,0.3);}
-.btn-both{background:var(--moss);color:#fff;}
-.tag{display:inline-block;padding:2px 8px;border-radius:20px;font-size:9px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px;}
-.tag-auto{background:rgba(74,124,89,0.12);color:var(--moss);}
-.tag-chunk{background:rgba(61,90,138,0.1);color:var(--indigo);}
-footer{text-align:center;padding:24px;font-family:'Shippori Mincho',serif;font-size:11px;color:rgba(26,20,16,0.3);}
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#0f0e0c;--bg2:#171613;--bg3:#201e1a;
+  --gold:#c8a96e;--gold2:#e8c88e;
+  --text:#e8e4dc;--text2:#b0a898;--text3:#706860;
+  --border:#2a2620;
+  --green:#3a5a3a;--green2:#1a2e1a;
+  --blue:#3a4a6a;--blue2:#1a2030;
+  --purple:#5a3a6a;--purple2:#2a1a30;
+  --red:#6a3a3a;--red2:#301a1a;
+}
+html,body{background:var(--bg);min-height:100%;color:var(--text);}
+body{font-family:'Noto Sans JP',sans-serif;}
+
+.app{max-width:800px;margin:0 auto;padding:0 0 40px;}
+
+/* Header */
+.header{padding:32px 24px 24px;border-bottom:0.5px solid var(--border);}
+.header h1{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:600;color:var(--text);}
+.header p{font-size:11px;color:var(--text3);margin-top:4px;letter-spacing:1px;}
+.stats{display:flex;gap:16px;margin-top:16px;}
+.stat{font-size:11px;color:var(--text3);}
+.stat span{color:var(--gold);font-size:13px;font-weight:500;}
+
+/* Filter tabs */
+.filters{display:flex;gap:8px;padding:16px 24px;flex-wrap:wrap;border-bottom:0.5px solid var(--border);}
+.filter-btn{padding:6px 14px;border-radius:20px;border:0.5px solid var(--border);background:none;color:var(--text3);font-size:11px;cursor:pointer;font-family:'Noto Sans JP',sans-serif;transition:all 0.2s;white-space:nowrap;}
+.filter-btn:hover{border-color:var(--gold);color:var(--gold);}
+.filter-btn.active{background:var(--gold);border-color:var(--gold);color:#1a1000;font-weight:500;}
+
+/* Section */
+.section{padding:20px 24px 0;}
+.section-title{font-size:10px;color:var(--text3);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.section-title::after{content:'';flex:1;height:0.5px;background:var(--border);}
+
+/* Grid */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin-bottom:8px;}
+
+/* App card */
+.card{background:var(--bg2);border:0.5px solid var(--border);border-radius:10px;padding:16px;text-decoration:none;color:inherit;transition:all 0.2s;display:block;}
+.card:hover{border-color:var(--gold);transform:translateY(-1px);}
+.card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;}
+.card-icon{font-size:22px;}
+.card-badges{display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end;}
+.badge{font-size:9px;padding:2px 6px;border-radius:8px;border:0.5px solid;}
+.badge-mac{background:#1a2030;border-color:#3a4a6a;color:#8a9aba;}
+.badge-ios{background:#1a2a1a;border-color:#3a5a3a;color:#8aba8a;}
+.badge-new{background:#2a1800;border-color:#c8a96e;color:#c8a96e;}
+.badge-life{background:#2a1a30;border-color:#5a3a6a;color:#aa8aba;}
+.card-name{font-size:13px;font-weight:500;color:var(--text);margin-bottom:4px;line-height:1.4;}
+.card-desc{font-size:11px;color:var(--text3);line-height:1.6;}
+.card-date{font-size:10px;color:var(--text3);margin-top:8px;opacity:0.6;}
+
+/* No results */
+.no-results{text-align:center;padding:40px;color:var(--text3);font-size:13px;}
 </style>
 </head>
 <body>
-<header>
-<div class="h-inner">
-<div class="h-title">📚 英語スピーキング練習アプリ</div>
-<div class="h-sub">🇦🇺 オーストラリア生活 × 瞬間反射トレーニング — 全アプリ一覧</div>
-</div>
-</header>
-<main>
+<div class="app">
+  <div class="header">
+    <h1>Miwa's Learning Apps</h1>
+    <p>英語スピーキング練習 × 瞬間反射トレーニング × ライフスタイル</p>
+    <div class="stats">
+      <div class="stat">総アプリ数 <span id="totalCount">0</span></div>
+      <div class="stat">英語練習 <span>20+</span></div>
+      <div class="stat">ライフ <span>2</span></div>
+    </div>
+  </div>
 
-<div class="sec">🌟 人気・おすすめ</div>
+  <div class="filters">
+    <button class="filter-btn active" onclick="filterApps('all')">すべて</button>
+    <button class="filter-btn" onclick="filterApps('new')">🆕 新着</button>
+    <button class="filter-btn" onclick="filterApps('life')">🌱 ライフ</button>
+    <button class="filter-btn" onclick="filterApps('english')">🇺🇸 英語練習</button>
+    <button class="filter-btn" onclick="filterApps('mac')">🖥 Mac版</button>
+    <button class="filter-btn" onclick="filterApps('ios')">📱 iOS版</button>
+  </div>
 
-<div class="app-card">
-<div class="app-logo">🐾</div>
-<div class="app-info">
-<div class="app-title">CoCo's Reflex Training</div>
-<div class="app-sub">CoCoとの日常 · 瞬間反射100フレーズ</div>
-<div>
-<span class="tag tag-auto">🔊 自動再生</span>
-<span class="tag tag-chunk">📦 チャンク学習</span>
-</div>
-<div class="app-btns">
-<a class="btn btn-mac" href="CoCoReflexTraining_GoogleTTS%20(14).html">🖥 Mac版</a>
-<a class="btn btn-ios" href="CoCo_iOS.html">📱 iOS版</a>
-</div>
-</div>
+  <div id="appList"></div>
 </div>
 
-<div class="app-card">
-<div class="app-logo">🌌</div>
-<div class="app-info">
-<div class="app-title">Deep Talk</div>
-<div class="app-sub">哲学・深い問い · 瞬間反射100フレーズ</div>
-<div>
-<span class="tag tag-auto">🔊 自動再生</span>
-<span class="tag tag-chunk">📦 チャンク学習</span>
-</div>
-<div class="app-btns">
-<a class="btn btn-mac" href="DeepTalk_GoogleTTS%20(6).html">🖥 Mac版</a>
-<a class="btn btn-ios" href="DeepTalk_iOS.html">📱 iOS版</a>
-</div>
-</div>
-</div>
+<script>
+var APPS = [
+  // ===== 新着・ライフスタイル =====
+  {
+    name: "人生再起動プロトコル",
+    desc: "Dan Koeメソッド。朝・日中・夜の3フェーズで人生を立て直す毎日の実践アプリ",
+    icon: "🔄",
+    url: "life-reset-protocol.html",
+    category: ["life","new"],
+    platform: "both",
+    date: "7時間前"
+  },
+  {
+    name: "孤独の英語スピーキング練習",
+    desc: "禅の孤独論を英語で学ぶ。重要構文ハイライト＋音声読み上げ＋例文練習",
+    icon: "🧘",
+    url: "solitude-english-study.html",
+    category: ["english","life","new"],
+    platform: "both",
+    date: "24分前"
+  },
+  // ===== 英語練習 Mac版 =====
+  {
+    name: "CoCo's Reflex Training",
+    desc: "日常生活の瞬間反射100フレーズ。チャンク学習で自動再生",
+    icon: "⚡",
+    url: "CoCoReflexTraining_GoogleTTS (14).html",
+    category: ["english"],
+    platform: "mac",
+    date: "先週"
+  },
+  {
+    name: "DeepTalk",
+    desc: "深い問い・瞬間反射100フレーズ",
+    icon: "💭",
+    url: "DeepTalk_GoogleTTS (6).html",
+    category: ["english"],
+    platform: "mac",
+    date: "先週"
+  },
+  {
+    name: "PhoneEigo",
+    desc: "電話英語・瞬間反射トレーニング",
+    icon: "📞",
+    url: "PhoneEigo_GoogleTTS (8).html",
+    category: ["english"],
+    platform: "mac",
+    date: "先週"
+  },
+  {
+    name: "Business英語",
+    desc: "ビジネス英語・瞬間反射トレーニング",
+    icon: "💼",
+    url: "Business_Eigo_GoogleTTS.html",
+    category: ["english"],
+    platform: "mac",
+    date: "4日前"
+  },
+  {
+    name: "Emotion英語",
+    desc: "感情表現英語・瞬間反射トレーニング",
+    icon: "😊",
+    url: "Emotion_Eigo_GoogleTTS.html",
+    category: ["english"],
+    platform: "mac",
+    date: "4日前"
+  },
+  {
+    name: "FamilyLife英語",
+    desc: "家族・日常生活英語・瞬間反射トレーニング",
+    icon: "👨‍👩‍👧",
+    url: "FamilyLife_GoogleTTS.html",
+    category: ["english"],
+    platform: "mac",
+    date: "4日前"
+  },
+  {
+    name: "Health英語",
+    desc: "健康・医療英語・瞬間反射トレーニング",
+    icon: "🏥",
+    url: "Health_Eiwa_GoogleTTS.html",
+    category: ["english"],
+    platform: "mac",
+    date: "4日前"
+  },
+  {
+    name: "HomeDaily英語",
+    desc: "家庭日常英語・瞬間反射トレーニング",
+    icon: "🏠",
+    url: "HomeDaily_GoogleTTS.html",
+    category: ["english"],
+    platform: "mac",
+    date: "4日前"
+  },
+  {
+    name: "JapanTalk",
+    desc: "日本の話題英語・瞬間反射トレーニング",
+    icon: "🗾",
+    url: "JapanTalk_GoogleTTS.html",
+    category: ["english"],
+    platform: "mac",
+    date: "4日前"
+  },
+  {
+    name: "JpFood英語",
+    desc: "日本食・食事英語・瞬間反射トレーニング",
+    icon: "🍱",
+    url: "JpFood_GoogleTTS.html",
+    category: ["english"],
+    platform: "mac",
+    date: "4日前"
+  },
+  {
+    name: "Love英語",
+    desc: "恋愛・人間関係英語・瞬間反射トレーニング",
+    icon: "💕",
+    url: "Love_Eigo_GoogleTTS.html",
+    category: ["english"],
+    platform: "mac",
+    date: "4日前"
+  },
+  {
+    name: "People病者英語",
+    desc: "病気・体調英語・瞬間反射トレーニング",
+    icon: "🌡️",
+    url: "People_Byosha_GoogleTTS.html",
+    category: ["english"],
+    platform: "mac",
+    date: "4日前"
+  },
+  {
+    name: "Smalltalk練習",
+    desc: "スモールトーク・日常会話練習",
+    icon: "💬",
+    url: "smalltalk-training.html",
+    category: ["english","new"],
+    platform: "mac",
+    date: "18時間前"
+  },
+  {
+    name: "Social Communication練習",
+    desc: "社交英語・コミュニケーション練習",
+    icon: "🤝",
+    url: "social-communication-training.html",
+    category: ["english","new"],
+    platform: "mac",
+    date: "13時間前"
+  },
+  {
+    name: "Supermarket練習",
+    desc: "スーパーマーケット英語・日常会話練習",
+    icon: "🛒",
+    url: "supermarket-training.html",
+    category: ["english","new"],
+    platform: "mac",
+    date: "14時間前"
+  },
+  {
+    name: "Dog Walk練習",
+    desc: "犬の散歩・アウトドア英語練習",
+    icon: "🐕",
+    url: "dog-walk-training.html",
+    category: ["english","new"],
+    platform: "mac",
+    date: "14時間前"
+  },
+  {
+    name: "Weather & Health練習",
+    desc: "天気・健康英語・日常会話練習",
+    icon: "🌤️",
+    url: "weather-health-training.html",
+    category: ["english","new"],
+    platform: "mac",
+    date: "14時間前"
+  },
+  // ===== iOS版 =====
+  {
+    name: "CoCo iOS版",
+    desc: "日常生活の瞬間反射100フレーズ（iOS最適化）",
+    icon: "⚡",
+    url: "CoCo_iOS.html",
+    category: ["english"],
+    platform: "ios",
+    date: "5日前"
+  },
+  {
+    name: "DeepTalk iOS版",
+    desc: "深い問い・瞬間反射100フレーズ（iOS最適化）",
+    icon: "💭",
+    url: "DeepTalk_iOS.html",
+    category: ["english"],
+    platform: "ios",
+    date: "5日前"
+  },
+  {
+    name: "PhoneEigo iOS版",
+    desc: "電話英語・瞬間反射（iOS最適化）",
+    icon: "📞",
+    url: "PhoneEigo_iOS.html",
+    category: ["english"],
+    platform: "ios",
+    date: "5日前"
+  },
+  {
+    name: "Business英語 iOS版",
+    desc: "ビジネス英語（iOS最適化）",
+    icon: "💼",
+    url: "Business_Eigo_iOS.html",
+    category: ["english"],
+    platform: "ios",
+    date: "4日前"
+  },
+  {
+    name: "Emotion英語 iOS版",
+    desc: "感情表現英語（iOS最適化）",
+    icon: "😊",
+    url: "Emotion_Eigo_iOS.html",
+    category: ["english"],
+    platform: "ios",
+    date: "4日前"
+  },
+  {
+    name: "FamilyLife iOS版",
+    desc: "家族・日常生活英語（iOS最適化）",
+    icon: "👨‍👩‍👧",
+    url: "FamilyLife_iOS.html",
+    category: ["english"],
+    platform: "ios",
+    date: "4日前"
+  },
+  {
+    name: "Health英語 iOS版",
+    desc: "健康・医療英語（iOS最適化）",
+    icon: "🏥",
+    url: "Health_Eiwa_iOS.html",
+    category: ["english"],
+    platform: "ios",
+    date: "4日前"
+  },
+  {
+    name: "HomeDaily iOS版",
+    desc: "家庭日常英語（iOS最適化）",
+    icon: "🏠",
+    url: "HomeDaily_iOS.html",
+    category: ["english"],
+    platform: "ios",
+    date: "4日前"
+  },
+  {
+    name: "JapanTalk iOS版",
+    desc: "日本の話題英語（iOS最適化）",
+    icon: "🗾",
+    url: "JapanTalk_iOS.html",
+    category: ["english"],
+    platform: "ios",
+    date: "4日前"
+  },
+  {
+    name: "JpFood iOS版",
+    desc: "日本食・食事英語（iOS最適化）",
+    icon: "🍱",
+    url: "JpFood_iOS.html",
+    category: ["english"],
+    platform: "ios",
+    date: "4日前"
+  },
+  {
+    name: "Love英語 iOS版",
+    desc: "恋愛・人間関係英語（iOS最適化）",
+    icon: "💕",
+    url: "Love_Eigo_iOS.html",
+    category: ["english"],
+    platform: "ios",
+    date: "4日前"
+  },
+  {
+    name: "People病者 iOS版",
+    desc: "病気・体調英語（iOS最適化）",
+    icon: "🌡️",
+    url: "People_Byosha_iOS.html",
+    category: ["english"],
+    platform: "ios",
+    date: "4日前"
+  },
+  {
+    name: "Smalltalk iOS版",
+    desc: "スモールトーク（iOS最適化）",
+    icon: "💬",
+    url: "smalltalk-training-ios.html",
+    category: ["english","new"],
+    platform: "ios",
+    date: "18時間前"
+  },
+  {
+    name: "Social Communication iOS版",
+    desc: "社交英語（iOS最適化）",
+    icon: "🤝",
+    url: "social-communication-training-ios.html",
+    category: ["english","new"],
+    platform: "ios",
+    date: "13時間前"
+  },
+  {
+    name: "Supermarket iOS版",
+    desc: "スーパーマーケット英語（iOS最適化）",
+    icon: "🛒",
+    url: "supermarket-training-ios.html",
+    category: ["english","new"],
+    platform: "ios",
+    date: "14時間前"
+  },
+  {
+    name: "Dog Walk iOS版",
+    desc: "犬の散歩・アウトドア英語（iOS最適化）",
+    icon: "🐕",
+    url: "dog-walk-training-ios.html",
+    category: ["english","new"],
+    platform: "ios",
+    date: "14時間前"
+  },
+  {
+    name: "Weather & Health iOS版",
+    desc: "天気・健康英語（iOS最適化）",
+    icon: "🌤️",
+    url: "weather-health-training-ios.html",
+    category: ["english","new"],
+    platform: "ios",
+    date: "14時間前"
+  }
+];
 
-<div class="app-card">
-<div class="app-logo">📞</div>
-<div class="app-info">
-<div class="app-title">電話英語 瞬間反射</div>
-<div class="app-sub">オーストラリア日常生活 · 100フレーズ</div>
-<div><span class="tag tag-auto">🔊 自動再生</span></div>
-<div class="app-btns">
-<a class="btn btn-mac" href="PhoneEigo_GoogleTTS%20(8).html">🖥 Mac版</a>
-<a class="btn btn-ios" href="PhoneEigo_iOS.html">📱 iOS版</a>
-</div>
-</div>
-</div>
+var currentFilter = 'all';
 
-<div class="sec">🗾 日本・文化</div>
+function filterApps(cat) {
+  currentFilter = cat;
+  document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
+  event.target.classList.add('active');
+  renderApps();
+}
 
-<div class="app-card">
-<div class="app-logo">🗾</div>
-<div class="app-info">
-<div class="app-title">Japan Talk</div>
-<div class="app-sub">日本紹介 チャンク反射 · 100フレーズ</div>
-<div>
-<span class="tag tag-auto">🔊 自動再生</span>
-<span class="tag tag-chunk">📦 チャンク学習</span>
-</div>
-<div class="app-btns">
-<a class="btn btn-mac" href="JapanTalk_GoogleTTS.html">🖥 Mac版</a>
-<a class="btn btn-ios" href="JapanTalk_iOS.html">📱 iOS版</a>
-</div>
-</div>
-</div>
+function renderApps() {
+  var list = document.getElementById('appList');
+  list.innerHTML = '';
 
-<div class="app-card">
-<div class="app-logo">🍱</div>
-<div class="app-info">
-<div class="app-title">日本の食材・調味料</div>
-<div class="app-sub">シェフのための英語説明 · 100フレーズ</div>
-<div class="app-btns">
-<a class="btn btn-mac" href="JpFood_GoogleTTS.html">🖥 Mac版</a>
-<a class="btn btn-ios" href="JpFood_iOS.html">📱 iOS版</a>
-</div>
-</div>
-</div>
+  var filtered = APPS.filter(function(a) {
+    if (currentFilter === 'all') return true;
+    if (currentFilter === 'new') return a.category.includes('new');
+    if (currentFilter === 'life') return a.category.includes('life');
+    if (currentFilter === 'english') return a.category.includes('english');
+    if (currentFilter === 'mac') return a.platform === 'mac' || a.platform === 'both';
+    if (currentFilter === 'ios') return a.platform === 'ios' || a.platform === 'both';
+    return true;
+  });
 
-<div class="sec">❤️ 人間関係・感情</div>
+  document.getElementById('totalCount').textContent = APPS.length;
 
-<div class="app-card">
-<div class="app-logo">💘</div>
-<div class="app-info">
-<div class="app-title">恋愛英語</div>
-<div class="app-sub">瞬間反射トレーニング · 100フレーズ</div>
-<div class="app-btns">
-<a class="btn btn-mac" href="Love_Eigo_GoogleTTS.html">🖥 Mac版</a>
-<a class="btn btn-ios" href="Love_Eigo_iOS.html">📱 iOS版</a>
-</div>
-</div>
-</div>
+  if (filtered.length === 0) {
+    list.innerHTML = '<div class="no-results">該当するアプリがありません</div>';
+    return;
+  }
 
-<div class="app-card">
-<div class="app-logo">💬</div>
-<div class="app-info">
-<div class="app-title">感情・気持ちの表現</div>
-<div class="app-sub">瞬間反射トレーニング · 100フレーズ</div>
-<div class="app-btns">
-<a class="btn btn-mac" href="Emotion_Eigo_GoogleTTS.html">🖥 Mac版</a>
-<a class="btn btn-ios" href="Emotion_Eigo_iOS.html">📱 iOS版</a>
-</div>
-</div>
-</div>
+  // Group
+  var groups = {};
+  filtered.forEach(function(a) {
+    var grp = '';
+    if (a.category.includes('life')) grp = '🌱 ライフスタイル';
+    else if (a.platform === 'both') grp = '🆕 新着';
+    else if (a.platform === 'mac') grp = '🖥 Mac版 英語練習';
+    else if (a.platform === 'ios') grp = '📱 iOS版 英語練習';
+    if (!groups[grp]) groups[grp] = [];
+    groups[grp].push(a);
+  });
 
-<div class="app-card">
-<div class="app-logo">👤</div>
-<div class="app-info">
-<div class="app-title">人の描写</div>
-<div class="app-sub">外見・性格・才能を表現 · 100フレーズ</div>
-<div class="app-btns">
-<a class="btn btn-mac" href="People_Byosha_GoogleTTS.html">🖥 Mac版</a>
-<a class="btn btn-ios" href="People_Byosha_iOS.html">📱 iOS版</a>
-</div>
-</div>
-</div>
+  // Sort group order
+  var order = ['🌱 ライフスタイル','🆕 新着','🖥 Mac版 英語練習','📱 iOS版 英語練習'];
+  order.forEach(function(grp) {
+    if (!groups[grp] || groups[grp].length === 0) return;
+    var sec = document.createElement('div');
+    sec.className = 'section';
+    var title = document.createElement('div');
+    title.className = 'section-title';
+    title.textContent = grp;
+    sec.appendChild(title);
+    var grid = document.createElement('div');
+    grid.className = 'grid';
+    groups[grp].forEach(function(a) {
+      var card = document.createElement('a');
+      card.className = 'card';
+      card.href = a.url;
+      card.target = '_blank';
+      var badges = '';
+      if (a.category.includes('new')) badges += '<span class="badge badge-new">NEW</span>';
+      if (a.category.includes('life')) badges += '<span class="badge badge-life">ライフ</span>';
+      if (a.platform === 'mac') badges += '<span class="badge badge-mac">Mac</span>';
+      if (a.platform === 'ios') badges += '<span class="badge badge-ios">iOS</span>';
+      if (a.platform === 'both') badges += '<span class="badge badge-mac">Mac</span><span class="badge badge-ios">iOS</span>';
+      card.innerHTML =
+        '<div class="card-top"><div class="card-icon">' + a.icon + '</div><div class="card-badges">' + badges + '</div></div>'
+        + '<div class="card-name">' + a.name + '</div>'
+        + '<div class="card-desc">' + a.desc + '</div>'
+        + '<div class="card-date">' + a.date + '</div>';
+      grid.appendChild(card);
+    });
+    sec.appendChild(grid);
+    list.appendChild(sec);
+  });
+}
 
-<div class="sec">💼 仕事・生活</div>
-
-<div class="app-card">
-<div class="app-logo">💼</div>
-<div class="app-info">
-<div class="app-title">仕事・職場・ビジネス英語</div>
-<div class="app-sub">瞬間反射トレーニング · 100フレーズ</div>
-<div class="app-btns">
-<a class="btn btn-mac" href="Business_Eigo_GoogleTTS.html">🖥 Mac版</a>
-<a class="btn btn-ios" href="Business_Eigo_iOS.html">📱 iOS版</a>
-</div>
-</div>
-</div>
-
-<div class="app-card">
-<div class="app-logo">🏥</div>
-<div class="app-info">
-<div class="app-title">健康・病院・食事</div>
-<div class="app-sub">瞬間反射トレーニング · 100フレーズ</div>
-<div class="app-btns">
-<a class="btn btn-mac" href="Health_Eiwa_GoogleTTS.html">🖥 Mac版</a>
-<a class="btn btn-ios" href="Health_Eiwa_iOS.html">📱 iOS版</a>
-</div>
-</div>
-</div>
-
-<div class="app-card">
-<div class="app-logo">🏠</div>
-<div class="app-info">
-<div class="app-title">家の中の日常動作</div>
-<div class="app-sub">瞬間反射トレーニング · 100フレーズ</div>
-<div class="app-btns">
-<a class="btn btn-mac" href="HomeDaily_GoogleTTS.html">🖥 Mac版</a>
-<a class="btn btn-ios" href="HomeDaily_iOS.html">📱 iOS版</a>
-</div>
-</div>
-</div>
-
-<div class="sec">👶 家族・ライフイベント</div>
-
-<div class="app-card">
-<div class="app-logo">👶</div>
-<div class="app-info">
-<div class="app-title">結婚・育児・離婚</div>
-<div class="app-sub">瞬間反射トレーニング · 100フレーズ</div>
-<div class="app-btns">
-<a class="btn btn-mac" href="FamilyLife_GoogleTTS.html">🖥 Mac版</a>
-<a class="btn btn-ios" href="FamilyLife_iOS.html">📱 iOS版</a>
-</div>
-</div>
-</div>
-
-</main>
-<footer>
-🌏 miwako67-web.github.io/english-learning-app — 全12シリーズ · 各100フレーズ<br>
-<span style="font-size:9px;margin-top:4px;display:block;">Mac版: Google TTS自動再生 / iOS版: Web Speech API自動再生</span>
-</footer>
+renderApps();
+</script>
 </body>
 </html>
