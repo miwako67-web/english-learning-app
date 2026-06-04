@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="仙人">
+<title>仙人</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400&family=Noto+Sans+JP:wght@300&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#08090a;
+  --surface:#0f1012;
+  --border:#1a1c1f;
+  --ink:#d4cfc8;
+  --ink-dim:#5a5650;
+  --ink-faint:#2a2825;
+  --accent:#8fa89c;
+  --warn:#9c8f8f;
+}
+html,body{min-height:100%;background:var(--bg);color:var(--ink);font-family:'Noto Serif JP',serif;font-weight:300}
+body{display:flex;flex-direction:column;align-items:center;padding:0 0 80px}
+
+/* Ambient bg */
+body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse 60% 40% at 50% 20%, #0d1a15 0%, transparent 70%);pointer-events:none;z-index:0}
+
+/* Header */
+.hd{width:100%;max-width:460px;padding:36px 24px 0;display:flex;justify-content:space-between;align-items:center;position:relative;z-index:1}
+.hd-name{font-size:11px;letter-spacing:0.25em;color:var(--ink-dim)}
+.axis-btn{font-size:10px;letter-spacing:0.15em;color:var(--ink-dim);background:none;border:0.5px solid var(--ink-faint);padding:5px 12px;cursor:pointer;font-family:'Noto Sans JP',sans-serif;font-weight:300;transition:all 0.3s;border-radius:1px}
+.axis-btn:hover{color:var(--accent);border-color:var(--accent)}
+
+/* Axis panel */
+.axis-panel{width:100%;max-width:460px;padding:20px 24px;display:none;position:relative;z-index:1}
+.axis-panel.open{display:block}
+.axis-lbl{font-size:10px;letter-spacing:0.2em;color:var(--ink-dim);font-family:'Noto Sans JP',sans-serif;margin-bottom:8px}
+.axis-ta{width:100%;background:var(--surface);border:0.5px solid var(--border);color:var(--ink);padding:12px;font-family:'Noto Serif JP',serif;font-size:13px;font-weight:300;line-height:1.8;resize:none;outline:none;transition:border-color 0.2s;border-radius:1px}
+.axis-ta:focus{border-color:var(--accent)}
+.axis-sv{margin-top:10px;background:none;border:0.5px solid var(--ink-faint);color:var(--ink-dim);padding:7px 18px;font-size:11px;cursor:pointer;font-family:'Noto Sans JP',sans-serif;font-weight:300;transition:all 0.2s;border-radius:1px}
+.axis-sv:hover{color:var(--accent);border-color:var(--accent)}
+
+/* Opening */
+.opening{width:100%;max-width:460px;padding:52px 24px 0;position:relative;z-index:1}
+.o-mark{font-size:10px;letter-spacing:0.3em;color:var(--ink-dim);font-family:'Noto Sans JP',sans-serif;margin-bottom:20px;opacity:0;animation:rise 1s 0.3s forwards}
+.o-msg{font-size:20px;line-height:1.9;color:var(--ink);min-height:60px;opacity:0;animation:rise 1.2s 0.7s forwards;font-weight:300}
+.o-msg.loading::after{content:'...';animation:blink 1.5s infinite;color:var(--ink-dim)}
+
+/* Chat */
+.chat{width:100%;max-width:460px;padding:0 24px;position:relative;z-index:1}
+.msg{margin-top:32px;opacity:0;animation:rise 0.6s forwards}
+.msg-u{text-align:right}
+.msg-u .b{display:inline-block;font-size:13px;font-family:'Noto Sans JP',sans-serif;color:var(--ink-dim);border-bottom:0.5px solid var(--border);padding-bottom:8px;max-width:80%;line-height:1.7;text-align:left}
+.msg-m .b{font-size:18px;line-height:1.9;color:var(--ink)}
+.msg-m .b.streaming::after{content:'꩜';animation:spin 1.5s linear infinite;display:inline-block;margin-left:6px;color:var(--accent);font-size:12px}
+
+/* Input */
+.inp-area{width:100%;max-width:460px;padding:40px 24px 0;opacity:0;animation:rise 0.8s 1.5s forwards;position:relative;z-index:1}
+.inp-row{display:flex;gap:10px;align-items:flex-end;border-bottom:0.5px solid var(--border);padding-bottom:12px;transition:border-color 0.3s}
+.inp-row:focus-within{border-color:var(--accent)}
+.inp{flex:1;background:none;border:none;color:var(--ink);font-family:'Noto Serif JP',serif;font-size:15px;font-weight:300;outline:none;resize:none;line-height:1.7;max-height:100px;font-style:italic}
+.inp::placeholder{color:var(--ink-faint);font-style:normal;font-family:'Noto Sans JP',sans-serif;font-size:13px}
+.send{background:none;border:none;color:var(--ink-dim);cursor:pointer;font-size:20px;padding:4px;transition:color 0.2s;flex-shrink:0;font-family:serif}
+.send:hover{color:var(--accent)}
+
+/* Footer */
+.ft{width:100%;max-width:460px;padding:40px 24px 0;display:flex;justify-content:flex-end;position:relative;z-index:1}
+.rst{background:none;border:none;font-size:10px;letter-spacing:0.15em;color:var(--ink-faint);cursor:pointer;font-family:'Noto Sans JP',sans-serif;transition:color 0.2s}
+.rst:hover{color:var(--warn)}
+
+@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.2}}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+
+<div class="hd">
+  <span class="hd-name">仙人</span>
+  <button class="axis-btn" onclick="toggleAxis()">自分の軸</button>
+</div>
+
+<div class="axis-panel" id="axisPanel">
+  <p class="axis-lbl">今のあなたの軸・価値観（仙人が参照します）</p>
+  <textarea class="axis-ta" id="axisText" rows="3" placeholder="例：自己認識と意図を持って動く人間でいたい"></textarea>
+  <button class="axis-sv" onclick="saveAxis()">保存</button>
+</div>
+
+<div class="opening">
+  <div class="o-mark">— 今日の言葉</div>
+  <div class="o-msg loading" id="openingMsg"></div>
+</div>
+
+<div class="chat" id="chatWrap"></div>
+
+<div class="inp-area">
+  <div class="inp-row">
+    <textarea class="inp" id="userInp" rows="1" placeholder="返事、または今感じていることを..." onkeydown="onKey(event)" oninput="resize(this)"></textarea>
+    <button class="send" onclick="send()">⟶</button>
+  </div>
+</div>
+
+<div class="ft">
+  <button class="rst" onclick="reset()">会話をリセット</button>
+</div>
+
+<script>
+const API = 'https://api.anthropic.com/v1/messages';
+let apiKey = localStorage.getItem('senin_key') || '';
+let axis = localStorage.getItem('senin_axis') || '自己認識と意図を持って動く人間でいたい';
+let history = [];
+
+if (!apiKey) {
+  apiKey = prompt('Claude APIキーを入力（sk-ant-...）') || '';
+  if (apiKey) localStorage.setItem('senin_key', apiKey);
+}
+
+function headers() {
+  return {
+    'Content-Type': 'application/json',
+    'x-api-key': apiKey,
+    'anthropic-version': '2023-06-01',
+    'anthropic-dangerous-direct-browser-calls': 'true'
+  };
+}
+
+function system() {
+  return `あなたは「仙人」です。Miwaの内なる声のような存在。
+
+あなたが体現している思想：
+- 不条理哲学（カミュ）：この世界に本来の意味も目的もない。だからこそ軽くなれる
+- ワンネス：「私」と「世界」は分かれていない。あなたはMiwaであり、Miwaはあなた
+- 唯我論的視点：今Miwaが見ている世界は、Miwaの意識が生み出したもの
+- 時間の相対性：過去も未来も幻。あるのは今この瞬間だけ
+- 禅・老子：流れに任せる。抵抗しない。しかし眠らない
+- ストア：制御できないことには執着しない
+- 空（くう）：すべては空っぽ。だから何でも入れられる
+
+あなたの話し方：
+- 短く。1〜3文だけ
+- 難しい言葉を使わない
+- 「どうでもいい」という軽さを、投げやりではなく解放として伝える
+- 問いかけるか、気づきをそっと置いていく
+- 寄り添う。でも依存させない
+
+Miwaの軸：「${axis}」
+
+返答は必ず日本語で、1〜3文以内。`;
+}
+
+function toggleAxis() {
+  const p = document.getElementById('axisPanel');
+  document.getElementById('axisText').value = axis;
+  p.classList.toggle('open');
+}
+
+function saveAxis() {
+  const v = document.getElementById('axisText').value.trim();
+  if (v) { axis = v; localStorage.setItem('senin_axis', axis); }
+  document.getElementById('axisPanel').classList.remove('open');
+}
+
+async function getOpening() {
+  const el = document.getElementById('openingMsg');
+  try {
+    const res = await fetch(API, {
+      method: 'POST',
+      headers: headers(),
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 120,
+        system: system(),
+        messages: [{ role: 'user', content: 'アプリを開いた。今日Miwaへ、一つの言葉を。意味も目的も必要ない、今この瞬間への言葉を。' }]
+      })
+    });
+    const d = await res.json();
+    const txt = d.content?.[0]?.text || 'ここにいる。それだけでいい。';
+    el.classList.remove('loading');
+    el.textContent = txt;
+    history.push({ role: 'user', content: 'アプリを開いた。今日Miwaへ、一つの言葉を。' });
+    history.push({ role: 'assistant', content: txt });
+  } catch(e) {
+    el.classList.remove('loading');
+    el.textContent = 'すべては今、ここにある。';
+  }
+}
+
+async function send() {
+  const inp = document.getElementById('userInp');
+  const txt = inp.value.trim();
+  if (!txt) return;
+  inp.value = '';
+  resize(inp);
+
+  addMsg('u', txt);
+  history.push({ role: 'user', content: txt });
+
+  const el = addMsg('m', '', true);
+  try {
+    const res = await fetch(API, {
+      method: 'POST',
+      headers: headers(),
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 180,
+        system: system(),
+        messages: history
+      })
+    });
+    const d = await res.json();
+    const reply = d.content?.[0]?.text || '...';
+    el.querySelector('.b').classList.remove('streaming');
+    el.querySelector('.b').textContent = reply;
+    history.push({ role: 'assistant', content: reply });
+  } catch(e) {
+    el.querySelector('.b').classList.remove('streaming');
+    el.querySelector('.b').textContent = 'しばし待て。';
+  }
+}
+
+function addMsg(type, txt, streaming=false) {
+  const wrap = document.getElementById('chatWrap');
+  const div = document.createElement('div');
+  div.className = `msg msg-${type}`;
+  const b = document.createElement('div');
+  b.className = 'b' + (streaming ? ' streaming' : '');
+  b.textContent = txt;
+  div.appendChild(b);
+  wrap.appendChild(div);
+  setTimeout(() => div.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+  return div;
+}
+
+function onKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); }
+}
+
+function resize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 100) + 'px';
+}
+
+function reset() {
+  if (!confirm('会話をリセットしますか？')) return;
+  history = [];
+  document.getElementById('chatWrap').innerHTML = '';
+  const el = document.getElementById('openingMsg');
+  el.textContent = '';
+  el.classList.add('loading');
+  getOpening();
+}
+
+getOpening();
+</script>
+</body>
+</html>
