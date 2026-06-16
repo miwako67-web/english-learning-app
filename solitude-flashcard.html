@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>孤独の知恵 — 英語暗記カード</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap');
+
+  :root {
+    --ink: #1a1a1a;
+    --ash: #4a4a4a;
+    --mist: #8a8a8a;
+    --paper: #f7f4ef;
+    --parchment: #ede9e1;
+    --stone: #d4cfc6;
+    --moss: #5c6b5a;
+    --moss-light: #7a8f77;
+    --gold: #a08040;
+    --gold-light: #c9a862;
+    --correct: #4a7c5a;
+    --incorrect: #8b4a4a;
+    --shadow: rgba(26,26,26,0.12);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Header */
+  .header {
+    background: var(--ink);
+    padding: 20px 24px 16px;
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+  }
+  .header-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    color: var(--paper);
+    letter-spacing: 0.02em;
+  }
+  .header-sub {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 11px;
+    color: var(--mist);
+    letter-spacing: 0.08em;
+  }
+
+  /* Stats bar */
+  .stats-bar {
+    background: var(--parchment);
+    border-bottom: 1px solid var(--stone);
+    padding: 10px 24px;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .stat {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--ash);
+  }
+  .stat-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+  }
+  .dot-total { background: var(--stone); }
+  .dot-correct { background: var(--correct); }
+  .dot-incorrect { background: var(--incorrect); }
+  .dot-remaining { background: var(--gold); }
+
+  /* Mode selector */
+  .mode-bar {
+    padding: 12px 24px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+    border-bottom: 1px solid var(--stone);
+  }
+  .mode-label {
+    font-size: 11px;
+    color: var(--mist);
+    letter-spacing: 0.06em;
+    margin-right: 4px;
+  }
+  .mode-btn {
+    padding: 5px 14px;
+    border-radius: 20px;
+    border: 1.5px solid var(--stone);
+    background: transparent;
+    font-size: 12px;
+    color: var(--ash);
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    transition: all 0.2s;
+  }
+  .mode-btn:hover { border-color: var(--gold); color: var(--gold); }
+  .mode-btn.active {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--paper);
+  }
+
+  /* Direction toggle */
+  .dir-toggle {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    color: var(--ash);
+  }
+  .toggle-switch {
+    position: relative;
+    width: 48px; height: 24px;
+  }
+  .toggle-switch input { opacity: 0; width: 0; height: 0; }
+  .toggle-slider {
+    position: absolute; inset: 0;
+    background: var(--stone);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  .toggle-slider::before {
+    content: '';
+    position: absolute;
+    width: 18px; height: 18px;
+    left: 3px; top: 3px;
+    background: white;
+    border-radius: 50%;
+    transition: 0.3s;
+  }
+  input:checked + .toggle-slider { background: var(--moss); }
+  input:checked + .toggle-slider::before { transform: translateX(24px); }
+
+  /* Main */
+  main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 32px 24px 24px;
+    gap: 24px;
+  }
+
+  /* Progress */
+  .progress-wrap {
+    width: 100%; max-width: 640px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .progress-bar {
+    flex: 1;
+    height: 3px;
+    background: var(--stone);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--gold);
+    border-radius: 2px;
+    transition: width 0.4s ease;
+  }
+  .progress-text {
+    font-size: 12px;
+    color: var(--mist);
+    white-space: nowrap;
+  }
+
+  /* Card */
+  .card-scene {
+    width: 100%; max-width: 640px;
+    perspective: 1200px;
+  }
+  .card {
+    width: 100%;
+    min-height: 260px;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.55s cubic-bezier(0.4,0,0.2,1);
+    cursor: pointer;
+  }
+  .card.flipped { transform: rotateY(180deg); }
+
+  .card-face {
+    position: absolute; inset: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: 4px;
+    padding: 40px 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    box-shadow: 0 2px 12px var(--shadow), 0 0 0 1px var(--stone);
+  }
+  .card-front { background: var(--paper); }
+  .card-back {
+    background: var(--ink);
+    transform: rotateY(180deg);
+  }
+
+  .card-lang {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    opacity: 0.45;
+    font-family: 'Inter', sans-serif;
+  }
+  .card-front .card-lang { color: var(--ink); }
+  .card-back .card-lang { color: var(--paper); }
+
+  .card-text {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(18px, 3.5vw, 26px);
+    line-height: 1.55;
+    font-weight: 400;
+  }
+  .card-front .card-text { color: var(--ink); }
+  .card-back .card-text { color: var(--paper); }
+
+  .card-sub {
+    margin-top: 16px;
+    font-family: 'Noto Serif JP', serif;
+    font-size: clamp(14px, 2.5vw, 17px);
+    line-height: 1.7;
+    opacity: 0.6;
+  }
+  .card-front .card-sub { color: var(--ash); }
+  .card-back .card-sub { color: var(--paper); }
+
+  .card-hint {
+    margin-top: 32px;
+    font-size: 11px;
+    color: var(--mist);
+    letter-spacing: 0.05em;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .card-back .card-hint { color: rgba(255,255,255,0.3); }
+  .hint-icon { font-size: 14px; }
+
+  /* Category badge */
+  .cat-badge {
+    position: absolute;
+    top: 16px; left: 20px;
+    font-size: 10px;
+    color: var(--mist);
+    letter-spacing: 0.08em;
+    font-family: 'Inter', sans-serif;
+    opacity: 0.6;
+  }
+
+  /* Action buttons */
+  .actions {
+    display: flex;
+    gap: 12px;
+    width: 100%; max-width: 640px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .btn {
+    padding: 10px 24px;
+    border-radius: 3px;
+    border: none;
+    font-size: 13px;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.03em;
+    font-weight: 500;
+  }
+  .btn-correct {
+    background: var(--correct);
+    color: white;
+    flex: 1; max-width: 200px;
+  }
+  .btn-incorrect {
+    background: var(--incorrect);
+    color: white;
+    flex: 1; max-width: 200px;
+  }
+  .btn-skip {
+    background: transparent;
+    color: var(--mist);
+    border: 1.5px solid var(--stone);
+  }
+  .btn:hover { opacity: 0.85; transform: translateY(-1px); }
+  .btn:active { transform: translateY(0); }
+  .btn:disabled { opacity: 0.3; cursor: not-allowed; transform: none; }
+
+  /* Nav */
+  .nav-btns {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .nav-btn {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    border: 1.5px solid var(--stone);
+    background: transparent;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    color: var(--ash);
+    transition: all 0.2s;
+  }
+  .nav-btn:hover { border-color: var(--ink); color: var(--ink); }
+
+  /* Review panel */
+  .review-panel {
+    width: 100%; max-width: 640px;
+    background: var(--parchment);
+    border: 1px solid var(--stone);
+    border-radius: 4px;
+    padding: 16px 20px;
+  }
+  .review-title {
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--mist);
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+  .review-chips {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .review-chip {
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    font-family: 'Inter', sans-serif;
+  }
+  .review-chip:hover { opacity: 0.75; }
+  .chip-correct { background: rgba(74,124,90,0.12); color: var(--correct); }
+  .chip-incorrect { background: rgba(139,74,74,0.12); color: var(--incorrect); }
+
+  /* Completion */
+  .completion {
+    text-align: center;
+    padding: 48px 24px;
+    max-width: 480px;
+  }
+  .completion-icon { font-size: 48px; margin-bottom: 20px; }
+  .completion-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    margin-bottom: 12px;
+    color: var(--ink);
+  }
+  .completion-sub {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 14px;
+    color: var(--ash);
+    line-height: 1.8;
+    margin-bottom: 28px;
+  }
+  .completion-btns {
+    display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;
+  }
+  .btn-restart {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 11px 28px;
+  }
+  .btn-review-only {
+    background: transparent;
+    color: var(--incorrect);
+    border: 1.5px solid var(--incorrect);
+    padding: 11px 28px;
+  }
+
+  /* Animations */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .card-scene { animation: fadeUp 0.3s ease; }
+
+  @media (max-width: 480px) {
+    .card-face { padding: 28px 24px; }
+    .header { padding: 14px 16px 12px; }
+    .header-title { font-size: 18px; }
+    .stats-bar, .mode-bar { padding: 10px 16px; }
+    main { padding: 20px 16px; }
+    .dir-toggle { margin-left: 0; width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-title">Solitude & Wisdom</div>
+  <div class="header-sub">孤独の知恵 — 英語暗記カード</div>
+</div>
+
+<div class="stats-bar">
+  <div class="stat"><span class="stat-dot dot-total"></span><span id="statTotal">0 cards</span></div>
+  <div class="stat"><span class="stat-dot dot-correct"></span><span id="statCorrect">0 correct</span></div>
+  <div class="stat"><span class="stat-dot dot-incorrect"></span><span id="statIncorrect">0 incorrect</span></div>
+  <div class="stat"><span class="stat-dot dot-remaining"></span><span id="statRemaining">0 remaining</span></div>
+</div>
+
+<div class="mode-bar">
+  <span class="mode-label">MODE</span>
+  <button class="mode-btn active" onclick="setMode('all')">All Cards</button>
+  <button class="mode-btn" onclick="setMode('incorrect')">Incorrect Only</button>
+  <button class="mode-btn" onclick="setMode('random')">Random</button>
+  <div class="dir-toggle">
+    <span id="dirLabel">EN → JP</span>
+    <label class="toggle-switch">
+      <input type="checkbox" id="dirToggle" onchange="toggleDirection()">
+      <span class="toggle-slider"></span>
+    </label>
+    <span>JP → EN</span>
+  </div>
+</div>
+
+<main id="mainContent">
+  <!-- Card rendered by JS -->
+</main>
+
+<script>
+const STORAGE_KEY = 'solitude-wisdom-v1';
+
+const CARDS = [
+  // Category 1: 孤独vs孤立
+  { id:1, cat:'孤独 vs 孤立', jp:'孤独は不幸ではない。むしろ最高の贅沢だ。', en:'Solitude is not unhappiness. It is the greatest luxury.' },
+  { id:2, cat:'孤独 vs 孤立', jp:'1人でいることを恐れてはいけない。', en:'Do not be afraid of being alone.' },
+  { id:3, cat:'孤独 vs 孤立', jp:'1人の時間こそ、自分と向き合える贅沢な時間だ。', en:'Time alone is precious time to face yourself.' },
+  { id:4, cat:'孤独 vs 孤立', jp:'孤立とは、望まないのに1人になってしまった状態だ。', en:'Isolation means being alone when you do not want to be.' },
+  { id:5, cat:'孤独 vs 孤立', jp:'孤独とは、自分で選び取る1人の時間のことだ。', en:'Solitude is time alone that you choose for yourself.' },
+  { id:6, cat:'孤独 vs 孤立', jp:'孤立は外から押しつけられるが、孤独は内から選ぶものだ。', en:'Isolation is forced on you. Solitude is chosen by you.' },
+  { id:7, cat:'孤独 vs 孤立', jp:'誰にも邪魔されず、誰の期待にも答えなくていい自由な時間がある。', en:'There is free time where no one disturbs you and you answer to no one.' },
+  { id:8, cat:'孤独 vs 孤立', jp:'1人でいることへの恐れは自然と薄れていくだろう。', en:'The fear of being alone will naturally fade away.' },
+  { id:9, cat:'孤独 vs 孤立', jp:'今感じている寂しさは、本当に孤立なのか。', en:'Is the loneliness you feel now truly isolation?' },
+  { id:10, cat:'孤独 vs 孤立', jp:'1人でいることへの不安かもしれない。そこをよく見極めることが第一歩だ。', en:'It may be anxiety about being alone. Knowing the difference is the first step.' },
+
+  // Category 2: 恐れの根っこ
+  { id:11, cat:'恐れの根っこ', jp:'人はなぜ孤独をこんなにも恐れるのだろうか。', en:'Why are people so afraid of being alone?' },
+  { id:12, cat:'恐れの根っこ', jp:'その根っこには2つの大きな呪いがある。', en:'At the root of it, there are two big curses.' },
+  { id:13, cat:'恐れの根っこ', jp:'人は太古の昔から群れを作って生きてきた生き物だ。', en:'People have lived in groups since ancient times.' },
+  { id:14, cat:'恐れの根っこ', jp:'その記憶が今も心の奥底に刻まれている。', en:'That memory is still deeply engraved in our hearts.' },
+  { id:15, cat:'恐れの根っこ', jp:'1人でいると、本能が危険信号を発する。', en:'When you are alone, your instincts send a danger signal.' },
+  { id:16, cat:'恐れの根っこ', jp:'今のあなたたちは、1人でいても命の危険などない。', en:'Today, you are not in danger just because you are alone.' },
+  { id:17, cat:'恐れの根っこ', jp:'心だけが太古の恐怖を引きずっている。', en:'Only your heart is still dragging along ancient fears.' },
+  { id:18, cat:'恐れの根っこ', jp:'現代は人がどう思うかを過剰に気にする時代だ。', en:'Today is an era when people worry too much about what others think.' },
+  { id:19, cat:'恐れの根っこ', jp:'他人の評価に合わせて生きることほど虚しいことはない。', en:'Nothing is emptier than living to match others\' opinions of you.' },
+  { id:20, cat:'恐れの根っこ', jp:'その物差しを手放せば、1人でいることの豊かさが見えてくる。', en:'Let go of that ruler, and you will see the richness of being alone.' },
+
+  // Category 3: 雑音を消す
+  { id:21, cat:'雑音を消す', jp:'1人になれば、雑音が消える。', en:'When you are alone, the noise disappears.' },
+  { id:22, cat:'雑音を消す', jp:'これが孤独の持つ最も大きな恵みだ。', en:'This is the greatest gift that solitude has.' },
+  { id:23, cat:'雑音を消す', jp:'あなたは今、どれほどの雑音に囲まれているだろうか。', en:'How much noise are you surrounded by right now?' },
+  { id:24, cat:'雑音を消す', jp:'家族の期待、職場での役割、世間の常識…', en:'Your family\'s expectations, your role at work, society\'s rules...' },
+  { id:25, cat:'雑音を消す', jp:'その雑音の中で、あなたは本当の自分の声を聞き逃している。', en:'In that noise, you are missing your true inner voice.' },
+  { id:26, cat:'雑音を消す', jp:'自分が何を感じているのか、何を望んでいるのか。', en:'What you are feeling, what you truly want.' },
+  { id:27, cat:'雑音を消す', jp:'誰もいない静寂の中で、初めて自分の心と向き合えた。', en:'Only in complete silence could I face my own heart for the first time.' },
+  { id:28, cat:'雑音を消す', jp:'外の世界がどれほど騒がしくとも、心の中に静けさを保つことが大切だ。', en:'No matter how noisy the outside world is, keep stillness inside your heart.' },
+  { id:29, cat:'雑音を消す', jp:'まずは物理的に1人になることが大切だ。', en:'First, it is important to be physically alone.' },
+  { id:30, cat:'雑音を消す', jp:'雑音を遠ざけることで、初めて見えてくるものがある。', en:'By removing noise, you can finally see what truly matters.' },
+
+  // Category 4: 自由への扉
+  { id:31, cat:'自由への扉', jp:'孤独は自由への扉だ。', en:'Solitude is a door to freedom.' },
+  { id:32, cat:'自由への扉', jp:'人は誰かと一緒にいる時、必ず何かしらの役割を演じている。', en:'When you are with others, you always play some kind of role.' },
+  { id:33, cat:'自由への扉', jp:'良い親でありたい、良い友人でありたい…', en:'You want to be a good parent, a good friend...' },
+  { id:34, cat:'自由への扉', jp:'そうした期待に答えようとするあまり、自分を縛っている。', en:'By trying to meet those expectations, you are tying yourself down.' },
+  { id:35, cat:'自由への扉', jp:'1人でいる時間こそが、その縛りから解放される唯一の時間だ。', en:'Time alone is the only time you are free from those ties.' },
+  { id:36, cat:'自由への扉', jp:'誰の目も気にせず、誰の期待にも答えなくていい。', en:'You do not have to worry about anyone\'s eyes or meet anyone\'s expectations.' },
+  { id:37, cat:'自由への扉', jp:'あなたは、ただあなた自身でいればいいのだから。', en:'You just need to be yourself.' },
+  { id:38, cat:'自由への扉', jp:'自由とは、何でも好き勝手にすることではない。', en:'Freedom is not doing whatever you like.' },
+  { id:39, cat:'自由への扉', jp:'自由とは、自分の心に正直に生きることだ。', en:'Freedom is living honestly according to your own heart.' },
+  { id:40, cat:'自由への扉', jp:'1人になれば、本当にやりたいことが見えてくる。', en:'When you are alone, you can see what you truly want to do.' },
+
+  // Category 5: 封印された夢
+  { id:41, cat:'封印された夢', jp:'ずっと我慢していた趣味、封印していた夢、諦めていた願い。', en:'Hobbies you held back, dreams you sealed away, wishes you gave up.' },
+  { id:42, cat:'封印された夢', jp:'そうしたものが静かに心の表面に浮かび上がってくる。', en:'These things quietly rise to the surface of your heart.' },
+  { id:43, cat:'封印された夢', jp:'孤独の時間は決して虚しいものではない。', en:'Time in solitude is never empty.' },
+  { id:44, cat:'封印された夢', jp:'あなた自身を取り戻すための、かけがえのない時間だ。', en:'It is irreplaceable time to get yourself back.' },
+  { id:45, cat:'封印された夢', jp:'自由への扉は、いつでもあなたの目の前にある。', en:'The door to freedom is always right in front of you.' },
+  { id:46, cat:'封印された夢', jp:'その扉を開く勇気を持つかどうかだ。', en:'The question is whether you have the courage to open it.' },
+  { id:47, cat:'封印された夢', jp:'1人でいることを恐れずに、その時間を楽しむことができれば…', en:'If you can enjoy that time without fearing being alone...' },
+  { id:48, cat:'封印された夢', jp:'あなたの人生はもっと軽やかになるだろう。', en:'Your life will become much lighter.' },
+  { id:49, cat:'封印された夢', jp:'誰もいない部屋で、静かに自分の心の声を聞く。', en:'In an empty room, quietly listen to the voice of your own heart.' },
+  { id:50, cat:'封印された夢', jp:'その小さな声こそが、あなた自身の声だ。', en:'That small voice is truly your own voice.' },
+
+  // Category 6: 執着を手放す
+  { id:51, cat:'執着を手放す', jp:'執着を手放せば、孤独は消える。', en:'When you let go of attachment, loneliness disappears.' },
+  { id:52, cat:'執着を手放す', jp:'多くの人が孤独を恐れる本当の理由は、孤独そのものにはない。', en:'The real reason many people fear solitude is not solitude itself.' },
+  { id:53, cat:'執着を手放す', jp:'寂しさという感情に囚われているからだ。', en:'It is because they are trapped by the feeling of loneliness.' },
+  { id:54, cat:'執着を手放す', jp:'誰かに認められたい、誰かに必要とされたい。', en:'You want to be recognized and needed by someone.' },
+  { id:55, cat:'執着を手放す', jp:'そうした欲求が満たされない時、人は寂しさを感じる。', en:'When these desires are not met, people feel lonely.' },
+  { id:56, cat:'執着を手放す', jp:'寂しさとは、他者への執着が生み出す苦しみだ。', en:'Loneliness is suffering created by attachment to others.' },
+  { id:57, cat:'執着を手放す', jp:'執着こそが苦しみの根源だとされている。', en:'Attachment itself is said to be the root of all suffering.' },
+  { id:58, cat:'執着を手放す', jp:'何かに執着すれば、それを失う恐怖が生まれる。', en:'When you attach to something, you fear losing it.' },
+  { id:59, cat:'執着を手放す', jp:'執着を手放せば、1人でいることが苦しみではなくなる。', en:'When you release attachment, being alone stops being painful.' },
+  { id:60, cat:'執着を手放す', jp:'誰かがいなければ幸せになれないという思い込みから解放される。', en:'You are freed from the belief that you need someone to be happy.' },
+
+  // Category 7: 平和な安らぎ
+  { id:61, cat:'平和な安らぎ', jp:'1人でいることは、ただの静かな時間になる。', en:'Being alone becomes just a quiet, peaceful time.' },
+  { id:62, cat:'平和な安らぎ', jp:'それは寂しさではなく、穏やかな安らぎへと変わる。', en:'It changes from loneliness into a calm sense of peace.' },
+  { id:63, cat:'平和な安らぎ', jp:'地位も名誉も、他者からの評価も、全てを手放した。', en:'I let go of status, honor, and the opinions of others — everything.' },
+  { id:64, cat:'平和な安らぎ', jp:'そうして初めて、心は軽くなった。', en:'Only then did my heart truly become light.' },
+  { id:65, cat:'平和な安らぎ', jp:'1人でいることの心地よさを知った。', en:'I came to know the comfort of being alone.' },
+  { id:66, cat:'平和な安らぎ', jp:'誰かに認めてもらわなくても、私には価値がある。', en:'Even without anyone\'s approval, I have value.' },
+  { id:67, cat:'平和な安らぎ', jp:'誰かと一緒でなくても、私は幸せでいられる。', en:'Even without being with someone, I can be happy.' },
+  { id:68, cat:'平和な安らぎ', jp:'そう心の底から思えた時、寂しさは自然と消えていく。', en:'When you truly believe this, loneliness naturally fades.' },
+  { id:69, cat:'平和な安らぎ', jp:'求めるから苦しむ。手放すから満たされる。', en:'You suffer because you seek. You feel full when you let go.' },
+  { id:70, cat:'平和な安らぎ', jp:'これこそが禅の知恵だ。', en:'This is the wisdom of Zen.' },
+
+  // Category 8: 人間関係を深める
+  { id:71, cat:'人間関係を深める', jp:'孤独を楽しめる者ほど、良い人間関係を築ける。', en:'Those who enjoy solitude can build better relationships.' },
+  { id:72, cat:'人間関係を深める', jp:'1人でいることを恐れる人は、常に誰かに依存しようとする。', en:'People who fear being alone always try to depend on others.' },
+  { id:73, cat:'人間関係を深める', jp:'相手に過大な期待をかけ、求めすぎてしまう。', en:'They expect too much and ask too much of others.' },
+  { id:74, cat:'人間関係を深める', jp:'いつも一緒にいてほしい、もっと自分を見てほしい…', en:'Always be with me. See me more. Understand me more...' },
+  { id:75, cat:'人間関係を深める', jp:'そうした思いは相手を疲れさせ、関係を窮屈にする。', en:'These feelings tire others and make relationships feel tight.' },
+  { id:76, cat:'人間関係を深める', jp:'1人でいることを楽しめる人は、自分自身で心を満たせる。', en:'Those who enjoy being alone can fill their own hearts.' },
+  { id:77, cat:'人間関係を深める', jp:'だからこそ、他者に依存する必要がない。', en:'So they do not need to depend on others.' },
+  { id:78, cat:'人間関係を深める', jp:'相手に何かを求めるのではなく、一緒にいる時間を楽しめる。', en:'Instead of needing something from others, you enjoy time together.' },
+  { id:79, cat:'人間関係を深める', jp:'そうした関わりこそが、本当に心地よい人間関係を生む。', en:'This kind of connection creates truly comfortable relationships.' },
+  { id:80, cat:'人間関係を深める', jp:'無心とは、何も求めず、あるがままを受け入れる心だ。', en:'No-mind means a heart that asks for nothing and accepts things as they are.' },
+
+  // Category 9: 今日からできること
+  { id:81, cat:'今日からできること', jp:'孤独を楽しむための第一歩は、難しいものではない。', en:'The first step to enjoying solitude is not a difficult one.' },
+  { id:82, cat:'今日からできること', jp:'まず、意識して1人の時間を作ること。', en:'First, make time to be alone on purpose.' },
+  { id:83, cat:'今日からできること', jp:'朝、誰よりも早く起きて、静かに座る10分間。', en:'In the morning, wake up before everyone and sit quietly for 10 minutes.' },
+  { id:84, cat:'今日からできること', jp:'夜、寝る前に誰にも邪魔されずに過ごす15分。', en:'At night, spend 15 minutes before bed with no interruptions.' },
+  { id:85, cat:'今日からできること', jp:'その時間の中では、何もしなくていい。', en:'During that time, you do not have to do anything.' },
+  { id:86, cat:'今日からできること', jp:'ただ静かに座り、自分の呼吸に意識を向ける。', en:'Just sit quietly and bring your attention to your breathing.' },
+  { id:87, cat:'今日からできること', jp:'心に浮かんでくる思いを、ただ眺める。', en:'Simply observe the thoughts that come up in your mind.' },
+  { id:88, cat:'今日からできること', jp:'次に、1人で楽しめることを見つけること。', en:'Next, find something you can enjoy on your own.' },
+  { id:89, cat:'今日からできること', jp:'本を読むこと、絵を描くこと、静かにお茶を入れること。', en:'Reading books, drawing pictures, quietly making tea.' },
+  { id:90, cat:'今日からできること', jp:'そうした小さな営みの中に、豊かな時間がある。', en:'In these small daily activities, there is richness.' },
+
+  // Category 10: 本当の自由
+  { id:91, cat:'本当の自由', jp:'完璧を目指さなくていい。最初はほんの5分でもいい。', en:'Do not aim for perfection. Even just 5 minutes at first is fine.' },
+  { id:92, cat:'本当の自由', jp:'焦らず、少しずつ、自分のペースで進めばいい。', en:'Do not rush. Go slowly at your own pace.' },
+  { id:93, cat:'本当の自由', jp:'孤独というものは、決して恐れるべきものではない。', en:'Solitude is truly nothing to fear.' },
+  { id:94, cat:'本当の自由', jp:'1人でいることは弱さではない。それは強さだ。', en:'Being alone is not weakness. It is strength.' },
+  { id:95, cat:'本当の自由', jp:'自分で立つことができる者だけが、本当の意味で他者とつながれる。', en:'Only those who can stand on their own can truly connect with others.' },
+  { id:96, cat:'本当の自由', jp:'世間の常識に縛られる必要はない。', en:'You do not need to be bound by society\'s common rules.' },
+  { id:97, cat:'本当の自由', jp:'あなたの人生はあなたのものだ。', en:'Your life belongs to you.' },
+  { id:98, cat:'本当の自由', jp:'自分の心に正直に生きればいい。', en:'Just live honestly according to your own heart.' },
+  { id:99, cat:'本当の自由', jp:'雑音が消え、自分の声が聞こえてくる。', en:'The noise fades, and you begin to hear your own voice.' },
+  { id:100, cat:'本当の自由', jp:'孤独を味方にすれば、あなたの人生はもっと自由で、もっと豊かになる。', en:'Make solitude your friend, and your life will become more free and rich.' },
+];
+
+// State
+let state = {
+  mode: 'all',
+  direction: 'en-jp', // 'en-jp' or 'jp-en'
+  queue: [],
+  currentIndex: 0,
+  isFlipped: false,
+  correct: new Set(),
+  incorrect: new Set(),
+  done: false,
+};
+
+function loadStorage() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      const d = JSON.parse(saved);
+      state.correct = new Set(d.correct || []);
+      state.incorrect = new Set(d.incorrect || []);
+    }
+  } catch(e) {}
+}
+
+function saveStorage() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify({
+    correct: [...state.correct],
+    incorrect: [...state.incorrect],
+  }));
+}
+
+function buildQueue() {
+  let pool;
+  if (state.mode === 'incorrect') {
+    pool = CARDS.filter(c => state.incorrect.has(c.id));
+    if (pool.length === 0) pool = [...CARDS];
+  } else {
+    pool = [...CARDS];
+  }
+  if (state.mode === 'random') {
+    pool = shuffle(pool);
+  }
+  state.queue = pool;
+  state.currentIndex = 0;
+  state.isFlipped = false;
+  state.done = false;
+}
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function setMode(m) {
+  state.mode = m;
+  document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  buildQueue();
+  render();
+}
+
+function toggleDirection() {
+  state.direction = document.getElementById('dirToggle').checked ? 'jp-en' : 'en-jp';
+  state.isFlipped = false;
+  render();
+}
+
+function flipCard() {
+  state.isFlipped = !state.isFlipped;
+  render();
+}
+
+function markCorrect() {
+  const card = state.queue[state.currentIndex];
+  state.correct.add(card.id);
+  state.incorrect.delete(card.id);
+  saveStorage();
+  nextCard();
+}
+
+function markIncorrect() {
+  const card = state.queue[state.currentIndex];
+  state.incorrect.add(card.id);
+  saveStorage();
+  nextCard();
+}
+
+function nextCard() {
+  if (state.currentIndex < state.queue.length - 1) {
+    state.currentIndex++;
+    state.isFlipped = false;
+    render();
+  } else {
+    state.done = true;
+    render();
+  }
+}
+
+function prevCard() {
+  if (state.currentIndex > 0) {
+    state.currentIndex--;
+    state.isFlipped = false;
+    render();
+  }
+}
+
+function jumpTo(id) {
+  const idx = state.queue.findIndex(c => c.id === id);
+  if (idx >= 0) {
+    state.currentIndex = idx;
+    state.isFlipped = false;
+    state.done = false;
+    render();
+  }
+}
+
+function restartAll() {
+  state.mode = 'all';
+  document.querySelectorAll('.mode-btn').forEach((b,i) => b.classList.toggle('active', i===0));
+  buildQueue();
+  render();
+}
+
+function restartIncorrect() {
+  state.mode = 'incorrect';
+  document.querySelectorAll('.mode-btn').forEach((b,i) => b.classList.toggle('active', i===1));
+  buildQueue();
+  render();
+}
+
+function updateStats() {
+  document.getElementById('statTotal').textContent = `${CARDS.length} cards`;
+  document.getElementById('statCorrect').textContent = `${state.correct.size} correct`;
+  document.getElementById('statIncorrect').textContent = `${state.incorrect.size} incorrect`;
+  const remaining = state.queue.length - state.currentIndex - 1;
+  document.getElementById('statRemaining').textContent = `${Math.max(0,remaining)} remaining`;
+}
+
+function render() {
+  updateStats();
+  const main = document.getElementById('mainContent');
+
+  if (state.done) {
+    const inc = state.incorrect.size;
+    main.innerHTML = `
+      <div class="completion">
+        <div class="completion-icon">🌿</div>
+        <div class="completion-title">Session Complete</div>
+        <div class="completion-sub">
+          ${state.queue.length} cards reviewed<br>
+          ${state.correct.size} correct · ${state.incorrect.size} to review
+        </div>
+        <div class="completion-btns">
+          <button class="btn btn-restart" onclick="restartAll()">Start Over</button>
+          ${inc > 0 ? `<button class="btn btn-review-only" onclick="restartIncorrect()">Review ${inc} Missed</button>` : ''}
+        </div>
+      </div>`;
+    return;
+  }
+
+  const card = state.queue[state.currentIndex];
+  const progress = ((state.currentIndex) / state.queue.length * 100).toFixed(1);
+
+  const frontText = state.direction === 'en-jp' ? card.en : card.jp;
+  const backText  = state.direction === 'en-jp' ? card.jp : card.en;
+  const frontLang = state.direction === 'en-jp' ? 'English' : '日本語';
+  const backLang  = state.direction === 'en-jp' ? '日本語' : 'English';
+
+  const isCorrect = state.correct.has(card.id);
+  const isIncorrect = state.incorrect.has(card.id);
+  const statusDot = isCorrect ? '🟢' : isIncorrect ? '🔴' : '';
+
+  main.innerHTML = `
+    <div class="progress-wrap">
+      <div class="progress-bar"><div class="progress-fill" style="width:${progress}%"></div></div>
+      <div class="progress-text">${state.currentIndex + 1} / ${state.queue.length}</div>
+    </div>
+
+    <div class="card-scene">
+      <div class="card ${state.isFlipped ? 'flipped' : ''}" onclick="flipCard()" id="theCard">
+        <div class="card-face card-front">
+          <div class="cat-badge">${card.cat} ${statusDot}</div>
+          <div class="card-lang">${frontLang}</div>
+          <div class="card-text">${frontText}</div>
+          <div class="card-hint"><span class="hint-icon">↕</span> tap to flip</div>
+        </div>
+        <div class="card-face card-back">
+          <div class="cat-badge">${card.cat}</div>
+          <div class="card-lang">${backLang}</div>
+          <div class="card-text">${backText}</div>
+          <div class="card-hint"><span class="hint-icon">↕</span> tap to flip back</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <div class="nav-btns">
+        <button class="nav-btn" onclick="prevCard()" ${state.currentIndex===0?'disabled':''}>←</button>
+      </div>
+      <button class="btn btn-incorrect" onclick="markIncorrect()" ${!state.isFlipped?'disabled':''}>✗ Missed</button>
+      <button class="btn btn-correct" onclick="markCorrect()" ${!state.isFlipped?'disabled':''}>✓ Got it</button>
+      <div class="nav-btns">
+        <button class="nav-btn" onclick="nextCard()">→</button>
+      </div>
+    </div>
+
+    <div class="review-panel">
+      <div class="review-title">Completed in this session</div>
+      <div class="review-chips">
+        ${[...state.correct].slice(-8).map(id => {
+          const c = CARDS.find(x=>x.id===id);
+          return c ? `<button class="review-chip chip-correct" onclick="jumpTo(${c.id})" title="${c.en}">#${c.id}</button>` : '';
+        }).join('')}
+        ${[...state.incorrect].slice(-8).map(id => {
+          const c = CARDS.find(x=>x.id===id);
+          return c ? `<button class="review-chip chip-incorrect" onclick="jumpTo(${c.id})" title="${c.en}">#${c.id}</button>` : '';
+        }).join('')}
+        ${state.correct.size + state.incorrect.size === 0 ? '<span style="font-size:12px;color:var(--mist)">Cards you mark will appear here</span>' : ''}
+      </div>
+    </div>`;
+}
+
+// Init
+loadStorage();
+buildQueue();
+render();
+</script>
+</body>
+</html>
