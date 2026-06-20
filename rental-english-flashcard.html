@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>賃貸トラブル英語 — 英語暗記カード</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap');
+
+  :root {
+    --ink: #1a1a1a;
+    --ash: #4a4a4a;
+    --mist: #8a8a8a;
+    --paper: #f7f4ef;
+    --parchment: #ede9e1;
+    --stone: #d4cfc6;
+    --moss: #5c6b5a;
+    --moss-light: #7a8f77;
+    --gold: #a08040;
+    --gold-light: #c9a862;
+    --correct: #4a7c5a;
+    --incorrect: #8b4a4a;
+    --shadow: rgba(26,26,26,0.12);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .header {
+    background: var(--ink);
+    padding: 20px 24px 16px;
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+  }
+  .header-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    color: var(--paper);
+    letter-spacing: 0.02em;
+  }
+  .header-sub {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 11px;
+    color: var(--mist);
+    letter-spacing: 0.08em;
+  }
+
+  .stats-bar {
+    background: var(--parchment);
+    border-bottom: 1px solid var(--stone);
+    padding: 10px 24px;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .stat {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--ash);
+  }
+  .stat-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+  }
+  .dot-total { background: var(--stone); }
+  .dot-correct { background: var(--correct); }
+  .dot-incorrect { background: var(--incorrect); }
+  .dot-remaining { background: var(--gold); }
+
+  .mode-bar {
+    padding: 12px 24px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+    border-bottom: 1px solid var(--stone);
+  }
+  .mode-label {
+    font-size: 11px;
+    color: var(--mist);
+    letter-spacing: 0.06em;
+    margin-right: 4px;
+  }
+  .mode-btn {
+    padding: 5px 14px;
+    border-radius: 20px;
+    border: 1.5px solid var(--stone);
+    background: transparent;
+    font-size: 12px;
+    color: var(--ash);
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    transition: all 0.2s;
+  }
+  .mode-btn:hover { border-color: var(--gold); color: var(--gold); }
+  .mode-btn.active {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--paper);
+  }
+
+  .dir-toggle {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    color: var(--ash);
+  }
+  .toggle-switch {
+    position: relative;
+    width: 48px; height: 24px;
+  }
+  .toggle-switch input { opacity: 0; width: 0; height: 0; }
+  .toggle-slider {
+    position: absolute; inset: 0;
+    background: var(--stone);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  .toggle-slider::before {
+    content: '';
+    position: absolute;
+    width: 18px; height: 18px;
+    left: 3px; top: 3px;
+    background: white;
+    border-radius: 50%;
+    transition: 0.3s;
+  }
+  input:checked + .toggle-slider { background: var(--moss); }
+  input:checked + .toggle-slider::before { transform: translateX(24px); }
+
+  main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 32px 24px 24px;
+    gap: 24px;
+  }
+
+  .progress-wrap {
+    width: 100%; max-width: 640px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .progress-bar {
+    flex: 1;
+    height: 3px;
+    background: var(--stone);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--gold);
+    border-radius: 2px;
+    transition: width 0.4s ease;
+  }
+  .progress-text {
+    font-size: 12px;
+    color: var(--mist);
+    white-space: nowrap;
+  }
+
+  .card-scene {
+    width: 100%; max-width: 640px;
+    perspective: 1200px;
+  }
+  .card {
+    width: 100%;
+    min-height: 280px;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.55s cubic-bezier(0.4,0,0.2,1);
+    cursor: pointer;
+  }
+  .card.flipped { transform: rotateY(180deg); }
+
+  .card-face {
+    position: absolute; inset: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: 4px;
+    padding: 36px 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    box-shadow: 0 2px 12px var(--shadow), 0 0 0 1px var(--stone);
+  }
+  .card-front { background: var(--paper); }
+  .card-back {
+    background: var(--ink);
+    transform: rotateY(180deg);
+  }
+
+  .card-lang {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    opacity: 0.45;
+    font-family: 'Inter', sans-serif;
+  }
+  .card-front .card-lang { color: var(--ink); }
+  .card-back .card-lang { color: var(--paper); }
+
+  .card-text {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(16px, 3vw, 22px);
+    line-height: 1.6;
+    font-weight: 400;
+  }
+  .card-front .card-text { color: var(--ink); }
+  .card-back .card-text { color: var(--paper); }
+
+  .card-sub {
+    margin-top: 14px;
+    font-family: 'Noto Serif JP', serif;
+    font-size: clamp(13px, 2.2vw, 15px);
+    line-height: 1.8;
+    opacity: 0.6;
+  }
+  .card-front .card-sub { color: var(--ash); }
+  .card-back .card-sub { color: var(--paper); }
+
+  /* Tip badge on back */
+  .card-tip {
+    margin-top: 18px;
+    padding: 8px 14px;
+    background: rgba(160,128,64,0.18);
+    border-radius: 3px;
+    font-size: 11px;
+    color: var(--gold-light);
+    font-family: 'Inter', sans-serif;
+    line-height: 1.5;
+    max-width: 440px;
+    text-align: center;
+  }
+
+  .card-hint {
+    margin-top: 28px;
+    font-size: 11px;
+    color: var(--mist);
+    letter-spacing: 0.05em;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .card-back .card-hint { color: rgba(255,255,255,0.3); }
+  .hint-icon { font-size: 14px; }
+
+  .cat-badge {
+    position: absolute;
+    top: 16px; left: 20px;
+    font-size: 10px;
+    color: var(--mist);
+    letter-spacing: 0.08em;
+    font-family: 'Inter', sans-serif;
+    opacity: 0.6;
+  }
+
+  .actions {
+    display: flex;
+    gap: 12px;
+    width: 100%; max-width: 640px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .btn {
+    padding: 10px 24px;
+    border-radius: 3px;
+    border: none;
+    font-size: 13px;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.03em;
+    font-weight: 500;
+  }
+  .btn-correct {
+    background: var(--correct);
+    color: white;
+    flex: 1; max-width: 200px;
+  }
+  .btn-incorrect {
+    background: var(--incorrect);
+    color: white;
+    flex: 1; max-width: 200px;
+  }
+  .btn-skip {
+    background: transparent;
+    color: var(--mist);
+    border: 1.5px solid var(--stone);
+  }
+  .btn:hover { opacity: 0.85; transform: translateY(-1px); }
+  .btn:active { transform: translateY(0); }
+  .btn:disabled { opacity: 0.3; cursor: not-allowed; transform: none; }
+
+  .nav-btns {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .nav-btn {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    border: 1.5px solid var(--stone);
+    background: transparent;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    color: var(--ash);
+    transition: all 0.2s;
+  }
+  .nav-btn:hover { border-color: var(--ink); color: var(--ink); }
+
+  .review-panel {
+    width: 100%; max-width: 640px;
+    background: var(--parchment);
+    border: 1px solid var(--stone);
+    border-radius: 4px;
+    padding: 16px 20px;
+  }
+  .review-title {
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--mist);
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+  .review-chips {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .review-chip {
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    font-family: 'Inter', sans-serif;
+  }
+  .review-chip:hover { opacity: 0.75; }
+  .chip-correct { background: rgba(74,124,90,0.12); color: var(--correct); }
+  .chip-incorrect { background: rgba(139,74,74,0.12); color: var(--incorrect); }
+
+  .completion {
+    text-align: center;
+    padding: 48px 24px;
+    max-width: 480px;
+  }
+  .completion-icon { font-size: 48px; margin-bottom: 20px; }
+  .completion-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    margin-bottom: 12px;
+    color: var(--ink);
+  }
+  .completion-sub {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 14px;
+    color: var(--ash);
+    line-height: 1.8;
+    margin-bottom: 28px;
+  }
+  .completion-btns {
+    display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;
+  }
+  .btn-restart {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 11px 28px;
+  }
+  .btn-review-only {
+    background: transparent;
+    color: var(--incorrect);
+    border: 1.5px solid var(--incorrect);
+    padding: 11px 28px;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .card-scene { animation: fadeUp 0.3s ease; }
+
+  @media (max-width: 480px) {
+    .card-face { padding: 28px 24px; }
+    .header { padding: 14px 16px 12px; }
+    .header-title { font-size: 18px; }
+    .stats-bar, .mode-bar { padding: 10px 16px; }
+    main { padding: 20px 16px; }
+    .dir-toggle { margin-left: 0; width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-title">Rental English</div>
+  <div class="header-sub">賃貸トラブル英語 — 英語暗記カード</div>
+</div>
+
+<div class="stats-bar">
+  <div class="stat"><span class="stat-dot dot-total"></span><span id="statTotal">0 cards</span></div>
+  <div class="stat"><span class="stat-dot dot-correct"></span><span id="statCorrect">0 correct</span></div>
+  <div class="stat"><span class="stat-dot dot-incorrect"></span><span id="statIncorrect">0 incorrect</span></div>
+  <div class="stat"><span class="stat-dot dot-remaining"></span><span id="statRemaining">0 remaining</span></div>
+</div>
+
+<div class="mode-bar">
+  <span class="mode-label">MODE</span>
+  <button class="mode-btn active" onclick="setMode('all', event)">All Cards</button>
+  <button class="mode-btn" onclick="setMode('incorrect', event)">Incorrect Only</button>
+  <button class="mode-btn" onclick="setMode('random', event)">Random</button>
+  <div class="dir-toggle">
+    <span>EN → JP</span>
+    <label class="toggle-switch">
+      <input type="checkbox" id="dirToggle" onchange="toggleDirection()">
+      <span class="toggle-slider"></span>
+    </label>
+    <span>JP → EN</span>
+  </div>
+</div>
+
+<main id="mainContent"></main>
+
+<script>
+const STORAGE_KEY = 'rental-english-v1';
+
+const CARDS = [
+  // カテゴリ1: 入居・契約
+  { id:1,  cat:'入居・契約', jp:'私は昨年まで5年間アパートに住んでいた。', en:'I lived in an apartment for five years until last year.', tip:'lived in ~ で「〜に住んでいた」。for five years で期間を表す。' },
+  { id:2,  cat:'入居・契約', jp:'退去した時、ボンド（保証金）について不動産業者ともめた。', en:'When I moved out, I had a trouble with my real estate agent about the bond.', tip:'move out =「退去する」。反対はmove in（入居する）。bond = 保証金。' },
+  { id:3,  cat:'入居・契約', jp:'家主は私がペットを飼うことを許可してくれた。', en:'The landlord gave me permission to keep a pet.', tip:'give permission to ~ で「〜することを許可する」。landlord = 家主。' },
+  { id:4,  cat:'入居・契約', jp:'私は部屋を借りた時、犬を飼う許可をもらった。', en:'I got permission to keep a dog when I rented the room.', tip:'rent the room = 部屋を借りる。get permission = 許可を得る。' },
+  { id:5,  cat:'入居・契約', jp:'私は毎月家賃を払っていた。', en:'I paid the rent every month.', tip:'pay the rent = 家賃を払う。every month で毎月の習慣を表す。' },
+  { id:6,  cat:'入居・契約', jp:'私は5年間、毎年50ドルの値上げを受け入れた。', en:'I accepted a $50 rent increase every year for five years.', tip:'accept = 受け入れる。rent increase = 家賃値上げ。' },
+  { id:7,  cat:'入居・契約', jp:'契約が終わった翌日、新しい人が入居した。', en:'The next day after my contract ended, a new person moved into the room.', tip:'move into = 入居する。contract ended = 契約終了。' },
+  { id:8,  cat:'入居・契約', jp:'部屋には木の床があった。', en:'The rooms had wooden floors.', tip:'wooden floors = 木の床。had は have の過去形。' },
+  { id:9,  cat:'入居・契約', jp:'入居口の近くに小さなシミがあった。', en:'There was a small stain near the entrance.', tip:'stain = シミ。entrance = 入り口。There was ~ = 〜があった。' },
+  { id:10, cat:'入居・契約', jp:'私はその不公平な請求に同意できなかった。', en:'I could not agree with their unfair request.', tip:'agree with = 〜に同意する。unfair = 不公平な。' },
+
+  // カテゴリ2: 業者とのトラブル
+  { id:11, cat:'業者トラブル', jp:'業者は「あなたの犬がここでおしっこをしてこのシミを作った」と言った。', en:'The agent said, "Your dog peed here and made this stain."', tip:'agent = 不動産業者。pee = おしっこをする（カジュアルな表現）。' },
+  { id:12, cat:'業者トラブル', jp:'彼らは「あなたはそれを支払わなければならない」と言った。', en:'They said, "You must pay for it."', tip:'must pay for = 〜の費用を払わなければならない。for it = それに対して。' },
+  { id:13, cat:'業者トラブル', jp:'彼らは私のボンドを返してくれなかった。', en:'They did not return my bond.', tip:'return = 返す。did not return = 返さなかった（過去の否定）。' },
+  { id:14, cat:'業者トラブル', jp:'彼らの行動はとても奇妙だった。', en:'Their action was very strange.', tip:'action = 行動。strange = 奇妙な、おかしい。' },
+  { id:15, cat:'業者トラブル', jp:'業者は私に修理費を求めたが、実際には修理しなかった！', en:'The agent asked me for repair money, but they did not actually repair the floor!', tip:'ask for = 〜を求める。actually = 実際には。repair = 修理する。' },
+  { id:16, cat:'業者トラブル', jp:'最終確認のすぐ後、業者は私にメールを送った。', en:'Right after the final inspection, the agent sent me an email.', tip:'right after = 〜の直後に。inspection = 検査・確認。' },
+  { id:17, cat:'業者トラブル', jp:'メールには「とてもきれいに使ってくれてありがとう」と書いてあった。', en:'It said, "Thank you for using the room so cleanly."', tip:'It said = メールに〜と書いてあった。so cleanly = とてもきれいに。' },
+  { id:18, cat:'業者トラブル', jp:'業者は私に修理費を請求した。', en:'The agent charged me for repair costs.', tip:'charge for = 〜の費用を請求する。repair costs = 修理費。' },
+  { id:19, cat:'業者トラブル', jp:'業者は私にミーティングを求めた。', en:'The agent asked for a meeting with me.', tip:'ask for = 〜を求める。a meeting with me = 私とのミーティング。' },
+  { id:20, cat:'業者トラブル', jp:'私はそれを断った。', en:'I refused it.', tip:'refuse = 断る、拒否する。シンプルで重要な動詞。' },
+
+  // カテゴリ3: 経年劣化
+  { id:21, cat:'経年劣化', jp:'VCATは「そのシミは経年劣化だ」と言った。', en:'VCAT said the stain was just normal wear and tear.', tip:'normal wear and tear = 経年劣化。賃貸トラブルで最重要フレーズ！' },
+  { id:22, cat:'経年劣化', jp:'経年劣化とは日常生活による自然な消耗のことだ。', en:'Normal wear and tear means natural damage from daily life.', tip:'natural damage = 自然な傷み。from daily life = 日常生活から。' },
+  { id:23, cat:'経年劣化', jp:'それは私のせいではなかった。', en:'It was not my fault.', tip:'not my fault = 私のせいではない。fault = 責任、過失。' },
+  { id:24, cat:'経年劣化', jp:'5年間そこに住んだことによる自然な消耗だった。', en:'It was natural wear from living there for five years.', tip:'natural wear = 自然な消耗。from living there = そこに住んだことによる。' },
+  { id:25, cat:'経年劣化', jp:'軽いシミや傷は日常生活では普通のことだ。', en:'Minor stains or scratches from daily life are normal.', tip:'minor = 軽い、小さな。scratches = 傷。normal = 普通の。' },
+  { id:26, cat:'経年劣化', jp:'私たちはそれらのために払う必要はない。', en:'We do not have to pay for them.', tip:'do not have to = 〜する必要はない（mustの反対の意味）。' },
+  { id:27, cat:'経年劣化', jp:'床の傷は経年劣化と見なされる。', en:'Scratches on the floor are considered normal wear and tear.', tip:'be considered = 〜と見なされる。重要な受動態の表現。' },
+  { id:28, cat:'経年劣化', jp:'5年間住んだ後の小さなシミは経年劣化だ。', en:'A small stain after five years of living is normal wear and tear.', tip:'after five years of living = 5年間住んだ後。' },
+  { id:29, cat:'経年劣化', jp:'それは私の責任ではなく、自然な消耗だ。', en:'It is not my responsibility. It is just natural wear.', tip:'responsibility = 責任。just = ただの、単なる。' },
+  { id:30, cat:'経年劣化', jp:'テナントは経年劣化のために支払う必要はない。', en:'Tenants do not have to pay for normal wear and tear.', tip:'tenant = テナント、借主。重要な権利の表現。' },
+
+  // カテゴリ4: VCATと権利
+  { id:31, cat:'VCATと権利', jp:'私はVCATにすべてを説明した。', en:'I explained everything to VCAT.', tip:'explain ~ to = 〜に…を説明する。VCAT = Victorian Civil and Administrative Tribunal。' },
+  { id:32, cat:'VCATと権利', jp:'VCATとはビクトリア州の民事行政裁判所のことだ。', en:'VCAT is the Victorian Civil and Administrative Tribunal.', tip:'tribunal = 裁判所・審判機関。オーストラリアの賃貸紛争で使う重要機関。' },
+  { id:33, cat:'VCATと権利', jp:'約1年後、VCATは決定を下した。', en:'About one year later, VCAT made a decision.', tip:'make a decision = 決定を下す。one year later = 1年後。' },
+  { id:34, cat:'VCATと権利', jp:'VCATは「業者はすべてのボンドを返さなければならない」と言った。', en:'VCAT said, "The agent must return all the bond to you."', tip:'must return = 返さなければならない。all the bond = ボンド全額。' },
+  { id:35, cat:'VCATと権利', jp:'VCATは私の話を理解してくれた。', en:'VCAT understood the true story.', tip:'understand = 理解する。the true story = 本当の話。' },
+  { id:36, cat:'VCATと権利', jp:'私はすでに本当のことをVCATに話していた。', en:'I already told the true story to VCAT.', tip:'already told = すでに話していた（過去完了的な使い方）。' },
+  { id:37, cat:'VCATと権利', jp:'私はただ待った。', en:'I just waited.', tip:'just = ただ。waited = 待った（waitの過去形）。シンプルだが重要。' },
+  { id:38, cat:'VCATと権利', jp:'私は自分の権利のために戦って勝った。', en:'I fought for my rights and won.', tip:'fight for = 〜のために戦う。rights = 権利。won = winの過去形。' },
+  { id:39, cat:'VCATと権利', jp:'私はその結果にとても満足している。', en:'I am very happy that I fought for my rights and won.', tip:'I am happy that ~ = 〜で満足している、うれしい。' },
+  { id:40, cat:'VCATと権利', jp:'ミーティングへの参加を断った。', en:'I refused to attend the meeting.', tip:'refuse to = 〜することを断る。attend = 出席する。' },
+
+  // カテゴリ5: テナントの知識
+  { id:41, cat:'テナントの知識', jp:'オーストラリアでは多くの業者がお金を取りすぎる。', en:'In Australia, many agents ask for too much money.', tip:'ask for too much = 取りすぎる、多く求めすぎる。' },
+  { id:42, cat:'テナントの知識', jp:'テナントがルールを知らないと思っているからだ。', en:'They think tenants do not know the rules.', tip:'tenants = 借主、テナント。rules = ルール、規則。' },
+  { id:43, cat:'テナントの知識', jp:'多くの人はただ払ってお金を失う。', en:'Many people just pay and lose their money.', tip:'just pay = ただ払う（何も言わずに）。lose money = お金を失う。' },
+  { id:44, cat:'テナントの知識', jp:'でも私たちはルールを知ることができる。', en:'But we can learn the rules.', tip:'can learn = 学ぶことができる。rules = 権利・規則。' },
+  { id:45, cat:'テナントの知識', jp:'テナントには権利がある。', en:'Tenants have rights.', tip:'have rights = 権利がある。シンプルだが大切な文。' },
+  { id:46, cat:'テナントの知識', jp:'ルールを知ることは自分を守ることだ。', en:'Knowing the rules is how you protect yourself.', tip:'protect yourself = 自分を守る。knowing = 知ること（動名詞）。' },
+  { id:47, cat:'テナントの知識', jp:'不公平な請求には同意する必要はない。', en:'You do not have to agree with an unfair request.', tip:'do not have to agree = 同意する必要はない。unfair = 不公平な。' },
+  { id:48, cat:'テナントの知識', jp:'自分の話を正直に説明することが大切だ。', en:'It is important to explain your story honestly.', tip:'honestly = 正直に。explain your story = 自分の話を説明する。' },
+  { id:49, cat:'テナントの知識', jp:'証拠（メールなど）を保存しておくべきだ。', en:'You should keep evidence like emails.', tip:'evidence = 証拠。keep = 保存する、保管する。like emails = メールなど。' },
+  { id:50, cat:'テナントの知識', jp:'あなたの権利のために戦うことを恐れないで。', en:'Do not be afraid to fight for your rights.', tip:'do not be afraid to = 〜することを恐れないで。fight for = 〜のために戦う。' },
+
+  // カテゴリ6: 感情・意見を伝える
+  { id:51, cat:'感情・意見', jp:'私は彼らの行動がおかしいと思った。', en:'I thought their action was very strange.', tip:'I thought ~ was = 〜はおかしいと思った。thought = thinkの過去形。' },
+  { id:52, cat:'感情・意見', jp:'私は彼らの要求に同意できなかった。', en:'I could not agree with their request.', tip:'could not agree = 同意できなかった。could notは過去の否定。' },
+  { id:53, cat:'感情・意見', jp:'それはとても不公平だと感じた。', en:'I felt it was very unfair.', tip:'felt = feelの過去形。unfair = 不公平な。' },
+  { id:54, cat:'感情・意見', jp:'私は正しいことをしたと確信していた。', en:'I was sure I did the right thing.', tip:'be sure = 確信している。do the right thing = 正しいことをする。' },
+  { id:55, cat:'感情・意見', jp:'結果にとても満足している。', en:'I am very satisfied with the result.', tip:'satisfied with = 〜に満足している。result = 結果。' },
+  { id:56, cat:'感情・意見', jp:'私はあきらめなくて良かった。', en:'I am glad I did not give up.', tip:'I am glad = 〜して良かった。give up = あきらめる。' },
+  { id:57, cat:'感情・意見', jp:'これは私にとって大きな勝利だった。', en:'This was a big win for me.', tip:'a big win = 大きな勝利。for me = 私にとって。' },
+  { id:58, cat:'感情・意見', jp:'私はこの経験から多くを学んだ。', en:'I learned a lot from this experience.', tip:'learn from = 〜から学ぶ。experience = 経験。' },
+  { id:59, cat:'感情・意見', jp:'自分の権利を知ることはとても重要だ。', en:'Knowing your rights is very important.', tip:'knowing = 知ること（動名詞が主語）。rights = 権利。' },
+  { id:60, cat:'感情・意見', jp:'正直に話したことが良い結果につながった。', en:'Telling the truth led to a good result.', tip:'lead to = 〜につながる。telling the truth = 正直に話すこと。' },
+
+  // カテゴリ7: 便利な表現
+  { id:61, cat:'便利な表現', jp:'彼らの言うことは変だと思った。', en:'I thought what they said was strange.', tip:'what they said = 彼らの言ったこと。関係代名詞のwhatを使った表現。' },
+  { id:62, cat:'便利な表現', jp:'詳しく説明してもいいですか？', en:'Can I explain in more detail?', tip:'in more detail = より詳しく。Can I ~ ? = 〜してもいいですか？' },
+  { id:63, cat:'便利な表現', jp:'証拠があります。', en:'I have evidence.', tip:'evidence = 証拠。have = 持っている。シンプルで力強い文。' },
+  { id:64, cat:'便利な表現', jp:'これは私のせいではありません。', en:'This is not my fault.', tip:'not my fault = 私のせいではない。fault = 責任、過失。' },
+  { id:65, cat:'便利な表現', jp:'その請求に同意しません。', en:'I do not agree with that charge.', tip:'charge = 請求。do not agree with = 〜に同意しない。' },
+  { id:66, cat:'便利な表現', jp:'正式に文句を言いたいです。', en:'I would like to make a formal complaint.', tip:'formal complaint = 正式な苦情。would like to = 〜したいです（丁寧）。' },
+  { id:67, cat:'便利な表現', jp:'その決定を受け入れません。', en:'I do not accept that decision.', tip:'accept = 受け入れる。decision = 決定。' },
+  { id:68, cat:'便利な表現', jp:'別の解決策はありますか？', en:'Is there another solution?', tip:'another solution = 別の解決策。Is there ~ ? = 〜はありますか？' },
+  { id:69, cat:'便利な表現', jp:'全額返金を求めます。', en:'I am asking for a full refund.', tip:'full refund = 全額返金。ask for = 求める。' },
+  { id:70, cat:'便利な表現', jp:'書面でそれが欲しいです。', en:'I would like that in writing.', tip:'in writing = 書面で。would like = 〜が欲しい（丁寧）。' },
+
+  // カテゴリ8: 状況説明
+  { id:71, cat:'状況説明', jp:'その犬はとてもおとなしかった。', en:'The dog was very quiet.', tip:'quiet = 静かな、おとなしい。was = beの過去形。' },
+  { id:72, cat:'状況説明', jp:'私はその部屋をとてもきれいに使った。', en:'I used the room very cleanly.', tip:'cleanly = きれいに。used the room = 部屋を使った。' },
+  { id:73, cat:'状況説明', jp:'私は部屋を良い状態で残した。', en:'I left the room in good condition.', tip:'in good condition = 良い状態で。left = leaveの過去形。' },
+  { id:74, cat:'状況説明', jp:'シミは入居前からあった。', en:'The stain was there before I moved in.', tip:'before I moved in = 入居前から。before + S + V の構文。' },
+  { id:75, cat:'状況説明', jp:'私は入居前に部屋の状態を写真に撮った。', en:'I took photos of the room condition before moving in.', tip:'take photos of = 〜の写真を撮る。condition = 状態。' },
+  { id:76, cat:'状況説明', jp:'最終チェックでは問題なかった。', en:'There were no problems during the final check.', tip:'no problems = 問題なし。during = 〜の間に。' },
+  { id:77, cat:'状況説明', jp:'業者はメールでそれを認めた。', en:'The agent admitted it in an email.', tip:'admit = 認める。in an email = メールで。' },
+  { id:78, cat:'状況説明', jp:'私は5年間良いテナントだった。', en:'I was a good tenant for five years.', tip:'good tenant = 良いテナント。for five years = 5年間。' },
+  { id:79, cat:'状況説明', jp:'問題はいつも時間通りに家賃を払った。', en:'I always paid the rent on time.', tip:'on time = 時間通りに。always = いつも。' },
+  { id:80, cat:'状況説明', jp:'私は業者のすべての要求に従った。', en:'I followed all the rules from the agent.', tip:'follow the rules = ルールに従う。from the agent = 業者からの。' },
+
+  // カテゴリ9: メール・文書の英語
+  { id:81, cat:'メール・文書', jp:'ご連絡いただきありがとうございます。', en:'Thank you for contacting me.', tip:'for contacting me = ご連絡いただき（動名詞の使い方）。' },
+  { id:82, cat:'メール・文書', jp:'私はその請求に同意しません。', en:'I do not agree with this charge.', tip:'this charge = この請求。do not agree with = 〜に同意しない。' },
+  { id:83, cat:'メール・文書', jp:'詳細を説明させてください。', en:'Please let me explain the details.', tip:'let me explain = 私に説明させてください。details = 詳細。' },
+  { id:84, cat:'メール・文書', jp:'証拠として写真を添付します。', en:'I am attaching photos as evidence.', tip:'attach = 添付する。as evidence = 証拠として。' },
+  { id:85, cat:'メール・文書', jp:'7日以内にご返答をお願いします。', en:'Please reply within seven days.', tip:'reply within = 〜以内に返答する。seven days = 7日。' },
+  { id:86, cat:'メール・文書', jp:'これは正式な通知です。', en:'This is a formal notice.', tip:'formal notice = 正式な通知。formal = 正式な。' },
+  { id:87, cat:'メール・文書', jp:'全額のボンドを返金してください。', en:'Please return the full bond amount.', tip:'full bond amount = ボンド全額。return = 返す。' },
+  { id:88, cat:'メール・文書', jp:'これ以上の遅延は受け入れられません。', en:'I cannot accept any further delays.', tip:'further delays = これ以上の遅延。cannot accept = 受け入れられない。' },
+  { id:89, cat:'メール・文書', jp:'この問題をVCATに提出することを検討しています。', en:'I am considering taking this matter to VCAT.', tip:'considering = 検討している。taking ~ to VCAT = VCATに提出する。' },
+  { id:90, cat:'メール・文書', jp:'迅速なご対応をお願いします。', en:'I look forward to your prompt response.', tip:'prompt response = 迅速な返答。look forward to = 〜を楽しみにしている（ここでは期待している）。' },
+
+  // カテゴリ10: まとめ・重要表現
+  { id:91, cat:'まとめ', jp:'permission（許可）: 〜することへの許可を与える', en:'"give permission to ~" means to allow someone to do something.', tip:'例: The landlord gave me permission to keep a dog.' },
+  { id:92, cat:'まとめ', jp:'move into（入居する）はmove out（退去する）の反対だ。', en:'"Move into" is the opposite of "move out."', tip:'move into = 引っ越してくる / move out = 引っ越して出る' },
+  { id:93, cat:'まとめ', jp:'right after（〜の直後に）はimmediately afterより自然な表現だ。', en:'"Right after" is a more casual way to say "immediately after."', tip:'例: Right after the inspection, they sent me an email.' },
+  { id:94, cat:'まとめ', jp:'normal wear and tearは経年劣化という意味だ。', en:'"Normal wear and tear" means natural damage from everyday use.', tip:'賃貸トラブルで最重要フレーズ！絶対に覚えよう。' },
+  { id:95, cat:'まとめ', jp:'do not have to は〜する必要はないという意味だ。', en:'"Do not have to" means it is not necessary to do something.', tip:'例: You do not have to pay for normal wear and tear.' },
+  { id:96, cat:'まとめ', jp:'charge（請求）はagentがお金を求めることだ。', en:'"Charge" means to ask someone to pay money for something.', tip:'例: The agent charged me for repairs I did not cause.' },
+  { id:97, cat:'まとめ', jp:'fight for your rights（権利のために戦う）は重要な表現だ。', en:'"Fight for your rights" means to take action to protect what you deserve.', tip:'例: I fought for my rights and won at VCAT.' },
+  { id:98, cat:'まとめ', jp:'evidence（証拠）はメールや写真のようなものだ。', en:'"Evidence" means proof, like emails or photos.', tip:'例: I have evidence. Please see the attached photos.' },
+  { id:99, cat:'まとめ', jp:'tenant（テナント）は部屋を借りている人のことだ。', en:'A "tenant" is a person who rents a room or home.', tip:'landlord（家主）とtenant（借主）はセットで覚えよう。' },
+  { id:100, cat:'まとめ', jp:'refuse（断る）はdeclineより少し強い表現だ。', en:'"Refuse" means to say no, often more firmly than "decline."', tip:'例: I refused to attend the meeting with the agent.' },
+];
+
+// State
+let state = {
+  mode: 'all',
+  direction: 'en-jp',
+  queue: [],
+  currentIndex: 0,
+  isFlipped: false,
+  correct: new Set(),
+  incorrect: new Set(),
+  done: false,
+};
+
+function loadStorage() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      const d = JSON.parse(saved);
+      state.correct = new Set(d.correct || []);
+      state.incorrect = new Set(d.incorrect || []);
+    }
+  } catch(e) {}
+}
+
+function saveStorage() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify({
+    correct: [...state.correct],
+    incorrect: [...state.incorrect],
+  }));
+}
+
+function buildQueue() {
+  let pool;
+  if (state.mode === 'incorrect') {
+    pool = CARDS.filter(c => state.incorrect.has(c.id));
+    if (pool.length === 0) pool = [...CARDS];
+  } else {
+    pool = [...CARDS];
+  }
+  if (state.mode === 'random') {
+    pool = shuffle(pool);
+  }
+  state.queue = pool;
+  state.currentIndex = 0;
+  state.isFlipped = false;
+  state.done = false;
+}
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function setMode(m, e) {
+  state.mode = m;
+  document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+  if (e && e.target) e.target.classList.add('active');
+  buildQueue();
+  render();
+}
+
+function toggleDirection() {
+  state.direction = document.getElementById('dirToggle').checked ? 'jp-en' : 'en-jp';
+  state.isFlipped = false;
+  render();
+}
+
+function flipCard() {
+  state.isFlipped = !state.isFlipped;
+  render();
+}
+
+function markCorrect() {
+  const card = state.queue[state.currentIndex];
+  state.correct.add(card.id);
+  state.incorrect.delete(card.id);
+  saveStorage();
+  nextCard();
+}
+
+function markIncorrect() {
+  const card = state.queue[state.currentIndex];
+  state.incorrect.add(card.id);
+  saveStorage();
+  nextCard();
+}
+
+function nextCard() {
+  if (state.currentIndex < state.queue.length - 1) {
+    state.currentIndex++;
+    state.isFlipped = false;
+    render();
+  } else {
+    state.done = true;
+    render();
+  }
+}
+
+function prevCard() {
+  if (state.currentIndex > 0) {
+    state.currentIndex--;
+    state.isFlipped = false;
+    render();
+  }
+}
+
+function jumpTo(id) {
+  const idx = state.queue.findIndex(c => c.id === id);
+  if (idx >= 0) {
+    state.currentIndex = idx;
+    state.isFlipped = false;
+    state.done = false;
+    render();
+  }
+}
+
+function restartAll() {
+  state.mode = 'all';
+  document.querySelectorAll('.mode-btn').forEach((b,i) => b.classList.toggle('active', i===0));
+  buildQueue();
+  render();
+}
+
+function restartIncorrect() {
+  state.mode = 'incorrect';
+  document.querySelectorAll('.mode-btn').forEach((b,i) => b.classList.toggle('active', i===1));
+  buildQueue();
+  render();
+}
+
+function updateStats() {
+  document.getElementById('statTotal').textContent = `${CARDS.length} cards`;
+  document.getElementById('statCorrect').textContent = `${state.correct.size} correct`;
+  document.getElementById('statIncorrect').textContent = `${state.incorrect.size} incorrect`;
+  const remaining = state.queue.length - state.currentIndex - 1;
+  document.getElementById('statRemaining').textContent = `${Math.max(0,remaining)} remaining`;
+}
+
+function render() {
+  updateStats();
+  const main = document.getElementById('mainContent');
+
+  if (state.done) {
+    const inc = state.incorrect.size;
+    main.innerHTML = `
+      <div class="completion">
+        <div class="completion-icon">🏠</div>
+        <div class="completion-title">Session Complete</div>
+        <div class="completion-sub">
+          ${state.queue.length} cards reviewed<br>
+          ${state.correct.size} correct · ${state.incorrect.size} to review
+        </div>
+        <div class="completion-btns">
+          <button class="btn btn-restart" onclick="restartAll()">Start Over</button>
+          ${inc > 0 ? `<button class="btn btn-review-only" onclick="restartIncorrect()">Review ${inc} Missed</button>` : ''}
+        </div>
+      </div>`;
+    return;
+  }
+
+  const card = state.queue[state.currentIndex];
+  const progress = ((state.currentIndex) / state.queue.length * 100).toFixed(1);
+
+  const frontText = state.direction === 'en-jp' ? card.en : card.jp;
+  const backText  = state.direction === 'en-jp' ? card.jp : card.en;
+  const frontLang = state.direction === 'en-jp' ? 'English' : '日本語';
+  const backLang  = state.direction === 'en-jp' ? '日本語' : 'English';
+
+  const isCorrect = state.correct.has(card.id);
+  const isIncorrect = state.incorrect.has(card.id);
+  const statusDot = isCorrect ? '🟢' : isIncorrect ? '🔴' : '';
+
+  const tipHtml = card.tip
+    ? `<div class="card-tip">💡 ${card.tip}</div>`
+    : '';
+
+  main.innerHTML = `
+    <div class="progress-wrap">
+      <div class="progress-bar"><div class="progress-fill" style="width:${progress}%"></div></div>
+      <div class="progress-text">${state.currentIndex + 1} / ${state.queue.length}</div>
+    </div>
+
+    <div class="card-scene">
+      <div class="card ${state.isFlipped ? 'flipped' : ''}" onclick="flipCard()" id="theCard">
+        <div class="card-face card-front">
+          <div class="cat-badge">${card.cat} ${statusDot}</div>
+          <div class="card-lang">${frontLang}</div>
+          <div class="card-text">${frontText}</div>
+          <div class="card-hint"><span class="hint-icon">↕</span> tap to flip</div>
+        </div>
+        <div class="card-face card-back">
+          <div class="cat-badge">${card.cat}</div>
+          <div class="card-lang">${backLang}</div>
+          <div class="card-text">${backText}</div>
+          ${tipHtml}
+          <div class="card-hint"><span class="hint-icon">↕</span> tap to flip back</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <div class="nav-btns">
+        <button class="nav-btn" onclick="prevCard()" ${state.currentIndex===0?'disabled':''}>←</button>
+      </div>
+      <button class="btn btn-incorrect" onclick="markIncorrect()" ${!state.isFlipped?'disabled':''}>✗ Missed</button>
+      <button class="btn btn-correct" onclick="markCorrect()" ${!state.isFlipped?'disabled':''}>✓ Got it</button>
+      <div class="nav-btns">
+        <button class="nav-btn" onclick="nextCard()">→</button>
+      </div>
+    </div>
+
+    <div class="review-panel">
+      <div class="review-title">Completed in this session</div>
+      <div class="review-chips">
+        ${[...state.correct].slice(-8).map(id => {
+          const c = CARDS.find(x=>x.id===id);
+          return c ? `<button class="review-chip chip-correct" onclick="jumpTo(${c.id})" title="${c.en}">#${c.id}</button>` : '';
+        }).join('')}
+        ${[...state.incorrect].slice(-8).map(id => {
+          const c = CARDS.find(x=>x.id===id);
+          return c ? `<button class="review-chip chip-incorrect" onclick="jumpTo(${c.id})" title="${c.en}">#${c.id}</button>` : '';
+        }).join('')}
+        ${state.correct.size + state.incorrect.size === 0 ? '<span style="font-size:12px;color:var(--mist)">Cards you mark will appear here</span>' : ''}
+      </div>
+    </div>`;
+}
+
+loadStorage();
+buildQueue();
+render();
+</script>
+</body>
+</html>
