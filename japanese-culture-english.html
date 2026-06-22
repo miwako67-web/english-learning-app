@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Japanese Culture English — 日本文化英語カード</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap');
+
+  :root {
+    --ink: #1a1208;
+    --ash: #4a3f2f;
+    --mist: #8a7d6a;
+    --paper: #faf7f0;
+    --parchment: #f0ebe0;
+    --stone: #d8d0c0;
+    --sakura: #c87070;
+    --sakura-light: #e09090;
+    --matcha: #5a7058;
+    --matcha-light: #7a9478;
+    --gold: #a07830;
+    --gold-light: #c8a050;
+    --indigo: #3a4870;
+    --correct: #5a7a5a;
+    --incorrect: #8b4a4a;
+    --shadow: rgba(26,18,8,0.12);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── Header ── */
+  .header {
+    background: var(--ink);
+    padding: 18px 24px 14px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::after {
+    content: '日本文化';
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'Noto Serif JP', serif;
+    font-size: 32px;
+    color: rgba(255,255,255,0.06);
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    pointer-events: none;
+  }
+  .header-icon { font-size: 24px; }
+  .header-titles { display: flex; flex-direction: column; gap: 2px; }
+  .header-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    color: var(--paper);
+    letter-spacing: 0.03em;
+  }
+  .header-sub {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 10px;
+    color: var(--mist);
+    letter-spacing: 0.1em;
+  }
+
+  /* ── Category tabs ── */
+  .cat-bar {
+    background: var(--parchment);
+    border-bottom: 1px solid var(--stone);
+    padding: 10px 16px;
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .cat-bar::-webkit-scrollbar { display: none; }
+  .cat-tab {
+    padding: 5px 12px;
+    border-radius: 20px;
+    border: 1.5px solid var(--stone);
+    background: transparent;
+    font-size: 11px;
+    color: var(--ash);
+    cursor: pointer;
+    white-space: nowrap;
+    font-family: 'Noto Serif JP', serif;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+  .cat-tab:hover { border-color: var(--sakura); color: var(--sakura); }
+  .cat-tab.active { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+
+  /* ── Stats bar ── */
+  .stats-bar {
+    padding: 8px 20px;
+    display: flex;
+    gap: 18px;
+    align-items: center;
+    border-bottom: 1px solid var(--stone);
+    flex-wrap: wrap;
+  }
+  .stat { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--ash); }
+  .stat-dot { width: 7px; height: 7px; border-radius: 50%; }
+  .dot-total { background: var(--stone); }
+  .dot-correct { background: var(--correct); }
+  .dot-incorrect { background: var(--incorrect); }
+  .dot-remaining { background: var(--gold); }
+
+  /* ── Mode bar ── */
+  .mode-bar {
+    padding: 10px 20px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+    border-bottom: 1px solid var(--stone);
+  }
+  .mode-label { font-size: 10px; color: var(--mist); letter-spacing: 0.08em; margin-right: 2px; }
+  .mode-btn {
+    padding: 4px 12px;
+    border-radius: 20px;
+    border: 1.5px solid var(--stone);
+    background: transparent;
+    font-size: 11px;
+    color: var(--ash);
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    transition: all 0.2s;
+  }
+  .mode-btn:hover { border-color: var(--sakura); color: var(--sakura); }
+  .mode-btn.active { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+  .dir-toggle {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    color: var(--ash);
+  }
+  .toggle-switch { position: relative; width: 44px; height: 22px; }
+  .toggle-switch input { opacity: 0; width: 0; height: 0; }
+  .toggle-slider {
+    position: absolute; inset: 0;
+    background: var(--stone);
+    border-radius: 11px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  .toggle-slider::before {
+    content: '';
+    position: absolute;
+    width: 16px; height: 16px;
+    left: 3px; top: 3px;
+    background: white;
+    border-radius: 50%;
+    transition: 0.3s;
+  }
+  input:checked + .toggle-slider { background: var(--matcha); }
+  input:checked + .toggle-slider::before { transform: translateX(22px); }
+
+  /* ── Main ── */
+  main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 28px 20px 24px;
+    gap: 22px;
+  }
+
+  .progress-wrap {
+    width: 100%; max-width: 640px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .progress-bar {
+    flex: 1;
+    height: 3px;
+    background: var(--stone);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--sakura);
+    border-radius: 2px;
+    transition: width 0.4s ease;
+  }
+  .progress-text { font-size: 11px; color: var(--mist); white-space: nowrap; }
+
+  /* ── Card ── */
+  .card-scene {
+    width: 100%; max-width: 640px;
+    perspective: 1200px;
+  }
+  .card {
+    width: 100%;
+    min-height: 300px;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.55s cubic-bezier(0.4,0,0.2,1);
+    cursor: pointer;
+  }
+  .card.flipped { transform: rotateY(180deg); }
+  .card-face {
+    position: absolute; inset: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: 4px;
+    padding: 36px 44px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    box-shadow: 0 2px 16px var(--shadow), 0 0 0 1px var(--stone);
+  }
+  .card-front { background: var(--paper); }
+  .card-back { background: var(--ink); transform: rotateY(180deg); }
+
+  /* culture motif on card */
+  .card-front::before {
+    content: attr(data-motif);
+    position: absolute;
+    bottom: 12px;
+    right: 18px;
+    font-size: 36px;
+    opacity: 0.06;
+    pointer-events: none;
+  }
+
+  .cat-badge {
+    position: absolute;
+    top: 14px; left: 18px;
+    font-size: 10px;
+    color: var(--mist);
+    letter-spacing: 0.08em;
+    font-family: 'Inter', sans-serif;
+  }
+  .level-badge {
+    position: absolute;
+    top: 14px; right: 18px;
+    font-size: 9px;
+    color: var(--sakura);
+    letter-spacing: 0.1em;
+    border: 1px solid rgba(200,112,112,0.3);
+    padding: 2px 6px;
+    border-radius: 10px;
+  }
+  .card-lang {
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    opacity: 0.4;
+    font-family: 'Inter', sans-serif;
+  }
+  .card-front .card-lang { color: var(--ink); }
+  .card-back .card-lang { color: var(--paper); }
+
+  .card-text {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(15px, 2.8vw, 20px);
+    line-height: 1.65;
+    font-weight: 400;
+  }
+  .card-front .card-text { color: var(--ink); }
+  .card-back .card-text { color: var(--paper); }
+
+  .card-sub {
+    margin-top: 12px;
+    font-family: 'Noto Serif JP', serif;
+    font-size: clamp(12px, 2vw, 14px);
+    line-height: 1.9;
+    opacity: 0.55;
+  }
+  .card-front .card-sub { color: var(--ash); }
+  .card-back .card-sub { color: var(--paper); }
+
+  .card-tip {
+    margin-top: 16px;
+    padding: 8px 14px;
+    background: rgba(160,120,48,0.15);
+    border-radius: 3px;
+    font-size: 11px;
+    color: var(--gold-light);
+    font-family: 'Inter', sans-serif;
+    line-height: 1.6;
+    max-width: 420px;
+    text-align: center;
+  }
+  .card-hint {
+    margin-top: 24px;
+    font-size: 10px;
+    color: var(--mist);
+    letter-spacing: 0.06em;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .card-back .card-hint { color: rgba(255,255,255,0.25); }
+
+  /* ── Actions ── */
+  .actions {
+    display: flex;
+    gap: 10px;
+    width: 100%; max-width: 640px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .btn {
+    padding: 10px 22px;
+    border-radius: 3px;
+    border: none;
+    font-size: 13px;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.03em;
+    font-weight: 500;
+  }
+  .btn-correct { background: var(--correct); color: white; flex: 1; max-width: 190px; }
+  .btn-incorrect { background: var(--incorrect); color: white; flex: 1; max-width: 190px; }
+  .btn-skip { background: transparent; color: var(--mist); border: 1.5px solid var(--stone); }
+  .btn:hover { opacity: 0.85; transform: translateY(-1px); }
+  .btn:active { transform: translateY(0); }
+  .btn:disabled { opacity: 0.3; cursor: not-allowed; transform: none; }
+  .nav-btns { display: flex; gap: 8px; align-items: center; }
+  .nav-btn {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    border: 1.5px solid var(--stone);
+    background: transparent;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    color: var(--ash);
+    transition: all 0.2s;
+  }
+  .nav-btn:hover { border-color: var(--ink); color: var(--ink); }
+  .nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+  /* ── Review panel ── */
+  .review-panel {
+    width: 100%; max-width: 640px;
+    background: var(--parchment);
+    border: 1px solid var(--stone);
+    border-radius: 4px;
+    padding: 14px 18px;
+  }
+  .review-title {
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: var(--mist);
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+  .review-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+  .review-chip {
+    padding: 3px 9px;
+    border-radius: 10px;
+    font-size: 11px;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    font-family: 'Noto Serif JP', serif;
+  }
+  .review-chip:hover { opacity: 0.75; }
+  .chip-correct { background: rgba(90,122,90,0.12); color: var(--correct); }
+  .chip-incorrect { background: rgba(139,74,74,0.12); color: var(--incorrect); }
+
+  /* ── Completion ── */
+  .completion {
+    text-align: center;
+    padding: 48px 24px;
+    max-width: 480px;
+  }
+  .completion-icon { font-size: 48px; margin-bottom: 20px; }
+  .completion-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    margin-bottom: 10px;
+    color: var(--ink);
+  }
+  .completion-sub {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 13px;
+    color: var(--ash);
+    line-height: 2;
+    margin-bottom: 28px;
+  }
+  .completion-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .btn-restart { background: var(--ink); color: var(--paper); padding: 11px 28px; }
+  .btn-review-only {
+    background: transparent;
+    color: var(--incorrect);
+    border: 1.5px solid var(--incorrect);
+    padding: 11px 28px;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .card-scene { animation: fadeUp 0.3s ease; }
+
+  @media (max-width: 480px) {
+    .card-face { padding: 28px 22px; }
+    .header { padding: 14px 16px 12px; }
+    main { padding: 18px 14px; }
+    .dir-toggle { margin-left: 0; width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-icon">⛩️</div>
+  <div class="header-titles">
+    <div class="header-title">Japanese Culture English</div>
+    <div class="header-sub">日本の美しい文化 — 英検2・3級レベル</div>
+  </div>
+</div>
+
+<!-- Category tabs -->
+<div class="cat-bar" id="catBar">
+  <button class="cat-tab active" onclick="filterCat('all', this)">すべて</button>
+  <button class="cat-tab" onclick="filterCat('整列文化', this)">🚃 整列</button>
+  <button class="cat-tab" onclick="filterCat('おもてなし', this)">🍵 おもてなし</button>
+  <button class="cat-tab" onclick="filterCat('時間厳守', this)">⏰ 時間厳守</button>
+  <button class="cat-tab" onclick="filterCat('食の作法', this)">🍱 食の作法</button>
+  <button class="cat-tab" onclick="filterCat('落とし物', this)">💼 落とし物</button>
+  <button class="cat-tab" onclick="filterCat('公共マナー', this)">🚇 公共マナー</button>
+  <button class="cat-tab" onclick="filterCat('掃除文化', this)">🧹 掃除文化</button>
+  <button class="cat-tab" onclick="filterCat('贈り物', this)">🎁 贈り物</button>
+  <button class="cat-tab" onclick="filterCat('謙虚さ', this)">🙏 謙虚さ</button>
+  <button class="cat-tab" onclick="filterCat('自然への敬意', this)">🌸 自然への敬意</button>
+</div>
+
+<div class="stats-bar">
+  <div class="stat"><span class="stat-dot dot-total"></span><span id="statTotal">0 cards</span></div>
+  <div class="stat"><span class="stat-dot dot-correct"></span><span id="statCorrect">0 correct</span></div>
+  <div class="stat"><span class="stat-dot dot-incorrect"></span><span id="statIncorrect">0 incorrect</span></div>
+  <div class="stat"><span class="stat-dot dot-remaining"></span><span id="statRemaining">0 remaining</span></div>
+</div>
+
+<div class="mode-bar">
+  <span class="mode-label">MODE</span>
+  <button class="mode-btn active" onclick="setMode('all', this)">All Cards</button>
+  <button class="mode-btn" onclick="setMode('incorrect', this)">Incorrect Only</button>
+  <button class="mode-btn" onclick="setMode('random', this)">Random</button>
+  <div class="dir-toggle">
+    <span>EN → JP</span>
+    <label class="toggle-switch">
+      <input type="checkbox" id="dirToggle" onchange="toggleDirection()">
+      <span class="toggle-slider"></span>
+    </label>
+    <span>JP → EN</span>
+  </div>
+</div>
+
+<main id="mainContent"></main>
+
+<script>
+const STORAGE_KEY = 'japanese-culture-english-v1';
+
+const CARDS = [
+  // ── カテゴリ1: 整列文化 ──
+  { id:1, cat:'整列文化', motif:'🚃', level:'英検3級',
+    jp:'日本では、人々はバス停で一列に並ぶ。',
+    en:'In Japan, people stand in a line at the bus stop.',
+    tip:'stand in a line = 一列に並ぶ。 stand in a queue とも言える。' },
+  { id:2, cat:'整列文化', motif:'🚃', level:'英検3級',
+    jp:'電車を待つとき、誰も列を乱さない。',
+    en:'When people wait for a train, nobody breaks the line.',
+    tip:'break the line = 列を乱す。 nobody = 誰も〜ない。' },
+  { id:3, cat:'整列文化', motif:'🚃', level:'英検3級',
+    jp:'これは子どもの頃に学校で習う習慣だ。',
+    en:'This is a habit that people learn at school when they are children.',
+    tip:'habit = 習慣。 learn at school = 学校で習う。' },
+  { id:4, cat:'整列文化', motif:'🚃', level:'英検2級',
+    jp:'係員がいなくても、人々は自然に整列する。',
+    en:'Even without a staff member, people naturally form a line.',
+    tip:'naturally = 自然に。 form a line = 列を作る。 staff member = 係員。' },
+  { id:5, cat:'整列文化', motif:'🚃', level:'英検2級',
+    jp:'この習慣は秩序のある社会を作るのに役立っている。',
+    en:'This habit helps create an orderly society.',
+    tip:'orderly = 秩序のある。 helps create = 作るのに役立つ。 society = 社会。' },
+  { id:6, cat:'整列文化', motif:'🚃', level:'英検3級',
+    jp:'混雑した場所でも、人々は押し合いをしない。',
+    en:'Even in crowded places, people do not push each other.',
+    tip:'crowded = 混雑した。 push each other = 押し合いをする。' },
+  { id:7, cat:'整列文化', motif:'🚃', level:'英検3級',
+    jp:'あなたの国では、人々は列に並びますか？',
+    en:'In your country, do people stand in a line?',
+    tip:'比較の話題として使える便利な質問文。' },
+  { id:8, cat:'整列文化', motif:'🚃', level:'英検2級',
+    jp:'この文化は他の国の訪問者をよく驚かせる。',
+    en:'This culture often surprises visitors from other countries.',
+    tip:'surprises = 驚かせる。 visitors from other countries = 他の国からの訪問者。' },
+  { id:9, cat:'整列文化', motif:'🚃', level:'英検2級',
+    jp:'整列することは、他の人への思いやりを示している。',
+    en:'Standing in a line shows respect for other people.',
+    tip:'shows respect for = 〜への敬意・思いやりを示す。 respect は大事な単語！' },
+  { id:10, cat:'整列文化', motif:'🚃', level:'英検2級',
+    jp:'私はこの習慣を外国の友人に誇りを持って説明できる。',
+    en:'I can proudly explain this habit to my foreign friends.',
+    tip:'proudly = 誇りを持って。 foreign friends = 外国の友人。' },
+
+  // ── カテゴリ2: おもてなし ──
+  { id:11, cat:'おもてなし', motif:'🍵', level:'英検3級',
+    jp:'日本のレストランでは、ウェイターはとても親切だ。',
+    en:'In Japanese restaurants, the waiters are very kind.',
+    tip:'waiter = ウェイター。 kind = 親切な。 とてもシンプルな表現。' },
+  { id:12, cat:'おもてなし', motif:'🍵', level:'英検3級',
+    jp:'おもてなしとは、お客様を心から歓迎することだ。',
+    en:'"Omotenashi" means welcoming guests with all your heart.',
+    tip:'with all your heart = 心から。 welcome = 歓迎する。' },
+  { id:13, cat:'おもてなし', motif:'🍵', level:'英検2級',
+    jp:'スタッフはお客様が必要とする前に、何が必要かを考える。',
+    en:'Staff think about what guests need before they ask.',
+    tip:'before they ask = 頼む前に。 この先読みの精神がおもてなし！' },
+  { id:14, cat:'おもてなし', motif:'🍵', level:'英検3級',
+    jp:'お茶は日本の大切なおもてなしのひとつだ。',
+    en:'Serving tea is one of the important ways to welcome guests in Japan.',
+    tip:'serve = （飲食を）出す。 ways to welcome = 歓迎の方法。' },
+  { id:15, cat:'おもてなし', motif:'🍵', level:'英検2級',
+    jp:'日本のホテルは細かいところまで気を配ることで知られている。',
+    en:'Japanese hotels are known for their careful attention to detail.',
+    tip:'be known for = 〜で知られている。 attention to detail = 細部への気配り。' },
+  { id:16, cat:'おもてなし', motif:'🍵', level:'英検3級',
+    jp:'コンビニでも、店員はいつも礼儀正しい。',
+    en:'Even at convenience stores, the staff are always polite.',
+    tip:'polite = 礼儀正しい。 convenience store = コンビニ。' },
+  { id:17, cat:'おもてなし', motif:'🍵', level:'英検2級',
+    jp:'おもてなしの精神は日本社会の多くの場面で見られる。',
+    en:'The spirit of "omotenashi" can be seen in many parts of Japanese society.',
+    tip:'the spirit of = 〜の精神。 can be seen = 見られる（受動態）。' },
+  { id:18, cat:'おもてなし', motif:'🍵', level:'英検3級',
+    jp:'私が旅館に泊まったとき、スタッフは私を家族のように迎えてくれた。',
+    en:'When I stayed at a ryokan, the staff welcomed me like family.',
+    tip:'welcome ~ like family = 〜を家族のように迎える。 ryokan = 旅館。' },
+  { id:19, cat:'おもてなし', motif:'🍵', level:'英検2級',
+    jp:'このサービス精神は日本を訪れる外国人観光客を感動させる。',
+    en:'This spirit of service impresses foreign tourists who visit Japan.',
+    tip:'impress = 感動させる。 spirit of service = サービス精神。' },
+  { id:20, cat:'おもてなし', motif:'🍵', level:'英検2級',
+    jp:'おもてなしは相手を大切に思う気持ちから生まれる。',
+    en:'"Omotenashi" comes from truly caring about the other person.',
+    tip:'truly caring about = 心から〜を大切に思う。 come from = 〜から生まれる。' },
+
+  // ── カテゴリ3: 時間厳守 ──
+  { id:21, cat:'時間厳守', motif:'⏰', level:'英検3級',
+    jp:'日本では電車はほぼいつも時間通りに来る。',
+    en:'In Japan, trains almost always come on time.',
+    tip:'on time = 時間通りに。 almost always = ほぼいつも。' },
+  { id:22, cat:'時間厳守', motif:'⏰', level:'英検3級',
+    jp:'電車が2分遅れても、アナウンスが流れる。',
+    en:'If a train is two minutes late, an announcement is made.',
+    tip:'announcement is made = アナウンスが流れる（受動態）。 late = 遅れた。' },
+  { id:23, cat:'時間厳守', motif:'⏰', level:'英検3級',
+    jp:'日本人は待ち合わせの時間より少し早く到着する。',
+    en:'Japanese people arrive a little early for meetings.',
+    tip:'arrive early = 早く到着する。 a little = 少し。 meetings = 待ち合わせ。' },
+  { id:24, cat:'時間厳守', motif:'⏰', level:'英検2級',
+    jp:'遅刻することは、相手の時間を無駄にすることだと考えられている。',
+    en:'Being late is seen as wasting the other person\'s time.',
+    tip:'be seen as = 〜と見なされる。 waste time = 時間を無駄にする。' },
+  { id:25, cat:'時間厳守', motif:'⏰', level:'英検2級',
+    jp:'時間を守ることは日本では非常に重要な礼儀のひとつだ。',
+    en:'Being on time is one of the most important manners in Japan.',
+    tip:'being on time = 時間を守ること（動名詞が主語）。 manners = 礼儀作法。' },
+  { id:26, cat:'時間厳守', motif:'⏰', level:'英検3級',
+    jp:'私の友達はいつも5分前に到着する。',
+    en:'My friend always arrives five minutes early.',
+    tip:'five minutes early = 5分早く。 always = いつも。' },
+  { id:27, cat:'時間厳守', motif:'⏰', level:'英検2級',
+    jp:'時間厳守の文化は学校教育から始まる。',
+    en:'The culture of being punctual starts from school education.',
+    tip:'punctual = 時間を守る（重要な単語！）。 starts from = 〜から始まる。' },
+  { id:28, cat:'時間厳守', motif:'⏰', level:'英検2級',
+    jp:'外国からの訪問者は日本の電車の正確さに驚く。',
+    en:'Visitors from abroad are surprised by the punctuality of Japanese trains.',
+    tip:'punctuality = 時間の正確さ。 surprised by = 〜に驚く。' },
+  { id:29, cat:'時間厳守', motif:'⏰', level:'英検3級',
+    jp:'もし遅れそうなら、すぐに連絡することが大切だ。',
+    en:'If you are going to be late, it is important to contact the person right away.',
+    tip:'right away = すぐに。 going to be late = 遅れそうだ。 contact = 連絡する。' },
+  { id:30, cat:'時間厳守', motif:'⏰', level:'英検2級',
+    jp:'この習慣は、他者の時間を尊重するという考え方から来ている。',
+    en:'This habit comes from the idea of respecting other people\'s time.',
+    tip:'respecting = 尊重すること。 comes from the idea of = 〜という考えから来ている。' },
+
+  // ── カテゴリ4: 食の作法 ──
+  { id:31, cat:'食の作法', motif:'🍱', level:'英検3級',
+    jp:'日本では食事の前に「いただきます」と言う。',
+    en:'In Japan, people say "Itadakimasu" before eating.',
+    tip:'before eating = 食べる前に。 say = 言う。' },
+  { id:32, cat:'食の作法', motif:'🍱', level:'英検3級',
+    jp:'この言葉は食べ物と料理を作った人への感謝を表している。',
+    en:'This word shows thanks to the food and the person who cooked it.',
+    tip:'shows thanks to = 〜への感謝を表す。 who cooked it = 料理した人（関係代名詞）。' },
+  { id:33, cat:'食の作法', motif:'🍱', level:'英検3級',
+    jp:'食事の後には「ごちそうさまでした」と言う。',
+    en:'After eating, people say "Gochisousama deshita."',
+    tip:'after eating = 食べた後に。 セットで覚えよう。' },
+  { id:34, cat:'食の作法', motif:'🍱', level:'英検2級',
+    jp:'いただきますには「命をいただく」という深い意味がある。',
+    en:'"Itadakimasu" has a deep meaning: receiving the life of food with gratitude.',
+    tip:'gratitude = 感謝の気持ち。 deep meaning = 深い意味。 receive = 受け取る。' },
+  { id:35, cat:'食の作法', motif:'🍱', level:'英検3級',
+    jp:'私の家族は毎食前にいただきますと言う。',
+    en:'My family says "Itadakimasu" before every meal.',
+    tip:'every meal = 毎食。 before = 〜の前に。' },
+  { id:36, cat:'食の作法', motif:'🍱', level:'英検2級',
+    jp:'この習慣は食べ物に対する感謝の心を育てる。',
+    en:'This habit helps people develop a sense of gratitude for food.',
+    tip:'develop = 育てる。 a sense of gratitude = 感謝の心。 for food = 食べ物への。' },
+  { id:37, cat:'食の作法', motif:'🍱', level:'英検3級',
+    jp:'日本の子どもたちは学校でこの言葉を一緒に言う。',
+    en:'Japanese children say these words together at school.',
+    tip:'together = 一緒に。 children は child の複数形。' },
+  { id:38, cat:'食の作法', motif:'🍱', level:'英検2級',
+    jp:'この文化は食べ物を大切にするという価値観を反映している。',
+    en:'This culture reflects the value of not wasting food.',
+    tip:'reflects = 反映する。 value = 価値観。 not wasting food = 食べ物を無駄にしないこと。' },
+  { id:39, cat:'食の作法', motif:'🍱', level:'英検2級',
+    jp:'外国の友人にこの言葉の意味を説明することができる。',
+    en:'I can explain the meaning of these words to my foreign friends.',
+    tip:'explain the meaning = 意味を説明する。 スピーキング練習に最適な文！' },
+  { id:40, cat:'食の作法', motif:'🍱', level:'英検2級',
+    jp:'この習慣は日本の謙虚さの文化を表している。',
+    en:'This habit represents the humble culture of Japan.',
+    tip:'represents = 表している。 humble = 謙虚な。 culture = 文化。' },
+
+  // ── カテゴリ5: 落とし物 ──
+  { id:41, cat:'落とし物', motif:'💼', level:'英検3級',
+    jp:'日本では、落とし物はよく持ち主のところに戻ってくる。',
+    en:'In Japan, lost items often come back to their owners.',
+    tip:'lost items = 落とし物。 come back to = 〜のところに戻る。 owners = 持ち主。' },
+  { id:42, cat:'落とし物', motif:'💼', level:'英検3級',
+    jp:'財布を落としても、誰かが警察に届けてくれることが多い。',
+    en:'If you drop your wallet, someone will often take it to the police.',
+    tip:'drop your wallet = 財布を落とす。 take ~ to the police = 警察に持って行く。' },
+  { id:43, cat:'落とし物', motif:'💼', level:'英検3級',
+    jp:'日本では「拾ったら交番へ」という文化がある。',
+    en:'In Japan, there is a culture of taking lost items to the police box.',
+    tip:'police box = 交番。 lost items = 落とし物。 culture of ~ ing = 〜する文化。' },
+  { id:44, cat:'落とし物', motif:'💼', level:'英検2級',
+    jp:'これは日本が世界で最も安全な国のひとつである理由だ。',
+    en:'This is one of the reasons why Japan is one of the safest countries in the world.',
+    tip:'one of the reasons why = 〜の理由のひとつ。 safest = 最も安全な（最上級）。' },
+  { id:45, cat:'落とし物', motif:'💼', level:'英検3級',
+    jp:'私の友人は電車に財布を忘れたが、返ってきた。',
+    en:'My friend left his wallet on the train, but it came back to him.',
+    tip:'left ~ on the train = 電車に〜を忘れた。 came back = 戻ってきた。' },
+  { id:46, cat:'落とし物', motif:'💼', level:'英検2級',
+    jp:'他人のものを取ることは恥ずかしいことだという考えが社会に根付いている。',
+    en:'The idea that taking someone else\'s things is shameful is deeply rooted in society.',
+    tip:'shameful = 恥ずかしい。 deeply rooted = 深く根付いている。' },
+  { id:47, cat:'落とし物', motif:'💼', level:'英検3級',
+    jp:'外国から来た旅行者はこの文化にとても驚く。',
+    en:'Travelers from other countries are very surprised by this culture.',
+    tip:'surprised by = 〜に驚く。 travelers = 旅行者。' },
+  { id:48, cat:'落とし物', motif:'💼', level:'英検2級',
+    jp:'この行動は正直さと他者への思いやりを示している。',
+    en:'This behavior shows honesty and care for others.',
+    tip:'honesty = 正直さ。 care for others = 他者への思いやり。 behavior = 行動。' },
+  { id:49, cat:'落とし物', motif:'💼', level:'英検3級',
+    jp:'私はこの文化を外国の友人に自慢できる。',
+    en:'I can be proud of this culture when talking with foreign friends.',
+    tip:'be proud of = 〜を誇りに思う。 自信を持って話そう！' },
+  { id:50, cat:'落とし物', motif:'💼', level:'英検2級',
+    jp:'落とし物が戻ってくることは日本社会の信頼を反映している。',
+    en:'The return of lost items reflects the trust in Japanese society.',
+    tip:'reflects = 反映する。 trust = 信頼。 return of = 〜が戻ること。' },
+
+  // ── カテゴリ6: 公共マナー ──
+  { id:51, cat:'公共マナー', motif:'🚇', level:'英検3級',
+    jp:'日本の電車の中では、人々は電話で話さない。',
+    en:'On trains in Japan, people do not talk on the phone.',
+    tip:'talk on the phone = 電話で話す。 on trains = 電車の中で。' },
+  { id:52, cat:'公共マナー', motif:'🚇', level:'英検3級',
+    jp:'イヤホンから音が漏れないように気をつける。',
+    en:'People are careful not to let sound leak from their earphones.',
+    tip:'be careful not to = 〜しないように気をつける。 leak = 漏れる。' },
+  { id:53, cat:'公共マナー', motif:'🚇', level:'英検2級',
+    jp:'公共の場では静かにすることが大切とされている。',
+    en:'Keeping quiet in public places is considered important.',
+    tip:'keeping quiet = 静かにすること（動名詞）。 in public places = 公共の場で。' },
+  { id:54, cat:'公共マナー', motif:'🚇', level:'英検3級',
+    jp:'ゴミは必ずゴミ箱に捨てる。',
+    en:'People always put their trash in the trash can.',
+    tip:'trash = ゴミ。 trash can = ゴミ箱。 put ~ in = 〜に入れる。' },
+  { id:55, cat:'公共マナー', motif:'🚇', level:'英検2級',
+    jp:'このマナーは他の人の空間を大切にするという考えから来ている。',
+    en:'This manner comes from the idea of respecting other people\'s space.',
+    tip:'manner = マナー。 respecting ~ space = 〜の空間を尊重すること。' },
+  { id:56, cat:'公共マナー', motif:'🚇', level:'英検3級',
+    jp:'公共の場で大声で話すことは礼儀に反すると考えられている。',
+    en:'Speaking loudly in public is seen as bad manners.',
+    tip:'loudly = 大声で。 bad manners = 礼儀に反すること。 in public = 公共の場で。' },
+  { id:57, cat:'公共マナー', motif:'🚇', level:'英検2級',
+    jp:'日本ではバスや電車でお年寄りに席を譲ることが多い。',
+    en:'In Japan, people often give up their seats for elderly people on buses and trains.',
+    tip:'give up your seat = 席を譲る。 elderly people = 高齢の人々。' },
+  { id:58, cat:'公共マナー', motif:'🚇', level:'英検3級',
+    jp:'この文化のおかげで、日本の公共交通機関は快適だ。',
+    en:'Because of this culture, public transportation in Japan is comfortable.',
+    tip:'because of = 〜のおかげで。 public transportation = 公共交通機関。 comfortable = 快適な。' },
+  { id:59, cat:'公共マナー', motif:'🚇', level:'英検2級',
+    jp:'周りの人への配慮が日本の公共マナーの基本だ。',
+    en:'Consideration for the people around you is the basis of public manners in Japan.',
+    tip:'consideration = 配慮。 basis = 基本、土台。 around you = 周りの。' },
+  { id:60, cat:'公共マナー', motif:'🚇', level:'英検2級',
+    jp:'このマナーは外国から来た人々に「静かすぎる」と思われることもある。',
+    en:'Sometimes, people from other countries think this manner makes Japan "too quiet."',
+    tip:'too quiet = 静かすぎる。 sometimes = 時々。 interesting な比較ポイント！' },
+
+  // ── カテゴリ7: 掃除文化 ──
+  { id:61, cat:'掃除文化', motif:'🧹', level:'英検3級',
+    jp:'日本の学校では、生徒たちが教室を自分たちで掃除する。',
+    en:'In Japanese schools, students clean their classrooms by themselves.',
+    tip:'by themselves = 自分たちで（自力で）。 clean = 掃除する。' },
+  { id:62, cat:'掃除文化', motif:'🧹', level:'英検3級',
+    jp:'掃除の時間は毎日学校のスケジュールに含まれている。',
+    en:'Cleaning time is included in the school schedule every day.',
+    tip:'included in = 含まれている。 schedule = スケジュール。 every day = 毎日。' },
+  { id:63, cat:'掃除文化', motif:'🧹', level:'英検2級',
+    jp:'ワールドカップで日本のサポーターがスタジアムを清掃したことが話題になった。',
+    en:'It became a topic when Japanese fans cleaned the stadium at the World Cup.',
+    tip:'became a topic = 話題になった。 fans = サポーター（ファン）。 clean = 清掃する。' },
+  { id:64, cat:'掃除文化', motif:'🧹', level:'英検2級',
+    jp:'「立つ鳥跡を濁らさず」は、使った場所をきれいにするという意味だ。',
+    en:'"Tatsu tori ato wo nigosazu" means you should leave a place clean after using it.',
+    tip:'leave a place clean = 場所をきれいにして残す。 after using it = 使った後に。' },
+  { id:65, cat:'掃除文化', motif:'🧹', level:'英検3級',
+    jp:'私は自分が使った場所はいつもきれいにする。',
+    en:'I always clean up the place I use.',
+    tip:'clean up = きれいにする。 the place I use = 私が使った場所（関係代名詞）。' },
+  { id:66, cat:'掃除文化', motif:'🧹', level:'英検2級',
+    jp:'この習慣は、他の人への責任感から生まれている。',
+    en:'This habit comes from a sense of responsibility toward others.',
+    tip:'sense of responsibility = 責任感。 toward others = 他の人への。' },
+  { id:67, cat:'掃除文化', motif:'🧹', level:'英検3級',
+    jp:'掃除をすることで、子どもたちは責任感を学ぶ。',
+    en:'By cleaning, children learn a sense of responsibility.',
+    tip:'by cleaning = 掃除をすることで（〜によって）。 learn = 学ぶ。' },
+  { id:68, cat:'掃除文化', motif:'🧹', level:'英検2級',
+    jp:'日本の街がきれいなのは、この文化のおかげだ。',
+    en:'Japanese streets are clean because of this culture.',
+    tip:'streets are clean = 街がきれい。 because of = 〜のおかげ。' },
+  { id:69, cat:'掃除文化', motif:'🧹', level:'英検2級',
+    jp:'この行動は世界中で「信じられない」と称賛された。',
+    en:'This action was praised around the world as "incredible."',
+    tip:'praised = 称賛された（受動態）。 incredible = 信じられない。 around the world = 世界中で。' },
+  { id:70, cat:'掃除文化', motif:'🧹', level:'英検2級',
+    jp:'使った空間に感謝することがこの文化の根底にある。',
+    en:'Being grateful for the space you use is at the heart of this culture.',
+    tip:'being grateful for = 〜に感謝すること。 at the heart of = 〜の根底に。' },
+
+  // ── カテゴリ8: 贈り物 ──
+  { id:71, cat:'贈り物', motif:'🎁', level:'英検3級',
+    jp:'日本では、旅行から帰ると家族や同僚にお土産を買う。',
+    en:'In Japan, people buy souvenirs for family and coworkers when they return from a trip.',
+    tip:'souvenir = お土産。 coworkers = 同僚。 return from a trip = 旅行から帰る。' },
+  { id:72, cat:'贈り物', motif:'🎁', level:'英検3級',
+    jp:'贈り物は両手で渡すのが礼儀だ。',
+    en:'It is polite to give a gift with both hands.',
+    tip:'with both hands = 両手で。 polite = 礼儀正しい。 it is polite to = 〜するのが礼儀。' },
+  { id:73, cat:'贈り物', motif:'🎁', level:'英検2級',
+    jp:'贈り物をすぐに開けないことがある。それは恥ずかしいと感じるからだ。',
+    en:'Sometimes people do not open a gift right away because they feel shy.',
+    tip:'right away = すぐに。 feel shy = 恥ずかしいと感じる。 sometimes = 時々。' },
+  { id:74, cat:'贈り物', motif:'🎁', level:'英検2級',
+    jp:'お土産を買う文化は相手への思いやりを示している。',
+    en:'The culture of buying souvenirs shows thoughtfulness for others.',
+    tip:'thoughtfulness = 思いやり。 shows = 示す。 culture of ~ ing = 〜する文化。' },
+  { id:75, cat:'贈り物', motif:'🎁', level:'英検3級',
+    jp:'季節の贈り物（お中元・お歳暮）は日本の伝統だ。',
+    en:'Seasonal gifts called "ochugen" and "oseibo" are Japanese traditions.',
+    tip:'seasonal = 季節の。 traditions = 伝統。 called = 〜と呼ばれる。' },
+  { id:76, cat:'贈り物', motif:'🎁', level:'英検2級',
+    jp:'贈り物の包み方にも気をつかう文化がある。',
+    en:'There is also a culture of being careful about how a gift is wrapped.',
+    tip:'how ~ is wrapped = どのように包まれるか。 be careful about = 〜に気をつかう。' },
+  { id:77, cat:'贈り物', motif:'🎁', level:'英検3級',
+    jp:'私はよく友達に手作りのお菓子をプレゼントする。',
+    en:'I often give my friends homemade sweets as a gift.',
+    tip:'homemade = 手作りの。 sweets = お菓子。 give ~ as a gift = 〜をプレゼントする。' },
+  { id:78, cat:'贈り物', motif:'🎁', level:'英検2級',
+    jp:'贈り物は人間関係を深めるために大切な役割を果たす。',
+    en:'Gifts play an important role in building relationships.',
+    tip:'play an important role = 重要な役割を果たす。 relationships = 人間関係。' },
+  { id:79, cat:'贈り物', motif:'🎁', level:'英検2級',
+    jp:'贈り物を断ることは失礼に当たることもある。',
+    en:'Refusing a gift can sometimes be seen as rude.',
+    tip:'refusing = 断ること（動名詞）。 seen as rude = 失礼と見なされる。' },
+  { id:80, cat:'贈り物', motif:'🎁', level:'英検2級',
+    jp:'この文化を外国の友人に伝えることは面白い会話のきっかけになる。',
+    en:'Sharing this culture with foreign friends can be an interesting topic of conversation.',
+    tip:'sharing = 伝えること（動名詞）。 topic of conversation = 会話の話題。' },
+
+  // ── カテゴリ9: 謙虚さ ──
+  { id:81, cat:'謙虚さ', motif:'🙏', level:'英検3級',
+    jp:'日本人は自分のことを褒められても、謙遜することが多い。',
+    en:'Japanese people often act humbly when they are praised.',
+    tip:'act humbly = 謙遜する。 be praised = 褒められる（受動態）。 often = よく。' },
+  { id:82, cat:'謙虚さ', motif:'🙏', level:'英検3級',
+    jp:'「まだまだです」という言葉は謙虚さを表している。',
+    en:'"Mada mada desu" is a phrase that shows humility.',
+    tip:'humility = 謙虚さ。 phrase = フレーズ、言葉。 shows = 表す。' },
+  { id:83, cat:'謙虚さ', motif:'🙏', level:'英検2級',
+    jp:'自分を前に出さず、周囲を立てることが美徳とされる。',
+    en:'Not standing out and supporting others is seen as a virtue.',
+    tip:'not standing out = 自分を前に出さないこと。 virtue = 美徳。 support = 支える。' },
+  { id:84, cat:'謙虚さ', motif:'🙏', level:'英検2級',
+    jp:'この謙虚さは日本人の礼儀の中心にある。',
+    en:'This humility is at the center of Japanese manners.',
+    tip:'at the center of = 〜の中心にある。 manners = 礼儀作法。' },
+  { id:85, cat:'謙虚さ', motif:'🙏', level:'英検3級',
+    jp:'「おかげさまで」は相手のおかげで良かったという意味だ。',
+    en:'"Okagesamade" means "things went well thanks to you."',
+    tip:'thanks to you = あなたのおかげで。 感謝と謙虚さが詰まった表現。' },
+  { id:86, cat:'謙虚さ', motif:'🙏', level:'英検2級',
+    jp:'謙虚さは日本文化の中で非常に重要な価値観のひとつだ。',
+    en:'Humility is one of the most important values in Japanese culture.',
+    tip:'values = 価値観（複数形）。 one of the most = 最も〜なもののひとつ。' },
+  { id:87, cat:'謙虚さ', motif:'🙏', level:'英検3級',
+    jp:'人の失敗をあからさまに指摘しないことも礼儀のひとつだ。',
+    en:'Not pointing out someone\'s mistake openly is also good manners.',
+    tip:'point out = 指摘する。 openly = あからさまに。 good manners = 礼儀。' },
+  { id:88, cat:'謙虚さ', motif:'🙏', level:'英検2級',
+    jp:'謙虚さは自分を大切にしながら、相手も尊重することだ。',
+    en:'Humility means valuing yourself while also respecting others.',
+    tip:'valuing yourself = 自分を大切にすること。 while also = しながらも。 respecting = 尊重すること。' },
+  { id:89, cat:'謙虚さ', motif:'🙏', level:'英検2級',
+    jp:'日本の文化における謙虚さを英語で説明するのは難しいが大切だ。',
+    en:'It is difficult but important to explain Japanese humility in English.',
+    tip:'difficult but important = 難しいが大切。 in English = 英語で。 スピーキング練習の動機として！' },
+  { id:90, cat:'謙虚さ', motif:'🙏', level:'英検2級',
+    jp:'この価値観を理解することで、日本人をより深く理解できる。',
+    en:'Understanding this value helps you understand Japanese people more deeply.',
+    tip:'understanding = 理解すること（動名詞が主語）。 more deeply = より深く。' },
+
+  // ── カテゴリ10: 自然への敬意 ──
+  { id:91, cat:'自然への敬意', motif:'🌸', level:'英検3級',
+    jp:'日本人は春に桜の木の下に集まってお花見をする。',
+    en:'In spring, Japanese people gather under cherry blossom trees for hanami.',
+    tip:'gather = 集まる。 cherry blossom = 桜の花。 in spring = 春に。' },
+  { id:92, cat:'自然への敬意', motif:'🌸', level:'英検3級',
+    jp:'お花見は自然の美しさを楽しむ日本の伝統だ。',
+    en:'"Hanami" is a Japanese tradition of enjoying the beauty of nature.',
+    tip:'enjoying the beauty of = 〜の美しさを楽しむこと（動名詞）。 tradition = 伝統。' },
+  { id:93, cat:'自然への敬意', motif:'🌸', level:'英検2級',
+    jp:'日本人は四季の変化をとても大切にする。',
+    en:'Japanese people value the changes of the four seasons greatly.',
+    tip:'value = 大切にする。 the four seasons = 四季。 changes = 変化。' },
+  { id:94, cat:'自然への敬意', motif:'🌸', level:'英検2級',
+    jp:'「侘び寂び」は、不完全さや移ろいの中に美を見出す考え方だ。',
+    en:'"Wabi-sabi" is the idea of finding beauty in imperfection and change.',
+    tip:'imperfection = 不完全さ。 finding beauty in = 〜の中に美を見出すこと。' },
+  { id:95, cat:'自然への敬意', motif:'🌸', level:'英検3級',
+    jp:'日本では山や川など自然の場所に神様がいると信じられている。',
+    en:'In Japan, people believe that gods live in natural places like mountains and rivers.',
+    tip:'believe that = 〜と信じる。 gods = 神様。 natural places = 自然の場所。' },
+  { id:96, cat:'自然への敬意', motif:'🌸', level:'英検2級',
+    jp:'この考え方は自然を大切にする行動につながっている。',
+    en:'This idea leads to actions that protect and care for nature.',
+    tip:'lead to = 〜につながる。 protect and care for = 大切にし、保護すること。' },
+  { id:97, cat:'自然への敬意', motif:'🌸', level:'英検3級',
+    jp:'私はお花見の季節が一番好きだ。',
+    en:'Hanami season is my favorite time of year.',
+    tip:'favorite time of year = 一年の中で一番好きな時期。 シンプルで使いやすい文。' },
+  { id:98, cat:'自然への敬意', motif:'🌸', level:'英検2級',
+    jp:'自然の美しさに感謝することは、日本文化の根本にある。',
+    en:'Being grateful for the beauty of nature is fundamental to Japanese culture.',
+    tip:'fundamental to = 〜の根本にある。 being grateful for = 〜に感謝すること。' },
+  { id:99, cat:'自然への敬意', motif:'🌸', level:'英検2級',
+    jp:'外国の人に日本の四季の美しさを伝えることができる。',
+    en:'I can share the beauty of Japan\'s four seasons with people from other countries.',
+    tip:'share ~ with = 〜と…を共有する・伝える。 four seasons = 四季。' },
+  { id:100, cat:'自然への敬意', motif:'🌸', level:'英検2級',
+    jp:'自然への敬意は日本人のものの見方の中心に流れている。',
+    en:'Respect for nature flows through the center of the Japanese way of seeing the world.',
+    tip:'flows through = 流れている。 way of seeing the world = ものの見方、世界観。' },
+];
+
+let state = {
+  mode: 'all',
+  direction: 'en-jp',
+  catFilter: 'all',
+  queue: [],
+  currentIndex: 0,
+  isFlipped: false,
+  correct: new Set(),
+  incorrect: new Set(),
+  done: false,
+};
+
+function loadStorage() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      const d = JSON.parse(saved);
+      state.correct = new Set(d.correct || []);
+      state.incorrect = new Set(d.incorrect || []);
+    }
+  } catch(e) {}
+}
+
+function saveStorage() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify({
+    correct: [...state.correct],
+    incorrect: [...state.incorrect],
+  }));
+}
+
+function getPool() {
+  let pool = state.catFilter === 'all' ? [...CARDS] : CARDS.filter(c => c.cat === state.catFilter);
+  if (state.mode === 'incorrect') {
+    const filtered = pool.filter(c => state.incorrect.has(c.id));
+    pool = filtered.length > 0 ? filtered : pool;
+  }
+  if (state.mode === 'random') pool = shuffle(pool);
+  return pool;
+}
+
+function buildQueue() {
+  state.queue = getPool();
+  state.currentIndex = 0;
+  state.isFlipped = false;
+  state.done = false;
+}
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function filterCat(cat, el) {
+  state.catFilter = cat;
+  document.querySelectorAll('.cat-tab').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  buildQueue();
+  render();
+}
+
+function setMode(m, el) {
+  state.mode = m;
+  document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  buildQueue();
+  render();
+}
+
+function toggleDirection() {
+  state.direction = document.getElementById('dirToggle').checked ? 'jp-en' : 'en-jp';
+  state.isFlipped = false;
+  render();
+}
+
+function flipCard() {
+  state.isFlipped = !state.isFlipped;
+  render();
+}
+
+function markCorrect() {
+  const card = state.queue[state.currentIndex];
+  state.correct.add(card.id);
+  state.incorrect.delete(card.id);
+  saveStorage();
+  nextCard();
+}
+
+function markIncorrect() {
+  const card = state.queue[state.currentIndex];
+  state.incorrect.add(card.id);
+  saveStorage();
+  nextCard();
+}
+
+function nextCard() {
+  if (state.currentIndex < state.queue.length - 1) {
+    state.currentIndex++;
+    state.isFlipped = false;
+    render();
+  } else {
+    state.done = true;
+    render();
+  }
+}
+
+function prevCard() {
+  if (state.currentIndex > 0) {
+    state.currentIndex--;
+    state.isFlipped = false;
+    render();
+  }
+}
+
+function jumpTo(id) {
+  const idx = state.queue.findIndex(c => c.id === id);
+  if (idx >= 0) {
+    state.currentIndex = idx;
+    state.isFlipped = false;
+    state.done = false;
+    render();
+  }
+}
+
+function restartAll() {
+  state.mode = 'all';
+  state.catFilter = 'all';
+  document.querySelectorAll('.mode-btn').forEach((b,i) => b.classList.toggle('active', i===0));
+  document.querySelectorAll('.cat-tab').forEach((b,i) => b.classList.toggle('active', i===0));
+  buildQueue();
+  render();
+}
+
+function restartIncorrect() {
+  state.mode = 'incorrect';
+  document.querySelectorAll('.mode-btn').forEach((b,i) => b.classList.toggle('active', i===1));
+  buildQueue();
+  render();
+}
+
+function updateStats() {
+  document.getElementById('statTotal').textContent = `${state.queue.length} cards`;
+  document.getElementById('statCorrect').textContent = `${state.correct.size} correct`;
+  document.getElementById('statIncorrect').textContent = `${state.incorrect.size} incorrect`;
+  const remaining = state.queue.length - state.currentIndex - (state.done ? 0 : 1);
+  document.getElementById('statRemaining').textContent = `${Math.max(0, remaining)} remaining`;
+}
+
+function render() {
+  updateStats();
+  const main = document.getElementById('mainContent');
+
+  if (state.done) {
+    const inc = [...state.incorrect].filter(id =>
+      state.queue.some(c => c.id === id)
+    ).length;
+    main.innerHTML = `
+      <div class="completion">
+        <div class="completion-icon">🌸</div>
+        <div class="completion-title">Session Complete</div>
+        <div class="completion-sub">
+          ${state.queue.length} cards reviewed<br>
+          ${state.correct.size} correct · ${state.incorrect.size} to review<br>
+          <br>よく頑張りました！
+        </div>
+        <div class="completion-btns">
+          <button class="btn btn-restart" onclick="restartAll()">Start Over</button>
+          ${inc > 0 ? `<button class="btn btn-review-only" onclick="restartIncorrect()">Review ${inc} Missed</button>` : ''}
+        </div>
+      </div>`;
+    return;
+  }
+
+  const card = state.queue[state.currentIndex];
+  const progress = (state.currentIndex / state.queue.length * 100).toFixed(1);
+
+  const frontText = state.direction === 'en-jp' ? card.en : card.jp;
+  const backText  = state.direction === 'en-jp' ? card.jp : card.en;
+  const frontLang = state.direction === 'en-jp' ? 'English' : '日本語';
+  const backLang  = state.direction === 'en-jp' ? '日本語' : 'English';
+
+  const statusDot = state.correct.has(card.id) ? '🟢' : state.incorrect.has(card.id) ? '🔴' : '';
+  const tipHtml = card.tip ? `<div class="card-tip">💡 ${card.tip}</div>` : '';
+
+  main.innerHTML = `
+    <div class="progress-wrap">
+      <div class="progress-bar"><div class="progress-fill" style="width:${progress}%"></div></div>
+      <div class="progress-text">${state.currentIndex + 1} / ${state.queue.length}</div>
+    </div>
+
+    <div class="card-scene">
+      <div class="card ${state.isFlipped ? 'flipped' : ''}" onclick="flipCard()">
+        <div class="card-face card-front" data-motif="${card.motif}">
+          <div class="cat-badge">${card.cat} ${statusDot}</div>
+          <div class="level-badge">${card.level}</div>
+          <div class="card-lang">${frontLang}</div>
+          <div class="card-text">${frontText}</div>
+          <div class="card-hint">↕ tap to flip</div>
+        </div>
+        <div class="card-face card-back">
+          <div class="cat-badge">${card.cat}</div>
+          <div class="card-lang">${backLang}</div>
+          <div class="card-text">${backText}</div>
+          ${tipHtml}
+          <div class="card-hint">↕ tap to flip back</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <div class="nav-btns">
+        <button class="nav-btn" onclick="prevCard()" ${state.currentIndex===0?'disabled':''}>←</button>
+      </div>
+      <button class="btn btn-incorrect" onclick="markIncorrect()" ${!state.isFlipped?'disabled':''}>✗ Missed</button>
+      <button class="btn btn-correct" onclick="markCorrect()" ${!state.isFlipped?'disabled':''}>✓ Got it</button>
+      <div class="nav-btns">
+        <button class="nav-btn" onclick="nextCard()">→</button>
+      </div>
+    </div>
+
+    <div class="review-panel">
+      <div class="review-title">Completed in this session</div>
+      <div class="review-chips">
+        ${[...state.correct].slice(-10).map(id => {
+          const c = CARDS.find(x=>x.id===id);
+          return c ? `<button class="review-chip chip-correct" onclick="jumpTo(${c.id})" title="${c.en}">${c.cat}</button>` : '';
+        }).join('')}
+        ${[...state.incorrect].slice(-10).map(id => {
+          const c = CARDS.find(x=>x.id===id);
+          return c ? `<button class="review-chip chip-incorrect" onclick="jumpTo(${c.id})" title="${c.en}">${c.cat}</button>` : '';
+        }).join('')}
+        ${state.correct.size + state.incorrect.size === 0 ? '<span style="font-size:11px;color:var(--mist)">カードをめくって記録しよう</span>' : ''}
+      </div>
+    </div>`;
+}
+
+loadStorage();
+buildQueue();
+render();
+</script>
+</body>
+</html>
